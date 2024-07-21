@@ -145,7 +145,7 @@ public struct InfoPlistValues {
 //            ]
 //        ])) { (_, new) in new }
         infoPlist.merge(setCFBundleVersion(.appBuildVersion())) { (_, new) in new }
-        infoPlist.merge(setGIDClientID("882277748169-ouegejt3kc6jo5enbfjmmre2nnbthj82.apps.googleusercontent.com")) { (_, new) in new }
+//        infoPlist.merge(setGIDClientID("882277748169-ouegejt3kc6jo5enbfjmmre2nnbthj82.apps.googleusercontent.com")) { (_, new) in new }
         infoPlist.merge(setLSRequiresIPhoneOS(true)) { (_, new) in new }
         infoPlist.merge(setUIAppFonts(["PretendardVariable.ttf"])) { (_, new) in new }
         infoPlist.merge(setUIApplicationSceneManifest([
@@ -159,8 +159,8 @@ public struct InfoPlistValues {
                 ]
             ]
         ])) { (_, new) in new }
-        infoPlist.merge(setUIRequiredDeviceCapabilities(["armv7"])) { (_, new) in new }
-        infoPlist.merge(setUISupportedInterfaceOrientations(["UIInterfaceOrientationPortrait"])) { (_, new) in new }
+//        infoPlist.merge(setUIRequiredDeviceCapabilities(["armv7"])) { (_, new) in new }
+//        infoPlist.merge(setUISupportedInterfaceOrientations(["UIInterfaceOrientationPortrait"])) { (_, new) in new }
 //        infoPlist.merge(setNSCameraUsageDescription("QR 코드 인식을 위해 카메라 접근 권한이 필요합니다")) { (_, new) in new }
         infoPlist.merge(setUILaunchScreens()) { (_, new) in new }
 

@@ -15,7 +15,7 @@ public extension Project {
         public static let appDevName = "OPeace-Dev"
         public static let deploymentTarget : ProjectDescription.DeploymentTargets = .iOS("17.0")
         public static let deploymentDestination: ProjectDescription.Destinations = [.iPhone]
-        public static let organizationTeamId = "92NGUT4BRA"
+        public static let organizationTeamId = "N94CS4N6VR"
         public static let bundlePrefix = "io.Opeace.Opeace"
         public static let appVersion = "1.0.0"
         public static let mainBundleId = "io.Opeace.Opeace"

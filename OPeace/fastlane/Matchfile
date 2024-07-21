@@ -1,0 +1,9 @@
+#git_url("https://github.com/TrandyTuist/DrumBeatMaster_Fastlane.git")
+git_url("git@github.com:TrandyTuist/DrumBeatMaster_Fastlane.git")
+
+storage_mode("git")
+
+
+app_identifier(["io.Opeace.Opeace"])
+
+
