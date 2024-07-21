@@ -1,29 +1,30 @@
 //
 //  Project.swift
-//  ProjectDescriptionHelpers
+//  Manifests
 //
-//  Created by 염성훈 on 1/17/24.
+//  Created by 서원지 on 7/21/24.
 //
-
-import Foundation
 
 import ProjectDescription
-import MyPlugin
+import DependencyPlugin
+import ProjectTemplatePlugin
 
-// Local plugin loaded
-let localHelper = LocalHelper(name: "MyPlugin")
+let infoPlist: [String: Plist.Value] = InfoPlistValues.generateInfoPlist()
 
 let project = Project.makeAppModule(
     name: Project.Environment.appName,
     bundleId: .mainBundleID(),
     product: .app,
     settings: .appMainSetting,
+    scripts: [],
     dependencies: [
-        .feature,
-        .core,
+        .Shared(implements: .Shareds),
+        .Networking(implements: .Networkings),
+        .Presentation(implements: .Presentation)
+
     ],
-    sources: ["Sources/**", "Resources/FontAsset/**"],
+    sources: ["Sources/**"],
     resources: ["Resources/**"],
-    infoPlist: .file(path: "Support/Info.plist"),
-    entitlements: "OPeace.entitlements"
+    infoPlist: .extendingDefault(with: infoPlist)
+//    entitlements: .file(path: "../../Entitlements/AuraTarot.entitlements")
 )

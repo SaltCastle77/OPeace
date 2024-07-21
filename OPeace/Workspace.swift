@@ -1,13 +1,14 @@
 //
-//  Workspace.swift
-//  ProjectDescriptionHelpers
+//  WorkSpace.swift
+//  Manifests
 //
-//  Created by 염성훈 on 1/17/24.
+//  Created by 서원지 on 7/21/24.
 //
 
 import Foundation
 import ProjectDescription
-import MyPlugin
+import ProjectTemplatePlugin
+
 
 let workspace = Workspace(
 name: Project.Environment.appName,

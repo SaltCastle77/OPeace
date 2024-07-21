@@ -7,78 +7,118 @@
       <FileRef
          location = "group:App/OPeace.xcodeproj">
       </FileRef>
-      <FileRef
-         location = "group:Core/Core.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:DesignSystemKit/DesignSystemKit.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:Domain/Domain.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:Feature/Feature.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:Network/Network.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:ShareKit/ShareKit.xcodeproj">
-      </FileRef>
+      <Group
+         location = "group:Core"
+         name = "Core">
+         <Group
+            location = "group:Networking"
+            name = "Networking">
+            <FileRef
+               location = "group:API/API.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:DiContainer/DiContainer.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:Foundations/Foundations.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:Model/Model.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:Networkings/Networkings.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:Service/Service.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:ThirdPartys/ThirdPartys.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:UseCase/UseCase.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:Utills/Utills.xcodeproj">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:Presentation"
+         name = "Presentation">
+         <FileRef
+            location = "group:Presentation/Presentation.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Shared"
+         name = "Shared">
+         <FileRef
+            location = "group:DesignSystem/DesignSystem.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:Shareds/Shareds.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:ThirdParty/ThirdParty.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:Utill/Utill.xcodeproj">
+         </FileRef>
+      </Group>
    </Group>
    <Group
       location = "container:"
       name = "Dependencies">
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/Alamofire/Alamofire.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/Alamofire/Alamofire.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/Moya/Moya.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/Moya/Moya.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/ReactiveSwift/ReactiveSwift.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/SDWebImage/SDWebImage.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/RxSwift/RxSwift.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/SDWebImageSwiftUI/SDWebImageSwiftUI.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/combine-schedulers/combine-schedulers.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/combine-schedulers/combine-schedulers.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-case-paths/swift-case-paths.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-case-paths/swift-case-paths.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-clocks/swift-clocks.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-clocks/swift-clocks.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-collections/swift-collections.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-collections/swift-collections.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-composable-architecture/swift-composable-architecture.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-composable-architecture/swift-composable-architecture.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-concurrency-extras/swift-concurrency-extras.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-concurrency-extras/swift-concurrency-extras.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-custom-dump/swift-custom-dump.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-custom-dump/swift-custom-dump.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-dependencies/swift-dependencies.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-dependencies/swift-dependencies.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-identified-collections/swift-identified-collections.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-identified-collections/swift-identified-collections.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-perception/swift-perception.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-perception/swift-perception.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swift-syntax/swift-syntax.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swift-syntax/swift-syntax.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/swiftui-navigation/swiftui-navigation.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/swiftui-navigation/swiftui-navigation.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/xctest-dynamic-overlay/xctest-dynamic-overlay.xcodeproj">
+         location = "group:Tuist/.build/tuist-derived/xctest-dynamic-overlay/xctest-dynamic-overlay.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>

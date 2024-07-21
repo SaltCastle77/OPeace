@@ -7,73 +7,128 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		06D86ADA0EFCE9E9E7285CEC /* DesignSystemKit_DesignSystemKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 42963B49AB32BC6E6C882B11 /* DesignSystemKit_DesignSystemKit.bundle */; };
-		096BCC418BA980C865DAF2C3 /* AppMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583CB22BB158FAFEB92160FF /* AppMainView.swift */; };
-		15D77C945CDE60033C695BFB /* OrderedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C7F7074430E076D9A8F093 /* OrderedCollections.framework */; };
+		0084A9CD43FBAEC3EF283B8E /* SortedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D95B9E0679952090A721AC1 /* SortedCollections.framework */; };
+		0180A7E4F66AB432233DACD9 /* SDWebImage_SDWebImage.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 5FBEA26A88470477194C74AB /* SDWebImage_SDWebImage.bundle */; };
+		0213510E485216819148A1E4 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1949B50C00C8126136F9F239 /* DesignSystem.framework */; };
+		06BE1F30EA1F2B51F27B6F87 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2ECC4C295DAC332701BD3A2E /* Preview Assets.xcassets */; };
+		08DA17EC3643FF5B491C2E34 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 389284836BD9FD455C644302 /* AppDelegate.swift */; };
+		1009573CAF17F46A78B57C5C /* swift-composable-architecture_ComposableArchitecture.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 59918D10B5B47AE0CA5D556B /* swift-composable-architecture_ComposableArchitecture.bundle */; };
+		1094F659271D4CA0F4B37C24 /* DequeModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0109352D6225D44C4F6AA772 /* DequeModule.framework */; };
+		11A30E6ED968290D60E18F5B /* Utills.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 831C23401C372875DA116D5C /* Utills.framework */; };
 		181F46F0548B9C0F912140F3 /* IdentifiedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 897CF9DC164F1166044C3EB8 /* IdentifiedCollections.framework */; };
-		196CD8FCD2663E266A67BF57 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C9D8CEDB1ED18F7500F840 /* Domain.framework */; };
-		1AD38619FB40811DC7F067BB /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CCB6C88557610302866AB9 /* test.swift */; };
-		1B06342E61FEF9C669770D08 /* _CollectionsUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37360C035C246BBC6221B53B /* _CollectionsUtilities.framework */; };
+		188385B73570EF9A0F5DF15C /* DesignSystem_DesignSystem.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 7FD3567291A1386FF6591C0A /* DesignSystem_DesignSystem.bundle */; };
+		1BAFFA84938BE13975DE21D1 /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A62E719CD13379021A1018E /* ComposableArchitecture.framework */; };
 		1D664278779A032A03566588 /* CombineSchedulers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 064CBB3A96D35D0C6C8E239C /* CombineSchedulers.framework */; };
+		1DD0634FBC408A52A4302B6E /* Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD35C1953A546211001D7C5E /* Service.framework */; };
+		21909553EA96AEF12A0D2D9B /* SwiftUINavigationCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3483BF4857D46DB99371764A /* SwiftUINavigationCore.framework */; };
+		22781B5774DBCA926BC079E5 /* swift-composable-architecture_ComposableArchitecture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 59918D10B5B47AE0CA5D556B /* swift-composable-architecture_ComposableArchitecture.bundle */; };
+		229C369A086C093BE6F8C108 /* SDWebImage_SDWebImage.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FBEA26A88470477194C74AB /* SDWebImage_SDWebImage.bundle */; };
+		2490EF2956AA07A5C4CA4FE0 /* HashTreeCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5248430708324123B9ACC783 /* HashTreeCollections.framework */; };
+		24E3737C28551EE8020CA41E /* Collections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1ED4C566C2443F1F4C2158 /* Collections.framework */; };
 		2552F6C9A88E89E2AACDF60F /* CustomDump.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD20FDB83BC2E8595770794 /* CustomDump.framework */; };
+		27F51C0CD77C5D6D32550CF5 /* swift-composable-architecture_ComposableArchitecture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 59918D10B5B47AE0CA5D556B /* swift-composable-architecture_ComposableArchitecture.bundle */; };
+		2CF178C63C285A7E6A38002C /* OpeaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B09DC0A9D071C5BD656C4B1 /* OpeaceApp.swift */; };
 		2D28E94B89C4962BF8DFC08B /* OrderedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C7F7074430E076D9A8F093 /* OrderedCollections.framework */; };
-		2D3B37AD95DAF35887F02AC5 /* SwiftUINavigationCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3483BF4857D46DB99371764A /* SwiftUINavigationCore.framework */; };
-		2DFBC73E6BDFAD220CE414DE /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08024CA62FDEBA52DA85240D /* test.swift */; };
-		314B9EA24F32792C4AC44C8E /* OpeaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D38A4CA1E3521DD8538BE /* OpeaceApp.swift */; };
-		331A553AA81B4B35A40A54D1 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88A866663F825CB4532CC39D /* Core.framework */; };
-		3BB4FC52C693288387AE275A /* DesignSystemKit_DesignSystemKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 42963B49AB32BC6E6C882B11 /* DesignSystemKit_DesignSystemKit.bundle */; };
-		3E28FAB660E8E9C2E92C98B2 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08024CA62FDEBA52DA85240D /* test.swift */; };
-		3F95678157AEC98B0717868B /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A4ACB716AA0BF22075AE1B /* Moya.framework */; };
-		41548E46AF543A67A20476CA /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A62E719CD13379021A1018E /* ComposableArchitecture.framework */; };
-		4BC2CBFF22A8480D4B615D61 /* DependenciesMacros.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F7EF819168A470F989D372 /* DependenciesMacros.framework */; };
+		2E2B831094AC55C4FEAAB77D /* DesignSystem_DesignSystem.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7FD3567291A1386FF6591C0A /* DesignSystem_DesignSystem.bundle */; };
+		2E6009A6CB28EC6BA6DD39E7 /* UseCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA78626F61B7A844F78DC9C /* UseCase.framework */; };
+		2EB31434049EC2D2154A3CC4 /* CombineMoya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9BE4AB849FDC214806C108 /* CombineMoya.framework */; };
+		3140BF9133CEE8BECE6CC368 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697B8FCF31717CABCDD5C879 /* ContentView.swift */; };
+		34813DB509379CA453DC4C27 /* Networkings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 725C4353C0319CF46F69E133 /* Networkings.framework */; };
+		355DED392E91274670709882 /* TuistFonts+OPeaceQA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0916C67FD91CC20A54179ADC /* TuistFonts+OPeaceQA.swift */; };
+		3567B85CCE559E4F933F97A4 /* ThirdParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 666517ACAEAFE67DE9DE1F99 /* ThirdParty.framework */; };
+		39CBE340BA91C90279F2DF66 /* TuistAssets+OPeaceQA.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B570466FE6B49D7EE86039 /* TuistAssets+OPeaceQA.swift */; };
+		3A8191C3C538D2102118852A /* Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD35C1953A546211001D7C5E /* Service.framework */; };
+		3D1AC96C5097B5A678DA752A /* BitCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 762F57C4BD0B6972F8330F08 /* BitCollections.framework */; };
+		40B1689C0E0B0C7AE6E66D7D /* CombineSchedulers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 064CBB3A96D35D0C6C8E239C /* CombineSchedulers.framework */; };
+		4973189A6AAEE69DC82055E4 /* XCTestDynamicOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DE957440EFEAB5E2C301F1D /* XCTestDynamicOverlay.framework */; };
+		4B3B0657E2112E169B22AA1B /* SDWebImageSwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 013A5AAACC29EDE6846ABBAB /* SDWebImageSwiftUI.framework */; };
+		4EBDDB8F4CB01625127B3A40 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2ECC4C295DAC332701BD3A2E /* Preview Assets.xcassets */; };
+		517C03290E4A5BC7EE7ABC2B /* CustomDump.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD20FDB83BC2E8595770794 /* CustomDump.framework */; };
 		5736B68C32F8BF337F4C9FAA /* CasePaths.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ED7023CBA52FE02F5CAA754 /* CasePaths.framework */; };
+		588A1ED0643A4C172E5678B3 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A9B165D24DBE49BC27B93DF /* SDWebImage.framework */; };
+		5E331A53B2857023D440CAE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58D960E49DE944A6B1FF2A96 /* Assets.xcassets */; };
 		5ED77D480D2EED7CAB8198BF /* SwiftUINavigationCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3483BF4857D46DB99371764A /* SwiftUINavigationCore.framework */; };
-		5F4CB6C26FCCABA75C936E01 /* IdentifiedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 897CF9DC164F1166044C3EB8 /* IdentifiedCollections.framework */; };
-		65B8A38D1DFCE98A6B9C8C3B /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2CB125698D4770B881D957A /* Network.framework */; };
+		5F2FDF9A105C61C434679D4E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3022953F3DC2156F43F5302 /* SceneDelegate.swift */; };
+		64873E2B3054E518F03D11C7 /* ThirdParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 666517ACAEAFE67DE9DE1F99 /* ThirdParty.framework */; };
+		6589D86719C2C6BCFE2B8096 /* Shareds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07AE0789A2321D5EEAB3811C /* Shareds.framework */; };
 		672295BC8455CEDC1972E351 /* Dependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D574A6935030AF818EFD7F3 /* Dependencies.framework */; };
-		6B06454EBE65FF7958F32348 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C13A4E62393B0F4732C6FAD /* CFNetwork.framework */; };
+		6755C7FCF356613C7F86D3D6 /* TuistAssets+OPeace.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AF3BE6FAD546CD1A68EE13 /* TuistAssets+OPeace.swift */; };
+		67A09416478592D07D5BEE8B /* OpeaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B09DC0A9D071C5BD656C4B1 /* OpeaceApp.swift */; };
+		67E90780D8D3A6B1812C0359 /* OSLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D12E17A75CA23D981ACEC5F /* OSLog.framework */; };
+		6815669EBE94A5CF50C2AD86 /* Model.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 494948D87841C4FD94980A86 /* Model.framework */; };
+		687B32BE05092A1E2006733B /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A9B165D24DBE49BC27B93DF /* SDWebImage.framework */; };
+		69A91E8D65BB3C1E9FEF486C /* API.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12BAB39FC2CF0425C5782559 /* API.framework */; };
+		6AD3E4F1D43936441912B2C6 /* CasePaths.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ED7023CBA52FE02F5CAA754 /* CasePaths.framework */; };
+		6CE1529FEB37637A164F0363 /* Utill.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F793A1AE8366CD0940432DC /* Utill.framework */; };
 		6CF65A3AB345A78CFD3B3E3B /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A4ACB716AA0BF22075AE1B /* Moya.framework */; };
-		6DC8923659198D603F255B5D /* OpeaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D38A4CA1E3521DD8538BE /* OpeaceApp.swift */; };
-		6EE4086E3420BD564AB88333 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C89683A2BF4DA865C6F0452 /* SplashView.swift */; };
-		72DCFE1729F948D6E033C7F1 /* ShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF08C930417B00E79450B51 /* ShareKit.framework */; };
+		6F165E92B749FB2DF2F94A63 /* Perception.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0631089E46A99964F1F75E /* Perception.framework */; };
+		725E92C201C7E49714F94F47 /* ThirdPartys.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CEE66DE71E36764B066F7F /* ThirdPartys.framework */; };
+		730E59EAA8CDD14FA76088FF /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A4ACB716AA0BF22075AE1B /* Moya.framework */; };
+		73A044F3CE28988E32B2FE47 /* _RopeModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 710544D3689288D88BCF4D7F /* _RopeModule.framework */; };
+		74A653B526AB76DF8CB07BF3 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC382232F9CB19C7889E7C36 /* PretendardVariable.ttf */; };
+		75B8E1058DFB1F3FEE006333 /* TuistBundle+OPeaceQA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B97CEC1E97ED3FA1E668670 /* TuistBundle+OPeaceQA.swift */; };
 		775C07C9FCAAD5AF0676E327 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7389C99AC044DB6FCAE886 /* Alamofire.framework */; };
+		7C1D3538DD0C31A1CABEF571 /* SDWebImageSwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 013A5AAACC29EDE6846ABBAB /* SDWebImageSwiftUI.framework */; };
+		7D486AFB6B4B503240531EED /* swift-composable-architecture_ComposableArchitecture.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 59918D10B5B47AE0CA5D556B /* swift-composable-architecture_ComposableArchitecture.bundle */; };
+		7D785148BEA25BEE231F3BCF /* Utills.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 831C23401C372875DA116D5C /* Utills.framework */; };
 		7D9BBA2B49EEFBDF4C3A1A7E /* TuistBundle+OPeace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E284EB4A91928A78EE95343 /* TuistBundle+OPeace.swift */; };
-		86347834E8A602D119AF426E /* test.swift in Resources */ = {isa = PBXBuildFile; fileRef = 08024CA62FDEBA52DA85240D /* test.swift */; };
-		8A1C3EDB397B1402D94A93B1 /* _CollectionsUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37360C035C246BBC6221B53B /* _CollectionsUtilities.framework */; };
-		8EECF7F75015510BC2417539 /* DesignSystemKit_DesignSystemKit.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 42963B49AB32BC6E6C882B11 /* DesignSystemKit_DesignSystemKit.bundle */; };
+		7E1B0DFC4A5E27059D66A767 /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD62BD908E4F117B1962FA2 /* Presentation.framework */; };
+		7F17ECEDDD0AB97E29B63835 /* UseCase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA78626F61B7A844F78DC9C /* UseCase.framework */; };
+		82D45CA455EF9B4B195ED262 /* InternalCollectionsUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005318C81558C9BF226FA9BE /* InternalCollectionsUtilities.framework */; };
+		839861321E71E42D18B5B53F /* ThirdPartys.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CEE66DE71E36764B066F7F /* ThirdPartys.framework */; };
+		83FD415F10EF29EDAC89347B /* Clocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3DC95C364244F938C7DFCCA /* Clocks.framework */; };
+		87708B71A43044AC7C05C752 /* DependenciesMacros.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F7EF819168A470F989D372 /* DependenciesMacros.framework */; };
+		8962AB7654D0505691159E5D /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7389C99AC044DB6FCAE886 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8C169AC0A3ABF90D83864607 /* Networkings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 725C4353C0319CF46F69E133 /* Networkings.framework */; };
+		8CAF2D194DC01F8EDDA77D0D /* TuistFonts+OPeace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D16C4D60B18758E0F556844 /* TuistFonts+OPeace.swift */; };
+		8E17BE3A922B72154286A801 /* ConcurrencyExtras.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7CD16D4BE579298838632D /* ConcurrencyExtras.framework */; };
 		8FAA6055E1C01F7EE6D4C8C4 /* DependenciesMacros.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F7EF819168A470F989D372 /* DependenciesMacros.framework */; };
-		90391EF432358320EB3A1B8C /* test.swift in Resources */ = {isa = PBXBuildFile; fileRef = 08024CA62FDEBA52DA85240D /* test.swift */; };
-		941E35F92216E142C775F4A1 /* Perception.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0631089E46A99964F1F75E /* Perception.framework */; };
-		9811C9EEE25648577909CB0C /* DesignSystemKit_DesignSystemKit.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 42963B49AB32BC6E6C882B11 /* DesignSystemKit_DesignSystemKit.bundle */; };
-		9C953E34089A4B7C6CAD7066 /* Feature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2746ED6390D9CF7B240C02 /* Feature.framework */; };
+		921E0C4962F3F5566EBFCC8E /* Dependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D574A6935030AF818EFD7F3 /* Dependencies.framework */; };
+		93071218163E3FB501379256 /* HeapModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E99ACF15A4D9E23B1F2325A /* HeapModule.framework */; };
+		938A759434FC519992BD9E23 /* AppDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B637CBABAD087480661558 /* AppDIContainer.swift */; };
+		93BE67F58BC1AA53AC238D61 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA1E4FC25D9C7F95A96380 /* AppReducer.swift */; };
+		9A80DBEEC842AF7059B33C16 /* OSLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D12E17A75CA23D981ACEC5F /* OSLog.framework */; };
 		9CBCAFF70D23219F539247B6 /* Clocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3DC95C364244F938C7DFCCA /* Clocks.framework */; };
-		9CCBDD6762078E6D0534BC2D /* AppMainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B55DC475ABD37BFA2E1B5E /* AppMainFeature.swift */; };
-		9D1E864535B4A8BDD77DC08B /* TuistBundle+OPeaceDev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1EEF65416062C63F1B3BD6 /* TuistBundle+OPeaceDev.swift */; };
-		A22B2FCD428ECB7BF912BAFE /* AppMainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B55DC475ABD37BFA2E1B5E /* AppMainFeature.swift */; };
-		A2A4A09451193E19B534201C /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C9D8CEDB1ED18F7500F840 /* Domain.framework */; };
+		9CEBAF272B8DEA51AB9CCCC1 /* IdentifiedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 897CF9DC164F1166044C3EB8 /* IdentifiedCollections.framework */; };
+		9D76F00722D8C726A277AEFC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3022953F3DC2156F43F5302 /* SceneDelegate.swift */; };
+		9F5F51A49EEF2AC322642146 /* InternalCollectionsUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005318C81558C9BF226FA9BE /* InternalCollectionsUtilities.framework */; };
+		9FC953FAA4E12FFE3A19673D /* DequeModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0109352D6225D44C4F6AA772 /* DequeModule.framework */; };
+		A1A9D7F2A35B221B41311C77 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA1E4FC25D9C7F95A96380 /* AppReducer.swift */; };
+		A4912DD950C6F3BCCECEED89 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1949B50C00C8126136F9F239 /* DesignSystem.framework */; };
 		A4C1045E8FABFE9B70B80B29 /* ConcurrencyExtras.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7CD16D4BE579298838632D /* ConcurrencyExtras.framework */; };
-		B10718682CE7A08A595BD044 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C89683A2BF4DA865C6F0452 /* SplashView.swift */; };
-		B245C58A3C7ED10016056A0B /* CustomDump.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCD20FDB83BC2E8595770794 /* CustomDump.framework */; };
-		B64D517CE1C04AB2731F919A /* ShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF08C930417B00E79450B51 /* ShareKit.framework */; };
-		BBAC2EF966D7B2C0550CB9F0 /* Clocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3DC95C364244F938C7DFCCA /* Clocks.framework */; };
-		BC7F266A6177C0351DF263FB /* CombineSchedulers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 064CBB3A96D35D0C6C8E239C /* CombineSchedulers.framework */; };
-		BD5CD72C48EA3FBB29C538BC /* ConcurrencyExtras.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA7CD16D4BE579298838632D /* ConcurrencyExtras.framework */; };
-		BD748F6D9C95E52A9FE596EA /* Feature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2746ED6390D9CF7B240C02 /* Feature.framework */; };
-		C172050A2C5A683F5D1B027B /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2CB125698D4770B881D957A /* Network.framework */; };
-		C66C9ACE971D24E22ED52CF7 /* AppMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583CB22BB158FAFEB92160FF /* AppMainView.swift */; };
+		A51184322AD72184603E2C72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58D960E49DE944A6B1FF2A96 /* Assets.xcassets */; };
+		A6E704845C23931FBF7231B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697B8FCF31717CABCDD5C879 /* ContentView.swift */; };
+		AD861630C63C0375EE9DB1AA /* AppDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B637CBABAD087480661558 /* AppDIContainer.swift */; };
+		ADB166DF6FEBA0CBA9A23197 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC382232F9CB19C7889E7C36 /* PretendardVariable.ttf */; };
+		B00E9D58880828B43244EFE1 /* _RopeModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 710544D3689288D88BCF4D7F /* _RopeModule.framework */; };
+		B1A84DEAF215A1316D08A14C /* SDWebImage_SDWebImage.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FBEA26A88470477194C74AB /* SDWebImage_SDWebImage.bundle */; };
+		B1B8A01C6BCC3B6D1E13F998 /* CombineMoya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9BE4AB849FDC214806C108 /* CombineMoya.framework */; };
+		B5BE8517EDD79872E3222EF7 /* DesignSystem_DesignSystem.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7FD3567291A1386FF6591C0A /* DesignSystem_DesignSystem.bundle */; };
+		B67245BF418E3295B879B624 /* SDWebImage_SDWebImage.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 5FBEA26A88470477194C74AB /* SDWebImage_SDWebImage.bundle */; };
+		B7FA98CBA34619C96BB2BB39 /* OrderedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C7F7074430E076D9A8F093 /* OrderedCollections.framework */; };
+		B9C44E35136A84D253A45FAB /* BitCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 762F57C4BD0B6972F8330F08 /* BitCollections.framework */; };
+		B9F176A6CDE2F185539E1A23 /* Collections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1ED4C566C2443F1F4C2158 /* Collections.framework */; };
+		BE8969A7658D30AC631536A3 /* API.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12BAB39FC2CF0425C5782559 /* API.framework */; };
+		C18DA389A976AAA40328D4B7 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D317BF12399D712D8ED8697 /* AppView.swift */; };
+		C2D8E758ADA6A350CF9AAFF6 /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD62BD908E4F117B1962FA2 /* Presentation.framework */; };
 		C753AB905C9649FA346C7B77 /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A62E719CD13379021A1018E /* ComposableArchitecture.framework */; };
-		C8A68F2CB6935D5E16566F5E /* CasePaths.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ED7023CBA52FE02F5CAA754 /* CasePaths.framework */; };
 		C9573E22755598E058524EF3 /* XCTestDynamicOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DE957440EFEAB5E2C301F1D /* XCTestDynamicOverlay.framework */; };
-		CD7F08C63C19FD51233AE426 /* DesignSystemKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D459FD4C268F6FFAF978E01 /* DesignSystemKit.framework */; };
-		D7FB274EE0887678903BA7B7 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88A866663F825CB4532CC39D /* Core.framework */; };
-		EE9B2EC8D458321DD012D5C3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7389C99AC044DB6FCAE886 /* Alamofire.framework */; };
-		EFA3BC38583E02E302778D34 /* XCTestDynamicOverlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DE957440EFEAB5E2C301F1D /* XCTestDynamicOverlay.framework */; };
+		CA61519B52C68608ED8339CA /* Foundations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DA43DBB964683DE5164F153 /* Foundations.framework */; };
+		CAF725F0644A5B588D076D0A /* Model.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 494948D87841C4FD94980A86 /* Model.framework */; };
+		CCACF5D96584765DB07ED1B5 /* Utill.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F793A1AE8366CD0940432DC /* Utill.framework */; };
+		CEEBA564D3E115C6F5A2D779 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7389C99AC044DB6FCAE886 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D3A33624AEB0B99942B9189A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 389284836BD9FD455C644302 /* AppDelegate.swift */; };
+		D848CE7AE30CB9A950C09850 /* HashTreeCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5248430708324123B9ACC783 /* HashTreeCollections.framework */; };
+		E3EEC42AF9EABB8E517E17ED /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D317BF12399D712D8ED8697 /* AppView.swift */; };
+		EBF24824A2B0B45D92D69CB2 /* Foundations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DA43DBB964683DE5164F153 /* Foundations.framework */; };
+		EDFC6B9C3EA569A0C9A4DDD3 /* DesignSystem_DesignSystem.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 7FD3567291A1386FF6591C0A /* DesignSystem_DesignSystem.bundle */; };
+		EF88608B1578A0228B210A90 /* DiContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 588A8A67B23F6F2DF15EB9FF /* DiContainer.framework */; };
 		F09378A1B1F2BA81FD356FA4 /* Perception.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0631089E46A99964F1F75E /* Perception.framework */; };
-		F158DFF9976A4C38DBA6E12C /* Dependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D574A6935030AF818EFD7F3 /* Dependencies.framework */; };
-		F4F4653691EAC15358FBFC99 /* DesignSystemKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D459FD4C268F6FFAF978E01 /* DesignSystemKit.framework */; };
-		FBFF8FD02B8B2A9000A95AA1 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBFF8FCF2B8B2A9000A95AA1 /* CustomAlertView.swift */; };
-		FBFF8FD12B8B2A9000A95AA1 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBFF8FCF2B8B2A9000A95AA1 /* CustomAlertView.swift */; };
-		FF22C045B31275A728EA2AC2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C13A4E62393B0F4732C6FAD /* CFNetwork.framework */; };
+		F4E3EDBD1817F9579BC56156 /* SortedCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D95B9E0679952090A721AC1 /* SortedCollections.framework */; };
+		F534F08CACCA7C5B3771F26D /* DiContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 588A8A67B23F6F2DF15EB9FF /* DiContainer.framework */; };
+		FCC58D2643854B2239BFB6ED /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7389C99AC044DB6FCAE886 /* Alamofire.framework */; };
+		FF2CD11E58ECBB0E526E19B1 /* HeapModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E99ACF15A4D9E23B1F2325A /* HeapModule.framework */; };
+		FF7FB16A3F22AF5DD4440A6E /* Shareds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07AE0789A2321D5EEAB3811C /* Shareds.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,16 +142,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		1717C1AFA73C2FACB39F0974 /* Dependencies */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
-			dstSubfolderSpec = 16;
-			files = (
-				8EECF7F75015510BC2417539 /* DesignSystemKit_DesignSystemKit.bundle in Dependencies */,
-			);
-			name = Dependencies;
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 		1908BCD75735C25C506A6DE4 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -107,22 +152,37 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		918BC4F2D7B0D6BAB8A061E5 /* Embed Frameworks */ = {
+		5E80B98667BCFBA201E83478 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				CEEBA564D3E115C6F5A2D779 /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B11E2C67F0C83BF9130CCA59 /* Dependencies */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstSubfolderSpec = 16;
+			files = (
+				188385B73570EF9A0F5DF15C /* DesignSystem_DesignSystem.bundle in Dependencies */,
+				0180A7E4F66AB432233DACD9 /* SDWebImage_SDWebImage.bundle in Dependencies */,
+				1009573CAF17F46A78B57C5C /* swift-composable-architecture_ComposableArchitecture.bundle in Dependencies */,
+			);
+			name = Dependencies;
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 		D9B70D4C93E6E344B9672E67 /* Dependencies */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 8;
 			dstSubfolderSpec = 16;
 			files = (
-				9811C9EEE25648577909CB0C /* DesignSystemKit_DesignSystemKit.bundle in Dependencies */,
+				EDFC6B9C3EA569A0C9A4DDD3 /* DesignSystem_DesignSystem.bundle in Dependencies */,
+				B67245BF418E3295B879B624 /* SDWebImage_SDWebImage.bundle in Dependencies */,
+				7D486AFB6B4B503240531EED /* swift-composable-architecture_ComposableArchitecture.bundle in Dependencies */,
 			);
 			name = Dependencies;
 			runOnlyForDeploymentPostprocessing = 1;
@@ -133,6 +193,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8962AB7654D0505691159E5D /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,47 +201,123 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		005318C81558C9BF226FA9BE /* InternalCollectionsUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = InternalCollectionsUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		00A4ACB716AA0BF22075AE1B /* Moya.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Moya.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0109352D6225D44C4F6AA772 /* DequeModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DequeModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		013A5AAACC29EDE6846ABBAB /* SDWebImageSwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDWebImageSwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		064CBB3A96D35D0C6C8E239C /* CombineSchedulers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CombineSchedulers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		08024CA62FDEBA52DA85240D /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
-		0C13A4E62393B0F4732C6FAD /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		0D1EEF65416062C63F1B3BD6 /* TuistBundle+OPeaceDev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+OPeaceDev.swift"; sourceTree = "<group>"; };
-		0D459FD4C268F6FFAF978E01 /* DesignSystemKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DesignSystemKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		07AE0789A2321D5EEAB3811C /* Shareds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Shareds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0916C67FD91CC20A54179ADC /* TuistFonts+OPeaceQA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistFonts+OPeaceQA.swift"; sourceTree = "<group>"; };
+		0A444847D12BE2BB106BBE50 /* OPeace-QA-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "OPeace-QA-Info.plist"; sourceTree = "<group>"; };
 		0D574A6935030AF818EFD7F3 /* Dependencies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Dependencies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DE957440EFEAB5E2C301F1D /* XCTestDynamicOverlay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCTestDynamicOverlay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E284EB4A91928A78EE95343 /* TuistBundle+OPeace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+OPeace.swift"; sourceTree = "<group>"; };
 		0ED7023CBA52FE02F5CAA754 /* CasePaths.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CasePaths.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1DF08C930417B00E79450B51 /* ShareKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ShareKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		28CCB6C88557610302866AB9 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
+		12BAB39FC2CF0425C5782559 /* API.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = API.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1949B50C00C8126136F9F239 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		231DB86E9FD48863312E8181 /* OPeace-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "OPeace-Info.plist"; sourceTree = "<group>"; };
+		2AA78626F61B7A844F78DC9C /* UseCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UseCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C1ED4C566C2443F1F4C2158 /* Collections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Collections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D12E17A75CA23D981ACEC5F /* OSLog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSLog.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OSLog.framework; sourceTree = DEVELOPER_DIR; };
+		2D317BF12399D712D8ED8697 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		2DA43DBB964683DE5164F153 /* Foundations.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Foundations.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2ECC4C295DAC332701BD3A2E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3483BF4857D46DB99371764A /* SwiftUINavigationCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftUINavigationCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		37360C035C246BBC6221B53B /* _CollectionsUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = _CollectionsUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		389284836BD9FD455C644302 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		39EB1E0DCC56F5D20F7CF97B /* OPeaceTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "OPeaceTests-Info.plist"; sourceTree = "<group>"; };
-		42963B49AB32BC6E6C882B11 /* DesignSystemKit_DesignSystemKit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DesignSystemKit_DesignSystemKit.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		43B55DC475ABD37BFA2E1B5E /* AppMainFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMainFeature.swift; sourceTree = "<group>"; };
-		4B5F6A7E244E786398E4A327 /* OPeace_Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OPeace_Dev.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B97CEC1E97ED3FA1E668670 /* TuistBundle+OPeaceQA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+OPeaceQA.swift"; sourceTree = "<group>"; };
+		3F793A1AE8366CD0940432DC /* Utill.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Utill.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		494948D87841C4FD94980A86 /* Model.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Model.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AD62BD908E4F117B1962FA2 /* Presentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Presentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D16C4D60B18758E0F556844 /* TuistFonts+OPeace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistFonts+OPeace.swift"; sourceTree = "<group>"; };
+		5248430708324123B9ACC783 /* HashTreeCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HashTreeCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		54CA1E4FC25D9C7F95A96380 /* AppReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
 		54F7EF819168A470F989D372 /* DependenciesMacros.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DependenciesMacros.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		583CB22BB158FAFEB92160FF /* AppMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMainView.swift; sourceTree = "<group>"; };
-		5B2746ED6390D9CF7B240C02 /* Feature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Feature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5C89683A2BF4DA865C6F0452 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
-		765AF232A628098DCC04FD80 /* OPeace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OPeace.entitlements; sourceTree = "<group>"; };
+		588A8A67B23F6F2DF15EB9FF /* DiContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DiContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		58D960E49DE944A6B1FF2A96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		59918D10B5B47AE0CA5D556B /* swift-composable-architecture_ComposableArchitecture.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-composable-architecture_ComposableArchitecture.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B09DC0A9D071C5BD656C4B1 /* OpeaceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeaceApp.swift; sourceTree = "<group>"; };
+		5D95B9E0679952090A721AC1 /* SortedCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SortedCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E99ACF15A4D9E23B1F2325A /* HeapModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HeapModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FBEA26A88470477194C74AB /* SDWebImage_SDWebImage.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SDWebImage_SDWebImage.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		60B637CBABAD087480661558 /* AppDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDIContainer.swift; sourceTree = "<group>"; };
+		666517ACAEAFE67DE9DE1F99 /* ThirdParty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThirdParty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		697B8FCF31717CABCDD5C879 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6D9BE4AB849FDC214806C108 /* CombineMoya.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CombineMoya.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		70CEE66DE71E36764B066F7F /* ThirdPartys.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThirdPartys.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		710544D3689288D88BCF4D7F /* _RopeModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = _RopeModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		725C4353C0319CF46F69E133 /* Networkings.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Networkings.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		762F57C4BD0B6972F8330F08 /* BitCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BitCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D7389C99AC044DB6FCAE886 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		88A866663F825CB4532CC39D /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FD3567291A1386FF6591C0A /* DesignSystem_DesignSystem.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DesignSystem_DesignSystem.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		831C23401C372875DA116D5C /* Utills.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Utills.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		897CF9DC164F1166044C3EB8 /* IdentifiedCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IdentifiedCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A62E719CD13379021A1018E /* ComposableArchitecture.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ComposableArchitecture.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B9D38A4CA1E3521DD8538BE /* OpeaceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeaceApp.swift; sourceTree = "<group>"; };
+		9A9B165D24DBE49BC27B93DF /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3B570466FE6B49D7EE86039 /* TuistAssets+OPeaceQA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistAssets+OPeaceQA.swift"; sourceTree = "<group>"; };
 		A445C66880DC63E9958A59AA /* OPeace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OPeace.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC382232F9CB19C7889E7C36 /* PretendardVariable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PretendardVariable.ttf; sourceTree = "<group>"; };
 		B3DC95C364244F938C7DFCCA /* Clocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Clocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B5C9D8CEDB1ED18F7500F840 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D9678ED159E24A7980155D0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D527E4719932A5E1B98FC9B0 /* OPeace_QA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OPeace_QA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD20FDB83BC2E8595770794 /* CustomDump.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CustomDump.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD35C1953A546211001D7C5E /* Service.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Service.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE77E1B0D4071D61EFEBAD16 /* OPeaceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OPeaceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0C7F7074430E076D9A8F093 /* OrderedCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OrderedCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E2CB125698D4770B881D957A /* Network.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Network.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3022953F3DC2156F43F5302 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		E9AF3BE6FAD546CD1A68EE13 /* TuistAssets+OPeace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistAssets+OPeace.swift"; sourceTree = "<group>"; };
 		FA7CD16D4BE579298838632D /* ConcurrencyExtras.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ConcurrencyExtras.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE0631089E46A99964F1F75E /* Perception.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Perception.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2D989FE4238CCBC6ACB8BADB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67E90780D8D3A6B1812C0359 /* OSLog.framework in Frameworks */,
+				BE8969A7658D30AC631536A3 /* API.framework in Frameworks */,
+				FCC58D2643854B2239BFB6ED /* Alamofire.framework in Frameworks */,
+				B9C44E35136A84D253A45FAB /* BitCollections.framework in Frameworks */,
+				6AD3E4F1D43936441912B2C6 /* CasePaths.framework in Frameworks */,
+				83FD415F10EF29EDAC89347B /* Clocks.framework in Frameworks */,
+				B9F176A6CDE2F185539E1A23 /* Collections.framework in Frameworks */,
+				B1B8A01C6BCC3B6D1E13F998 /* CombineMoya.framework in Frameworks */,
+				40B1689C0E0B0C7AE6E66D7D /* CombineSchedulers.framework in Frameworks */,
+				1BAFFA84938BE13975DE21D1 /* ComposableArchitecture.framework in Frameworks */,
+				8E17BE3A922B72154286A801 /* ConcurrencyExtras.framework in Frameworks */,
+				517C03290E4A5BC7EE7ABC2B /* CustomDump.framework in Frameworks */,
+				921E0C4962F3F5566EBFCC8E /* Dependencies.framework in Frameworks */,
+				87708B71A43044AC7C05C752 /* DependenciesMacros.framework in Frameworks */,
+				9FC953FAA4E12FFE3A19673D /* DequeModule.framework in Frameworks */,
+				A4912DD950C6F3BCCECEED89 /* DesignSystem.framework in Frameworks */,
+				EF88608B1578A0228B210A90 /* DiContainer.framework in Frameworks */,
+				EBF24824A2B0B45D92D69CB2 /* Foundations.framework in Frameworks */,
+				D848CE7AE30CB9A950C09850 /* HashTreeCollections.framework in Frameworks */,
+				93071218163E3FB501379256 /* HeapModule.framework in Frameworks */,
+				9CEBAF272B8DEA51AB9CCCC1 /* IdentifiedCollections.framework in Frameworks */,
+				82D45CA455EF9B4B195ED262 /* InternalCollectionsUtilities.framework in Frameworks */,
+				6815669EBE94A5CF50C2AD86 /* Model.framework in Frameworks */,
+				730E59EAA8CDD14FA76088FF /* Moya.framework in Frameworks */,
+				34813DB509379CA453DC4C27 /* Networkings.framework in Frameworks */,
+				B7FA98CBA34619C96BB2BB39 /* OrderedCollections.framework in Frameworks */,
+				6F165E92B749FB2DF2F94A63 /* Perception.framework in Frameworks */,
+				7E1B0DFC4A5E27059D66A767 /* Presentation.framework in Frameworks */,
+				687B32BE05092A1E2006733B /* SDWebImage.framework in Frameworks */,
+				7C1D3538DD0C31A1CABEF571 /* SDWebImageSwiftUI.framework in Frameworks */,
+				3A8191C3C538D2102118852A /* Service.framework in Frameworks */,
+				6589D86719C2C6BCFE2B8096 /* Shareds.framework in Frameworks */,
+				0084A9CD43FBAEC3EF283B8E /* SortedCollections.framework in Frameworks */,
+				21909553EA96AEF12A0D2D9B /* SwiftUINavigationCore.framework in Frameworks */,
+				3567B85CCE559E4F933F97A4 /* ThirdParty.framework in Frameworks */,
+				839861321E71E42D18B5B53F /* ThirdPartys.framework in Frameworks */,
+				7F17ECEDDD0AB97E29B63835 /* UseCase.framework in Frameworks */,
+				6CE1529FEB37637A164F0363 /* Utill.framework in Frameworks */,
+				7D785148BEA25BEE231F3BCF /* Utills.framework in Frameworks */,
+				4973189A6AAEE69DC82055E4 /* XCTestDynamicOverlay.framework in Frameworks */,
+				73A044F3CE28988E32B2FE47 /* _RopeModule.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3F43FEA6251AC3A3E655C462 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -192,59 +329,47 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B06454EBE65FF7958F32348 /* CFNetwork.framework in Frameworks */,
+				9A80DBEEC842AF7059B33C16 /* OSLog.framework in Frameworks */,
+				69A91E8D65BB3C1E9FEF486C /* API.framework in Frameworks */,
 				775C07C9FCAAD5AF0676E327 /* Alamofire.framework in Frameworks */,
+				3D1AC96C5097B5A678DA752A /* BitCollections.framework in Frameworks */,
 				5736B68C32F8BF337F4C9FAA /* CasePaths.framework in Frameworks */,
 				9CBCAFF70D23219F539247B6 /* Clocks.framework in Frameworks */,
+				24E3737C28551EE8020CA41E /* Collections.framework in Frameworks */,
+				2EB31434049EC2D2154A3CC4 /* CombineMoya.framework in Frameworks */,
 				1D664278779A032A03566588 /* CombineSchedulers.framework in Frameworks */,
 				C753AB905C9649FA346C7B77 /* ComposableArchitecture.framework in Frameworks */,
 				A4C1045E8FABFE9B70B80B29 /* ConcurrencyExtras.framework in Frameworks */,
-				D7FB274EE0887678903BA7B7 /* Core.framework in Frameworks */,
 				2552F6C9A88E89E2AACDF60F /* CustomDump.framework in Frameworks */,
 				672295BC8455CEDC1972E351 /* Dependencies.framework in Frameworks */,
 				8FAA6055E1C01F7EE6D4C8C4 /* DependenciesMacros.framework in Frameworks */,
-				F4F4653691EAC15358FBFC99 /* DesignSystemKit.framework in Frameworks */,
-				196CD8FCD2663E266A67BF57 /* Domain.framework in Frameworks */,
-				BD748F6D9C95E52A9FE596EA /* Feature.framework in Frameworks */,
+				1094F659271D4CA0F4B37C24 /* DequeModule.framework in Frameworks */,
+				0213510E485216819148A1E4 /* DesignSystem.framework in Frameworks */,
+				F534F08CACCA7C5B3771F26D /* DiContainer.framework in Frameworks */,
+				CA61519B52C68608ED8339CA /* Foundations.framework in Frameworks */,
+				2490EF2956AA07A5C4CA4FE0 /* HashTreeCollections.framework in Frameworks */,
+				FF2CD11E58ECBB0E526E19B1 /* HeapModule.framework in Frameworks */,
 				181F46F0548B9C0F912140F3 /* IdentifiedCollections.framework in Frameworks */,
+				9F5F51A49EEF2AC322642146 /* InternalCollectionsUtilities.framework in Frameworks */,
+				CAF725F0644A5B588D076D0A /* Model.framework in Frameworks */,
 				6CF65A3AB345A78CFD3B3E3B /* Moya.framework in Frameworks */,
-				65B8A38D1DFCE98A6B9C8C3B /* Network.framework in Frameworks */,
+				8C169AC0A3ABF90D83864607 /* Networkings.framework in Frameworks */,
 				2D28E94B89C4962BF8DFC08B /* OrderedCollections.framework in Frameworks */,
 				F09378A1B1F2BA81FD356FA4 /* Perception.framework in Frameworks */,
-				B64D517CE1C04AB2731F919A /* ShareKit.framework in Frameworks */,
+				C2D8E758ADA6A350CF9AAFF6 /* Presentation.framework in Frameworks */,
+				588A1ED0643A4C172E5678B3 /* SDWebImage.framework in Frameworks */,
+				4B3B0657E2112E169B22AA1B /* SDWebImageSwiftUI.framework in Frameworks */,
+				1DD0634FBC408A52A4302B6E /* Service.framework in Frameworks */,
+				FF7FB16A3F22AF5DD4440A6E /* Shareds.framework in Frameworks */,
+				F4E3EDBD1817F9579BC56156 /* SortedCollections.framework in Frameworks */,
 				5ED77D480D2EED7CAB8198BF /* SwiftUINavigationCore.framework in Frameworks */,
+				64873E2B3054E518F03D11C7 /* ThirdParty.framework in Frameworks */,
+				725E92C201C7E49714F94F47 /* ThirdPartys.framework in Frameworks */,
+				2E6009A6CB28EC6BA6DD39E7 /* UseCase.framework in Frameworks */,
+				CCACF5D96584765DB07ED1B5 /* Utill.framework in Frameworks */,
+				11A30E6ED968290D60E18F5B /* Utills.framework in Frameworks */,
 				C9573E22755598E058524EF3 /* XCTestDynamicOverlay.framework in Frameworks */,
-				8A1C3EDB397B1402D94A93B1 /* _CollectionsUtilities.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		AA137F6B971C94B5B414104C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FF22C045B31275A728EA2AC2 /* CFNetwork.framework in Frameworks */,
-				EE9B2EC8D458321DD012D5C3 /* Alamofire.framework in Frameworks */,
-				C8A68F2CB6935D5E16566F5E /* CasePaths.framework in Frameworks */,
-				BBAC2EF966D7B2C0550CB9F0 /* Clocks.framework in Frameworks */,
-				BC7F266A6177C0351DF263FB /* CombineSchedulers.framework in Frameworks */,
-				41548E46AF543A67A20476CA /* ComposableArchitecture.framework in Frameworks */,
-				BD5CD72C48EA3FBB29C538BC /* ConcurrencyExtras.framework in Frameworks */,
-				331A553AA81B4B35A40A54D1 /* Core.framework in Frameworks */,
-				B245C58A3C7ED10016056A0B /* CustomDump.framework in Frameworks */,
-				F158DFF9976A4C38DBA6E12C /* Dependencies.framework in Frameworks */,
-				4BC2CBFF22A8480D4B615D61 /* DependenciesMacros.framework in Frameworks */,
-				CD7F08C63C19FD51233AE426 /* DesignSystemKit.framework in Frameworks */,
-				A2A4A09451193E19B534201C /* Domain.framework in Frameworks */,
-				9C953E34089A4B7C6CAD7066 /* Feature.framework in Frameworks */,
-				5F4CB6C26FCCABA75C936E01 /* IdentifiedCollections.framework in Frameworks */,
-				3F95678157AEC98B0717868B /* Moya.framework in Frameworks */,
-				C172050A2C5A683F5D1B027B /* Network.framework in Frameworks */,
-				15D77C945CDE60033C695BFB /* OrderedCollections.framework in Frameworks */,
-				941E35F92216E142C775F4A1 /* Perception.framework in Frameworks */,
-				72DCFE1729F948D6E033C7F1 /* ShareKit.framework in Frameworks */,
-				2D3B37AD95DAF35887F02AC5 /* SwiftUINavigationCore.framework in Frameworks */,
-				EFA3BC38583E02E302778D34 /* XCTestDynamicOverlay.framework in Frameworks */,
-				1B06342E61FEF9C669770D08 /* _CollectionsUtilities.framework in Frameworks */,
+				B00E9D58880828B43244EFE1 /* _RopeModule.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,7 +379,7 @@
 		03A7FAD6F457AFA7E791EBC1 /* FontAsset */ = {
 			isa = PBXGroup;
 			children = (
-				08024CA62FDEBA52DA85240D /* test.swift */,
+				AC382232F9CB19C7889E7C36 /* PretendardVariable.ttf */,
 			);
 			path = FontAsset;
 			sourceTree = "<group>";
@@ -263,55 +388,85 @@
 			isa = PBXGroup;
 			children = (
 				45ADAF318A02CAFDF8C6224B /* Project */,
-				ACB79210E0994716B164D65E /* Frameworks */,
 				3F2247ADAAE2A17A5F1DF0E9 /* Products */,
+				ACB79210E0994716B164D65E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		1AB4FE79166F9D8BA743236F /* InfoPlists */ = {
 			isa = PBXGroup;
 			children = (
+				231DB86E9FD48863312E8181 /* OPeace-Info.plist */,
+				0A444847D12BE2BB106BBE50 /* OPeace-QA-Info.plist */,
 				39EB1E0DCC56F5D20F7CF97B /* OPeaceTests-Info.plist */,
 			);
 			path = InfoPlists;
 			sourceTree = "<group>";
 		};
-		213D5A90805B578C5CE78264 /* Applicaton */ = {
+		29763E9C0D52E548C7BAB9C2 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8B9D38A4CA1E3521DD8538BE /* OpeaceApp.swift */,
+				2D317BF12399D712D8ED8697 /* AppView.swift */,
 			);
-			path = Applicaton;
+			path = View;
+			sourceTree = "<group>";
+		};
+		325B8A474A69475CE04C6C7B /* Di */ = {
+			isa = PBXGroup;
+			children = (
+				60B637CBABAD087480661558 /* AppDIContainer.swift */,
+			);
+			path = Di;
 			sourceTree = "<group>";
 		};
 		3F2247ADAAE2A17A5F1DF0E9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				37360C035C246BBC6221B53B /* _CollectionsUtilities.framework */,
+				710544D3689288D88BCF4D7F /* _RopeModule.framework */,
 				7D7389C99AC044DB6FCAE886 /* Alamofire.framework */,
+				12BAB39FC2CF0425C5782559 /* API.framework */,
+				762F57C4BD0B6972F8330F08 /* BitCollections.framework */,
 				0ED7023CBA52FE02F5CAA754 /* CasePaths.framework */,
 				B3DC95C364244F938C7DFCCA /* Clocks.framework */,
+				2C1ED4C566C2443F1F4C2158 /* Collections.framework */,
+				6D9BE4AB849FDC214806C108 /* CombineMoya.framework */,
 				064CBB3A96D35D0C6C8E239C /* CombineSchedulers.framework */,
 				8A62E719CD13379021A1018E /* ComposableArchitecture.framework */,
 				FA7CD16D4BE579298838632D /* ConcurrencyExtras.framework */,
-				88A866663F825CB4532CC39D /* Core.framework */,
 				DCD20FDB83BC2E8595770794 /* CustomDump.framework */,
 				0D574A6935030AF818EFD7F3 /* Dependencies.framework */,
 				54F7EF819168A470F989D372 /* DependenciesMacros.framework */,
-				42963B49AB32BC6E6C882B11 /* DesignSystemKit_DesignSystemKit.bundle */,
-				0D459FD4C268F6FFAF978E01 /* DesignSystemKit.framework */,
-				B5C9D8CEDB1ED18F7500F840 /* Domain.framework */,
-				5B2746ED6390D9CF7B240C02 /* Feature.framework */,
+				0109352D6225D44C4F6AA772 /* DequeModule.framework */,
+				7FD3567291A1386FF6591C0A /* DesignSystem_DesignSystem.bundle */,
+				1949B50C00C8126136F9F239 /* DesignSystem.framework */,
+				588A8A67B23F6F2DF15EB9FF /* DiContainer.framework */,
+				2DA43DBB964683DE5164F153 /* Foundations.framework */,
+				5248430708324123B9ACC783 /* HashTreeCollections.framework */,
+				5E99ACF15A4D9E23B1F2325A /* HeapModule.framework */,
 				897CF9DC164F1166044C3EB8 /* IdentifiedCollections.framework */,
+				005318C81558C9BF226FA9BE /* InternalCollectionsUtilities.framework */,
+				494948D87841C4FD94980A86 /* Model.framework */,
 				00A4ACB716AA0BF22075AE1B /* Moya.framework */,
-				E2CB125698D4770B881D957A /* Network.framework */,
-				4B5F6A7E244E786398E4A327 /* OPeace_Dev.app */,
+				725C4353C0319CF46F69E133 /* Networkings.framework */,
+				D527E4719932A5E1B98FC9B0 /* OPeace_QA.app */,
 				A445C66880DC63E9958A59AA /* OPeace.app */,
 				DE77E1B0D4071D61EFEBAD16 /* OPeaceTests.xctest */,
 				E0C7F7074430E076D9A8F093 /* OrderedCollections.framework */,
 				FE0631089E46A99964F1F75E /* Perception.framework */,
-				1DF08C930417B00E79450B51 /* ShareKit.framework */,
+				4AD62BD908E4F117B1962FA2 /* Presentation.framework */,
+				5FBEA26A88470477194C74AB /* SDWebImage_SDWebImage.bundle */,
+				9A9B165D24DBE49BC27B93DF /* SDWebImage.framework */,
+				013A5AAACC29EDE6846ABBAB /* SDWebImageSwiftUI.framework */,
+				DD35C1953A546211001D7C5E /* Service.framework */,
+				07AE0789A2321D5EEAB3811C /* Shareds.framework */,
+				5D95B9E0679952090A721AC1 /* SortedCollections.framework */,
+				59918D10B5B47AE0CA5D556B /* swift-composable-architecture_ComposableArchitecture.bundle */,
 				3483BF4857D46DB99371764A /* SwiftUINavigationCore.framework */,
+				666517ACAEAFE67DE9DE1F99 /* ThirdParty.framework */,
+				70CEE66DE71E36764B066F7F /* ThirdPartys.framework */,
+				2AA78626F61B7A844F78DC9C /* UseCase.framework */,
+				3F793A1AE8366CD0940432DC /* Utill.framework */,
+				831C23401C372875DA116D5C /* Utills.framework */,
 				0DE957440EFEAB5E2C301F1D /* XCTestDynamicOverlay.framework */,
 			);
 			name = Products;
@@ -320,8 +475,11 @@
 		419F4246985134C340672215 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				213D5A90805B578C5CE78264 /* Applicaton */,
-				4DAC7528990F65298350287D /* Presentations */,
+				FAB92450311A2F14B5B23B8A /* Application */,
+				325B8A474A69475CE04C6C7B /* Di */,
+				F414258289AFB97BF0F28EF5 /* Reducer */,
+				29763E9C0D52E548C7BAB9C2 /* View */,
+				697B8FCF31717CABCDD5C879 /* ContentView.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -330,37 +488,21 @@
 			isa = PBXGroup;
 			children = (
 				7E7CE22EABBCBAC0C0EE5781 /* Derived */,
-				C01D06E37F2879FD9EB651AB /* OPeaceTests */,
 				E93C8D3BD42E0094C8A2B202 /* Resources */,
 				419F4246985134C340672215 /* Sources */,
-				E7F8C20A3A8E3CA0E2581356 /* Support */,
-				765AF232A628098DCC04FD80 /* OPeace.entitlements */,
 			);
 			name = Project;
-			sourceTree = "<group>";
-		};
-		4DAC7528990F65298350287D /* Presentations */ = {
-			isa = PBXGroup;
-			children = (
-				ADD185D2658254F476CBD36C /* Reducer */,
-				DDD9533A8D54B8E63CB26A83 /* View */,
-			);
-			path = Presentations;
-			sourceTree = "<group>";
-		};
-		681CA21C138E4CFAEB9EDBF8 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				28CCB6C88557610302866AB9 /* test.swift */,
-			);
-			path = Sources;
 			sourceTree = "<group>";
 		};
 		78090E0BA1BBC8141549CB8D /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E9AF3BE6FAD546CD1A68EE13 /* TuistAssets+OPeace.swift */,
+				A3B570466FE6B49D7EE86039 /* TuistAssets+OPeaceQA.swift */,
 				0E284EB4A91928A78EE95343 /* TuistBundle+OPeace.swift */,
-				0D1EEF65416062C63F1B3BD6 /* TuistBundle+OPeaceDev.swift */,
+				3B97CEC1E97ED3FA1E668670 /* TuistBundle+OPeaceQA.swift */,
+				4D16C4D60B18758E0F556844 /* TuistFonts+OPeace.swift */,
+				0916C67FD91CC20A54179ADC /* TuistFonts+OPeaceQA.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -374,78 +516,53 @@
 			path = Derived;
 			sourceTree = "<group>";
 		};
+		8D97ADFC55517BA28A7417AC /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				2ECC4C295DAC332701BD3A2E /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		ACB79210E0994716B164D65E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0C13A4E62393B0F4732C6FAD /* CFNetwork.framework */,
+				2D12E17A75CA23D981ACEC5F /* OSLog.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		ADD185D2658254F476CBD36C /* Reducer */ = {
-			isa = PBXGroup;
-			children = (
-				43B55DC475ABD37BFA2E1B5E /* AppMainFeature.swift */,
-			);
-			path = Reducer;
-			sourceTree = "<group>";
-		};
-		C01D06E37F2879FD9EB651AB /* OPeaceTests */ = {
-			isa = PBXGroup;
-			children = (
-				681CA21C138E4CFAEB9EDBF8 /* Sources */,
-			);
-			path = OPeaceTests;
-			sourceTree = "<group>";
-		};
-		DDD9533A8D54B8E63CB26A83 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				583CB22BB158FAFEB92160FF /* AppMainView.swift */,
-				5C89683A2BF4DA865C6F0452 /* SplashView.swift */,
-				FBFF8FCF2B8B2A9000A95AA1 /* CustomAlertView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		E7F8C20A3A8E3CA0E2581356 /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				D9678ED159E24A7980155D0C /* Info.plist */,
-			);
-			path = Support;
 			sourceTree = "<group>";
 		};
 		E93C8D3BD42E0094C8A2B202 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				03A7FAD6F457AFA7E791EBC1 /* FontAsset */,
+				8D97ADFC55517BA28A7417AC /* Preview Content */,
+				58D960E49DE944A6B1FF2A96 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		F414258289AFB97BF0F28EF5 /* Reducer */ = {
+			isa = PBXGroup;
+			children = (
+				54CA1E4FC25D9C7F95A96380 /* AppReducer.swift */,
+			);
+			path = Reducer;
+			sourceTree = "<group>";
+		};
+		FAB92450311A2F14B5B23B8A /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				389284836BD9FD455C644302 /* AppDelegate.swift */,
+				5B09DC0A9D071C5BD656C4B1 /* OpeaceApp.swift */,
+				E3022953F3DC2156F43F5302 /* SceneDelegate.swift */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2F1E58DFE4272F4D92DF2D4D /* OPeace-Dev */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FADCF27C5296A410AFE015E3 /* Build configuration list for PBXNativeTarget "OPeace-Dev" */;
-			buildPhases = (
-				18A37FFF4CCCF534DF7F8124 /* Sources */,
-				B7AE6E0CC2BB74A9D4AD1C66 /* Resources */,
-				918BC4F2D7B0D6BAB8A061E5 /* Embed Frameworks */,
-				AA137F6B971C94B5B414104C /* Frameworks */,
-				1717C1AFA73C2FACB39F0974 /* Dependencies */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "OPeace-Dev";
-			productName = OPeace_Dev;
-			productReference = 4B5F6A7E244E786398E4A327 /* OPeace_Dev.app */;
-			productType = "com.apple.product-type.application";
-		};
 		67D9F4592180F61529ADFF00 /* OPeace */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F714BB4E7DE9D14BEA1C38F3 /* Build configuration list for PBXNativeTarget "OPeace" */;
@@ -463,6 +580,25 @@
 			name = OPeace;
 			productName = OPeace;
 			productReference = A445C66880DC63E9958A59AA /* OPeace.app */;
+			productType = "com.apple.product-type.application";
+		};
+		89983ACF375CAB6476C784C1 /* OPeace-QA */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E2FF94D84A4C4FB28553F3DA /* Build configuration list for PBXNativeTarget "OPeace-QA" */;
+			buildPhases = (
+				C99E34368935718BDDE24254 /* Sources */,
+				4B0FEA9F01FFA98AB2DD7922 /* Resources */,
+				5E80B98667BCFBA201E83478 /* Embed Frameworks */,
+				2D989FE4238CCBC6ACB8BADB /* Frameworks */,
+				B11E2C67F0C83BF9130CCA59 /* Dependencies */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "OPeace-QA";
+			productName = OPeace_QA;
+			productReference = D527E4719932A5E1B98FC9B0 /* OPeace_QA.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D846BAB7A4553FDE0C61B023 /* OPeaceTests */ = {
@@ -491,7 +627,6 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				ORGANIZATIONNAME = Yeom;
 				TargetAttributes = {
 					D846BAB7A4553FDE0C61B023 = {
 						TestTargetID = 67D9F4592180F61529ADFF00;
@@ -512,13 +647,26 @@
 			projectRoot = "";
 			targets = (
 				67D9F4592180F61529ADFF00 /* OPeace */,
-				2F1E58DFE4272F4D92DF2D4D /* OPeace-Dev */,
+				89983ACF375CAB6476C784C1 /* OPeace-QA */,
 				D846BAB7A4553FDE0C61B023 /* OPeaceTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4B0FEA9F01FFA98AB2DD7922 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A51184322AD72184603E2C72 /* Assets.xcassets in Resources */,
+				74A653B526AB76DF8CB07BF3 /* PretendardVariable.ttf in Resources */,
+				06BE1F30EA1F2B51F27B6F87 /* Preview Assets.xcassets in Resources */,
+				2E2B831094AC55C4FEAAB77D /* DesignSystem_DesignSystem.bundle in Resources */,
+				B1A84DEAF215A1316D08A14C /* SDWebImage_SDWebImage.bundle in Resources */,
+				22781B5774DBCA926BC079E5 /* swift-composable-architecture_ComposableArchitecture.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7D4EBDEA4C0F6908A285D2D7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -530,17 +678,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90391EF432358320EB3A1B8C /* test.swift in Resources */,
-				3BB4FC52C693288387AE275A /* DesignSystemKit_DesignSystemKit.bundle in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B7AE6E0CC2BB74A9D4AD1C66 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				86347834E8A602D119AF426E /* test.swift in Resources */,
-				06D86ADA0EFCE9E9E7285CEC /* DesignSystemKit_DesignSystemKit.bundle in Resources */,
+				5E331A53B2857023D440CAE3 /* Assets.xcassets in Resources */,
+				ADB166DF6FEBA0CBA9A23197 /* PretendardVariable.ttf in Resources */,
+				4EBDDB8F4CB01625127B3A40 /* Preview Assets.xcassets in Resources */,
+				B5BE8517EDD79872E3222EF7 /* DesignSystem_DesignSystem.bundle in Resources */,
+				229C369A086C093BE6F8C108 /* SDWebImage_SDWebImage.bundle in Resources */,
+				27F51C0CD77C5D6D32550CF5 /* swift-composable-architecture_ComposableArchitecture.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,27 +694,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6755C7FCF356613C7F86D3D6 /* TuistAssets+OPeace.swift in Sources */,
 				7D9BBA2B49EEFBDF4C3A1A7E /* TuistBundle+OPeace.swift in Sources */,
-				FBFF8FD02B8B2A9000A95AA1 /* CustomAlertView.swift in Sources */,
-				2DFBC73E6BDFAD220CE414DE /* test.swift in Sources */,
-				6DC8923659198D603F255B5D /* OpeaceApp.swift in Sources */,
-				A22B2FCD428ECB7BF912BAFE /* AppMainFeature.swift in Sources */,
-				096BCC418BA980C865DAF2C3 /* AppMainView.swift in Sources */,
-				6EE4086E3420BD564AB88333 /* SplashView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		18A37FFF4CCCF534DF7F8124 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9D1E864535B4A8BDD77DC08B /* TuistBundle+OPeaceDev.swift in Sources */,
-				FBFF8FD12B8B2A9000A95AA1 /* CustomAlertView.swift in Sources */,
-				3E28FAB660E8E9C2E92C98B2 /* test.swift in Sources */,
-				314B9EA24F32792C4AC44C8E /* OpeaceApp.swift in Sources */,
-				9CCBDD6762078E6D0534BC2D /* AppMainFeature.swift in Sources */,
-				C66C9ACE971D24E22ED52CF7 /* AppMainView.swift in Sources */,
-				B10718682CE7A08A595BD044 /* SplashView.swift in Sources */,
+				8CAF2D194DC01F8EDDA77D0D /* TuistFonts+OPeace.swift in Sources */,
+				08DA17EC3643FF5B491C2E34 /* AppDelegate.swift in Sources */,
+				67A09416478592D07D5BEE8B /* OpeaceApp.swift in Sources */,
+				5F2FDF9A105C61C434679D4E /* SceneDelegate.swift in Sources */,
+				A6E704845C23931FBF7231B9 /* ContentView.swift in Sources */,
+				AD861630C63C0375EE9DB1AA /* AppDIContainer.swift in Sources */,
+				A1A9D7F2A35B221B41311C77 /* AppReducer.swift in Sources */,
+				C18DA389A976AAA40328D4B7 /* AppView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,7 +711,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AD38619FB40811DC7F067BB /* test.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C99E34368935718BDDE24254 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39CBE340BA91C90279F2DF66 /* TuistAssets+OPeaceQA.swift in Sources */,
+				75B8E1058DFB1F3FEE006333 /* TuistBundle+OPeaceQA.swift in Sources */,
+				355DED392E91274670709882 /* TuistFonts+OPeaceQA.swift in Sources */,
+				D3A33624AEB0B99942B9189A /* AppDelegate.swift in Sources */,
+				2CF178C63C285A7E6A38002C /* OpeaceApp.swift in Sources */,
+				9D76F00722D8C726A277AEFC /* SceneDelegate.swift in Sources */,
+				3140BF9133CEE8BECE6CC368 /* ContentView.swift in Sources */,
+				938A759434FC519992BD9E23 /* AppDIContainer.swift in Sources */,
+				93BE67F58BC1AA53AC238D61 /* AppReducer.swift in Sources */,
+				E3EEC42AF9EABB8E517E17ED /* AppView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -595,50 +743,124 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		15252E96D814E59CB38CFD73 /* Dev */ = {
+		1541B4DA06B409622225E7C0 /* QA */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				INFOPLIST_FILE = "Derived/InfoPlists/OPeaceTests-Info.plist";
+				ENABLE_PREVIEWS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
+				INFOPLIST_FILE = "Derived/InfoPlists/OPeace-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
 				OTHER_SWIFT_FLAGS = (
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace.OPeaceTests;
-				PRODUCT_NAME = OPeaceTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
+				PRODUCT_NAME = OPeace;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OPeace.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OPeace";
-				TEST_TARGET_NAME = OPeace;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Dev;
+			name = QA;
+		};
+		1D6C1E6D0E8EE7FFA7160975 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
+				INFOPLIST_FILE = "Derived/InfoPlists/OPeace-QA-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
+				OTHER_SWIFT_FLAGS = (
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
+				PRODUCT_NAME = OPeace_QA;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
 		};
 		2E104F5D8F2CB71968536A83 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
 				INFOPLIST_FILE = "Derived/InfoPlists/OPeaceTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -646,114 +868,46 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
 				OTHER_SWIFT_FLAGS = (
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace.OPeaceTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace.OPeaceTests;
 				PRODUCT_NAME = OPeaceTests;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OPeace.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OPeace";
 				TEST_TARGET_NAME = OPeace;
 			};
 			name = Release;
 		};
-		3340737D9C36F49FD82730D7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OPeace.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Support/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = "-all_load";
-				OTHER_SWIFT_FLAGS = (
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace;
-				PRODUCT_NAME = OPeace_Dev;
-				SDKROOT = iphoneos;
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		522C8A7016305F684F9AF4E5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OPeace.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Support/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = "-all_load";
-				OTHER_SWIFT_FLAGS = (
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace;
-				PRODUCT_NAME = OPeace_Dev;
-				SDKROOT = iphoneos;
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_COMPILATION_MODE = singlefile;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		59F8DD4ECD319AFEA8DAC83D /* Dev */ = {
+		3A66F29D8391CB5DF7AF84C9 /* QA */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				AS_AUTHENTICATION_SERVICES_ENABLED = YES;
 				BACKGROUND_MODES = "remote-notification";
-				CFBundleDisplayName = OPeace;
+				CFBundleDisplayName = "OPeace-Dev";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -785,14 +939,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEBUG_INFORMATION_FORMAT = "DWARF with dSYM File";
-				DEVELOPMENT_ASSET_PATH = "\"Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = "sunghun yeom";
-				DISPLAY_NAME = "OPeace-Dev";
+				DEBUG_INFORMATION_FORMAT = "non-global";
+				DEVELOPMENT_TEAM = 92NGUT4BRA;
 				ENABLE_BACKGROUND_MODES = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -813,19 +965,27 @@
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = "-ObjC -all_load";
 				PRODUCT_NAME = "OPeace-Dev";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.DDD.DDDAttendance";
 				PUSH_NOTIFICATIONS_ENABLED = YES;
-				STRIP_STYLE = "non-global";
+				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Dev;
+			name = QA;
 		};
-		991BB080E4A77206DC10195F /* Debug */ = {
+		5DF76B03CFB8F54FD68709F3 /* QA */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
 				INFOPLIST_FILE = "Derived/InfoPlists/OPeaceTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -833,28 +993,141 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
 				OTHER_SWIFT_FLAGS = (
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace.OPeaceTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace.OPeaceTests;
 				PRODUCT_NAME = OPeaceTests;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OPeace.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OPeace";
+				TEST_TARGET_NAME = OPeace;
+			};
+			name = QA;
+		};
+		81913C56CA39EAC3F203B07D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
+				INFOPLIST_FILE = "Derived/InfoPlists/OPeace-QA-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
+				OTHER_SWIFT_FLAGS = (
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
+				PRODUCT_NAME = OPeace_QA;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		991BB080E4A77206DC10195F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
+				INFOPLIST_FILE = "Derived/InfoPlists/OPeaceTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
+				OTHER_SWIFT_FLAGS = (
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace.OPeaceTests;
+				PRODUCT_NAME = OPeaceTests;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OPeace.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OPeace";
 				TEST_TARGET_NAME = OPeace;
 			};
@@ -864,36 +1137,48 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OPeace.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Support/Info.plist;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
+				INFOPLIST_FILE = "Derived/InfoPlists/OPeace-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
 				OTHER_SWIFT_FLAGS = (
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
-					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace;
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -901,125 +1186,60 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OPeace.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development: sunghun yeom (R5SDJ945WS)";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = M527AM6YJ5;
-				DISPLAY_NAME = OPeace;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Support/Info.plist;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
+				INFOPLIST_FILE = "Derived/InfoPlists/OPeace-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--keychain /Users/devyeom/Developer/DDD/OPeace/OPeace/Projects/App/Derived/signing.keychain";
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
 				OTHER_SWIFT_FLAGS = (
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace;
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace;
-				PROVISIONING_PROFILE_SPECIFIER = "d80c8bd3-aad6-4ef1-af21-9c235807ee70";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
-		};
-		D27BC97880D1117650AD231F /* Dev */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OPeace.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Support/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = "-all_load";
-				OTHER_SWIFT_FLAGS = (
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace;
-				PRODUCT_NAME = OPeace_Dev;
-				SDKROOT = iphoneos;
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_COMPILATION_MODE = singlefile;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Dev;
-		};
-		D718DC6FC3FCE6C2BD4DEB31 /* Dev */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OPeace.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Support/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = "-all_load";
-				OTHER_SWIFT_FLAGS = (
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Emo.OPeace;
-				PRODUCT_NAME = OPeace;
-				SDKROOT = iphoneos;
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_COMPILATION_MODE = singlefile;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Dev;
 		};
 		E5BAB150EB074D3A5BDA86B8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				AS_AUTHENTICATION_SERVICES_ENABLED = YES;
 				BACKGROUND_MODES = "remote-notification";
 				CFBundleDisplayName = OPeace;
@@ -1054,15 +1274,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEBUG_INFORMATION_FORMAT = "DWARF with dSYM File";
-				DEVELOPMENT_ASSET_PATH = "\"Resources/Preview Content\"";
-				DEVELOPMENT_ASSET_PATHS = "\"Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = "sunghun yeom";
-				DISPLAY_NAME = OPeace;
+				DEBUG_INFORMATION_FORMAT = "non-global";
+				DEVELOPMENT_TEAM = 92NGUT4BRA;
 				ENABLE_BACKGROUND_MODES = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1076,10 +1293,11 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = "-ObjC -all_load";
 				PRODUCT_NAME = OPeace;
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.DDD.DDDAttendance";
 				PUSH_NOTIFICATIONS_ENABLED = YES;
-				STRIP_STYLE = "non-global";
+				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1089,6 +1307,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				AS_AUTHENTICATION_SERVICES_ENABLED = YES;
 				BACKGROUND_MODES = "remote-notification";
 				CFBundleDisplayName = OPeace;
@@ -1123,14 +1342,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEBUG_INFORMATION_FORMAT = "DWARF with dSYM File";
-				DEVELOPMENT_ASSET_PATH = "\"Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = "sunghun yeom";
-				DISPLAY_NAME = OPeace;
+				DEBUG_INFORMATION_FORMAT = "non-global";
+				DEVELOPMENT_TEAM = 92NGUT4BRA;
 				ENABLE_BACKGROUND_MODES = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1151,13 +1368,67 @@
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = "-ObjC -all_load";
 				PRODUCT_NAME = OPeace;
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.DDD.DDDAttendance";
 				PUSH_NOTIFICATIONS_ENABLED = YES;
-				STRIP_STYLE = "non-global";
+				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
+		};
+		FDDD4EE8B85A66193E3EFC7D /* QA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(inherited)",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Core",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/Private",
+					"$(SRCROOT)/../../Tuist/.build/checkouts/SDWebImage/SDWebImage/include",
+				);
+				INFOPLIST_FILE = "Derived/InfoPlists/OPeace-QA-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+				);
+				OTHER_SWIFT_FLAGS = (
+					"$(inherited)",
+					"-Xcc",
+					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
+				PRODUCT_NAME = OPeace_QA;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = QA;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1166,7 +1437,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EFD2DFEFC4410AD36969A154 /* Debug */,
-				59F8DD4ECD319AFEA8DAC83D /* Dev */,
+				3A66F29D8391CB5DF7AF84C9 /* QA */,
 				E5BAB150EB074D3A5BDA86B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1176,8 +1447,18 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				991BB080E4A77206DC10195F /* Debug */,
-				15252E96D814E59CB38CFD73 /* Dev */,
+				5DF76B03CFB8F54FD68709F3 /* QA */,
 				2E104F5D8F2CB71968536A83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E2FF94D84A4C4FB28553F3DA /* Build configuration list for PBXNativeTarget "OPeace-QA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6C1E6D0E8EE7FFA7160975 /* Debug */,
+				FDDD4EE8B85A66193E3EFC7D /* QA */,
+				81913C56CA39EAC3F203B07D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1186,18 +1467,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B1D2835072CE24A5F44DF03A /* Debug */,
-				D718DC6FC3FCE6C2BD4DEB31 /* Dev */,
+				1541B4DA06B409622225E7C0 /* QA */,
 				ADA65AD47B10600E7D8DBC1B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FADCF27C5296A410AFE015E3 /* Build configuration list for PBXNativeTarget "OPeace-Dev" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				522C8A7016305F684F9AF4E5 /* Debug */,
-				D27BC97880D1117650AD231F /* Dev */,
-				3340737D9C36F49FD82730D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
