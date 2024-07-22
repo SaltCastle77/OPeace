@@ -19,6 +19,14 @@ public struct RootView: View {
     }
     
     public var body: some View {
-        Text("Root")
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            Text("Root")
+        } destination: { switchStore in
+            switch switchStore.case {
+            default:
+                EmptyView()
+            }
+        }
+
     }
 }

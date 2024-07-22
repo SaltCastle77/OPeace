@@ -9,13 +9,20 @@ import Foundation
 
 public enum ImageAsset: String {
     
-    case appLogo
+    //MARK: - NavigationBar
     case arrowLeft
     case backGroud
     case circleCheck
     case circleCheckFill
-    case spalshLogo
-
     
+    //MARK: - Logo
+    case appLogo
+    case spalshLogo
+    
+    //MARK: - Login
+    case googleLogin
+    case kakaoLogin
+    case appleLogin
+
     case empty
 }

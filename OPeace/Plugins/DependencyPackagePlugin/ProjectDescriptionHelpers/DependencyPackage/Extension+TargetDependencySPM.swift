@@ -15,6 +15,7 @@ public extension TargetDependency.SPM {
     static let sdwebImage = TargetDependency.external(name: "SDWebImageSwiftUI", condition: .none)
     static let keychainAccess = TargetDependency.external(name: "KeychainAccess", condition: .none)
     static let collections = TargetDependency.external(name: "Collections", condition: .none)
+    static let googleSignIn = TargetDependency.external(name: "GoogleSignIn", condition: .none)
 }
   
 

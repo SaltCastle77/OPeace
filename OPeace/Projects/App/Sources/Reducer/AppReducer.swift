@@ -19,6 +19,8 @@ public struct AppReducer {
     public enum State {
         case splash(Splash.State)
         case root(Root.State)
+        case auth(Auth.State)
+        
         
         public init() {
             self = .splash(Splash.State())
@@ -40,6 +42,7 @@ public struct AppReducer {
         case presentRootView
         case splash(Splash.Action)
         case root(Root.Action)
+        case auth(Auth.Action)
     }
     
     //MARK: - 앱내에서 사용하는 액선
@@ -67,13 +70,14 @@ public struct AppReducer {
                  
                 case .presntView:
                     return .run { @MainActor send in
-                        try await self.clock.sleep(for: .seconds(5))
+                        try await self.clock.sleep(for: .seconds(6))
                          send(.view(.splash(.presentRootView)), animation: .easeOut(duration: 1))
                         send(.view(.presentRootView))
                     }
                     
                 case .presentRootView:
-                    state = .root(.init())
+                    state = .auth(.init())
+//                    state = .root(.init())
                     return .none
                     
                 default:
@@ -102,6 +106,9 @@ public struct AppReducer {
         }
         .ifCaseLet(\.root, action: \.view.root) {
             Root()
+        }
+        .ifCaseLet(\.auth, action: \.view.auth) {
+            Auth()
         }
     }
 }

@@ -28,11 +28,12 @@ let package = Package(
     dependencies: [
         .package(url: "http://github.com/pointfreeco/swift-composable-architecture", from: "1.11.2"),
         .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
-//        .package(url: "https://github.com/pointfreeco/swift-concurrency-extras.git", from: "1.1.0"),
+        .package(url: "https://github.com/pointfreeco/swift-concurrency-extras.git", from: "1.1.0"),
         .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
         .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", from: "4.2.2"),
         .package(url: "https://github.com/exyte/PopupView.git", from: "2.10.4"),
         .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI.git", from: "2.0.0"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "7.1.0"),
         
     ]
 )

@@ -25,6 +25,6 @@ let project = Project.makeAppModule(
     ],
     sources: ["Sources/**"],
     resources: ["Resources/**"],
-    infoPlist: .extendingDefault(with: infoPlist)
-//    entitlements: .file(path: "../../Entitlements/AuraTarot.entitlements")
+    infoPlist: .extendingDefault(with: infoPlist),
+    entitlements: .file(path: "../../Entitlements/OPeace.entitlements")
 )

@@ -21,7 +21,7 @@ public struct NavigationBackButton: View {
             Image(asset: .arrowLeft)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 12, height: 20)
+                .frame(width: 10, height: 20)
                 .foregroundStyle(Color.gray400)
                 .onTapGesture {
                     buttonAction()
@@ -30,6 +30,6 @@ public struct NavigationBackButton: View {
             Spacer()
             
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 20)
     }
 }
