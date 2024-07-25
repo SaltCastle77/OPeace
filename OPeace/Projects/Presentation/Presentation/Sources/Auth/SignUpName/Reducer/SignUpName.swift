@@ -21,17 +21,20 @@ public struct SignUpName {
     @ObservableState
     public struct State: Equatable {
         public init() {}
-        var signUpTitle: String = "닉네임 입력"
-        var signUpSubTitle: String = "2~5자까지 입력할 수 있어요"
+        var signUpNameTitle: String = "닉네임 입력"
+        var signUpNameSubTitle: String = "2~5자까지 입력할 수 있어요"
          var signUpNameDisplay = ""
         var presntNextViewButtonTitle = "다음"
         var nickNameModel: CheckNickName? = nil
         var checkNickNameMessage: String = ""
         var enableButton: Bool = false
+        var selectedTab = 0
+        var totalTabs = 3
+        @Presents var destination: Destination.State?
     }
     
     public enum Action: ViewAction, FeatureAction , BindableAction {
-        case signUpNameDisplay(text: String)
+        case destination(PresentationAction<Destination.Action>)
         case binding(BindingAction<State>)
         case view(View)
         case async(AsyncAction)
@@ -59,7 +62,12 @@ public struct SignUpName {
     
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
+        case presentSignUpAge
+    }
     
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case signUpAge(SignUpAge)
     }
     
     @Dependency(SignUpUseCase.self) var signUpUseCase
@@ -69,13 +77,8 @@ public struct SignUpName {
         Reduce { state, action in
             switch action {
             case .binding(\.signUpNameDisplay):
-                state.signUpNameDisplay = state.signUpNameDisplay
                 return .none
                 
-                
-            case .signUpNameDisplay(text: let text):
-                state.signUpNameDisplay = text
-                return .none
             case .view(let View):
                 switch View {
                     
@@ -125,12 +128,14 @@ public struct SignUpName {
                 
             case .navigation(let NavigationAction):
                 switch NavigationAction {
-                    
+                case .presentSignUpAge:
+                    state.destination = .signUpAge(.init(signUpName: state.signUpNameDisplay))
+                    return .none
                 }
                 
             default:
                 return .none
-            
+                
             }
         }
 //        .onChange(of: \.signUpNameDisplay) { oldValue, newValue in

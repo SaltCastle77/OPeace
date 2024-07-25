@@ -65,6 +65,8 @@ public struct AgreeMent {
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
         case presntSignUpName
+        case presntPrivacyAgreeCheckTapped
+        case presntServiceAgreeCheckTapped
     }
     
     public var body: some ReducerOf<Self> {
@@ -132,6 +134,10 @@ public struct AgreeMent {
             case .navigation(let NavigationAction):
                 switch NavigationAction {
                 case .presntSignUpName:
+                    return .none
+                case .presntPrivacyAgreeCheckTapped:
+                    return .none
+                case .presntServiceAgreeCheckTapped:
                     return .none
                 }
             }

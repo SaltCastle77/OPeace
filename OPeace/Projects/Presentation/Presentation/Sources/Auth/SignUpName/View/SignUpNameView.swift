@@ -14,11 +14,15 @@ import DesignSystem
 
 public struct SignUpNameView: View {
     @Bindable var store: StoreOf<SignUpName>
+    var backAction: () -> Void = {}
     
     public init(
-        store: StoreOf<SignUpName>
+        store: StoreOf<SignUpName>,
+        backAction: @escaping () -> Void
+        
     ) {
         self.store = store
+        self.backAction = backAction
     }
     
     public var body: some View {
@@ -27,6 +31,17 @@ public struct SignUpNameView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
+                
+                Spacer()
+                    .frame(height: 14)
+                
+                NavigationBackButton(buttonAction: backAction)
+                
+                Spacer()
+                    .frame(height: 27)
+                
+                DotBarView(activeIndex: $store.selectedTab, totalDots: store.totalTabs)
+                
                 ScrollView(.vertical, showsIndicators: false) {
                     signUpNameTitle()
                       
@@ -37,7 +52,7 @@ public struct SignUpNameView: View {
                     
                     CustomButton(
                         action: {
-                           
+                            store.send(.navigation(.presentSignUpAge))
                         }, title: store.presntNextViewButtonTitle,
                         config: CustomButtonConfig.create()
                         ,isEnable: store.enableButton
@@ -64,14 +79,14 @@ extension SignUpNameView {
             Spacer()
                 .frame(height: UIScreen.screenHeight * 0.02)
             
-            Text(store.signUpTitle)
+            Text(store.signUpNameTitle)
                 .pretendardFont(family: .SemiBold, size: 24)
                 .foregroundStyle(Color.basicWhite)
             
             Spacer()
                 .frame(height: 16)
             
-            Text(store.signUpSubTitle)
+            Text(store.signUpNameSubTitle)
                 .pretendardFont(family: .Regular, size: 16)
                 .foregroundStyle(Color.gray300)
             
@@ -85,21 +100,34 @@ extension SignUpNameView {
             Spacer()
                 .frame(height: UIScreen.screenHeight * 0.08)
             
-            TextField("닉네임을 입력해주세요", text: $store.signUpNameDisplay)
-                .pretendardFont(family: .Regular, size: store.signUpNameDisplay.isEmpty ? 30 : 48)
-                .foregroundStyle(Color.gray300)
+            TextField("닉네임", text: $store.signUpNameDisplay)
+                .pretendardFont(family: .SemiBold, size: store.signUpNameDisplay.isEmpty ? 48 : 48)
+                .foregroundStyle(store.signUpNameDisplay.isEmpty ? Color.gray300 : Color.basicWhite)
                 .multilineTextAlignment(.center)
-                .onChange(of: store.signUpNameDisplay) { oldValue, newValue in
+                .submitLabel(.done)
+                .onSubmit {
                     if CheckRegister.isValidNickName(store.signUpNameDisplay) {
                         store.checkNickNameMessage = "사용 가능한 닉네임이에요"
-                        store.send(.async(.checkNickName(nickName: newValue)))
-                    } else if CheckRegister.containsInvalidCharacters(newValue) {
+                        
+                    } else if CheckRegister.containsInvalidCharacters(store.signUpNameDisplay) {
                         store.checkNickNameMessage = "띄어쓰기와 특수문자는 사용할 수 없어요"
-                        store.enableButton = false
+                    } else if store.signUpNameDisplay.isEmpty {
+                        store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
                     } else {
                         store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
+                    }
+                }
+                .onChange(of: store.signUpNameDisplay) { oldValue, newValue in
+                    if CheckRegister.isValidNickName(store.signUpNameDisplay) {
+                        store.send(.async(.checkNickName(nickName: newValue)))
+                    } else if CheckRegister.containsInvalidCharacters(newValue) {
+                        store.enableButton = false
+                    } else {
                         store.enableButton = false
                     }
+                }
+                .onTapGesture {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
             
                 
@@ -108,11 +136,13 @@ extension SignUpNameView {
                 .frame(height: 20)
             
             if store.signUpNameDisplay.isEmpty {
-                
+                Text(store.checkNickNameMessage)
+                    .pretendardFont(family: .Regular, size: 16)
+                    .foregroundStyle(store.enableButton ? Color.basicPrimary : Color.alertError)
             } else {
                 Text(store.checkNickNameMessage)
                     .pretendardFont(family: .Regular, size: 16)
-                    .foregroundStyle(store.enableButton ? Color.basicPrimary : Color.aletError)
+                    .foregroundStyle(store.enableButton ? Color.basicPrimary : Color.alertError)
             }
             
         }

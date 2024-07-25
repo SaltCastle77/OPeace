@@ -18,6 +18,7 @@ public extension Color {
     static let gray400 = Color(hex: "5C5C5C")
     static let gray500 = Color(hex: "3D3D3D")
     static let gray600 = Color(hex: "292929")
+    static let gray700 = Color(hex: "7D7D7D")
     static let basicBlack = Color(hex: "000000")
     
     //MARK: - Lighten
@@ -36,6 +37,6 @@ public extension Color {
     static let basicYellow = Color(hex: "FFE924")
     static let basicLightBlue = Color(hex: "62FFE3")
     static let basicPurple = Color(hex: "FF96F5")
-    static let aletError = Color(hex: "FF5050")
+    static let alertError = Color(hex: "FF5050")
     
 }

@@ -2,6 +2,7 @@ import Foundation
 import ProjectDescription
 import DependencyPlugin
 import ProjectTemplatePlugin
+import DependencyPackagePlugin
 
 let project = Project.makeAppModule(
     name: "DesignSystem",
@@ -9,7 +10,9 @@ let project = Project.makeAppModule(
     product: .staticFramework,
     settings:  .settings(),
     dependencies: [
-        .Shared(implements: .Utill)
+        .Shared(implements: .Utill),
+        .Shared(implements: .ThirdParty)
+//        .SPM.composableArchitecture
     ],
     sources: ["Sources/**"],
     resources: ["Resources/**", "FontAsset"]

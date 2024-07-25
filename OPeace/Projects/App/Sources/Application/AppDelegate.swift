@@ -11,7 +11,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        registerDependencies()
         return true
     }
     
@@ -29,9 +28,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) {
     }
     
-    private func registerDependencies() {
-        Task {
-            await AppDIContainer.shared.registerDependencies()
-        }
-    }
 }

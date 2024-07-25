@@ -103,6 +103,8 @@ extension AgreeMentView {
             CheckTitleView(
                 action: {
                     store.send(.view(.allAgreeCheckTapped))
+                }, goWebView: {
+                    
                 },
                 text: store.allAgreeMentText,
                 isChecked: store.allAgreeCheckState,
@@ -115,6 +117,8 @@ extension AgreeMentView {
             CheckTitleView(
                 action: {
                     store.send(.view(.ageAgreeCheckTappd))
+                }, goWebView: {
+                    
                 },
                 text: store.ageAgreeCheckTitle,
                 isChecked: store.ageAgreeCheckState,
@@ -126,6 +130,8 @@ extension AgreeMentView {
             CheckTitleView(
                 action: {
                     store.send(.view(.serviceAgreeCheckTapped))
+                }, goWebView: {
+                    store.send(.navigation(.presntServiceAgreeCheckTapped))
                 },
                 text: store.serviceAgreeCheckTitle,
                 isChecked: store.serviceAgreeCheckState,
@@ -138,6 +144,8 @@ extension AgreeMentView {
             CheckTitleView(
                 action: {
                     store.send(.view(.privacyAgreeCheckTapped))
+                }, goWebView: {
+                    store.send(.navigation(.presntPrivacyAgreeCheckTapped))
                 },
                 text: store.privacyAgreeCheckTitle,
                 isChecked: store.privacyAgreeCheckState,

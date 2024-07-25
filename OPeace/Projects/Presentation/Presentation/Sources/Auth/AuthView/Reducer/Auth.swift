@@ -13,6 +13,7 @@ import Utills
 
 import Model
 import UseCase
+import API
 import AuthenticationServices
 
 @Reducer
@@ -32,7 +33,10 @@ public struct Auth {
     public enum Path {
         case login(Login)
         case agreeMent(AgreeMent)
-        case signUpPagging(SignUpPaging)
+        case signUpName(SignUpName)
+        case signUpAge(SignUpAge)
+        case webView(Web)
+        
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -81,9 +85,19 @@ public struct Auth {
                     return .none
                     
                 case .element(id: _, action: .agreeMent(.navigation(.presntSignUpName))):
-                    state.path.append(.signUpPagging(.init()))
+                    state.path.append(.signUpName(.init()))
+                    return .none
+                
+                case .element(id: _, action: .agreeMent(.navigation(.presntServiceAgreeCheckTapped))):
+                    state.path.append(.webView(.init(url: AgreeMentAPI.seriveTerms.agreeMentDesc)))
                     return .none
                     
+                case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
+                    state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
+                    return .none
+                    
+                case .element(id: _, action: .signUpName(.navigation(.presentSignUpAge))):
+                    state.path.append(.signUpAge(.init()))
                     
                 default:
                     break

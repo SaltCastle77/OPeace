@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SwiftUI
+
 
 public struct CheckRegister{
      
@@ -20,5 +22,11 @@ public struct CheckRegister{
     @discardableResult
     public static func containsInvalidCharacters(_ nickname: String) -> Bool {
         return nickname.contains(" ") || nickname.range(of: "[^a-zA-Z0-9가-힣]", options: .regularExpression) != nil
+    }
+    
+    @discardableResult
+    public static func containsInvalidAge(_ age: String) -> Bool {
+        let yearRegex = "^(?!0000)[0-9]{4}$"
+        return age.contains(" ") || age.range(of: yearRegex, options: .regularExpression) != nil
     }
 }
