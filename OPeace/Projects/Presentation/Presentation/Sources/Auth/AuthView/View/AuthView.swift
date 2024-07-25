@@ -35,8 +35,14 @@ public struct AuthView: View {
                 LoginView(store: loginStore)
                     .navigationBarBackButtonHidden()
                 
-            case .agreeMent(let AgreeMentStore):
-                AgreeMentView(store: AgreeMentStore) {
+            case .agreeMent(let agreeMentStore):
+                AgreeMentView(store: agreeMentStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
+                
+            case .signUpPagging(let signUpPaggingStore):
+                SignUpPagingView(store: signUpPaggingStore) {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()

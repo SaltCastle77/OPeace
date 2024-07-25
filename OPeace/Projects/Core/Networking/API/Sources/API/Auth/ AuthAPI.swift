@@ -8,27 +8,22 @@
 import Foundation
 
 public enum AuthAPI : String {
-    case updateAppleRefreshToken
-    case tryRevoke
-    case insertAppleRefreshToken
-    case authRefresh
-    case authAccess
-    case tryLogin
+    case appleLogin
+    case kakaoLogin
+    case kakaoLoginCallback
     
-    public var apiDesc: String {
+    
+    public var authAPIDesc: String {
         switch self {
-        case .updateAppleRefreshToken:
-            return "updateAppleRefreshToken"
-        case .tryRevoke:
-            return "tryRevoke"
-        case .insertAppleRefreshToken:
-            return "insertAppleRefreshToken"
-        case .authRefresh:
-            return "auth/refresh"
-        case .authAccess:
-            return "auth/access"
-        case .tryLogin:
-            return "tryLogin"
+        case .appleLogin:
+            return "/oauth/apple/login"
+            
+        case .kakaoLogin:
+            return "/oauth/kakao/login/"
+            
+        case .kakaoLoginCallback:
+            return "/oauth/kakao/login/callback/"
         }
     }
 }
+

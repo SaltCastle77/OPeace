@@ -43,7 +43,7 @@ public struct AgreeMentView: View {
                 
                 CustomButton(
                     action: {
-                        
+                        store.send(.navigation(.presntSignUpName))
                     }, title: store.nextButtonTitle,
                     config: CustomButtonConfig.create()
                     ,isEnable: store.enableNextButton

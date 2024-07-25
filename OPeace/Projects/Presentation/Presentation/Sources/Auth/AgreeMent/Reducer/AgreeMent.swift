@@ -30,6 +30,7 @@ public struct AgreeMent {
         var serviceAgreeCheckState: Bool = false
         var privacyAgreeCheckState: Bool = false
         var enableNextButton = false
+        
     }
     
     public enum Action: ViewAction ,FeatureAction, BindableAction {
@@ -63,7 +64,7 @@ public struct AgreeMent {
     
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
-        
+        case presntSignUpName
     }
     
     public var body: some ReducerOf<Self> {
@@ -130,7 +131,8 @@ public struct AgreeMent {
                 
             case .navigation(let NavigationAction):
                 switch NavigationAction {
-                
+                case .presntSignUpName:
+                    return .none
                 }
             }
             

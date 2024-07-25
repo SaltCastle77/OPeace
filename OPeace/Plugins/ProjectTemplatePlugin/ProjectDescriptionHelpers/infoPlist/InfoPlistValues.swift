@@ -78,6 +78,38 @@ public struct InfoPlistValues {
         return ["UIAppFonts": .array(value.map { .string($0) })]
     }
 
+    public static func setAppTransportSecurity() -> [String: Plist.Value] {
+        return [
+            "NSAppTransportSecurity": .dictionary([
+                "NSAllowsArbitraryLoads": .boolean(true)
+            ])
+        ]
+    }
+    
+    public static func setApplicationQueriesSchemes() -> [String: Plist.Value] {
+        return [
+            "LSApplicationQueriesSchemes": .array([
+                .string("kakaokompassauth"),
+                .string("kakaolink"),
+                .string("kakaoplus")
+            ])
+        ]
+    }
+    
+    public static func setCFBundleURLTypes() -> [String: Plist.Value] {
+        return [
+            "CFBundleURLTypes": .array([
+                .dictionary([
+                    "CFBundleTypeRole": .string("Editor"),
+                    "CFBundleURLName": .string("kakao"),
+                    "CFBundleURLSchemes": .array([
+                        .string("kakao$(e55ab48902aa38be8a6fb0f1a3431e8d)")
+                    ])
+                ])
+            ])
+        ]
+    }
+    
     public static func setUIApplicationSceneManifest(_ value: [String: Any]) -> [String: Plist.Value] {
         func convertToPlistValue(_ value: Any) -> Plist.Value {
             switch value {
@@ -113,6 +145,10 @@ public struct InfoPlistValues {
         return ["NSCameraUsageDescription": .string(value)]
     }
     
+    public static func setKakaoAPPKEY(_ value: String) -> [String: Plist.Value] {
+        return ["KAKAO_APP_KEY": .string(value)]
+    }
+    
     public static func setUILaunchScreens() -> [String: Plist.Value] {
         return [
             "UILaunchScreens": .dictionary([
@@ -137,6 +173,10 @@ public struct InfoPlistValues {
         infoPlist.merge(setCFBundleName("$(PRODUCT_NAME)")) { (_, new) in new }
         infoPlist.merge(setCFBundlePackageType("APPL")) { (_, new) in new }
         infoPlist.merge(setCFBundleShortVersionString(.appVersion(version: "1.0.0"))) { (_, new) in new }
+        infoPlist.merge(setAppTransportSecurity()) { (_, new) in new }
+        infoPlist.merge(setApplicationQueriesSchemes()) { (_, new) in new }
+        infoPlist.merge(setKakaoAPPKEY("e55ab48902aa38be8a6fb0f1a3431e8d")) { (_, new) in new }
+        infoPlist.merge(setCFBundleURLTypes()) { (_, new) in new }
 //        infoPlist.merge(setCFBundleURLTypes([
 //            [
 //                "CFBundleURLSchemes": [

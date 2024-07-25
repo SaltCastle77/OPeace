@@ -9,7 +9,7 @@ import Foundation
 import Moya
 import API
 
-protocol BaseTargetType: TargetType {}
+public protocol BaseTargetType: TargetType {}
 
 extension BaseTargetType {
     public var baseURL: URL {
@@ -17,7 +17,7 @@ extension BaseTargetType {
     }
     
     public var headers: [String : String]? {
-        return [:]
+        return APIHeader.baseHeader
     }
     
 }

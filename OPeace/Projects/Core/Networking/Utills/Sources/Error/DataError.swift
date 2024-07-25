@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import Moya
 
-enum DataError: Error {
+public enum DataError: Error {
     case error(Error)
     case emptyValue
     case invalidatedType
     case decodingError(Error)
     case statusCodeError(Int)
+    case noData
+    case badRequest
+    case unhandledStatusCode(Int)
+    case errorData(String)
+    case moyaError(MoyaError)
+    case unknownError
+    
 }

@@ -14,6 +14,7 @@ public enum CustomError: Error, Equatable {
     case internalServer
     case responseBodyEmpty
     case decodeFailed
+    case kakaoTokenError(String)
     case invalidURL
     case invalidEventId
     case unknownError(String)
@@ -47,6 +48,8 @@ extension CustomError: LocalizedError {
             return "파이어 베이스 에러 발생: \(message)"
         case .encodingError(let message):
             return "파이어 인코딩 에러 발생: \(message)"
+        case .kakaoTokenError(let message):
+            return "카카오 토큰 에러 방생: \(message)"
         case .none:
             return nil
         }
@@ -76,12 +79,14 @@ extension CustomError: LocalizedError {
             return "개발팀에게 문의해주세요"
         case .encodingError(_):
             return "개발팀에게 문의해주세요"
+        case .kakaoTokenError(_):
+            return "개발팀에게 문의해주세요"
         case .none:
             return nil
         }
     }
 
-    static func map(_ error: Error) -> CustomError {
+    public static func map(_ error: Error) -> CustomError {
         if let customError = error as? CustomError {
             return customError
         } else {

@@ -13,7 +13,10 @@ let project = Project.makeAppModule(
         .SPM.composableArchitecture,
         .SPM.concurrencyExtras,
         .SPM.sdwebImage,
-        .SPM.collections
+        .SPM.collections,
+        .SPM.kakaoSDKAuth,
+        .SPM.kakaoSDKUser,
+        .SPM.kakaoSDKCommon,
     ],
     sources: ["Sources/**"]
 )
