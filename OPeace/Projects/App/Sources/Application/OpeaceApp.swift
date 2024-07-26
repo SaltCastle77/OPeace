@@ -6,6 +6,7 @@ import KakaoSDKCommon
 @main
 struct OpeaceApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     init() {
         registerDependencies()
         initializeKakao()
@@ -21,6 +22,7 @@ struct OpeaceApp: App {
                             AppReducer()
                                 ._printChanges()
                                 ._printChanges(.actionLabels)
+                                ._printChanges(.customDump)
                         }
                     )
             )
