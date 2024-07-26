@@ -16,7 +16,7 @@ extension MoyaProvider {
     public func requestAsync<T: Decodable>(_ target: Target, decodeTo type: T.Type) async throws -> T {
             return try await withCheckedThrowingContinuation { continuation in
                 // async/await API의 일부로, 비동기 작업을 동기식으로 변환할 때 사용됩니다. 여기서 continuation은 비동기 작업이 완료되면 값을 반환하거나 오류를 던지기 위해 사용
-                let provider = MoyaProvider<Target>()
+                let provider = MoyaProvider<Target>(plugins: [MoyaLoggingPlugin()])
                 var cancellable: AnyCancellable?
                 cancellable = provider.requestPublisher(target)
                     .tryMap { response -> Data in

@@ -66,6 +66,12 @@ public struct SignUpAgeView: View {
                 .bounce(false)
                 
             }
+            .onChange(of: store.signUpAgeDisplay, { oldValue, newValue in
+                let (generation, color, textColor) = CheckRegister.getGeneration(year: Int(newValue) ?? .zero, color: store.signUpAgeDisplayColor, textColor: store.checkGenerationTextColor)
+                store.checkGenerationText = generation
+                store.signUpAgeDisplayColor = color
+                store.checkGenerationTextColor = textColor
+            })
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 
@@ -79,11 +85,6 @@ public struct SignUpAgeView: View {
                     store.enableButton = true
                     store.isErrorGenerationText = ""
                 }
-                let (generation, color, textColor) = CheckRegister.getGeneration(year: Int(store.signUpAgeDisplay) ?? .zero, color: store.signUpAgeDisplayColor, textColor: store.checkGenerationTextColor)
-                store.checkGenerationText = generation
-                store.signUpAgeDisplayColor = color
-                store.checkGenerationTextColor = textColor
-                
             }
             
         }
@@ -137,9 +138,6 @@ extension SignUpAgeView {
                     store.checkGenerationText = generation
                     store.signUpAgeDisplayColor = color
                     store.checkGenerationTextColor = textColor
-                }
-                .onTapGesture {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
             
             HStack {

@@ -8,13 +8,12 @@
 import Foundation
 import KeychainAccess
 
-struct APIHeader{
+public struct APIHeader{
     
-    static let contentType = "Content-Type"
-    static let appPackageName = "App-Package-Name"
-    static let apikey =  "apikey"
-    static let cookie = "Cookie"
-    static let accessToken = "access_Token"
+    public static let contentType = "Content-Type"
+    public static let accessToken = "Authorization"
+    
+    public init() {}
     
 }
 
@@ -34,10 +33,10 @@ extension APIHeader {
     }
     
     static var kakakoHeader: Dictionary<String, String> {
-        let kakaoKeyChain = try? Keychain().get("KAKAKO_ACCESS_TOKEN")
+        let kakaoKeyChain = try? Keychain().get("KAKAKO_ID_TOKEN")
         return   [
             contentType : APIHeaderManger.shared.contentType,
-            accessToken : "Bearer \(kakaoKeyChain ?? "")",
+            accessToken : "Bearer \(kakaoKeyChain)",
             "accept": APIHeaderManger.shared.contentType
             ]
             

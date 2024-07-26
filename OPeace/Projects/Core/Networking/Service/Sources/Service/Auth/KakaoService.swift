@@ -9,9 +9,10 @@ import Foundation
 import Moya
 import API
 import Foundations
+import Utills
 
 public enum KakaoService {
-    case kakaoLogin
+    case kakaoLogin(accessToken: String)
 }
 
 
@@ -35,6 +36,20 @@ extension KakaoService: KakaoBaseTargetType {
         case .kakaoLogin:
             return .requestPlain
             
+        }
+    }
+    
+    public var headers: [String : String]? {
+        switch self {
+        case .kakaoLogin(let accessToken):
+            let headers: [String: String] = [
+                
+                APIHeader.contentType : APIHeaderManger.shared.contentType,
+//                APIHeader.accessToken : "Bearer \(accessToken)",
+                "accept": APIHeaderManger.shared.contentType
+            ]
+            
+            return headers
         }
     }
 }

@@ -15,6 +15,7 @@ import UseCase
 import Utills
 import Model
 import AuthenticationServices
+import KeychainAccess
 
 
 @Reducer
@@ -128,7 +129,7 @@ public struct Login {
                             send(.async(.kakaoLoginResponse(.failure(CustomError.map(error)))))
                         }
                         
-                        
+                        try await Task.sleep(nanoseconds: 3000000000)
                         send(.async(.loginWIthKakao))
                     }
                     
@@ -137,7 +138,12 @@ public struct Login {
                     switch result {
                     case .success(let (accessToken, idToken)):
                         state.accessToken = accessToken
+                        state.idToken = accessToken
                         state.idToken = idToken
+                        try? Keychain().set(state.idToken ?? "", key: "KAKAKO_ID_TOKEN")
+                        Log.debug("카카오 idToken ",  state.idToken)
+                        let keychaain = try? Keychain().get("KAKAKO_ID_TOKEN")
+                        Log.debug("카카오 idToken ", keychaain)
                     case let .failure(error):
                         Log.error("카카오 리턴 에러", error)
                     }
