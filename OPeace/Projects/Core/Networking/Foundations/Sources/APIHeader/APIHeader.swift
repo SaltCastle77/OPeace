@@ -36,7 +36,7 @@ extension APIHeader {
         let kakaoKeyChain = try? Keychain().get("KAKAKO_ID_TOKEN")
         return   [
             contentType : APIHeaderManger.shared.contentType,
-            accessToken : "Bearer \(kakaoKeyChain)",
+//            accessToken : "Bearer \(kakaoKeyChain)",
             "accept": APIHeaderManger.shared.contentType
             ]
             

@@ -15,6 +15,7 @@ import Foundations
 
 public enum SignUpService {
     case nickNameCheck(nickname: String)
+    case signUpJob
 }
 
 
@@ -24,6 +25,9 @@ extension SignUpService: BaseTargetType {
         switch self {
         case .nickNameCheck:
             return SignUpAPI.nickNameCheck.signUpAPIDesc
+            
+        case .signUpJob:
+            return SignUpAPI.signUpJob.signUpAPIDesc
         }
     }
     
@@ -31,6 +35,9 @@ extension SignUpService: BaseTargetType {
      public var method: Moya.Method {
         switch self {
         case .nickNameCheck:
+            return .get
+            
+        case .signUpJob:
             return .get
         }
     }
@@ -40,6 +47,9 @@ extension SignUpService: BaseTargetType {
         case .nickNameCheck(let nickname):
             let parameters: [String: Any] = ["nickname": nickname]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            
+        case .signUpJob:
+            return .requestPlain
         }
     }
 }

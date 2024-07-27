@@ -9,12 +9,16 @@ import Foundation
 
 public enum SignUpAPI : String{
     case nickNameCheck
+    case signUpJob
     
     
     public  var signUpAPIDesc: String {
         switch self {
         case .nickNameCheck:
             return "/users/nickname-check/"
+            
+        case .signUpJob:
+            return "/users/jobs/"
         }
     }
 }
