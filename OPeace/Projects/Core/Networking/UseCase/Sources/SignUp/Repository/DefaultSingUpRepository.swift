@@ -18,4 +18,8 @@ public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
     public func checkNickName(_ nickName: String) async throws -> CheckNickName? {
         return nil
     }
+    
+    public func fetchJobList() async throws -> SignUpJobModel? {
+        return nil
+    }
 }

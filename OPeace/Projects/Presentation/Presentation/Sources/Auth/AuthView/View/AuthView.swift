@@ -41,18 +41,13 @@ public struct AuthView: View {
                 }
                 .navigationBarBackButtonHidden()
                 
-            case .signUpName(let signUpNameStore):
-                SignUpNameView(store: signUpNameStore) {
-                    store.send(.inner(.removePath))
-                }
-                .navigationBarBackButtonHidden()
                 
             case .webView(let webViewStore):
                 WebViews(store: webViewStore)
                     .navigationBarBackButtonHidden()
                 
-            case .signUpAge(let signUpAgeStore):
-                SignUpAgeView(store: signUpAgeStore) {
+            case .signUpPagging(let signUpPaggingStore):
+                SignUpPagingView(store: signUpPaggingStore) {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()

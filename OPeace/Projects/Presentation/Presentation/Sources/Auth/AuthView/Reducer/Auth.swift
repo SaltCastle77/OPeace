@@ -33,8 +33,7 @@ public struct Auth {
     public enum Path {
         case login(Login)
         case agreeMent(AgreeMent)
-        case signUpName(SignUpName)
-        case signUpAge(SignUpAge)
+        case signUpPagging(SignUpPaging)
         case webView(Web)
         
     }
@@ -85,7 +84,7 @@ public struct Auth {
                     return .none
                     
                 case .element(id: _, action: .agreeMent(.navigation(.presntSignUpName))):
-                    state.path.append(.signUpName(.init()))
+                    state.path.append(.signUpPagging(.init()))
                     return .none
                 
                 case .element(id: _, action: .agreeMent(.navigation(.presntServiceAgreeCheckTapped))):
@@ -95,9 +94,6 @@ public struct Auth {
                 case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
                     state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
                     return .none
-                    
-                case .element(id: _, action: .signUpName(.navigation(.presentSignUpAge))):
-                    state.path.append(.signUpAge(.init()))
                     
                 default:
                     break

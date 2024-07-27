@@ -13,6 +13,7 @@ import Service
 import Utills
 import Model
 import UseCase
+import KeychainAccess
 
 @Reducer
 public struct SignUpName {
@@ -28,9 +29,9 @@ public struct SignUpName {
         var nickNameModel: CheckNickName? = nil
         var checkNickNameMessage: String = ""
         var enableButton: Bool = false
-        var selectedTab = 0
-        var totalTabs = 3
+    
         @Presents var destination: Destination.State?
+        var activeMenu: SignUpTab = .signUpName
     }
     
     public enum Action: ViewAction, FeatureAction , BindableAction {
@@ -40,13 +41,14 @@ public struct SignUpName {
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
+        case switchSettingTab
     }
     
     //MARK: - ViewAction
     @CasePathable
     public enum View {
         case signUpNameDisplay(text: String)
-        
+       
     }
     
     //MARK: - AsyncAction 비동기 처리 액션
@@ -62,12 +64,13 @@ public struct SignUpName {
     
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
-        case presentSignUpAge
+        
     }
     
     @Reducer(state: .equatable)
     public enum Destination {
         case signUpAge(SignUpAge)
+        case signUpJob(SignUpJob)
     }
     
     @Dependency(SignUpUseCase.self) var signUpUseCase
@@ -78,10 +81,18 @@ public struct SignUpName {
             switch action {
             case .binding(\.signUpNameDisplay):
                 return .none
+               
+            case .switchSettingTab:
+                state.activeMenu = .signUpGeneration
+                state.destination = .signUpAge(.init(signUpName: state.signUpNameDisplay))
+                state.destination = .signUpJob(.init(signUpName: state.signUpNameDisplay))
+                try? Keychain().set(state.signUpNameDisplay, key: "signUpName")
+                print(state.signUpNameDisplay,   try? Keychain().get("signUpName"))
+                return .none
                 
             case .view(let View):
                 switch View {
-                    
+               
              
                 case .signUpNameDisplay(text: let text):
                     state.signUpNameDisplay = text
@@ -128,9 +139,7 @@ public struct SignUpName {
                 
             case .navigation(let NavigationAction):
                 switch NavigationAction {
-                case .presentSignUpAge:
-                    state.destination = .signUpAge(.init(signUpName: state.signUpNameDisplay))
-                    return .none
+              
                 }
                 
             default:
@@ -138,6 +147,7 @@ public struct SignUpName {
                 
             }
         }
+        
 //        .onChange(of: \.signUpNameDisplay) { oldValue, newValue in
 //            Reduce { state, action in
 //                state.signUpNameDisplay = newValue

@@ -77,6 +77,7 @@ import Model
                                     }
 
                                     Log.debug("access token", oauthToken?.idToken ?? "")
+                                    try? Keychain().remove("KAKAKO_ID_TOKEN")
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 }
                             }
@@ -95,7 +96,7 @@ import Model
                                     _ = oauthToken
                                     
                                     Log.debug("access token", accessToken)
-
+                                    try? Keychain().remove("KAKAKO_ID_TOKEN")
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 }
                             }
@@ -113,7 +114,7 @@ import Model
                                     return
                                 }
                                 _ = oauthToken
-                                
+                                try? Keychain().remove("KAKAKO_ID_TOKEN")
 
                                 Log.debug("access token", oauthToken?.idToken ?? "")
                                 continuation.resume(returning: (accessToken, oauthToken?.idToken))
@@ -147,7 +148,7 @@ import Model
     
     public func reauestKakaoLogin() async throws -> KakaoResponse? {
         let kakaoAcessToken = (try? Keychain().get("KAKAKO_ID_TOKEN") ?? "")
-        return try await kakaoProvider.requestAsync(.kakaoLogin(accessToken: ""), decodeTo: KakaoResponse.self)
+        return try await kakaoProvider.requestAsync(.kakaoLogin(code: "", accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponse.self)
     }
     
 }

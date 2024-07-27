@@ -14,14 +14,12 @@ import Utill
 
 public struct SignUpAgeView: View {
     @Bindable var store: StoreOf<SignUpAge>
-    var backAction: () -> Void = { }
     
     public init(
-        store: StoreOf<SignUpAge>,
-        backAction: @escaping () -> Void
+        store: StoreOf<SignUpAge>
     ) {
         self.store = store
-        self.backAction = backAction
+        
     }
     
     public var body: some View {
@@ -30,16 +28,6 @@ public struct SignUpAgeView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                
-                Spacer()
-                    .frame(height: 14)
-                
-                NavigationBackButton(buttonAction: backAction)
-                
-                Spacer()
-                    .frame(height: 27)
-                
-                DotBarView(activeIndex: $store.selectedTab, totalDots: store.totalTabs)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     signUpAgeTitle()
@@ -53,6 +41,12 @@ public struct SignUpAgeView: View {
                     
                     CustomButton(
                         action: {
+                            store.send(.async(.fetchJobList))
+                            store.send(.async(.updateName))
+                            Task {
+                                try await Task.sleep(nanoseconds: UInt64(5))
+                                 store.send(.switchTabs)
+                            }
                             
                         }, title: store.presntNextViewButtonTitle,
                         config: CustomButtonConfig.create()
@@ -65,6 +59,9 @@ public struct SignUpAgeView: View {
                 }
                 .bounce(false)
                 
+            }
+            .onAppear {
+                store.send(.view(.apperName))
             }
             .onChange(of: store.signUpAgeDisplay, { oldValue, newValue in
                 let (generation, color, textColor) = CheckRegister.getGeneration(year: Int(newValue) ?? .zero, color: store.signUpAgeDisplayColor, textColor: store.checkGenerationTextColor)
@@ -146,7 +143,7 @@ extension SignUpAgeView {
                 if store.signUpAgeDisplay.isEmpty {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(Color.gray500)
-                        .frame(width: 70, height: 32)
+                        .frame(width: 100, height: 32)
                         .overlay {
                             Text("? 세대")
                                 .pretendardFont(family: .Regular, size: 16)
@@ -155,7 +152,7 @@ extension SignUpAgeView {
                 } else {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(store.signUpAgeDisplayColor)
-                        .frame(width: 90, height: 32)
+                        .frame(width: 100, height: 32)
                         .overlay {
                             Text(store.checkGenerationText)
                                 .pretendardFont(family: .Regular, size: 16)

@@ -11,4 +11,5 @@ import Model
 
 public protocol SignUpRepositoryProtocol {
     func checkNickName(_ nickName: String) async throws -> CheckNickName?
+    func fetchJobList ()  async throws -> SignUpJobModel?
 }

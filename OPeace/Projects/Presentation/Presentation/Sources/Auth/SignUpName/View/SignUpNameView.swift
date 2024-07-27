@@ -14,15 +14,12 @@ import DesignSystem
 
 public struct SignUpNameView: View {
     @Bindable var store: StoreOf<SignUpName>
-    var backAction: () -> Void = {}
     
     public init(
-        store: StoreOf<SignUpName>,
-        backAction: @escaping () -> Void
+        store: StoreOf<SignUpName>
         
     ) {
         self.store = store
-        self.backAction = backAction
     }
     
     public var body: some View {
@@ -31,28 +28,19 @@ public struct SignUpNameView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                
-                Spacer()
-                    .frame(height: 14)
-                
-                NavigationBackButton(buttonAction: backAction)
-                
-                Spacer()
-                    .frame(height: 27)
-                
-                DotBarView(activeIndex: $store.selectedTab, totalDots: store.totalTabs)
-                
                 ScrollView(.vertical, showsIndicators: false) {
                     signUpNameTitle()
                       
                     checkNickNameTextField()
+                    
+                    erorNIckCheckText()
                     
                     Spacer()
                         .frame(height: UIScreen.screenHeight * 0.4)
                     
                     CustomButton(
                         action: {
-                            store.send(.navigation(.presentSignUpAge))
+                            store.send(.switchSettingTab)
                         }, title: store.presntNextViewButtonTitle,
                         config: CustomButtonConfig.create()
                         ,isEnable: store.enableButton
@@ -130,8 +118,13 @@ extension SignUpNameView {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
             
-                
-            
+                 
+        }
+    }
+    
+    @ViewBuilder
+    private func erorNIckCheckText() -> some View {
+        VStack {
             Spacer()
                 .frame(height: 20)
             
@@ -144,7 +137,8 @@ extension SignUpNameView {
                     .pretendardFont(family: .Regular, size: 16)
                     .foregroundStyle(store.enableButton ? Color.basicPrimary : Color.alertError)
             }
-            
         }
     }
+    
+
 }

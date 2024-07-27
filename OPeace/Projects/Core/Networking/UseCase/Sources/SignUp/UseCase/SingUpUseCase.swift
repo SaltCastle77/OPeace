@@ -28,6 +28,10 @@ public struct SignUpUseCase : SignUpUseCaseProtocol{
     ) async throws -> CheckNickName? {
         try await repository.checkNickName(nickName)
     }
+    
+    public func fetchJobList() async throws -> SignUpJobModel? {
+        try await repository.fetchJobList()
+    }
 }
 
 

@@ -135,8 +135,10 @@ public struct AgreeMent {
                 switch NavigationAction {
                 case .presntSignUpName:
                     return .none
+                    
                 case .presntPrivacyAgreeCheckTapped:
                     return .none
+                    
                 case .presntServiceAgreeCheckTapped:
                     return .none
                 }

@@ -10,7 +10,10 @@ import ComposableArchitecture
 
 import Utill
 import SwiftUI
+
+import Model
 import DesignSystem
+import KeychainAccess
 
 @Reducer
 public struct SignUpAge {
@@ -19,8 +22,7 @@ public struct SignUpAge {
     @ObservableState
     public struct State: Equatable {
         
-        var selectedTab = 1
-        var totalTabs = 3
+
         var signUpAgeTitle: String = "나이 입력"
         var signUpAgeSubTitle: String = "출생 연도를  알려주세요"
          var signUpAgeDisplay = ""
@@ -31,6 +33,11 @@ public struct SignUpAge {
         var presntNextViewButtonTitle = "다음"
         var enableButton: Bool = false
         var signUpName: String? = nil
+        var signUpNames: String = ""
+        
+        @Presents var destination: Destination.State?
+        var activeMenu: SignUpTab = .signUpName
+        var signUpJob = SignUpJob.State()
         
         public init(
             signUpName: String? = nil
@@ -39,23 +46,30 @@ public struct SignUpAge {
         }
     }
     
-    public enum Action: ViewAction, FeatureAction , BindableAction {
+    public enum Action: ViewAction, FeatureAction , BindableAction, FeatureScopeAction {
+        case destination(PresentationAction<Destination.Action>)
         case binding(BindingAction<State>)
         case view(View)
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
+        case switchTabs
+//        case apperName
+        case scope(ScopeAction)
+        case signUpJob(SignUpJob.Action)
     }
 
     @CasePathable
     public enum View {
-        
-        
+        case apperName
     }
+    
+
     
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
-     
+        case fetchJobList
+        case updateName
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -68,6 +82,17 @@ public struct SignUpAge {
     
     }
     
+    public enum ScopeAction: Equatable {
+        case updateName
+        case fetchJobList
+        
+    }
+    
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case signUpJob(SignUpJob)
+    }
+    
                         
     
                         
@@ -76,19 +101,40 @@ public struct SignUpAge {
         BindingReducer()
         Reduce { state, action in
             switch action {
+            case .switchTabs:
+                let signUpName = try? Keychain().get("signUpName")
+                print(signUpName)
+                state.destination = .signUpJob(.init(
+                    signUpName: signUpName ?? "",
+                    signUpGeneration: state.signUpAgeDisplay
+                ))
+                return .none
                 
             case .binding(\.signUpAgeDisplay):
                 return .none
                 
+            case .destination(_):
+                return .none
+                
             case .view(let View):
                 switch View {
-                    
              
+                case .apperName:
+                    return .none
                 }
                 
             case .async(let AsyncAction):
                 switch AsyncAction {
+                case .fetchJobList:
+                    return .run { @MainActor send in
+                        send(.signUpJob(.fetchJob))
+                    }
                     
+                case .updateName:
+                    let signUpName = state.signUpName
+                    return .run { @MainActor send in
+                        send(.signUpJob(.appearName(signUpName ?? "")))
+                    }
                 }
                 
             case .inner(let InnerAction):
@@ -100,11 +146,28 @@ public struct SignUpAge {
                 switch NavigationAction {
                     
                 }
+                     
+            case .scope(let ScopeAction):
+                switch ScopeAction {
+                case .updateName:
+                    let signUpName = try? Keychain().get("signUpName")
+                    return .run { @MainActor send in
+                        send(.signUpJob(.appearName(signUpName ?? "")))
+                    }
+                case .fetchJobList:
+                    return .run { @MainActor send in
+                        send(.signUpJob(.fetchJob))
+                    }
+                    
+                }
                 
             default:
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
+        Scope(state: \.signUpJob, action: \.signUpJob) {
+            SignUpJob()
+        }
     }
 }
-
