@@ -17,15 +17,15 @@ extension CheckRegister {
         textColor: Color
     ) -> (String, Color, Color) {
         if (1995...2022).contains(year) {
-            return ("BB세대", .basicPurple, .basicWhite)
+            return ("베이비붐 세대", .basicPurple, .gray600)
         } else if (1981...1996).contains(year) {
-            return ("M세대", .basicYellow, .basicWhite)
+            return ("M세대", .basicYellow, .gray600)
         } else if (1965...1980).contains(year) {
-            return ("X세대", .basicLightBlue, .basicWhite)
+            return ("X세대", .basicLightBlue, .gray600)
         } else if (1941...1964).contains(year) {
-            return ("Z세대", .basicGreen, .basicWhite)
+            return ("Z세대", .basicGreen, .gray600)
         } else {
-            return ("기타세대", .gray500, .gray200)
+            return ("? 세대", .gray500, .gray200)
         }
     }
 }

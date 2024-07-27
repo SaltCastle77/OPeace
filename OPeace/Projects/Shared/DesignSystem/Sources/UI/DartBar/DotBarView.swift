@@ -7,22 +7,23 @@
 
 import Foundation
 import SwiftUI
+import Model
 
 public struct DotBarView: View {
-    @Binding var activeIndex: Int
-    var totalDots: Int
+    @Binding var activeIndex: SignUpTab
+//    var totalDots: Int
 
     public init(
-        activeIndex: Binding<Int>,
-        totalDots: Int
+        activeIndex: Binding<SignUpTab>
+//        totalDots: Int
     ) {
         self._activeIndex = activeIndex
-        self.totalDots = totalDots
+//        self.totalDots = totalDots
     }
 
     public var body: some View {
         HStack(spacing: 8) {
-            ForEach(0..<totalDots, id: \.self) { index in
+            ForEach(SignUpTab.allCases, id: \.self) { index in
                 if index == activeIndex {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color.basicPrimary)

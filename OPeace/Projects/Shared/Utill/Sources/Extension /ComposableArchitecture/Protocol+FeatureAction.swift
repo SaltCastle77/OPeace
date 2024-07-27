@@ -32,3 +32,16 @@ public protocol FeatureAction {
   // NOTE: 부모 Reducer 에서 사용되는 Action 을 정의합니다.
 //  static func delegate(_: DelegateAction) -> Self
 }
+
+
+public protocol FeatureScopeAction {
+  associatedtype ScopeAction
+//  associatedtype DelegateAction
+
+
+  // NOTE: 자식 Redcuer 에서 사용되는 Action 을 정의합니다.
+  static func scope(_: ScopeAction) -> Self
+
+  // NOTE: 부모 Reducer 에서 사용되는 Action 을 정의합니다.
+//  static func delegate(_: DelegateAction) -> Self
+}
