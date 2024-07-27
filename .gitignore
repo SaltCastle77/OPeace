@@ -10,7 +10,8 @@
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
-
+.pbxproj
+**/.pbxproj
 
 ## User settings
 xcuserdata/
