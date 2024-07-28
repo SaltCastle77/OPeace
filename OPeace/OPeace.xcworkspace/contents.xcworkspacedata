@@ -82,6 +82,9 @@
          location = "group:Tuist/.build/tuist-derived/Moya/Moya.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:Tuist/.build/tuist-derived/PopupView/PopupView.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:Tuist/.build/tuist-derived/SDWebImage/SDWebImage.xcodeproj">
       </FileRef>
       <FileRef
@@ -119,6 +122,9 @@
       </FileRef>
       <FileRef
          location = "group:Tuist/.build/tuist-derived/swift-syntax/swift-syntax.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Tuist/.build/tuist-derived/swiftui-introspect/swiftui-introspect.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:Tuist/.build/tuist-derived/swiftui-navigation/swiftui-navigation.xcodeproj">
