@@ -140,10 +140,7 @@ public struct Login {
                         state.accessToken = accessToken
                         state.idToken = accessToken
                         state.idToken = idToken
-                        try? Keychain().set(state.idToken ?? "", key: "KAKAKO_ID_TOKEN")
-                        Log.debug("카카오 idToken ",  state.idToken)
-                        let keychaain = try? Keychain().get("KAKAKO_ID_TOKEN")
-                        Log.debug("카카오 idToken ", keychaain)
+                        Log.debug("카카오 idToken ",  state.idToken,  state.accessToken)
                     case let .failure(error):
                         Log.error("카카오 리턴 에러", error)
                     }
