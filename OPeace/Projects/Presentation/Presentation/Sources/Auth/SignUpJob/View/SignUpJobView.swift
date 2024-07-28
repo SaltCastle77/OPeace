@@ -10,21 +10,25 @@ import SwiftUI
 import ComposableArchitecture
 
 import DesignSystem
+import PopupView
 
 public struct SignUpJobView: View {
     @Bindable var store: StoreOf<SignUpJob>
-    
+    private var confirmAction: () -> Void
     
     public init(
-        store: StoreOf<SignUpJob>
+        store: StoreOf<SignUpJob>,
+        confirmAction: @escaping() -> Void
+        
     ) {
         self.store = store
+        self.confirmAction = confirmAction
     }
     
     
     public var body: some View {
         ZStack {
-            Color.gray600
+            store.backGroudColor
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
@@ -36,16 +40,17 @@ public struct SignUpJobView: View {
                     signUpJobSelect()
                     
                     Spacer()
-                        .frame(height: UIScreen.screenHeight * 0.15)
+                        .frame(height: UIScreen.screenHeight * 0.145)
                     
                     CustomButton(
                         action: {
-                            
+                            confirmAction()
                         }, title: store.presntNextViewButtonTitle,
                         config: CustomButtonConfig.create()
                         ,isEnable: store.enableButton
                     )
                     .padding(.horizontal, 20)
+                    .offset(y: 4)
                     
                     Spacer()
                         .frame(height: 16)
@@ -61,6 +66,10 @@ public struct SignUpJobView: View {
             store.send(.async(.fetchSignUpJobList))
             store.send(.appearName(store.signUpName ?? ""))
         }
+        .onTapGesture {
+            store.send(.view(.closePopUp))
+        }
+        
     }
 }
 

@@ -13,6 +13,8 @@ import Service
 import Utills
 import Model
 import UseCase
+import DesignSystem
+import SwiftUI
 
 @Reducer
 public struct SignUpJob {
@@ -30,6 +32,9 @@ public struct SignUpJob {
         var enableButton: Bool = false
         var selectedJob: String?
         let paddings: [CGFloat] = [48, 25, 32, 48, 24, 0]
+        var backGroudColor = Color.gray600
+        
+        @Presents var destination: Destination.State?
         
         public init(
             signUpName: String? = nil,
@@ -42,6 +47,7 @@ public struct SignUpJob {
     
     public enum Action: ViewAction, FeatureAction , BindableAction {
         case binding(BindingAction<State>)
+        case destination(PresentationAction<Destination.Action>)
         case view(View)
         case async(AsyncAction)
         case inner(InnerAction)
@@ -50,10 +56,17 @@ public struct SignUpJob {
         case appearName(String)
     }
     
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case customPopUp(CustomPopUp)
+    }
+    
+    
     @CasePathable
     public enum View {
         case selectJob(String)
-        
+        case appearPopUp
+        case closePopUp
     }
     
     //MARK: - AsyncAction 비동기 처리 액션
@@ -83,6 +96,9 @@ public struct SignUpJob {
             case .binding(_):
                 return .none
                 
+            case .destination(_):
+                return .none
+                
             case .fetchJob:
                 return .run { @MainActor send in
                     send(.async(.fetchSignUpJobList))
@@ -107,6 +123,15 @@ public struct SignUpJob {
                     }
                     return .none
                     
+                case .appearPopUp:
+                    state.destination = .customPopUp(.init())
+                    state.backGroudColor = Color.basicBlack.opacity(0.3)
+                    return .none
+                    
+                case .closePopUp:
+                    state.destination = nil
+                    state.backGroudColor = Color.gray600
+                    return .none
                 }
                 
                 
@@ -156,6 +181,7 @@ public struct SignUpJob {
                 
             }
         }
+        .ifLet(\.$destination, action: \.destination)
     }
 }
 

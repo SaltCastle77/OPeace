@@ -86,8 +86,6 @@ public struct SignUpName {
                 state.activeMenu = .signUpGeneration
                 state.destination = .signUpAge(.init(signUpName: state.signUpNameDisplay))
                 state.destination = .signUpJob(.init(signUpName: state.signUpNameDisplay))
-                try? Keychain().set(state.signUpNameDisplay, key: "signUpName")
-                print(state.signUpNameDisplay,   try? Keychain().get("signUpName"))
                 return .none
                 
             case .view(let View):
@@ -147,7 +145,7 @@ public struct SignUpName {
                 
             }
         }
-        
+        .ifLet(\.$destination, action: \.destination)
 //        .onChange(of: \.signUpNameDisplay) { oldValue, newValue in
 //            Reduce { state, action in
 //                state.signUpNameDisplay = newValue

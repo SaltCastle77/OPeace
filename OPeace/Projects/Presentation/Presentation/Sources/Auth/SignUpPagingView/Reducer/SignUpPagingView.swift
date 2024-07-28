@@ -11,6 +11,7 @@ import ComposableArchitecture
 
 import DesignSystem
 import Model
+import PopupView
 
 public struct SignUpPagingView: View {
     @Bindable var store: StoreOf<SignUpPaging>
@@ -60,7 +61,9 @@ public struct SignUpPagingView: View {
                     SignUpAgeView(store: self.store.scope(state: \.signUpAge, action: \.signUpAge))
                         .tag(SignUpTab.signUpGeneration)
                     
-                    SignUpJobView(store: self.store.scope(state: \.signUpJob, action: \.signUpJob))
+                    SignUpJobView(store: self.store.scope(state: \.signUpJob, action: \.signUpJob), confirmAction: {
+                        store.send(.view(.appearPopUp))
+                    })
                         .tag(SignUpTab.signUpJob)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -70,6 +73,25 @@ public struct SignUpPagingView: View {
             }
             
         }
+        .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp), itemView: { customPopUpStore in
+            CheckSignUpPopUp(
+                store: customPopUpStore,
+                nickName: store.signUpName.signUpNameDisplay,
+                yearOfBirth: store.signUpAge.signUpAgeDisplay,
+                job: store.signUpJob.selectedJob ?? "",
+                cancelAction: {
+                    store.send(.view(.closePopUp))
+                }
+            )
+        }, customize: { popup in
+            popup
+                .type(.floater(verticalPadding: UIScreen.screenHeight * 0.2))
+                .position(.bottom)
+                .animation(.spring)
+                .closeOnTap(true)
+                .closeOnTapOutside(true)
+                .backgroundColor(Color.basicBlack.opacity(0.8))
+        })
         
     }
 }

@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 import Utill
 import Model
+import DesignSystem
 
 @Reducer
 public struct SignUpPaging {
@@ -24,12 +25,14 @@ public struct SignUpPaging {
         var signUpAges = SignUpAge.State()
         var signUpJob = SignUpJob.State()
         var activeMenu: SignUpTab = .signUpName
+        @Presents var destination: Destination.State?
         
         
     }
     
     public enum Action: ViewAction, FeatureAction, BindableAction {
         case binding(BindingAction<State>)
+        case destination(PresentationAction<Destination.Action>)
         case view(View)
         case async(AsyncAction)
         case inner(InnerAction)
@@ -40,11 +43,17 @@ public struct SignUpPaging {
         case activeTabChanged(SignUpTab)
     }
     
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case customPopUp(CustomPopUp)
+    }
+    
     //MARK: - ViewAction
     @CasePathable
     public enum View {
-        
         case backSelectTab
+        case appearPopUp
+        case closePopUp
         
     }
     
@@ -74,6 +83,9 @@ public struct SignUpPaging {
             case .binding(_):
                 return .none
                
+            case .destination(_):
+                return .none
+                
             case .activeTabChanged(let changeTab):
                 state.activeMenu = changeTab
                 return .none
@@ -107,6 +119,14 @@ public struct SignUpPaging {
                         state.activeMenu = .signUpName
                     }
                     return .none
+                    
+                case .appearPopUp:
+                    state.destination = .customPopUp(.init())
+                    return .none
+                    
+                case .closePopUp:
+                    state.destination = nil
+                    return .none
                 }
                 
             case .async(let AsyncAction):
@@ -129,6 +149,7 @@ public struct SignUpPaging {
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
         Scope(state: \.signUpName, action: \.signUpName) {
             SignUpName()
         }
