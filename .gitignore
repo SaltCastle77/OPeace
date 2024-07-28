@@ -12,6 +12,8 @@
 **/._.DS_Store
 .pbxproj
 **/.pbxproj
+.xcworkspacedata
+**/.xcworkspacedata
 
 ## User settings
 xcuserdata/
