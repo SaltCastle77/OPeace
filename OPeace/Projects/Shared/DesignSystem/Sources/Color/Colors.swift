@@ -21,6 +21,7 @@ public extension Color {
     static let gray700 = Color(hex: "7D7D7D")
     static let basicBlack = Color(hex: "000000")
     
+    static let textColor100 = Color(hex: "1D1D1D")
     //MARK: - Lighten
     static let lighten100 = Color(hex: "CAFC7C")
     static let lighten200 = Color(hex: "EDFED1")
