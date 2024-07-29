@@ -6,6 +6,14 @@
 //
 
 public struct SignUpJobModel: Codable, Equatable {
+    public let data: SignUpJobModelResponse?
+    
+    public init(data: SignUpJobModelResponse?) {
+        self.data = data
+    }
+}
+
+public struct SignUpJobModelResponse: Codable, Equatable {
     public let data: [String]?
     
     public init(data: [String]?) {
@@ -16,3 +24,5 @@ public struct SignUpJobModel: Codable, Equatable {
         case data
     }
 }
+
+

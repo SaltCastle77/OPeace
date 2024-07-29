@@ -39,6 +39,7 @@
 		34813DB509379CA453DC4C27 /* Networkings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 725C4353C0319CF46F69E133 /* Networkings.framework */; };
 		355DED392E91274670709882 /* TuistFonts+OPeaceQA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0916C67FD91CC20A54179ADC /* TuistFonts+OPeaceQA.swift */; };
 		3567B85CCE559E4F933F97A4 /* ThirdParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 666517ACAEAFE67DE9DE1F99 /* ThirdParty.framework */; };
+		3572270D02AF0B1525497610 /* IssueReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F1FDF793FB12E2AB8CBEF6 /* IssueReporting.framework */; };
 		39CBE340BA91C90279F2DF66 /* TuistAssets+OPeaceQA.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B570466FE6B49D7EE86039 /* TuistAssets+OPeaceQA.swift */; };
 		3A8191C3C538D2102118852A /* Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD35C1953A546211001D7C5E /* Service.framework */; };
 		3D1AC96C5097B5A678DA752A /* BitCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 762F57C4BD0B6972F8330F08 /* BitCollections.framework */; };
@@ -73,6 +74,7 @@
 		73A044F3CE28988E32B2FE47 /* _RopeModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 710544D3689288D88BCF4D7F /* _RopeModule.framework */; };
 		74A653B526AB76DF8CB07BF3 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC382232F9CB19C7889E7C36 /* PretendardVariable.ttf */; };
 		75B8E1058DFB1F3FEE006333 /* TuistBundle+OPeaceQA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B97CEC1E97ED3FA1E668670 /* TuistBundle+OPeaceQA.swift */; };
+		7611DDD6BD2D33F2F92229C9 /* IssueReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F1FDF793FB12E2AB8CBEF6 /* IssueReporting.framework */; };
 		775C07C9FCAAD5AF0676E327 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7389C99AC044DB6FCAE886 /* Alamofire.framework */; };
 		7C1D3538DD0C31A1CABEF571 /* SDWebImageSwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 013A5AAACC29EDE6846ABBAB /* SDWebImageSwiftUI.framework */; };
 		7D486AFB6B4B503240531EED /* swift-composable-architecture_ComposableArchitecture.bundle in Dependencies */ = {isa = PBXBuildFile; fileRef = 59918D10B5B47AE0CA5D556B /* swift-composable-architecture_ComposableArchitecture.bundle */; };
@@ -224,6 +226,7 @@
 		0109352D6225D44C4F6AA772 /* DequeModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DequeModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		013A5AAACC29EDE6846ABBAB /* SDWebImageSwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDWebImageSwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		016E030DE0DB256201F123B9 /* KakaoSDKUser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KakaoSDKUser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01F1FDF793FB12E2AB8CBEF6 /* IssueReporting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IssueReporting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		064CBB3A96D35D0C6C8E239C /* CombineSchedulers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CombineSchedulers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07AE0789A2321D5EEAB3811C /* Shareds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Shareds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0916C67FD91CC20A54179ADC /* TuistFonts+OPeaceQA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistFonts+OPeaceQA.swift"; sourceTree = "<group>"; };
@@ -322,6 +325,7 @@
 				93071218163E3FB501379256 /* HeapModule.framework in Frameworks */,
 				9CEBAF272B8DEA51AB9CCCC1 /* IdentifiedCollections.framework in Frameworks */,
 				82D45CA455EF9B4B195ED262 /* InternalCollectionsUtilities.framework in Frameworks */,
+				7611DDD6BD2D33F2F92229C9 /* IssueReporting.framework in Frameworks */,
 				BE68B622ED5365E66E26B5AE /* KakaoSDKAuth.framework in Frameworks */,
 				C7E08756AF6FF31813FF4DCC /* KakaoSDKCommon.framework in Frameworks */,
 				9F031B08B44FB26428465314 /* KakaoSDKUser.framework in Frameworks */,
@@ -383,6 +387,7 @@
 				FF2CD11E58ECBB0E526E19B1 /* HeapModule.framework in Frameworks */,
 				181F46F0548B9C0F912140F3 /* IdentifiedCollections.framework in Frameworks */,
 				9F5F51A49EEF2AC322642146 /* InternalCollectionsUtilities.framework in Frameworks */,
+				3572270D02AF0B1525497610 /* IssueReporting.framework in Frameworks */,
 				93AEF0CA0400F21761297155 /* KakaoSDKAuth.framework in Frameworks */,
 				9E18AB82C01622149E57AD06 /* KakaoSDKCommon.framework in Frameworks */,
 				A0AECD0E4FEC858111825135 /* KakaoSDKUser.framework in Frameworks */,
@@ -483,6 +488,7 @@
 				5E99ACF15A4D9E23B1F2325A /* HeapModule.framework */,
 				897CF9DC164F1166044C3EB8 /* IdentifiedCollections.framework */,
 				005318C81558C9BF226FA9BE /* InternalCollectionsUtilities.framework */,
+				01F1FDF793FB12E2AB8CBEF6 /* IssueReporting.framework */,
 				47C809FF8501FA41CDDB53F4 /* KakaoOpenSDK_KakaoSDKCommon.bundle */,
 				F8A8DE4B98B94ABFDFBE12D4 /* KakaoSDKAuth.framework */,
 				7ED18DE4A9239908C51AB615 /* KakaoSDKCommon.framework */,
@@ -831,11 +837,11 @@
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace;
@@ -883,13 +889,13 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace_QA;
@@ -936,11 +942,11 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 				);
@@ -1061,13 +1067,13 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace.OPeaceTests;
 				PRODUCT_NAME = OPeaceTests;
@@ -1117,13 +1123,13 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace_QA;
@@ -1166,13 +1172,13 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
-					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace.OPeaceTests;
 				PRODUCT_NAME = OPeaceTests;
@@ -1222,13 +1228,13 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace;
@@ -1272,13 +1278,13 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
-					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"-load-plugin-executable",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace;
@@ -1468,13 +1474,13 @@
 					"-Xcc",
 					"-fmodule-map-file=$(SRCROOT)/../../Tuist/.build/tuist-derived/SDWebImage/SDWebImage.modulemap",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/PerceptionMacros#PerceptionMacros",
 					"-load-plugin-executable",
 					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/CasePathsMacros#CasePathsMacros",
 					"-load-plugin-executable",
-					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/DependenciesMacrosPlugin#DependenciesMacrosPlugin",
+					"$BUILD_DIR/Debug$EFFECTIVE_PLATFORM_NAME/ComposableArchitectureMacros#ComposableArchitectureMacros",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.Opeace.Opeace;
 				PRODUCT_NAME = OPeace_QA;

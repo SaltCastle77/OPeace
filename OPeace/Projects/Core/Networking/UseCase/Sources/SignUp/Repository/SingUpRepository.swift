@@ -22,8 +22,8 @@ import Moya
         
     }
     
-    public func checkNickName(_ nickName: String) async throws -> CheckNickName? {
-        return try await provider.requestAsync(.nickNameCheck(nickname: nickName), decodeTo: CheckNickName.self)
+    public func checkNickName(_ nickName: String) async throws -> CheckNickNameModel? {
+        return try await provider.requestAsync(.nickNameCheck(nickname: nickName), decodeTo: CheckNickNameModel.self)
     }
     
     public func fetchJobList() async throws -> SignUpJobModel? {

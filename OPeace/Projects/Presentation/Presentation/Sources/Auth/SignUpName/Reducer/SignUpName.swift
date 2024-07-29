@@ -26,7 +26,7 @@ public struct SignUpName {
         var signUpNameSubTitle: String = "2~5자까지 입력할 수 있어요"
          var signUpNameDisplay = ""
         var presntNextViewButtonTitle = "다음"
-        var nickNameModel: CheckNickName? = nil
+        var nickNameModel: CheckNickNameModel? = nil
         var checkNickNameMessage: String = ""
         var enableButton: Bool = false
     
@@ -54,7 +54,7 @@ public struct SignUpName {
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
         case checkNickName(nickName: String)
-        case checkNIckNameResponse(Result<CheckNickName, CustomError>)
+        case checkNIckNameResponse(Result<CheckNickNameModel, CustomError>)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -122,7 +122,7 @@ public struct SignUpName {
                     switch result {
                     case .success(let data):
                         state.nickNameModel = data
-                        state.enableButton =  state.nickNameModel?.exists ?? false
+                        state.enableButton =  state.nickNameModel?.data?.exists ?? false
                         
                     case .failure(let error):
                         Log.network("닉네임 에러", error.localizedDescription)

@@ -15,7 +15,7 @@ public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
         
     }
     
-    public func checkNickName(_ nickName: String) async throws -> CheckNickName? {
+    public func checkNickName(_ nickName: String) async throws -> CheckNickNameModel? {
         return nil
     }
     

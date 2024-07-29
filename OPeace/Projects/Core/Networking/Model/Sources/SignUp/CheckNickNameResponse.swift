@@ -7,7 +7,18 @@
 
 import Foundation
 
-public struct CheckNickName: Codable, Equatable {
+public struct CheckNickNameModel: Codable, Equatable {
+    public let data: CheckNickNameResponse?
+    
+    public init(
+        data: CheckNickNameResponse?
+    ) {
+        self.data = data
+    }
+}
+
+
+public struct CheckNickNameResponse: Codable, Equatable {
     public var exists: Bool?
     public var message: String?
     

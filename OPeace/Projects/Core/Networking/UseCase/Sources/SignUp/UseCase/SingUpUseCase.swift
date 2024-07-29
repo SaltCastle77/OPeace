@@ -25,7 +25,7 @@ public struct SignUpUseCase : SignUpUseCaseProtocol{
     
     public func checkNickName(
         _ nickName: String
-    ) async throws -> CheckNickName? {
+    ) async throws -> CheckNickNameModel? {
         try await repository.checkNickName(nickName)
     }
     

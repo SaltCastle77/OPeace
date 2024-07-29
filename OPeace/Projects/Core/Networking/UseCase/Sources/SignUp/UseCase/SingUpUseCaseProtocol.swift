@@ -10,6 +10,6 @@ import Foundation
 import Model
 
 public protocol SignUpUseCaseProtocol {
-    func checkNickName(_ nickName: String) async throws -> CheckNickName?
+    func checkNickName(_ nickName: String) async throws -> CheckNickNameModel?
     func fetchJobList ()  async throws -> SignUpJobModel?
 }
