@@ -3,12 +3,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-.pbxproj
-**/.pbxproj
-.xcworkspacedata
-**/.xcworkspacedata
-.resolved
-**/.resolved
+
 # Icon must end with two
 Icon
 
@@ -72,4 +67,4 @@ graph.dot
 Derived/
 
 ### Tuist managed dependencies ###
-Tuist/.build
+Tuist/.build1
