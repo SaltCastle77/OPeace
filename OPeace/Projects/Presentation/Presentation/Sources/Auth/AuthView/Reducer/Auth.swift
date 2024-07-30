@@ -35,6 +35,7 @@ public struct Auth {
         case agreeMent(AgreeMent)
         case signUpPagging(SignUpPaging)
         case webView(Web)
+        case root(Root)
         
     }
     
@@ -93,6 +94,10 @@ public struct Auth {
                     
                 case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
                     state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
+                    return .none
+                    
+                case .element(id: _, action: .login(.navigation(.presentMain))):
+                    state.path.append(.root(.init()))
                     return .none
                     
                 default:

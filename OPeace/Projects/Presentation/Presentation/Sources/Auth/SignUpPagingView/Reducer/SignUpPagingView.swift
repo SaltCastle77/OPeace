@@ -81,7 +81,14 @@ public struct SignUpPagingView: View {
                 job: store.signUpJob.selectedJob ?? "",
                 cancelAction: {
                     store.send(.view(.closePopUp))
+                }, confirmAction: {
+                    store.send(.async(.updateUserInfo(
+                        nickName: store.signUpName.signUpNameDisplay,
+                        year: Int(store.signUpAge.signUpAgeDisplay) ?? 0 ,
+                        job: store.signUpJob.selectedJob ?? "",
+                        generation: store.signUpAge.checkGenerationText)))
                 }
+                
             )
         }, customize: { popup in
             popup

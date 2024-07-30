@@ -11,6 +11,8 @@ import ComposableArchitecture
 import Utill
 import Model
 import DesignSystem
+import Utills
+import UseCase
 
 @Reducer
 public struct SignUpPaging {
@@ -25,6 +27,8 @@ public struct SignUpPaging {
         var signUpAges = SignUpAge.State()
         var signUpJob = SignUpJob.State()
         var activeMenu: SignUpTab = .signUpName
+        
+        var updateUserinfoModel: UpdateUserInfoModel?
         @Presents var destination: Destination.State?
         
         
@@ -61,7 +65,12 @@ public struct SignUpPaging {
     
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
-        
+        case updateUserInfoResponse(Result<UpdateUserInfoModel, CustomError>)
+        case updateUserInfo(
+            nickName: String,
+            year: Int,
+            job: String,
+            generation: String)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -75,7 +84,7 @@ public struct SignUpPaging {
     }
     
     
-    
+    @Dependency(SignUpUseCase.self) var signUpUseCase
     public var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
@@ -132,6 +141,34 @@ public struct SignUpPaging {
             case .async(let AsyncAction):
                 switch AsyncAction {
                     
+               
+                    
+                case .updateUserInfo(let nickname, let year, let job, let generation):
+                    return .run { @MainActor send in
+                        let userInfoResult = await Result {
+                            try await signUpUseCase.updateUserInfo(nickname: nickname, year: year, job: job, generation: generation)
+                        }
+                        
+                        switch userInfoResult {
+                        case .success(let updateUserInfoData):
+                            if let updateUserInfoData = updateUserInfoData {
+                                send(.async(.updateUserInfoResponse(.success(updateUserInfoData))))
+                            }
+                        case .failure(let error):
+                            send(.async(.updateUserInfoResponse(.failure(CustomError.map(error)))))
+                        }
+                    }
+                    
+                    
+                    
+                case .updateUserInfoResponse(let result):
+                    switch result {
+                    case .success(let userInfoData):
+                        state.updateUserinfoModel = userInfoData
+                    case let .failure(error):
+                        Log.error("update user info 리턴 에러", error)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):

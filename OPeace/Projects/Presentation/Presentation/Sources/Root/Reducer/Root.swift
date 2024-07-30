@@ -15,7 +15,7 @@ public struct Root {
     public init() {}
     
     @ObservableState
-    public struct State {
+    public struct State: Equatable {
         public init() {}
         var path: StackState<Path.State> = .init()
     }

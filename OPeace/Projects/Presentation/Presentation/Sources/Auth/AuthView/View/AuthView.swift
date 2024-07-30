@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 import DesignSystem
+import KakaoSDKAuth
 
 public struct AuthView: View {
     @Bindable var store: StoreOf<Auth>
@@ -51,6 +52,10 @@ public struct AuthView: View {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
+                
+            case .root(let rootStore):
+                RootView(store: rootStore)
+                    .navigationBarBackButtonHidden()
             }
         }
 

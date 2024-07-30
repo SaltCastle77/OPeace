@@ -34,7 +34,7 @@ public struct Login {
         var appleAccessToken: String = ""
         var accessToken: String?
         var idToken: String?
-        var kakaoModel : KakaoResponse? = nil
+        var kakaoModel : KakaoResponseModel? = nil
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -58,7 +58,7 @@ public struct Login {
         case kakaoLogin
         case kakaoLoginResponse(Result<(String?, String?), CustomError>)
         case loginWIthKakao
-        case kakaoLoginApiResponse(Result<KakaoResponse, CustomError>)
+        case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -69,6 +69,7 @@ public struct Login {
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
         case presnetAgreement
+        case presentMain
     }
     
     
@@ -129,7 +130,7 @@ public struct Login {
                             send(.async(.kakaoLoginResponse(.failure(CustomError.map(error)))))
                         }
                         
-                        try await Task.sleep(nanoseconds: 3000000000)
+//                        try await Task.sleep(nanoseconds: 3000000000)
                         send(.async(.loginWIthKakao))
                     }
                     
@@ -156,6 +157,9 @@ public struct Login {
                         case .success(let resopnse):
                             if let responseData = resopnse {
                                 send(.async(.kakaoLoginApiResponse(.success(responseData))))
+                                try await Task.sleep(nanoseconds: UInt64(0.4))
+                                
+                                send(.navigation(.presnetAgreement))
                             }
                             
                         case .failure(let error):
@@ -167,6 +171,8 @@ public struct Login {
                     switch data {
                     case .success(let ResponseData):
                         state.kakaoModel = ResponseData
+                        try? Keychain().remove("ACCESS_TOKEN")
+                        try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                         
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
@@ -182,6 +188,9 @@ public struct Login {
             case .navigation(let NavigationAction):
                 switch NavigationAction {
                 case .presnetAgreement:
+                    return .none
+                    
+                case .presentMain:
                     return .none
                 }
             }

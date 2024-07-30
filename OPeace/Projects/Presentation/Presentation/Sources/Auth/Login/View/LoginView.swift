@@ -39,6 +39,11 @@ public struct LoginView: View {
                 notLoginLookAroudButton()
             }
         }
+        .onOpenURL { url in
+            if AuthApi.isKakaoTalkLoginUrl(url) {
+                _ = AuthController.handleOpenUrl(url: url)
+            }
+        }
     }
 }
 
@@ -156,6 +161,7 @@ extension LoginView {
                         else {
 //                            completionHandler()
                             Log.debug("카카오 토큰 삭제")
+                            store.send(.navigation(.presentMain))
                         }
                     }
                 }
