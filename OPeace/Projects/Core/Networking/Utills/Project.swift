@@ -2,6 +2,7 @@ import Foundation
 import ProjectDescription
 import DependencyPlugin
 import ProjectTemplatePlugin
+import DependencyPackagePlugin
 
 let project = Project.makeAppModule(
     name: "Utills",
@@ -10,7 +11,7 @@ let project = Project.makeAppModule(
     settings:  .settings(),
     dependencies: [
         .sdk(name: "OSLog", type: .framework),
-        .Networking(implements: .ThirdPartys)
+        .Networking(implements: .ThirdPartys),
     ],
     sources: ["Sources/**"]
 )

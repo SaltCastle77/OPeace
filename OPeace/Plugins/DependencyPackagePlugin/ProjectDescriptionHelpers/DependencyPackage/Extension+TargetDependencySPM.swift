@@ -21,6 +21,10 @@ public extension TargetDependency.SPM {
     static let kakaoSDKCommon = TargetDependency.external(name: "KakaoSDKCommon", condition: .none)
     
     static let popupView = TargetDependency.external(name: "PopupView", condition: .none)
+    
+    static let firebaseAuth = TargetDependency.external(name: "FirebaseAuth", condition: .none)
+    static let firebaseAnalytics = TargetDependency.external(name: "FirebaseAnalytics", condition: .none)
+    static let firebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics", condition: .none)
 }
   
 

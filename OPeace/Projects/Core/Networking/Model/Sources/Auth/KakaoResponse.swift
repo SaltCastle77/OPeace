@@ -7,10 +7,19 @@
 
 import Foundation
 
+// MARK: - Welcome
+public struct KakaoResponseModel: Codable, Equatable {
+    public let data: KakaoResponse?
+    
+    public init(data: KakaoResponse?) {
+        self.data = data
+    }
+}
+
 public struct KakaoResponse: Codable, Equatable {
-    let socialID: String?
-    let accessToken: String?
-    let refreshToken: String?
+    public let socialID: String?
+    public let accessToken: String?
+    public let refreshToken: String?
 
     public enum CodingKeys: String, CodingKey {
         case socialID = "social_id"

@@ -16,6 +16,12 @@ import Foundations
 public enum SignUpService {
     case nickNameCheck(nickname: String)
     case signUpJob
+    case updateUserInfo(
+        nickname: String,
+        year: Int,
+        job: String,
+        generation: String
+    )
 }
 
 
@@ -28,6 +34,9 @@ extension SignUpService: BaseTargetType {
             
         case .signUpJob:
             return SignUpAPI.signUpJob.signUpAPIDesc
+            
+        case .updateUserInfo:
+            return SignUpAPI.updateProfile.signUpAPIDesc
         }
     }
     
@@ -39,6 +48,9 @@ extension SignUpService: BaseTargetType {
             
         case .signUpJob:
             return .get
+            
+        case .updateUserInfo:
+            return .patch
         }
     }
     
@@ -50,6 +62,26 @@ extension SignUpService: BaseTargetType {
             
         case .signUpJob:
             return .requestPlain
+            
+        case .updateUserInfo(let nickname , let year, let job,  let generation):
+            let parameters: [String: Any] = [
+                "nickname": nickname,
+                "year": year,
+                "job": job,
+                "generation": generation
+            ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+        }
+    }
+    
+    
+    public var headers: [String : String]?{
+        switch self {
+        case .updateUserInfo:
+            return APIHeader.baseHeader
+            
+        default:
+            return APIHeader.notAccessTokenHeader
         }
     }
 }

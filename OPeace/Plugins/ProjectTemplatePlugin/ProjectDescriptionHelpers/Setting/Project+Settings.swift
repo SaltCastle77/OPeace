@@ -25,7 +25,6 @@ extension Settings {
             .setVersioningSystem()
             .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
             .setDevelopmentTeam(Project.Environment.organizationTeamId)
-            .setSkipInstall(true)
             .setDebugInformationFormat(),
       
         
@@ -44,6 +43,7 @@ extension Settings {
                 .setOtherLdFlags("-ObjC -all_load")
                 .setDebugInformationFormat("non-global")
                 .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
+                .setSkipInstall(false)
             ),
             .release(name: .release, settings: SettingsDictionary()
                 .setProductName(Project.Environment.appName)
@@ -51,6 +51,7 @@ extension Settings {
                 .setOtherLdFlags("-ObjC -all_load")
                 .setDebugInformationFormat("non-global")
                 .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
+                .setSkipInstall(false)
             )
         ], defaultSettings: .recommended
     )

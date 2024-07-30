@@ -1,5 +1,5 @@
 //
-//  UpdateNickNameModel.swift
+//  UpdateUserInfoModel.swift
 //  Model
 //
 //  Created by 서원지 on 7/30/24.
@@ -8,17 +8,17 @@
 import Foundation
 
 // MARK: - Welcome
-public struct UpdateProfileModel: Codable, Equatable {
-    public let data: UpdateProfileResponse?
+public struct UpdateUserInfoModel: Codable, Equatable {
+    public let data: UpdateUserInfoResponse?
     
-    public init(data: UpdateProfileResponse?) {
+    public init(data: UpdateUserInfoResponse?) {
         self.data = data
     }
     
 }
 
 // MARK: - DataClass
-public struct UpdateProfileResponse: Codable, Equatable {
+public struct UpdateUserInfoResponse: Codable, Equatable {
     let nickname, year, generation, job: Generation?
     
     public enum CodingKeys: String, CodingKey {

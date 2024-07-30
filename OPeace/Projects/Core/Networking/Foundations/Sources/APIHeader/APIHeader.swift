@@ -12,7 +12,8 @@ public struct APIHeader{
     
     public static let contentType = "Content-Type"
     public static let accessToken = "Authorization"
-    
+    public static let accepot = "accept"
+    public static let accessTokenKeyChain = try? Keychain().get("ACCESS_TOKEN") ?? ""
     public init() {}
     
 }
@@ -26,20 +27,21 @@ extension APIHeader {
         return baseHeaders
     }
     
-    static var baseHeader: Dictionary<String, String> {
+    public static var baseHeader: Dictionary<String, String> {
         [
-          contentType : APIHeaderManger.shared.contentType
+          contentType : APIHeaderManger.shared.contentType,
+          accessToken : accessTokenKeyChain ?? "",
+          accepot: APIHeaderManger.shared.contentType
         ]
     }
     
-    static var kakakoHeader: Dictionary<String, String> {
-        let kakaoKeyChain = try? Keychain().get("KAKAKO_ID_TOKEN")
-        return   [
-            contentType : APIHeaderManger.shared.contentType,
-//            accessToken : "Bearer \(kakaoKeyChain)",
-            "accept": APIHeaderManger.shared.contentType
-            ]
-            
+    public static var notAccessTokenHeader: Dictionary<String, String> {
+        [
+          contentType : APIHeaderManger.shared.contentType,
+//          accessToken : "Bearer \(accessTokenKeyChain ?? "")",
+          accepot: APIHeaderManger.shared.contentType
+        ]
     }
+    
 }
 

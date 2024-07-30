@@ -103,7 +103,7 @@ public struct InfoPlistValues {
                     "CFBundleTypeRole": .string("Editor"),
                     "CFBundleURLName": .string("kakao"),
                     "CFBundleURLSchemes": .array([
-                        .string("kakao$(e55ab48902aa38be8a6fb0f1a3431e8d)")
+                        .string("kakao${e55ab48902aa38be8a6fb0f1a3431e8d}?")
                     ])
                 ])
             ])
@@ -161,7 +161,11 @@ public struct InfoPlistValues {
             ])
         ]
     }
-
+//    App Uses Non-Exempt Encryption
+    public static func setAppUseExemptEncryption(value: Bool) -> [String: Plist.Value] {
+        return ["ITSAppUsesNonExemptEncryption": .boolean(value)]
+    }
+    
     public static func generateInfoPlist() -> [String: Plist.Value] {
         var infoPlist: [String: Plist.Value] = [:]
 
@@ -177,6 +181,7 @@ public struct InfoPlistValues {
         infoPlist.merge(setApplicationQueriesSchemes()) { (_, new) in new }
         infoPlist.merge(setKakaoAPPKEY("e55ab48902aa38be8a6fb0f1a3431e8d")) { (_, new) in new }
         infoPlist.merge(setCFBundleURLTypes()) { (_, new) in new }
+        infoPlist.merge(setAppUseExemptEncryption(value: false)) { (_, new) in new }
 //        infoPlist.merge(setCFBundleURLTypes([
 //            [
 //                "CFBundleURLSchemes": [

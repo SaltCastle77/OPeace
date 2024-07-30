@@ -10,6 +10,7 @@ import Foundation
 public enum SignUpAPI : String{
     case nickNameCheck
     case signUpJob
+    case updateProfile
     
     
     public  var signUpAPIDesc: String {
@@ -19,6 +20,9 @@ public enum SignUpAPI : String{
             
         case .signUpJob:
             return "/users/jobs/"
+            
+        case .updateProfile:
+            return "/users/"
         }
     }
 }

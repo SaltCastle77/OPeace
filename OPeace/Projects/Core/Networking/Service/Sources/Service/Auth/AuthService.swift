@@ -12,6 +12,7 @@ import Foundations
 
 public enum AuthService {
     case appleLogin
+    case kakaoLogin(accessToken: String)
 }
 
 extension AuthService: BaseTargetType {
@@ -20,12 +21,17 @@ extension AuthService: BaseTargetType {
         case .appleLogin:
             return AuthAPI.appleLogin.authAPIDesc
             
+        case .kakaoLogin:
+            return AuthAPI.kakaoLoginCallback.authAPIDesc
         }
     }
     
     public var method: Moya.Method {
         switch self {
         case .appleLogin:
+            return .get
+            
+        case .kakaoLogin:
             return .get
             
         }
@@ -36,8 +42,18 @@ extension AuthService: BaseTargetType {
         case .appleLogin:
             return .requestPlain
             
-            
+        case .kakaoLogin(let accessToken):
+            let parameters: [String: Any] = [
+                "access_token": accessToken
+            ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
         }
     }
     
+    public var headers: [String : String]? {
+        switch self {
+        default:
+            return APIHeader.notAccessTokenHeader
+        }
+    }
 }
