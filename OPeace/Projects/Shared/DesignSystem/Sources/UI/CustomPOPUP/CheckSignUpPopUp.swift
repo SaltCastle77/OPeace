@@ -14,23 +14,26 @@ public struct CheckSignUpPopUp: View {
     
     @Bindable var store: StoreOf<CustomPopUp>
     
-    var nickName: String
-    var yearOfBirth: String
-    var job: String
-    var cancelAction: () -> Void = { }
+    private var nickName: String
+    private var yearOfBirth: String
+    private var job: String
+    private var cancelAction: () -> Void = { }
+    private var confirmAction: () -> Void = { }
     
     public init(
         store: StoreOf<CustomPopUp>,
         nickName: String,
         yearOfBirth: String,
         job: String,
-        cancelAction: @escaping () -> Void
+        cancelAction: @escaping () -> Void,
+        confirmAction: @escaping () -> Void
     ) {
         self.store = store
         self.nickName = nickName
         self.yearOfBirth = yearOfBirth
         self.job = job
         self.cancelAction = cancelAction
+        self.confirmAction = confirmAction
     }
     
     public var body: some View{
@@ -164,6 +167,9 @@ extension CheckSignUpPopUp {
                         Text("가입 하기")
                             .pretendardFont(family: .Medium, size: 16)
                             .foregroundStyle(Color.textColor100)
+                    }
+                    .onTapGesture {
+                        confirmAction()
                     }
                 
             }
