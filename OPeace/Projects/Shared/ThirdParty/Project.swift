@@ -17,7 +17,9 @@ let project = Project.makeAppModule(
         .SPM.kakaoSDKAuth,
         .SPM.kakaoSDKUser,
         .SPM.kakaoSDKCommon,
-        .SPM.popupView
+        .SPM.popupView,
+        .SPM.firebaseAnalytics,
+        .SPM.firebaseCrashlytics
     ],
     sources: ["Sources/**"]
 )

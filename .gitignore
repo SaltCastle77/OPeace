@@ -19,7 +19,7 @@
 *.env
 *.plist
 **/.plist
-*.xcworkspacedata
+*contents.xcworkspacedata
 
 ## User settings
 xcuserdata/
