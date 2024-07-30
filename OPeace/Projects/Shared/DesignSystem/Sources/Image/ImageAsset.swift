@@ -24,5 +24,9 @@ public enum ImageAsset: String {
     case kakaoLogin
     case appleLogin
 
+    
+    //MARK: - OnBoarding
+    case onBoardingFirst
+    case onBoardingFirstTap
     case empty
 }

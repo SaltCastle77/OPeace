@@ -9,21 +9,16 @@ import Foundation
 import SwiftUI
 import Model
 
-public struct DotBarView: View {
-    @Binding var activeIndex: SignUpTab
-//    var totalDots: Int
+public struct DotBarView<T: Equatable & Hashable & CaseIterable>: View where T.AllCases: RandomAccessCollection {
+    @Binding var activeIndex: T
 
-    public init(
-        activeIndex: Binding<SignUpTab>
-//        totalDots: Int
-    ) {
+    public init(activeIndex: Binding<T>) {
         self._activeIndex = activeIndex
-//        self.totalDots = totalDots
     }
 
     public var body: some View {
         HStack(spacing: 8) {
-            ForEach(SignUpTab.allCases, id: \.self) { index in
+            ForEach(T.allCases, id: \.self) { index in
                 if index == activeIndex {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color.basicPrimary)
@@ -47,3 +42,4 @@ public struct DotBarView: View {
         .cornerRadius(10)
     }
 }
+

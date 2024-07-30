@@ -122,6 +122,7 @@ public struct SignUpName {
                     switch result {
                     case .success(let data):
                         state.nickNameModel = data
+                        state.checkNickNameMessage = state.nickNameModel?.data?.message  ?? ""
                         state.enableButton =  state.nickNameModel?.data?.exists ?? false
                         
                     case .failure(let error):

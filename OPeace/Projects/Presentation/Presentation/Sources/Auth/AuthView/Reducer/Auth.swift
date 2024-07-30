@@ -36,6 +36,7 @@ public struct Auth {
         case signUpPagging(SignUpPaging)
         case webView(Web)
         case root(Root)
+        case onBoardingPagging(OnBoadingPagging)
         
     }
     
@@ -99,6 +100,11 @@ public struct Auth {
                 case .element(id: _, action: .login(.navigation(.presentMain))):
                     state.path.append(.root(.init()))
                     return .none
+                    
+                case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
+                    state.path.append(.onBoardingPagging(.init()))
+                    return .none
+                    
                     
                 default:
                     break

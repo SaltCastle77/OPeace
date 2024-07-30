@@ -8,7 +8,7 @@
 import Foundation
 
 public struct CheckNickNameModel: Codable, Equatable {
-    public let data: CheckNickNameResponse?
+    public var data: CheckNickNameResponse?
     
     public init(
         data: CheckNickNameResponse?

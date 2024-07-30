@@ -56,6 +56,12 @@ public struct AuthView: View {
             case .root(let rootStore):
                 RootView(store: rootStore)
                     .navigationBarBackButtonHidden()
+                
+            case .onBoardingPagging(let onBoardingPaggingStore):
+                OnBoadingPaggingView(store: onBoardingPaggingStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
             }
         }
 

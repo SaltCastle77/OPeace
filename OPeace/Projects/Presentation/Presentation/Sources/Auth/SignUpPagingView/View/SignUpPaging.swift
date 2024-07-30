@@ -80,6 +80,7 @@ public struct SignUpPaging {
     
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
+        case presntOnboarding
     
     }
     
@@ -154,6 +155,12 @@ public struct SignUpPaging {
                             if let updateUserInfoData = updateUserInfoData {
                                 send(.async(.updateUserInfoResponse(.success(updateUserInfoData))))
                             }
+                            
+                            send(.view(.closePopUp))
+                            
+                            try await Task.sleep(nanoseconds: 500_000_000)
+                                send(.navigation(.presntOnboarding))
+                            
                         case .failure(let error):
                             send(.async(.updateUserInfoResponse(.failure(CustomError.map(error)))))
                         }
@@ -178,7 +185,8 @@ public struct SignUpPaging {
                 
             case .navigation(let NavigationAction):
                 switch NavigationAction {
-                    
+                case .presntOnboarding:
+                    return .none
                 }
                 
                 

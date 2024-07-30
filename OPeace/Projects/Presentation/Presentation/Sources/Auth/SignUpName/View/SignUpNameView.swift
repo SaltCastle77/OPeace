@@ -96,24 +96,20 @@ extension SignUpNameView {
                 .onSubmit {
                     if CheckRegister.isValidNickName(store.signUpNameDisplay) {
                         store.checkNickNameMessage = "사용 가능한 닉네임이에요"
-                        
+                        store.send(.async(.checkNickName(nickName: store.signUpNameDisplay)))
                     } else if CheckRegister.containsInvalidCharacters(store.signUpNameDisplay) {
                         store.checkNickNameMessage = "띄어쓰기와 특수문자는 사용할 수 없어요"
                     } else if store.signUpNameDisplay.isEmpty {
                         store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
+                        store.enableButton = false
+                    }  else if CheckRegister.containsInvalidCharacters(store.signUpNameDisplay) {
+                        store.enableButton = false
                     } else {
                         store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
-                    }
-                }
-                .onChange(of: store.signUpNameDisplay) { oldValue, newValue in
-                    if CheckRegister.isValidNickName(store.signUpNameDisplay) {
-                        store.send(.async(.checkNickName(nickName: newValue)))
-                    } else if CheckRegister.containsInvalidCharacters(newValue) {
-                        store.enableButton = false
-                    } else {
                         store.enableButton = false
                     }
                 }
+                
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
