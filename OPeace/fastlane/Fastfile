@@ -11,8 +11,12 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+update_fastlane
 
+APP_NAME = "OPeace"
+SCHEME = "OPeace-QA"
+
+ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "600"
 default_platform(:ios)
 
 platform :ios do
@@ -20,4 +24,71 @@ platform :ios do
   lane :custom_lane do
     # add actions here: https://docs.fastlane.tools/actions
   end
+
+desc "Install Profiles and Build My App"
+  lane :build_ipa do
+    clear_derived_data
+
+   build_app(
+      workspace: "#{APP_NAME}.xcworkspace",
+      scheme: "#{SCHEME}",
+    silent: true,
+    clean: true,
+    output_directory: "./fastlane/output/",
+    output_name: "OPeace.ipa",
+      export_method: "app-store",
+      export_options: {
+      signingStyle: "manual",
+          uploadBitcode: false,
+            provisioningProfiles: {
+            "io.Opeace.Opeace" => "match AppStore io.Opeace.Opeace",
+           
+             }
+        }
+    )
+ 
+   end
+#  ✅ 테스트 플라이트 업로드
+  desc "Push to TestFlight"
+  lane :QA do |options|
+app_store_connect_api_key(is_key_content_base64: true, in_house: false)
+
+
+
+build_ipa
+upload_to_testflight(
+       demo_account_required: true,
+       beta_app_description:" OPeace",
+       ipa:"./fastlane/output/OPeace.ipa",
+       changelog:"변경사항",
+       groups: ["Opeace"],
+       skip_waiting_for_build_processing: true)
+
+
+      send_slack
+    end
+    # ✅ if 문을 
+
+lane :send_slack do
+    version_number = get_version_number(xcodeproj: "Projects/App/#{APP_NAME}.xcodeproj", target: "#{SCHEME}")
+    build_number = latest_testflight_build_number(app_identifier: "io.Opeace.Opeace") + 1
+    
+    slack(
+      message: "테스트 플라이트  업로드가 완료되었습니다.",
+      icon_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/앱스토어.png/600px-앱스토어.png?20240730002648",
+      channel: "#개발-ios",
+      username: "Opeace",
+      success: true,
+      slack_url: ENV["SLACK_URL_UPLOAD"],
+      default_payloads: [:lane, :test_result, :git_branch, :git_author, :last_git_commit],
+      payload: { "Version": version_number + "(" + build_number.to_s + ")" }
+    )   
+    error do |lane, exception, options|
+    slack(
+      message: "에러 발생 : #{exception}",
+      success: false,
+      slack_url: ENV["SLACK_URL_UPLOAD"]
+    )
+   end
+end
 end
