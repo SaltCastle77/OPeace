@@ -13,7 +13,7 @@ let project = Project.makeAppModule(
         .Networking(implements: .DiContainer),
         .Networking(implements: .Service),
         .Networking(implements: .Model),
-        .SPM.composableArchitecture
+        .SPM.composableArchitecture,
     ],
     sources: ["Sources/**"]
 )

@@ -23,7 +23,6 @@ import Model
 
 @Observable public class AuthRepository: AuthRepositoryProtocol {
     private let provider = MoyaProvider<AuthService>(plugins: [MoyaLoggingPlugin()])
-    private let kakaoProvider = MoyaProvider<KakaoService>(plugins: [MoyaLoggingPlugin()])
     
     public init() {}
     
@@ -76,8 +75,9 @@ import Model
                                         return
                                     }
 
-                                    Log.debug("access token", oauthToken?.idToken ?? "")
+                                    Log.debug("access token", oauthToken?.accessToken ?? "")
                                     try? Keychain().remove("KAKAKO_ID_TOKEN")
+                                    try? Keychain().set(accessToken, key: "KAKAKO_ID_TOKEN")
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 }
                             }
@@ -96,7 +96,9 @@ import Model
                                     _ = oauthToken
                                     
                                     Log.debug("access token", accessToken)
-                                    try? Keychain().remove("KAKAKO_ID_TOKEN")
+                                    try? Keychain().remove("ACCESS_TOKEN")
+                                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                    Log.debug("access token", oauthToken?.accessToken ?? "")
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 }
                             }
@@ -114,9 +116,9 @@ import Model
                                     return
                                 }
                                 _ = oauthToken
-                                try? Keychain().remove("KAKAKO_ID_TOKEN")
-
-                                Log.debug("access token", oauthToken?.idToken ?? "")
+                                try? Keychain().remove("ACCESS_TOKEN")
+                                try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                Log.debug("access token", oauthToken?.accessToken ?? "")
                                 continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 
                             }
@@ -140,15 +142,16 @@ import Model
 
                     _ = oauthToken
                     Log.debug("access token", oauthToken?.idToken ?? "")
+                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                 }
             }
         }
     }
     
-    public func reauestKakaoLogin() async throws -> KakaoResponse? {
-        let kakaoAcessToken = (try? Keychain().get("KAKAKO_ID_TOKEN") ?? "")
-        return try await kakaoProvider.requestAsync(.kakaoLogin(code: "", accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponse.self)
+    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
+        let kakaoAcessToken = (try? Keychain().get("ACCESS_TOKEN") ?? "")
+        return try await provider.requestAsync(.kakaoLogin( accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponseModel.self)
     }
     
 }

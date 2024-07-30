@@ -29,4 +29,13 @@ import Moya
     public func fetchJobList() async throws -> SignUpJobModel? {
         return  try await provider.requestAsync(.signUpJob, decodeTo: SignUpJobModel.self)
     }
+    
+    public func updateUserInfo(nickname: String, year: Int, job: String, generation: String) async throws -> UpdateUserInfoModel? {
+        return try await provider.requestAsync(.updateUserInfo(
+            nickname: nickname,
+            year: year,
+            job: job,
+            generation: generation
+        ), decodeTo: UpdateUserInfoModel.self)
+    }
 }

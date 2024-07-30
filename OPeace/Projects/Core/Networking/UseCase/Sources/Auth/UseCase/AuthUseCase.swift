@@ -36,7 +36,7 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     //MARK: - 카카오 로그인
-    public func reauestKakaoLogin() async throws -> KakaoResponse? {
+    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
         try await repository.reauestKakaoLogin()
     }
     

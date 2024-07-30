@@ -31,7 +31,7 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
         return (nil, nil)
     }
     
-    public func reauestKakaoLogin() async throws -> KakaoResponse? {
+    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
         return nil
     }
     

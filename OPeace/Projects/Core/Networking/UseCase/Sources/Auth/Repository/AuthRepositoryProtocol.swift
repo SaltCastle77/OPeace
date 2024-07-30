@@ -13,5 +13,5 @@ import Model
 public protocol AuthRepositoryProtocol {
     func handleAppleLogin(_ request: Result<ASAuthorization, Error>) async throws -> ASAuthorization
     func requestKakaoTokenAsync() async throws  -> (String?, String?)
-    func reauestKakaoLogin() async throws -> KakaoResponse?
+    func reauestKakaoLogin() async throws -> KakaoResponseModel?
 }

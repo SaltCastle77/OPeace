@@ -22,4 +22,13 @@ public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
     public func fetchJobList() async throws -> SignUpJobModel? {
         return nil
     }
+    
+    public func updateUserInfo(
+        nickname: String,
+        year: Int,
+        job: String,
+        generation: String
+    ) async throws -> UpdateUserInfoModel? {
+        return nil
+    }
 }
