@@ -15,7 +15,12 @@ import ProjectDescription
 
     let packageSettings = PackageSettings(
         productTypes: [
-                    :
+            "FirebaseCore": .staticLibrary,
+            "FirebaseAuth": .staticLibrary,
+            "FirebaseFirestore": .staticLibrary,
+            "FirebaseAnalytics": .staticLibrary,
+            "FirebaseCrashlytics": .staticLibrary,
+            "FirebaseRemoteConfig": .staticLibrary
         ], baseSettings: .settings(configurations: [
             .debug(name: .debug),
             .release(name: .release)
@@ -35,6 +40,7 @@ let package = Package(
         .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI.git", from: "2.0.0"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "7.1.0"),
         .package(url: "https://github.com/kakao/kakao-ios-sdk", from: "2.21.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
         
     ]
 )
