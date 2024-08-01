@@ -14,6 +14,7 @@ public enum ImageAsset: String {
     case backGroud
     case circleCheck
     case circleCheckFill
+    case setting
     
     //MARK: - Logo
     case appLogo
