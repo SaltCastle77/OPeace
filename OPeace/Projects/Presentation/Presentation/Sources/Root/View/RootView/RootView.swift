@@ -26,6 +26,7 @@ public struct RootView: View {
             case .homeRoot:
                 if let store = store.scope(state: \.homeRoot, action: \.view.homeRoot) {
                     HomeRootView(store: store)
+                        .animation(.smooth)
                 }
          
             case .auth:
