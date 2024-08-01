@@ -56,6 +56,9 @@ extension HomeView {
                                 
                         }
                     }
+                    .onTapGesture {
+                        store.send(.navigation(.presntProfile))
+                    }
             }
             .padding(.horizontal, 16)
         }

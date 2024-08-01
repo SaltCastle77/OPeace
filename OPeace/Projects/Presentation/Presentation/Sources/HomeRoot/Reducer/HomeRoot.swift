@@ -65,13 +65,15 @@ public struct HomeRoot {
             switch action {
             case .path(let action):
                 switch action {
-                case .element(id: _, action: .home):
-//                    state.path.append(.home(.init()))
-                    return .run { send in
-                        await send(.view(.appearPath))
-                    }
+//                case .element(id: _, action: .home):
+                    
+                case .element(id: _, action: .home(.navigation(.presntProfile))):
+                    state.path.append(.profile(.init()))
+                                
+                                
                 default:
-                    state.path.append(.home(.init()))
+                    return .none
+                                
                 }
                 return .none
                 

@@ -33,11 +33,10 @@ public struct HomeRootView: View {
                     .navigationBarBackButtonHidden()
                 
             case .profile(let profileStore):
-                ProfileView(store: profileStore)
-                    .navigationBarBackButtonHidden()
-                
-            default:
-                HomeView(store: self.store.scope(state: \.home, action: \.home))
+                ProfileView(store: profileStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
             }
         }
 

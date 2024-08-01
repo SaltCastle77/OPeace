@@ -48,7 +48,7 @@ public struct Home {
     
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
-        
+        case presntProfile
     
     }
     
@@ -77,7 +77,8 @@ public struct Home {
                 
             case .navigation(let NavigationAction):
                 switch NavigationAction {
-                    
+                case .presntProfile:
+                    return .none
                 }
                 
           
