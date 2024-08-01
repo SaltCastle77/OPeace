@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 import Presentation
 import Utill
+import KeychainAccess
 
 @Reducer
 public struct AppReducer {
@@ -19,11 +20,12 @@ public struct AppReducer {
     public enum State {
         case splash(Splash.State)
         case root(Root.State)
-        case auth(Auth.State)
         
         
         public init() {
             self = .splash(Splash.State())
+            try? Keychain().removeAll()
+            
         }
     }
     
@@ -42,7 +44,6 @@ public struct AppReducer {
         case presentRootView
         case splash(Splash.Action)
         case root(Root.Action)
-        case auth(Auth.Action)
     }
     
     //MARK: - 앱내에서 사용하는 액선
@@ -76,7 +77,7 @@ public struct AppReducer {
                     }
                     
                 case .presentRootView:
-                    state = .auth(.init())
+                    state = .root(.init())
 //                    state = .root(.init())
                     return .none
                     
@@ -106,9 +107,6 @@ public struct AppReducer {
         }
         .ifCaseLet(\.root, action: \.view.root) {
             Root()
-        }
-        .ifCaseLet(\.auth, action: \.view.auth) {
-            Auth()
         }
     }
 }

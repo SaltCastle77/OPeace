@@ -22,11 +22,6 @@ public struct AppView: View {
                 }
                     
                 
-            case .auth:
-                if let authStore = store.scope(state: \.auth, action: \.view.auth) {
-                    AuthView(store: authStore)
-                }
-                
             case .root:
                 if let store = store.scope(state: \.root, action: \.view.root) {
                     RootView(store: store)

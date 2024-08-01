@@ -103,7 +103,7 @@ public struct InfoPlistValues {
                     "CFBundleTypeRole": .string("Editor"),
                     "CFBundleURLName": .string("kakao"),
                     "CFBundleURLSchemes": .array([
-                        .string("kakao${e55ab48902aa38be8a6fb0f1a3431e8d}?")
+                        .string("kakao${e55ab48902aa38be8a6fb0f1a3431e8d}")
                     ])
                 ])
             ])

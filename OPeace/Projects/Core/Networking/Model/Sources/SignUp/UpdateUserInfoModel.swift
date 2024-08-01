@@ -18,38 +18,20 @@ public struct UpdateUserInfoModel: Codable, Equatable {
 }
 
 // MARK: - DataClass
-public struct UpdateUserInfoResponse: Codable, Equatable {
-    let nickname, year, generation, job: Generation?
-    
-    public enum CodingKeys: String, CodingKey {
-        case nickname
-        case year
-        case generation
-        case job
-    }
-    
-    public init(
-        nickname: Generation?,
-        year: Generation?,
-        generation: Generation?,
-        job: Generation?
-    ) {
-        self.nickname = nickname
-        self.year = year
-        self.generation = generation
-        self.job = job
+public struct UpdateUserInfoResponse: Codable , Equatable {
+    public let socialID, socialType, email: String?
+    public let phone: String?
+    public let createdAt, lastLogin, nickname: String?
+    public let year: Int?
+    public let job, generation: String?
+
+    enum CodingKeys: String, CodingKey {
+        case socialID = "social_id"
+        case socialType = "social_type"
+        case email, phone
+        case createdAt = "created_at"
+        case lastLogin = "last_login"
+        case nickname, year, job, generation
     }
 }
 
-// MARK: - Generation
-public struct Generation: Codable , Equatable{
-    let message: String?
-    
-    public init(message: String?) {
-        self.message = message
-    }
-    
-    public enum CodingKeys: String, CodingKey {
-        case message
-    }
-}

@@ -28,5 +28,6 @@ public enum ImageAsset: String {
     //MARK: - OnBoarding
     case onBoardingFirst
     case onBoardingFirstTap
+    case onBoardingSecond
     case empty
 }
