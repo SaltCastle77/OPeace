@@ -32,7 +32,15 @@ public struct OnBoadingPaggingView: View {
                 Spacer()
                     .frame(height: 14)
                 
-                NavigationBackButton(buttonAction: backAction)
+                NavigationBackButton(buttonAction: {
+                    if store.activeMenu == .onBoardingFirst {
+                       backAction()
+                    } else if store.activeMenu == .onBoardingSecond {
+                        store.activeMenu = .onBoardingFirst
+                    } else {
+                        store.activeMenu = .onBoardingSecond
+                    }
+                })
                 
                 Spacer()
                     .frame(height: 20)
