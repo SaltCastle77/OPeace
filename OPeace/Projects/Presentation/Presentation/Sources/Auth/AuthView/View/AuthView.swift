@@ -22,14 +22,10 @@ public struct AuthView: View {
     
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            LoginView(
-                store: Store(initialState: Login.State(),
-                             reducer: {
-                Login()
-            }))
-            .onAppear {
-                store.send(.view(.appearPath))
-            }
+            LoginView(store: self.store.scope(state: \.login, action: \.login))
+//            .onAppear {
+//                store.send(.view(.appearPath))
+//            }
         } destination: { swithStore in
             switch swithStore.case {
             case .login(let loginStore):
@@ -54,7 +50,7 @@ public struct AuthView: View {
                 .navigationBarBackButtonHidden()
                 
             case .root(let rootStore):
-                RootView(store: rootStore)
+                HomeRootView(store: rootStore)
                     .navigationBarBackButtonHidden()
                 
             case .onBoardingPagging(let onBoardingPaggingStore):
@@ -62,8 +58,14 @@ public struct AuthView: View {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
+                
+            case .home(let homeStore):
+                HomeView(store: homeStore)
+                    .navigationBarBackButtonHidden()
+                
+            default:
+                LoginView(store: store.scope(state: \.login, action: \.login))
             }
         }
-
     }
 }

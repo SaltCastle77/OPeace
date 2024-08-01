@@ -23,10 +23,12 @@ public struct Auth {
     @ObservableState
     public struct State: Equatable {
         public init() {}
-        var path: StackState<Path.State> = .init()
+        var path = StackState<Path.State>()
         var emptyModel: EmptyModel?
         var appleAccessToken: String = ""
         var nonce: String = ""
+        
+        var login = Login.State()
     }
     
     @Reducer(state: .equatable)
@@ -35,9 +37,9 @@ public struct Auth {
         case agreeMent(AgreeMent)
         case signUpPagging(SignUpPaging)
         case webView(Web)
-        case root(Root)
+        case root(HomeRoot)
         case onBoardingPagging(OnBoadingPagging)
-        
+        case home(Home)
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -46,6 +48,7 @@ public struct Auth {
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
+        case login(Login.Action)
     }
     
   
@@ -78,9 +81,12 @@ public struct Auth {
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
-            switch action {
+            switch action {       
             case let .path(action):
                 switch action {
+                case .element(id: _, action: .root):
+                return .none
+                    
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
                     return .none
@@ -105,9 +111,13 @@ public struct Auth {
                     state.path.append(.onBoardingPagging(.init()))
                     return .none
                     
+                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
+                    state.path.removeAll()
+                    return .none
+                    
                     
                 default:
-                    break
+                    state.path.append(.login(.init()))
                 }
                 return .none
                 
@@ -162,8 +172,14 @@ public struct Auth {
                 switch NavigationAction {
                     
                 }
+            
+            default:
+                return .none
             }
         }
         .forEach(\.path, action: \.path)
+        Scope(state: \.login, action: \.login) {
+            Login()
+        }
     }
 }

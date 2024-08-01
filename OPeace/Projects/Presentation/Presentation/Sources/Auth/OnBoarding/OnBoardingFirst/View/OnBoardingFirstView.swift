@@ -12,6 +12,12 @@ import ComposableArchitecture
 public struct  OnBoardingFirstView: View {
     @Bindable var store: StoreOf<OnBoardingFirst>
     
+    public init(
+        store: StoreOf<OnBoardingFirst>
+    ) {
+        self.store = store
+    }
+    
     public var body: some View {
         ZStack {
             Color.gray600
@@ -19,19 +25,19 @@ public struct  OnBoardingFirstView: View {
             
             VStack {
                 Spacer()
-                    .frame(height: UIScreen.screenHeight * 0.02)
+                    .frame(height: UIScreen.screenHeight * 0.1)
                 
                 onBoardingImageView()
                 
                 onBoarindFirstViewTitle()
                 
                 Spacer()
-                    .frame(height: UIScreen.screenHeight * 0.3)
+                    .frame(height: UIScreen.screenHeight * 0.2)
                 
                 
                 CustomButton(
                     action: {
-                       
+                        store.send(.switchTab)
                     }, title: store.presntNextViewButtonTitle,
                     config: CustomButtonConfig.create()
                     ,isEnable: true

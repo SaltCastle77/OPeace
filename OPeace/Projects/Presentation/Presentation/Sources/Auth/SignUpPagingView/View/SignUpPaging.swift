@@ -45,6 +45,7 @@ public struct SignUpPaging {
         case signUpAge(SignUpAge.Action)
         case signUpJob(SignUpJob.Action)
         case activeTabChanged(SignUpTab)
+        
     }
     
     @Reducer(state: .equatable)
@@ -58,7 +59,7 @@ public struct SignUpPaging {
         case backSelectTab
         case appearPopUp
         case closePopUp
-        
+        case presntOnboarding
     }
     
   
@@ -136,6 +137,10 @@ public struct SignUpPaging {
                     
                 case .closePopUp:
                     state.destination = nil
+                    return .none
+                    
+                    
+                case .presntOnboarding:
                     return .none
                 }
                 

@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import Model
 
 @Reducer
 public struct OnBoardingFirst {
@@ -17,16 +18,20 @@ public struct OnBoardingFirst {
         var onBoardingFirstTilte = "고민 주제에"
         var onBoardingFirstSubTilte = "투표해 주세요!"
         var presntNextViewButtonTitle = "다음"
+        var activeMenu: OnBoardingTab = .onBoardingFirst
         public init() {}
     }
     
     public enum Action: Equatable {
-        
+        case switchTab
     }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .switchTab:
+                state.activeMenu = .onBoardingSecond
+                return .none
                 
             }
         }

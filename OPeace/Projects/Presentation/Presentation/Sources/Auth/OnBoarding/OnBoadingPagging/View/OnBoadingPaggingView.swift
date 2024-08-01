@@ -44,10 +44,12 @@ public struct OnBoadingPaggingView: View {
                     OnBoardingFirstView(store: self.store.scope(state: \.onBoardingFirst, action: \.onBoardingFirst))
                         .tag(OnBoardingTab.onBoardingFirst)
                     
-                    OnBoardingFirstView(store: self.store.scope(state: \.onBoardingFirst, action: \.onBoardingFirst))
+                    OnBoadingSecondView(store: self.store.scope(state: \.onBoardingSecond, action: \.onBoardingSecond))
                         .tag(OnBoardingTab.onBoardingSecond)
                     
-                    OnBoardingFirstView(store: self.store.scope(state: \.onBoardingFirst, action: \.onBoardingFirst))
+                    OnBoadringLastView(store: self.store.scope(state: \.onBoardingLast, action: \.onBoardingLast)) {
+                        store.send(.navigation(.presntMainHome))
+                    }
                         .tag(OnBoardingTab.onBoardingLast)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

@@ -22,6 +22,8 @@ public struct OnBoadingPagging {
     public struct State: Equatable {
         var activeMenu: OnBoardingTab = .onBoardingFirst
         var onBoardingFirst = OnBoardingFirst.State()
+        var onBoardingSecond = OnBoadingSecond.State()
+        var onBoardingLast = OnBoadringLast.State()
         
         public init() {}
     }
@@ -34,6 +36,8 @@ public struct OnBoadingPagging {
         case navigation(NavigationAction)
         case activeTabChanged(OnBoardingTab)
         case onBoardingFirst(OnBoardingFirst.Action)
+        case onBoardingSecond(OnBoadingSecond.Action)
+        case onBoardingLast(OnBoadringLast.Action)
     }
     
     //MARK: - ViewAction
@@ -54,7 +58,7 @@ public struct OnBoadingPagging {
     
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
-    
+        case presntMainHome
     }
     
     
@@ -68,6 +72,17 @@ public struct OnBoadingPagging {
             case .activeTabChanged(let changeTab):
                 state.activeMenu = changeTab
                 return .none
+                
+            case .onBoardingFirst(.switchTab):
+                state.activeMenu = .onBoardingSecond
+//                state.selectedTab = 1
+                return .none
+                
+            case .onBoardingSecond(.switchTab):
+                state.activeMenu = .onBoardingLast
+//                state.selectedTab = 1
+                return .none
+                
                 
             case .view(let View):
                 switch View {
@@ -86,7 +101,8 @@ public struct OnBoadingPagging {
                 
             case .navigation(let NavigationAction):
                 switch NavigationAction {
-                    
+                case .presntMainHome:
+                    return .none
                 }
                 
             default:
@@ -96,6 +112,12 @@ public struct OnBoadingPagging {
         
         Scope(state: \.onBoardingFirst, action: \.onBoardingFirst) {
             OnBoardingFirst()
+        }
+        Scope(state: \.onBoardingSecond, action: \.onBoardingSecond) {
+            OnBoadingSecond()
+        }
+        Scope(state: \.onBoardingLast, action: \.onBoardingLast) {
+            OnBoadringLast()
         }
     }
 }
