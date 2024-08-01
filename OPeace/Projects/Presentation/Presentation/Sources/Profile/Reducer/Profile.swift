@@ -5,10 +5,12 @@
 //  Created by 서원지 on 7/31/24.
 //
 
-import Foundation
+import SwiftUI
+
 import ComposableArchitecture
 
 import Utill
+import DesignSystem
 
 @Reducer
 public struct Profile {
@@ -16,7 +18,12 @@ public struct Profile {
     
     @ObservableState
     public struct State: Equatable {
+        var profileGenerationColor: Color = Color.gray600
+        var profileGenerationTextColor: Color = Color.gray600
+        var profileGenerationText: String = ""
+        
         public init() {}
+        
     }
     
     public enum Action: ViewAction, BindableAction, FeatureAction {
