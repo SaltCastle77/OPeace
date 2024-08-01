@@ -122,9 +122,6 @@ import Model
                                 continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 
                             }
-                            
-                            
-                            //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
                         }
                     }
             } else {
@@ -149,11 +146,21 @@ import Model
         }
     }
     
+    //MARK: - 카카오 로그인 api
     public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
         let kakaoAcessToken = (try? Keychain().get("ACCESS_TOKEN") ?? "")
         return try await provider.requestAsync(.kakaoLogin( accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponseModel.self)
     }
     
+    //MARK: - 토큰 재발급
+    public func requestRefreshToken(refreshToken: String) async throws -> RefreshModel? {
+        return try await provider.requestAsync(.refreshToken(refreshToken: refreshToken), decodeTo: RefreshModel.self)
+    }
+    
+    //MARK: - 유저정보 조회
+    public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
+        return try await provider.requestAsync(.fetchUserInfo, decodeTo: UpdateUserInfoModel.self)
+    }
 }
 
 

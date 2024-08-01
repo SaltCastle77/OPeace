@@ -35,4 +35,13 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
         return nil
     }
     
+    public func requestRefreshToken(
+        refreshToken: String
+    ) async throws -> RefreshModel? {
+        return nil
+    }
+    
+    public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
+        return nil
+    }
 }

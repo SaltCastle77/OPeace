@@ -35,6 +35,8 @@ public struct Login {
         var accessToken: String?
         var idToken: String?
         var kakaoModel : KakaoResponseModel? = nil
+        var socialType: SocialType? = nil
+        var refreshTokenModel: RefreshModel?
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -59,6 +61,8 @@ public struct Login {
         case kakaoLoginResponse(Result<(String?, String?), CustomError>)
         case loginWIthKakao
         case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
+        case refreshTokenResponse(Result<RefreshModel, CustomError>)
+        case refreshTokenRequest(refreshToken: String)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -117,20 +121,26 @@ public struct Login {
                     return .none
                     
                 case .kakaoLogin:
+                    #if swift(>=6.0)
+                    nonisolated(unsafe) var socialType = state.socialType
+                    #else
+                     var socialType = state.socialType
+                    #endif
+                    
                     return .run { @MainActor send in
                         let requset = await Result {
                             try await  authUseCase.requestKakaoTokenAsync()
                         }
                         
                         switch requset {
+                           
                         case .success(let (accessToken, idToken)):
                             send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
                             
                         case let .failure(error):
                             send(.async(.kakaoLoginResponse(.failure(CustomError.map(error)))))
                         }
-                        
-//                        try await Task.sleep(nanoseconds: 3000000000)
+                        try await Task.sleep(nanoseconds: 100_000_000)
                         send(.async(.loginWIthKakao))
                     }
                     
@@ -144,6 +154,7 @@ public struct Login {
                         Log.debug("카카오 idToken ",  state.idToken,  state.accessToken)
                     case let .failure(error):
                         Log.error("카카오 리턴 에러", error)
+
                     }
                     return .none
                     
@@ -173,16 +184,54 @@ public struct Login {
                         state.kakaoModel = ResponseData
                         try? Keychain().remove("ACCESS_TOKEN")
                         try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                        try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                        state.socialType = .kakao
+                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
+                        try? Keychain().set(socialTypeValue, key: "socialType")
                         
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
+                        state.socialType = .kakao
+                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
+                        try? Keychain().set(socialTypeValue, key: "socialType")
+                    }
+                    return .none
+                    
+                case .refreshTokenRequest(let refreshToken):
+                    return .run { @MainActor send in
+                        let refreshTokenRequest =  await Result {
+                            try await authUseCase.requestRefreshToken(refreshToken: refreshToken)
+                        }
+                        
+                        switch refreshTokenRequest {
+                        case .success(let refreshTokenData):
+                            if let refreshTokenData = refreshTokenData {
+                                send(.async(.refreshTokenResponse(.success(refreshTokenData))))
+                            }
+                        case .failure(let error):
+                            send(.async(.refreshTokenResponse(.failure(CustomError.map(error)))))
+                        }
+                        
+                    }
+                    
+                case .refreshTokenResponse(let result):
+                    switch result {
+                    case .success(let refreshTokenData):
+                        state.refreshTokenModel = refreshTokenData
+                        Log.network("리프레쉬 토큰 발급", refreshTokenData)
+                        Log.network("refershToken", refreshTokenData)
+                        try? Keychain().remove("ACCESS_TOKEN")
+                        try? Keychain().set(state.refreshTokenModel?.data?.accessToken ?? "", key: "ACCESS_TOKEN")
+                        
+                    case .failure(let error):
+                        Log.network("리프레쉬 토큰 발급 에러", error.localizedDescription)
                     }
                     return .none
                 }
                 
             case .inner(let InnerAction):
                 switch InnerAction {
-               
+                
                 }
                 
             case .navigation(let NavigationAction):

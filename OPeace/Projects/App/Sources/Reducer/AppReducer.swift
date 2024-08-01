@@ -24,7 +24,7 @@ public struct AppReducer {
         
         public init() {
             self = .splash(Splash.State())
-            try? Keychain().removeAll()
+//            try? Keychain().removeAll()
             
         }
     }

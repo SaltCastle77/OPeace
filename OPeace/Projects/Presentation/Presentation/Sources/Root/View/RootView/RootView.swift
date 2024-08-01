@@ -42,7 +42,7 @@ public struct RootView: View {
                
         }
         .onAppear {
-            
+            store.send(.async(.autoLogin))
         }
     }
 }

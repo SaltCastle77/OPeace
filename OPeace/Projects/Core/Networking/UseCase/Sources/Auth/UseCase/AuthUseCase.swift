@@ -40,6 +40,17 @@ public struct AuthUseCase: AuthUseCaseProtocol {
         try await repository.reauestKakaoLogin()
     }
     
+    //MARK: - 리프레쉬토큰 재발급
+    public func requestRefreshToken(
+        refreshToken: String
+    ) async throws -> RefreshModel? {
+        try await repository.requestRefreshToken(refreshToken: refreshToken)
+    }
+    
+    //MARK: - 유저 정보 조회
+    public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
+        try await repository.fetchUserInfo()
+    }
 }
 
 

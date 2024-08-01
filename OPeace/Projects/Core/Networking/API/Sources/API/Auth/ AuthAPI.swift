@@ -11,6 +11,10 @@ public enum AuthAPI : String {
     case appleLogin
     case kakaoLogin
     case kakaoLoginCallback
+    case autoLogin
+    case refreshToken
+    case fetchUser
+    case deleteUser
     
     
     public var authAPIDesc: String {
@@ -23,6 +27,18 @@ public enum AuthAPI : String {
             
         case .kakaoLoginCallback:
             return "/oauth/kakao/login/callback/"
+            
+        case .autoLogin:
+            return "/users/login/"
+            
+        case .refreshToken:
+            return "/users/token/refresh/"
+            
+        case .fetchUser:
+            return "/users/"
+            
+        case .deleteUser:
+            return "/users/"
         }
     }
 }

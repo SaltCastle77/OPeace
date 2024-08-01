@@ -13,6 +13,8 @@ import Foundations
 public enum AuthService {
     case appleLogin
     case kakaoLogin(accessToken: String)
+    case refreshToken(refreshToken: String)
+    case fetchUserInfo
 }
 
 extension AuthService: BaseTargetType {
@@ -23,6 +25,12 @@ extension AuthService: BaseTargetType {
             
         case .kakaoLogin:
             return AuthAPI.kakaoLoginCallback.authAPIDesc
+            
+        case .refreshToken:
+            return AuthAPI.refreshToken.authAPIDesc
+            
+        case .fetchUserInfo:
+            return AuthAPI.fetchUser.authAPIDesc
         }
     }
     
@@ -34,6 +42,11 @@ extension AuthService: BaseTargetType {
         case .kakaoLogin:
             return .get
             
+        case .refreshToken:
+            return .post
+            
+        case .fetchUserInfo:
+            return .get
         }
     }
     
@@ -47,13 +60,26 @@ extension AuthService: BaseTargetType {
                 "access_token": accessToken
             ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            
+        case .refreshToken(let refreshToken):
+            let parameters: [String: Any] = [
+                "refresh_token": refreshToken
+            ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            
+        case .fetchUserInfo:
+            let parameters: [String: Any] = [:]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
     }
     
     public var headers: [String : String]? {
         switch self {
-        default:
+        case .kakaoLogin:
             return APIHeader.notAccessTokenHeader
+            
+        default:
+            return APIHeader.baseHeader
         }
     }
 }
