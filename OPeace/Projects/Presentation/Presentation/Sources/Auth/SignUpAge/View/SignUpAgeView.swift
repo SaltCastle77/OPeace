@@ -143,7 +143,7 @@ extension SignUpAgeView {
                 if store.signUpAgeDisplay.isEmpty {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(Color.gray500)
-                        .frame(width: calculateWidth(for: "? 세대"), height: 32)
+                        .frame(width: "? 세대".calculateWidthAge(for: "? 세대"), height: 32)
                         .overlay {
                             Text("? 세대")
                                 .pretendardFont(family: .Regular, size: 16)
@@ -152,7 +152,7 @@ extension SignUpAgeView {
                 } else {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(store.signUpAgeDisplayColor)
-                        .frame(width: calculateWidth(for: store.checkGenerationText), height: 32)
+                        .frame(width: store.checkGenerationText.calculateWidthAge(for: store.checkGenerationText), height: 32)
                         .overlay {
                             Text(store.checkGenerationText)
                                 .pretendardFont(family: .Regular, size: 16)
@@ -183,21 +183,5 @@ extension SignUpAgeView {
             
             
         }
-    }
-    
-    func calculateWidth(for title: String) -> CGFloat {
-      let baseWidth: CGFloat = 70
-      let extraWidthPerCharacter: CGFloat = 10
-      
-      if title.count <= 2 {
-        return baseWidth
-      } else if title.count == 4 {
-        return baseWidth + 30
-      } else if title.count == 5 {
-        return baseWidth + 40
-      }
-      else {
-        return baseWidth + extraWidthPerCharacter * CGFloat(title.count - 2)
-      }
     }
 }
