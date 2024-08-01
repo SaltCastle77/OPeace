@@ -129,7 +129,7 @@ extension SignUpJobView {
         HStack {
             Spacer(minLength: padding)
             ForEach(startIndex..<endIndex, id: \.self) { index in
-                signUpSelectButton(jobTitle: categories[index], width: calculateWidth(for: categories[index]))
+                signUpSelectButton(jobTitle: categories[index], width: categories[index].calculateWidth(for: categories[index]))
             }
             Spacer(minLength: padding)
         }
@@ -152,21 +152,5 @@ extension SignUpJobView {
             .onTapGesture {
                 store.send(.view(.selectJob(jobTitle)))
             }
-    }
-    
-    func calculateWidth(for title: String) -> CGFloat {
-      let baseWidth: CGFloat = 60
-      let extraWidthPerCharacter: CGFloat = 10
-      
-      if title.count <= 2 {
-        return baseWidth
-      } else if title.count == 4 {
-        return baseWidth + 30
-      } else if title.count == 5 {
-        return baseWidth + 40
-      }
-      else {
-        return baseWidth + extraWidthPerCharacter * CGFloat(title.count - 2)
-      }
     }
 }
