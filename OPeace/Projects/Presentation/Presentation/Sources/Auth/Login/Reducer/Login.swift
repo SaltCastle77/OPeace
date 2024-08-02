@@ -137,11 +137,13 @@ public struct Login {
                         case .success(let (accessToken, idToken)):
                             send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
                             
+                            try await Task.sleep(nanoseconds: 100_000_000)
+                            send(.async(.loginWIthKakao))
+                            
                         case let .failure(error):
                             send(.async(.kakaoLoginResponse(.failure(CustomError.map(error)))))
                         }
-                        try await Task.sleep(nanoseconds: 100_000_000)
-                        send(.async(.loginWIthKakao))
+                       
                     }
                     
                

@@ -23,9 +23,9 @@ public struct AuthView: View {
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             LoginView(store: self.store.scope(state: \.login, action: \.login))
-//            .onAppear {
-//                store.send(.view(.appearPath))
-//            }
+            .onAppear {
+                store.send(.view(.appearPath))
+            }
         } destination: { swithStore in
             switch swithStore.case {
             case .login(let loginStore):
@@ -63,8 +63,11 @@ public struct AuthView: View {
                 HomeView(store: homeStore)
                     .navigationBarBackButtonHidden()
                 
-            default:
-                LoginView(store: store.scope(state: \.login, action: \.login))
+            case .profile(let profileStore):
+                ProfileView(store: profileStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
             }
         }
     }

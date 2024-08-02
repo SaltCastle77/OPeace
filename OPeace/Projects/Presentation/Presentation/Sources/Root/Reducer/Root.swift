@@ -24,7 +24,7 @@ public struct Root {
         case auth(Auth.State)
         case onbaordingPagging(OnBoadingPagging.State)
         case signUpPAgging(SignUpPaging.State)
-        
+        static var kakaoModel : KakaoResponseModel? = nil
         
         public init() {
             self = .auth(.init())
@@ -66,6 +66,9 @@ public struct Root {
         
         case handleRefreshToken(String)
         case handleKakaoLogin
+        
+        case loginWIthKakao
+        case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
         
     }
     
@@ -115,26 +118,27 @@ public struct Root {
                     return .run { @MainActor send in
                         switch socailType {
                         case "kakao":
+                            try await clock.sleep(for: .seconds(1))
                             
-                            send(.view(.auth(.login(.async(.loginWIthKakao)))))
-                            try await clock.sleep(for: .seconds(0.3))
-                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
-                                if kakaoLogin?.accessToken == accessToken {
-                                    if ((kakaoLogin?.accessToken?.isEmpty) == nil) {
-                                        send(.view(.changeScene(.homeRoot(.init()))))
-                                    } else {
-                                        send(.view(.changeScene(.auth(.init()))))
-                                    }
-                                } else if kakaoLogin?.isExpires == true {
-                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                        send(.async(.handleRefreshToken(refreshToken)))
-                                    }
-                                } else if kakaoLogin?.isRefreshTokenExpires == true {
-                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
-                                } else {
-                                    send(.view(.changeScene(.auth(.init()))))
-                                }
-                            }
+                            
+//                            try await clock.sleep(for: .seconds(0.3))
+//                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
+//                                if kakaoLogin?.accessToken == accessToken {
+//                                    if ((kakaoLogin?.accessToken?.isEmpty) == nil) {
+//                                        send(.view(.changeScene(.homeRoot(.init()))))
+//                                    } else {
+//                                        send(.view(.changeScene(.auth(.init()))))
+//                                    }
+//                                } else if kakaoLogin?.isExpires == true {
+//                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+//                                        send(.async(.handleRefreshToken(refreshToken)))
+//                                    }
+//                                } else if kakaoLogin?.isRefreshTokenExpires == true {
+//                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
+//                                } else {
+//                                    send(.view(.changeScene(.auth(.init()))))
+//                                }
+//                            }
                             
                         case "apple":
                             break
@@ -155,6 +159,37 @@ public struct Root {
                 case .handleKakaoLogin:
                     return .run { @MainActor  send in
                         send(.view(.auth(.login(.async(.loginWIthKakao)))))
+                    }
+                    
+                case .kakaoLoginApiResponse(let data):
+                    switch data {
+                    case .success(let ResponseData):
+                        Root.State.kakaoModel = ResponseData
+//                        try? Keychain().remove("ACCESS_TOKEN")
+//                        try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+//                        try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                        
+                    case .failure(let error):
+                        Log.network("카카오 로그인 에러", error.localizedDescription)
+                        
+                    }
+                    return .none
+                    
+                case .loginWIthKakao:
+                    return .run { @MainActor send in
+                        let kakaoRequest = await Result {
+                            try await authUseCase.reauestKakaoLogin()
+                        }
+                        
+                        switch kakaoRequest {
+                        case .success(let resopnse):
+                            if let responseData = resopnse {
+                                send(.async(.kakaoLoginApiResponse(.success(responseData))))
+                            }
+                            
+                        case .failure(let error):
+                            send(.async(.kakaoLoginApiResponse(.failure(CustomError.map(error)))))
+                        }
                     }
                 }
                 

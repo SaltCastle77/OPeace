@@ -40,6 +40,8 @@ public struct Auth {
         case root(HomeRoot)
         case onBoardingPagging(OnBoadingPagging)
         case home(Home)
+        case profile(Profile)
+        
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -104,7 +106,7 @@ public struct Auth {
                     return .none
                     
                 case .element(id: _, action: .login(.navigation(.presentMain))):
-                    state.path.append(.root(.init()))
+                    state.path.append(.home(.init()))
                     return .none
                     
                 case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
@@ -112,12 +114,15 @@ public struct Auth {
                     return .none
                     
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
-                    state.path.removeAll()
+                    state.path.append(.home(.init()))
                     return .none
                     
+                case .element(id: _, action: .home(.navigation(.presntProfile))):
+                    state.path.append(.profile(.init()))
+                    return .none
                     
                 default:
-                    state.path.append(.login(.init()))
+                    return .none
                 }
                 return .none
                 
