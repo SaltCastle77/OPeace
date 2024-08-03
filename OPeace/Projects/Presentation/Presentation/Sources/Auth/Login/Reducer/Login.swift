@@ -32,6 +32,7 @@ public struct Login {
         var notLogingLookAroundText: String = "로그인 없이 둘러보기"
         var nonce: String = ""
         var appleAccessToken: String = ""
+        var error: String = ""
         var accessToken: String?
         var idToken: String?
         var kakaoModel : KakaoResponseModel? = nil
@@ -138,7 +139,7 @@ public struct Login {
                         case .success(let (accessToken, idToken)):
                             send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
                             
-                            try await Task.sleep(nanoseconds: 100_000_000)
+                            try await clock.sleep(for: .seconds(2))
                             send(.async(.loginWIthKakao))
                             
                         case let .failure(error):
@@ -162,6 +163,7 @@ public struct Login {
                     return .none
                     
                 case .loginWIthKakao:
+                    var errorMessgage = state.error
                     guard let accessToken = try? Keychain().get("ACCESS_TOKEN") else { return .none }
                     return .run { @MainActor send in
                         let kakaoRequest = await Result {
@@ -182,7 +184,8 @@ public struct Login {
                             }
                             
                         case .failure(let error):
-                            send(.async(.kakaoLoginApiResponse(.failure(CustomError.map(error)))))
+                            send(.async(.kakaoLoginApiResponse(.failure(CustomError.kakaoTokenError(error.localizedDescription)))))
+                            errorMessgage = CustomError.kakaoTokenError(error.localizedDescription).recoverySuggestion ?? ""
                         }
                     }
                     
