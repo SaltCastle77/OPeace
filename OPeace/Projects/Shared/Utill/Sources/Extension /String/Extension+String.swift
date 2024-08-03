@@ -9,7 +9,7 @@ import Foundation
 
 public extension String {
     func calculateWidth(for title: String) -> CGFloat {
-      let baseWidth: CGFloat = 50
+      let baseWidth: CGFloat = 64
       let extraWidthPerCharacter: CGFloat = 10
       
       if title.count <= 2 {
@@ -70,5 +70,9 @@ public extension String {
       else {
         return baseWidth + extraWidthPerCharacter * CGFloat(title.count - 2)
       }
+    }
+    
+    func size(withAttributes attrs: [NSAttributedString.Key: Any]) -> CGSize {
+        return (self as NSString).size(withAttributes: attrs)
     }
 }

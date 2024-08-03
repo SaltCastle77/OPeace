@@ -17,6 +17,7 @@ public struct CheckSignUpPopUp: View {
     private var nickName: String
     private var yearOfBirth: String
     private var job: String
+    private var confirmButtonText: String
     private var cancelAction: () -> Void = { }
     private var confirmAction: () -> Void = { }
     
@@ -25,6 +26,7 @@ public struct CheckSignUpPopUp: View {
         nickName: String,
         yearOfBirth: String,
         job: String,
+        confirmButtonText: String,
         cancelAction: @escaping () -> Void,
         confirmAction: @escaping () -> Void
     ) {
@@ -32,6 +34,7 @@ public struct CheckSignUpPopUp: View {
         self.nickName = nickName
         self.yearOfBirth = yearOfBirth
         self.job = job
+        self.confirmButtonText = confirmButtonText
         self.cancelAction = cancelAction
         self.confirmAction = confirmAction
     }
@@ -73,7 +76,7 @@ extension CheckSignUpPopUp {
                 .frame(height: 8)
             
             
-            Text("정보가 일치하면 가입하기를 눌러주세요.")
+            Text("정보가 일치하면 \(confirmButtonText)를 눌러주세요.")
                 .pretendardFont(family: .Regular, size: 15)
                 .foregroundStyle(Color.gray200)
             
@@ -128,10 +131,15 @@ extension CheckSignUpPopUp {
             Spacer()
                 .frame(height: 32)
             
-            Text("출생 연도는 추후 변경할 수 없어요!")
-                .pretendardFont(family: .Regular, size: 16)
-                .foregroundStyle(Color.alertError)
-            
+            if confirmButtonText == "수정하기" {
+                Text("출생 연도는 추후 변경할 수 없어요!")
+                    .pretendardFont(family: .Regular, size: 16)
+                    .foregroundStyle(Color.alertError)
+            } else {
+                Text("출생 연도는 추후 변경할 수 없어요!")
+                    .pretendardFont(family: .Regular, size: 16)
+                    .foregroundStyle(Color.alertError)
+            }
         }
     }
     
@@ -164,7 +172,7 @@ extension CheckSignUpPopUp {
                     .frame(width: 135, height: 56)
                     .clipShape(Capsule())
                     .overlay(alignment: .center) {
-                        Text("가입 하기")
+                        Text(confirmButtonText)
                             .pretendardFont(family: .Medium, size: 16)
                             .foregroundStyle(Color.textColor100)
                     }

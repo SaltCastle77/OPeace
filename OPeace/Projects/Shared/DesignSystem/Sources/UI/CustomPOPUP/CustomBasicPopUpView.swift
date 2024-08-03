@@ -30,9 +30,9 @@ public struct CustomBasicPopUpView: View {
     
     
     public var body: some View {
-        RoundedRectangle(cornerRadius: 12)
+        RoundedRectangle(cornerRadius: 20)
             .fill(Color.gray500)
-            .frame(height: 260)
+            .frame(height: 240)
             .padding(.horizontal, 31)
             .overlay(alignment: .center) {
                 VStack {
