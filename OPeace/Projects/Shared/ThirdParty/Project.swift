@@ -19,7 +19,8 @@ let project = Project.makeAppModule(
         .SPM.kakaoSDKCommon,
         .SPM.popupView,
         .SPM.firebaseAnalytics,
-        .SPM.firebaseCrashlytics
+        .SPM.firebaseCrashlytics,
+        .SPM.swiftUIIntrospect
     ],
     sources: ["Sources/**"]
 )
