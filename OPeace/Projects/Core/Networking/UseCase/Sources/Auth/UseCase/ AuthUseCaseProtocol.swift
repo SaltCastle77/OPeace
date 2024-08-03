@@ -16,4 +16,5 @@ public protocol AuthUseCaseProtocol {
     func reauestKakaoLogin() async throws -> KakaoResponseModel?
     func requestRefreshToken(refreshToken : String) async throws -> RefreshModel?
     func fetchUserInfo() async throws -> UpdateUserInfoModel?
+    func logoutUser(refreshToken : String) async throws -> UserLogOut?
 }

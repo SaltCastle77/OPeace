@@ -78,6 +78,7 @@ public struct Login {
     
     
     @Dependency(AuthUseCase.self) var authUseCase
+    @Dependency(\.continuousClock) var clock
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -161,6 +162,7 @@ public struct Login {
                     return .none
                     
                 case .loginWIthKakao:
+                    guard let accessToken = try? Keychain().get("ACCESS_TOKEN") else { return .none }
                     return .run { @MainActor send in
                         let kakaoRequest = await Result {
                             try await authUseCase.reauestKakaoLogin()
@@ -170,9 +172,13 @@ public struct Login {
                         case .success(let resopnse):
                             if let responseData = resopnse {
                                 send(.async(.kakaoLoginApiResponse(.success(responseData))))
-                                try await Task.sleep(nanoseconds: UInt64(0.4))
+                                try await self.clock.sleep(for: .seconds(0.3))
                                 
-                                send(.navigation(.presnetAgreement))
+                                if accessToken != "" {
+                                    send(.navigation(.presentMain))
+                                } else {
+                                    send(.navigation(.presnetAgreement))
+                                }
                             }
                             
                         case .failure(let error):
@@ -184,13 +190,16 @@ public struct Login {
                     switch data {
                     case .success(let ResponseData):
                         state.kakaoModel = ResponseData
-                        try? Keychain().remove("ACCESS_TOKEN")
+
                         try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
-                        try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                         state.socialType = .kakao
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
                         try? Keychain().set(socialTypeValue, key: "socialType")
-                        
+                        if state.kakaoModel?.data?.accessToken != "" {
+                            try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                        } else {
+                            
+                        }
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
                         state.socialType = .kakao

@@ -81,7 +81,8 @@ public struct Home {
                     return .none
                 }
                 
-          
+            default:
+                return .none
             }
         }
     }

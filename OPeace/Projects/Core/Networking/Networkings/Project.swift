@@ -13,7 +13,6 @@ let project = Project.makeAppModule(
         .Networking(implements: .Service),
         .Networking(implements: .DiContainer),
         .Networking(implements: .UseCase),
-//        .Networking(implements: .Utills),
         .Networking(implements: .Foundations)
     ],
     sources: ["Sources/**"]

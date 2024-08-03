@@ -24,6 +24,7 @@ public struct UpdateUserInfoResponse: Codable , Equatable {
     public let createdAt, lastLogin, nickname: String?
     public let year: Int?
     public let job, generation: String?
+    public let isFirstLogin: Bool?
 
     enum CodingKeys: String, CodingKey {
         case socialID = "social_id"
@@ -32,6 +33,7 @@ public struct UpdateUserInfoResponse: Codable , Equatable {
         case createdAt = "created_at"
         case lastLogin = "last_login"
         case nickname, year, job, generation
+        case isFirstLogin = "is_first_login"
     }
 }
 

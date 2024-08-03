@@ -15,6 +15,7 @@ public enum AuthService {
     case kakaoLogin(accessToken: String)
     case refreshToken(refreshToken: String)
     case fetchUserInfo
+    case logoutUser(refreshToken: String)
 }
 
 extension AuthService: BaseTargetType {
@@ -31,6 +32,9 @@ extension AuthService: BaseTargetType {
             
         case .fetchUserInfo:
             return AuthAPI.fetchUser.authAPIDesc
+            
+        case .logoutUser:
+            return AuthAPI.logoutUser.authAPIDesc
         }
     }
     
@@ -47,6 +51,9 @@ extension AuthService: BaseTargetType {
             
         case .fetchUserInfo:
             return .get
+            
+        case .logoutUser:
+            return .post
         }
     }
     
@@ -68,7 +75,12 @@ extension AuthService: BaseTargetType {
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
         case .fetchUserInfo:
-            let parameters: [String: Any] = [:]
+            return .requestPlain
+            
+        case .logoutUser(let refreshToken):
+            let parameters: [String: Any] = [
+                "refresh_token" : refreshToken
+                ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
     }
@@ -77,6 +89,7 @@ extension AuthService: BaseTargetType {
         switch self {
         case .kakaoLogin:
             return APIHeader.notAccessTokenHeader
+            
             
         default:
             return APIHeader.baseHeader

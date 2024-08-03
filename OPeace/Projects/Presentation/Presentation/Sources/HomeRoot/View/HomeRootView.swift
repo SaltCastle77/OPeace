@@ -20,9 +20,7 @@ public struct HomeRootView: View {
     
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            HomeView(store: Store(initialState: Home.State(), reducer: {
-                Home()
-            }))
+            HomeView(store: self.store.scope(state: \.home, action: \.home))
                 .onAppear {
                     store.send(.view(.appearPath))
                 }
@@ -37,6 +35,10 @@ public struct HomeRootView: View {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
+            case .login(let loginStore):
+                LoginView(store: loginStore)
+                    .navigationBarBackButtonHidden()
+                
             }
         }
 

@@ -44,4 +44,9 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
         return nil
     }
+    
+    
+    public func logoutUser(refreshToken: String) async throws -> UserLogOut? {
+        return nil
+    }
 }

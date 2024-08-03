@@ -35,10 +35,27 @@ public struct ProfileView: View {
                 
                 CustomTitleNaviagionBackButton(buttonAction: backAction, title: "마이페이지")
                 
-                userInfoTitle(nickName: "엠제이엠제이", job: "개발", generation: "Z세대")
+                userInfoTitle(
+                    nickName: store.profileUserModel?.data?.nickname ?? "",
+                    job: store.profileUserModel?.data?.job ?? "",
+                    generation:  store.profileUserModel?.data?.generation ?? "" )
                 
                 Spacer()
             }
+        }
+        .task {
+            store.send(.async(.fetchUser))
+        }
+        
+        .sheet(item: $store.scope(state: \.destination?.setting, action: \.destination.setting)) { settingStore in
+            SettingView(store: settingStore) {
+                store.send(.navigation(.presntLogout))
+            } closeModalAction: {
+                store.send(.view(.closeModal))
+            }
+                .presentationDetents([.height(UIScreen.screenHeight * 0.3)])
+                .presentationCornerRadius(20)
+                .presentationDragIndicator(.hidden)
         }
     }
 }
@@ -90,6 +107,9 @@ extension ProfileView {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
+                    .onTapGesture {
+                        store.send(.view(.tapPresntSettingModal))
+                    }
                 
                 Spacer()
                 
@@ -97,7 +117,7 @@ extension ProfileView {
             .padding(.horizontal, 20)
         }
         .onAppear {
-            let (generation, color, textColor) = CheckRegister.getGeneration(year: 1998, color: store.profileGenerationColor, textColor: store.profileGenerationTextColor)
+            let (generation, color, textColor) = CheckRegister.getGeneration(year: store.profileUserModel?.data?.year ?? .zero, color: store.profileGenerationColor, textColor: store.profileGenerationTextColor)
             store.profileGenerationText = generation
             store.profileGenerationColor = color
             store.profileGenerationTextColor = textColor

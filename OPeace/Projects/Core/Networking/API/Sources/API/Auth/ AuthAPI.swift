@@ -15,6 +15,7 @@ public enum AuthAPI : String {
     case refreshToken
     case fetchUser
     case deleteUser
+    case logoutUser
     
     
     public var authAPIDesc: String {
@@ -39,6 +40,9 @@ public enum AuthAPI : String {
             
         case .deleteUser:
             return "/users/"
+            
+        case .logoutUser:
+            return "/users/logout/"
         }
     }
 }

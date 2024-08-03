@@ -21,7 +21,6 @@ let project = Project.makeAppModule(
         .Shared(implements: .Shareds),
         .Networking(implements: .Networkings),
         .Presentation(implements: .Presentation)
-
     ],
     sources: ["Sources/**"],
     resources: ["Resources/**"],

@@ -76,8 +76,16 @@ import Model
                                     }
 
                                     Log.debug("access token", oauthToken?.accessToken ?? "")
-                                    try? Keychain().remove("KAKAKO_ID_TOKEN")
-                                    try? Keychain().set(accessToken, key: "KAKAKO_ID_TOKEN")
+                                    guard let accessToken =  try? Keychain().get("ACCESS_TOKEN") else { return }
+                                    
+                                    if accessToken != "" {
+                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                    } else {
+                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                    }
+                                    
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 }
                             }
@@ -96,8 +104,13 @@ import Model
                                     _ = oauthToken
                                     
                                     Log.debug("access token", accessToken)
-                                    try? Keychain().remove("ACCESS_TOKEN")
-                                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                    if accessToken != "" {
+                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                    } else {
+                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                    }
                                     Log.debug("access token", oauthToken?.accessToken ?? "")
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 }
@@ -116,8 +129,13 @@ import Model
                                     return
                                 }
                                 _ = oauthToken
-                                try? Keychain().remove("ACCESS_TOKEN")
-                                try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                if accessToken != "" {
+                                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                    try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                } else {
+                                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                    try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                }
                                 Log.debug("access token", oauthToken?.accessToken ?? "")
                                 continuation.resume(returning: (accessToken, oauthToken?.idToken))
                                 
@@ -139,7 +157,13 @@ import Model
 
                     _ = oauthToken
                     Log.debug("access token", oauthToken?.idToken ?? "")
-                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                    if accessToken != "" {
+                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                    } else {
+                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                    }
                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                 }
             }
@@ -160,6 +184,14 @@ import Model
     //MARK: - 유저정보 조회
     public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
         return try await provider.requestAsync(.fetchUserInfo, decodeTo: UpdateUserInfoModel.self)
+    }
+    
+    //MARK: - 유저 로그아웃
+    public func logoutUser(refreshToken: String) async throws -> UserLogOut? {
+        guard let refreshToken  = try? Keychain().get("REFRESH_TOKEN") else { return .none }
+        return try await provider.requestAsync(
+            .logoutUser(refreshToken: refreshToken),
+            decodeTo: UserLogOut.self)
     }
 }
 

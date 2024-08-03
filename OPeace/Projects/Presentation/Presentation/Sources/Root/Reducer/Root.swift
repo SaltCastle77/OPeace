@@ -24,17 +24,21 @@ public struct Root {
         case auth(Auth.State)
         case onbaordingPagging(OnBoadingPagging.State)
         case signUpPAgging(SignUpPaging.State)
+        case profile(Profile.State)
         static var kakaoModel : KakaoResponseModel? = nil
         
         public init() {
-            self = .auth(.init())
+//            self = .auth(.init())
             
-//            if let token = try? Keychain().get("ACCESS_TOKEN") , !token.isEmpty {
-//                Log.debug(token)
-//                self = .homeRoot(.init())
-//            } else {
-//                self = .auth(.init())
-//            }
+            if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty {
+                Log.debug(token, "refresh : \(refreshToken)")
+                self = .homeRoot(.init())
+            } else if let refreshToken = try? Keychain().get("REFRESH_TOKEN") , refreshToken.isEmpty {
+                self = .homeRoot(.init())
+            }
+            else {
+                self = .auth(.init())
+            }
         }
     }
     
@@ -52,6 +56,7 @@ public struct Root {
         case homeRoot(HomeRoot.Action)
         case signupPaging(SignUpPaging.Action)
         case onbaordingPagging(OnBoadingPagging.Action)
+        case profile(Profile.Action)
         case changeScene(State)
     }
     
@@ -97,6 +102,10 @@ public struct Root {
                 case .changeScene(let state):
                     var state = state
                     state = state
+                    return .none
+                    
+                case .profile(.navigation(.presntLogout)):
+                    state = .auth(.init())
                     return .none
                     
                 default:
@@ -208,6 +217,9 @@ public struct Root {
         }
         .ifCaseLet(\.signUpPAgging, action: \.view.signupPaging) {
             SignUpPaging()
+        }
+        .ifCaseLet(\.profile, action: \.view.profile) {
+            Profile()
         }
     }
 }

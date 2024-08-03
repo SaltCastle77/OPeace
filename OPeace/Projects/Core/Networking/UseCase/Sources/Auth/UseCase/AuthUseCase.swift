@@ -51,6 +51,11 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
         try await repository.fetchUserInfo()
     }
+    
+    //MARK: - 유저 로그아웃
+    public func logoutUser(refreshToken: String) async throws -> UserLogOut? {
+        try await repository.logoutUser(refreshToken: refreshToken)
+    }
 }
 
 

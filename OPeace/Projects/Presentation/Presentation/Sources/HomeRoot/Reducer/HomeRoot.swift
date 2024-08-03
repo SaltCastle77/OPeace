@@ -34,6 +34,7 @@ public struct HomeRoot {
     public enum Path {
         case home(Home)
         case profile(Profile)
+        case login(Login)
     }
     
     //MARK: - ViewAction
@@ -70,7 +71,15 @@ public struct HomeRoot {
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
                     state.path.append(.profile(.init()))
                                 
-                                
+                case .element(id: _, action: .profile(.navigation(.presntLogout))):
+                    state.path.append(.login(.init()))
+                    state.path.removeFirst()
+                    
+                case .element(id: _, action: .login(.navigation(.presentMain))):
+                    state.path.append(.home(.init()))
+                    
+                    
+                    
                 default:
                     return .none
                                 

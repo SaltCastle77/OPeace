@@ -121,6 +121,17 @@ public struct Auth {
                     state.path.append(.profile(.init()))
                     return .none
                     
+                case .element(id: _, action: .profile(.navigation(.presntLogout))):
+                    // Append the login item
+                    state.path.append(.login(.init()))
+                    // Remove all items from the stack except for the login item
+                    state.path.removeAll { element in
+                        if case .login = element {
+                            return false // Keep the login item
+                        }
+                        return true // Remove other items
+                    }
+                    
                 default:
                     return .none
                 }
