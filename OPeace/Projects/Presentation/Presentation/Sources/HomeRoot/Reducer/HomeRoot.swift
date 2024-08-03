@@ -35,6 +35,7 @@ public struct HomeRoot {
         case home(Home)
         case profile(Profile)
         case login(Login)
+        case editProfile(EditProfile)
     }
     
     //MARK: - ViewAction
@@ -78,6 +79,9 @@ public struct HomeRoot {
                 case .element(id: _, action: .login(.navigation(.presentMain))):
                     state.path.append(.home(.init()))
                     
+                    
+                case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
+                    state.path.append(.editProfile(.init()))
                     
                     
                 default:

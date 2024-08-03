@@ -41,6 +41,8 @@ public struct Auth {
         case onBoardingPagging(OnBoadingPagging)
         case home(Home)
         case profile(Profile)
+        case editProfile(EditProfile)
+        
         
     }
     
@@ -131,6 +133,9 @@ public struct Auth {
                         }
                         return true // Remove other items
                     }
+                    
+                case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
+                    state.path.append(.editProfile(.init()))
                     
                 default:
                     return .none

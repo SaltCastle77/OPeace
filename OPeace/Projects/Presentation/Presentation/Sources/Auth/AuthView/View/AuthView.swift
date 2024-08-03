@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 import DesignSystem
 import KakaoSDKAuth
+import SwiftUIIntrospect
 
 public struct AuthView: View {
     @Bindable var store: StoreOf<Auth>
@@ -68,6 +69,24 @@ public struct AuthView: View {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
+                
+            case .editProfile(let editProfileStore):
+                EditProfileView(store: editProfileStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
+                
+            }
+        }
+        .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
+            if store.path.contains(.home(.init())) {
+                navigationController.interactivePopGestureRecognizer?.isEnabled = false
+            } else if store.path.contains(.signUpPagging(.init())) {
+                navigationController.interactivePopGestureRecognizer?.isEnabled = false
+            } else if store.path.contains(.login(.init())) {
+                navigationController.interactivePopGestureRecognizer?.isEnabled = false
+            } else {
+                navigationController.interactivePopGestureRecognizer?.isEnabled = true
             }
         }
     }

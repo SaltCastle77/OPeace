@@ -9,6 +9,7 @@ import SwiftUI
 import DesignSystem
 
 import ComposableArchitecture
+import SwiftUIIntrospect
 
 public struct HomeView: View {
     @Bindable var store: StoreOf<Home>
@@ -26,6 +27,9 @@ public struct HomeView: View {
                 navigationBaritem()
                 
                 Spacer()
+            }
+            .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
+                navigationController.interactivePopGestureRecognizer?.isEnabled = false
             }
         }
     }
