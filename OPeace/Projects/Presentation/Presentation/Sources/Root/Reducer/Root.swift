@@ -130,24 +130,21 @@ public struct Root {
 //                            try await clock.sleep(for: .seconds(1))
                             send(.async(.loginWIthKakao))
                             
-//                            try await clock.sleep(for: .seconds(0.3))
-//                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
-//                                if kakaoLogin?.accessToken == accessToken {
-//                                    if ((kakaoLogin?.accessToken?.isEmpty) == nil) {
-//                                        send(.view(.changeScene(.homeRoot(.init()))))
-//                                    } else {
-//                                        send(.view(.changeScene(.auth(.init()))))
-//                                    }
-//                                } else if kakaoLogin?.isExpires == true {
-//                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-//                                        send(.async(.handleRefreshToken(refreshToken)))
-//                                    }
-//                                } else if kakaoLogin?.isRefreshTokenExpires == true {
-//                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
-//                                } else {
-//                                    send(.view(.changeScene(.auth(.init()))))
-//                                }
-//                            }
+                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
+                                if Root.State.kakaoModel?.data?.accessToken == accessToken {
+                                    if ((Root.State.kakaoModel?.data?.accessToken?.isEmpty) == nil) {
+                                        send(.view(.changeScene(.homeRoot(.init()))))
+                                    } else {
+                                        send(.view(.changeScene(.auth(.init()))))
+                                    }
+                                } else if Root.State.kakaoModel?.data?.isExpires == true {
+                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                        send(.async(.handleRefreshToken(refreshToken)))
+                                    }
+                                } else if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
+                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
+                                }
+                            }
                             
                         case "apple":
                             break

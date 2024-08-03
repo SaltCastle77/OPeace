@@ -14,16 +14,16 @@ import Model
 
 public struct SettingView: View {
     @Bindable var store: StoreOf<Setting>
-    private var authAction: () -> Void = {}
+    private var action: () -> Void = {}
     private var closeModalAction: () -> Void = { }
     
     public init(
         store: StoreOf<Setting>,
-        authAction: @escaping () -> Void,
+        action: @escaping () -> Void,
         closeModalAction: @escaping () -> Void
     ) {
         self.store = store
-        self.authAction = authAction
+        self.action = action
         self.closeModalAction = closeModalAction
     }
     
@@ -43,8 +43,6 @@ public struct SettingView: View {
                 Spacer()
                 
             }
-            
-            
         }
     }
     
@@ -62,13 +60,16 @@ extension SettingView {
                     if item == store.settingtitem {
                         switch store.settingtitem {
                         case .editProfile:
-                            print(item.desc)
+                            closeModalAction()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                action()
+                            }
                         case .blackManagement:
                             print(item.desc)
                         case .logout:
                             closeModalAction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                                authAction()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                action()
                             }
                         case .withDraw:
                             print(item.desc)
