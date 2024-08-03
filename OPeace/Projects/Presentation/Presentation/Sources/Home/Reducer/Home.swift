@@ -18,6 +18,7 @@ public struct Home {
     public struct State: Equatable {
         public init() {}
         var profileImage: String = "person.fill"
+        var profile = Profile.State()
     }
     
     public enum Action: ViewAction, BindableAction, FeatureAction {
@@ -26,12 +27,13 @@ public struct Home {
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
+        case profile(Profile.Action)
     }
     
     //MARK: - ViewAction
     @CasePathable
     public enum View {
-        
+        case appaerProfiluserData
     }
     
   
@@ -62,6 +64,10 @@ public struct Home {
             
             case .view(let View):
                 switch View {
+                case .appaerProfiluserData:
+                    return .run { @MainActor send in
+                        send(.profile(.scopeFetchUser))
+                    }
                     
                 }
                 
@@ -78,12 +84,17 @@ public struct Home {
             case .navigation(let NavigationAction):
                 switch NavigationAction {
                 case .presntProfile:
-                    return .none
+                    return .run { @MainActor send in
+                        send(.profile(.scopeFetchUser))
+                    }
                 }
                 
             default:
                 return .none
             }
+        }
+        Scope(state: \.profile, action: \.profile) {
+            Profile()
         }
     }
 }

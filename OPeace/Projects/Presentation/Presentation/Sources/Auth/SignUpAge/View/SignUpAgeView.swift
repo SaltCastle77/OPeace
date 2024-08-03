@@ -42,7 +42,6 @@ public struct SignUpAgeView: View {
                     CustomButton(
                         action: {
                             store.send(.async(.fetchJobList))
-                            store.send(.async(.updateName))
                             Task {
                                 try await Task.sleep(nanoseconds: UInt64(5))
                                  store.send(.switchTabs)

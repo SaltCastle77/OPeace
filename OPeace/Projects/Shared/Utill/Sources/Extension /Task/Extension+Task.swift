@@ -13,3 +13,13 @@ extension Task where Success == Never, Failure == Never {
         try? await Task.sleep(nanoseconds: duration)
     }
 }
+
+public struct AsyncUtility {
+    
+    public init() {}
+    
+    public static func sleep(seconds: Double) async {
+        let duration = UInt64(seconds * Double(NSEC_PER_SEC))
+        try? await Task.sleep(nanoseconds: duration)
+    }
+}

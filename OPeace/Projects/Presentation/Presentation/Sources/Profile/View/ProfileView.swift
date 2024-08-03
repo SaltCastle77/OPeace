@@ -9,10 +9,13 @@ import SwiftUI
 import DesignSystem
 
 import ComposableArchitecture
+import PopupView
+
 import Utill
 
 public struct ProfileView: View {
     @Bindable var store: StoreOf<Profile>
+
     var backAction: () -> Void = {}
     
     
@@ -38,31 +41,48 @@ public struct ProfileView: View {
                 userInfoTitle(
                     nickName: store.profileUserModel?.data?.nickname ?? "",
                     job: store.profileUserModel?.data?.job ?? "",
-                    generation:  store.profileUserModel?.data?.generation ?? "" )
+                    generation:  store.profileGenerationText )
                 
                 Spacer()
             }
-        }
-        .task {
-            store.send(.async(.fetchUser))
-        }
-        
-        .sheet(item: $store.scope(state: \.destination?.setting, action: \.destination.setting)) { settingStore in
-            SettingView(store: settingStore) {
-                store.send(.navigation(.presntLogout))
-            } closeModalAction: {
-                store.send(.view(.closeModal))
+            .task {
+                store.send(.async(.fetchUser))
             }
+            .sheet(item: $store.scope(state: \.destination?.setting, action: \.destination.setting)) { settingStore in
+                SettingView(store: settingStore) {
+                    settingStore.settingtitem = store.settingProfile
+                    store.send(.view(.presntPopUp))
+                } closeModalAction: {
+                    store.send(.view(.closeModal))
+                }
                 .presentationDetents([.height(UIScreen.screenHeight * 0.3)])
                 .presentationCornerRadius(20)
                 .presentationDragIndicator(.hidden)
+            }
+            
+            .popup(item: $store.scope(state: \.destination?.popup, action: \.destination.popup)) { customPopUp in
+                CustomBasicPopUpView(store: customPopUp, tittle: store.logoutPopUpTitle) {
+                    store.send(.async(.logoutUser))
+                } cancelAction: {
+                    store.send(.view(.closeModal))
+                }
+                
+            }  customize: { popup in
+                popup
+                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
+                    .position(.bottom)
+                    .animation(.spring)
+                    .closeOnTap(true)
+                    .closeOnTapOutside(true)
+                    .backgroundColor(Color.basicBlack.opacity(0.8))
+            }
         }
     }
 }
 
 
 extension ProfileView {
-
+    
     @ViewBuilder
     private func userInfoTitle(nickName: String, job: String, generation: String) -> some View {
         VStack {
@@ -92,7 +112,7 @@ extension ProfileView {
                 
                 RoundedRectangle(cornerRadius: 20)
                     .fill(store.profileGenerationColor)
-                    .frame(width: generation.calculateWidth(for: generation), height: 24)
+                    .frame(width: generation.calculateWidthProfileGeneration(for: generation), height: 24)
                     .overlay(alignment: .center) {
                         Text(generation)
                             .pretendardFont(family: .Regular, size: 12)
@@ -102,7 +122,7 @@ extension ProfileView {
                 
                 Spacer()
                     .frame(width: 4)
-
+                
                 Image(asset: .setting)
                     .resizable()
                     .scaledToFit()
@@ -115,12 +135,6 @@ extension ProfileView {
                 
             }
             .padding(.horizontal, 20)
-        }
-        .onAppear {
-            let (generation, color, textColor) = CheckRegister.getGeneration(year: store.profileUserModel?.data?.year ?? .zero, color: store.profileGenerationColor, textColor: store.profileGenerationTextColor)
-            store.profileGenerationText = generation
-            store.profileGenerationColor = color
-            store.profileGenerationTextColor = textColor
         }
     }
 }

@@ -83,7 +83,6 @@ public struct SignUpAge {
     }
     
     public enum ScopeAction: Equatable {
-        case updateName
         case fetchJobList
         
     }
@@ -102,12 +101,7 @@ public struct SignUpAge {
         Reduce { state, action in
             switch action {
             case .switchTabs:
-                let signUpName = try? Keychain().get("signUpName")
-                print(signUpName)
-                state.destination = .signUpJob(.init(
-                    signUpName: signUpName ?? "",
-                    signUpGeneration: state.signUpAgeDisplay
-                ))
+                state.destination = .signUpJob(.init())
                 return .none
                 
             case .binding(\.signUpAgeDisplay):
@@ -149,11 +143,6 @@ public struct SignUpAge {
                      
             case .scope(let ScopeAction):
                 switch ScopeAction {
-                case .updateName:
-                    let signUpName = try? Keychain().get("signUpName")
-                    return .run { @MainActor send in
-                        send(.signUpJob(.appearName(signUpName ?? "")))
-                    }
                 case .fetchJobList:
                     return .run { @MainActor send in
                         send(.signUpJob(.fetchJob))

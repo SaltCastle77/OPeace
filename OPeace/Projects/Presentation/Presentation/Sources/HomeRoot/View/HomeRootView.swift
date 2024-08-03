@@ -8,6 +8,7 @@
 import SwiftUI
 
 import ComposableArchitecture
+import DesignSystem
 
 public struct HomeRootView: View {
     @Bindable var store: StoreOf<HomeRoot>
@@ -35,6 +36,7 @@ public struct HomeRootView: View {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
+            
             case .login(let loginStore):
                 LoginView(store: loginStore)
                     .navigationBarBackButtonHidden()

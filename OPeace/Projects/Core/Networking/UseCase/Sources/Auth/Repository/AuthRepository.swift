@@ -79,9 +79,11 @@ import Model
                                     guard let accessToken =  try? Keychain().get("ACCESS_TOKEN") else { return }
                                     
                                     if accessToken != "" {
+                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
                                         try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
                                         try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
                                     } else {
+                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
                                         try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
                                         try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
                                     }
@@ -105,9 +107,11 @@ import Model
                                     
                                     Log.debug("access token", accessToken)
                                     if accessToken != "" {
+                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
                                         try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
                                         try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
                                     } else {
+                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
                                         try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
                                         try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
                                     }
@@ -130,10 +134,10 @@ import Model
                                 }
                                 _ = oauthToken
                                 if accessToken != "" {
-                                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                    try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
                                     try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
                                 } else {
-                                    try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
+                                    try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
                                     try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
                                 }
                                 Log.debug("access token", oauthToken?.accessToken ?? "")
@@ -172,7 +176,7 @@ import Model
     
     //MARK: - 카카오 로그인 api
     public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
-        let kakaoAcessToken = (try? Keychain().get("ACCESS_TOKEN") ?? "")
+        let kakaoAcessToken = (try? Keychain().get("KAKAO_ACCESS_TOKEN") ?? "")
         return try await provider.requestAsync(.kakaoLogin( accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponseModel.self)
     }
     

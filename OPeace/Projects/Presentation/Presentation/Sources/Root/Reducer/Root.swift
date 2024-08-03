@@ -127,8 +127,8 @@ public struct Root {
                     return .run { @MainActor send in
                         switch socailType {
                         case "kakao":
-                            try await clock.sleep(for: .seconds(1))
-                            
+//                            try await clock.sleep(for: .seconds(1))
+                            send(.async(.loginWIthKakao))
                             
 //                            try await clock.sleep(for: .seconds(0.3))
 //                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {

@@ -66,9 +66,8 @@ extension SettingView {
                         case .blackManagement:
                             print(item.desc)
                         case .logout:
-                            store.send(.async(.logoutUser))
                             closeModalAction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                                 authAction()
                             }
                         case .withDraw:

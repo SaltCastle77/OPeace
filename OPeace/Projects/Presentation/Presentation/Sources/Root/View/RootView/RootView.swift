@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 import ComposableArchitecture
+import Utill
 
 public struct RootView: View {
     @Bindable var store: StoreOf<Root>
@@ -41,9 +42,9 @@ public struct RootView: View {
             }
                
         }
-        .onAppear {
+        .task {
+            await AsyncUtility.sleep(seconds: 1)
             store.send(.async(.autoLogin))
-            store.send(.async(.loginWIthKakao))
         }
     }
 }
