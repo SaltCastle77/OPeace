@@ -200,10 +200,12 @@ public struct Login {
                         if state.kakaoModel?.data?.accessToken != "" {
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                             try? Keychain().set( "", key: "LastLogin")
+                            UserDefaults.standard.set(false, forKey: "isLogOut")
                         } else {
                             try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                             try? Keychain().set( "", key: "LastLogin")
+                            UserDefaults.standard.set(false, forKey: "isLogOut")
                         }
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)

@@ -21,9 +21,10 @@ public struct Home {
         public init() {}
         var profileImage: String = "person.fill"
         var profile = Profile.State()
-        
+        var isLogin = UserDefaults.standard.bool(forKey: "isLogOut")
         @Presents var destination: Destination.State?
         var loginTiltle: String = "로그인을 해야 다른 기능을 사용하실 수 있습니다. "
+        
     }
     
     public enum Action: ViewAction, BindableAction, FeatureAction {

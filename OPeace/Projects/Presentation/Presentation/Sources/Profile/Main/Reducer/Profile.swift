@@ -35,6 +35,7 @@ public struct Profile {
         var deletePopUpTitle: String = "정말 탈퇴하시겠어요?"
         
         @Presents var destination: Destination.State?
+        @Shared(.appStorage("isLogOut")) var isLogOut: Bool = false
         public init() {}
         
     }
@@ -206,6 +207,7 @@ public struct Profile {
                         state.userLogoutModel = userData
                         Log.debug("유저 로그아웃 성공", userData)
                         try? Keychain().set(state.userLogoutModel?.data?.lastLogin ?? "", key: "LastLogin")
+                        UserDefaults.standard.set(true, forKey: "isLogOut")
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }

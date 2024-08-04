@@ -56,18 +56,24 @@ public struct SignUpPagingView: View {
                 TabView(selection: $store.activeMenu) {
                     SignUpNameView(store: self.store.scope(state: \.signUpName, action: \.signUpName))
                         .tag(SignUpTab.signUpName)
-                        
-                    
+                       
+                                
                     SignUpAgeView(store: self.store.scope(state: \.signUpAge, action: \.signUpAge))
                         .tag(SignUpTab.signUpGeneration)
+                     
+                    
                     
                     SignUpJobView(store: self.store.scope(state: \.signUpJob, action: \.signUpJob), confirmAction: {
                         store.send(.view(.appearPopUp))
+                           
                     })
                         .tag(SignUpTab.signUpJob)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .animation(.none, value: store.activeMenu)
+                .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
+                    navigationController.interactivePopGestureRecognizer?.isEnabled = false
+                }
                 
                 Spacer()
             }

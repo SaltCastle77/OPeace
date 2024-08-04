@@ -33,7 +33,7 @@ public struct HomeView: View {
             .onAppear {
                 guard let lastLogin = try? Keychain().get("LastLogin") else { return }
                 print("lastlogin: \(lastLogin)")
-                if lastLogin != "" {
+                if store.isLogin == true {
                     store.send(.view(.presntFloatintPopUp))
                 }
             }
