@@ -43,7 +43,6 @@ public struct RootView: View {
                
         }
         .task {
-            await AsyncUtility.sleep(seconds: 1)
             store.send(.async(.autoLogin))
         }
     }

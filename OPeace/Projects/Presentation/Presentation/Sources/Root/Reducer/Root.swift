@@ -30,13 +30,10 @@ public struct Root {
         public init() {
 //            self = .auth(.init())
             
-            if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty {
+            if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty || !token.isEmpty {
                 Log.debug(token, "refresh : \(refreshToken)")
                 self = .homeRoot(.init())
-            } else if let refreshToken = try? Keychain().get("REFRESH_TOKEN") , refreshToken.isEmpty {
-                self = .homeRoot(.init())
-            }
-            else {
+            } else {
                 self = .auth(.init())
             }
         }
@@ -128,7 +125,11 @@ public struct Root {
                         switch socailType {
                         case "kakao":
 //                            try await clock.sleep(for: .seconds(1))
-                            send(.async(.loginWIthKakao))
+                            if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                if refreshToken != nil {
+                                    send(.async(.loginWIthKakao))
+                                }
+                            }
                             
                             if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
                                 if Root.State.kakaoModel?.data?.accessToken == accessToken {
@@ -171,6 +172,7 @@ public struct Root {
                     switch data {
                     case .success(let ResponseData):
                         Root.State.kakaoModel = ResponseData
+                        try? Keychain().set( "", key: "LastLogin")
 //                        try? Keychain().remove("ACCESS_TOKEN")
 //                        try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
 //                        try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
