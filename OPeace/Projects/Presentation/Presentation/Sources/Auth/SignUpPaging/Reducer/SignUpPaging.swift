@@ -82,11 +82,14 @@ public struct SignUpPaging {
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
         case presntOnboarding
+        case presntMainHome
     
     }
     
     
     @Dependency(SignUpUseCase.self) var signUpUseCase
+    @Dependency(\.continuousClock) var clock
+    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
@@ -157,12 +160,16 @@ public struct SignUpPaging {
                         case .success(let updateUserInfoData):
                             if let updateUserInfoData = updateUserInfoData {
                                 send(.async(.updateUserInfoResponse(.success(updateUserInfoData))))
+                                
+                                send(.view(.closePopUp))
+                             
+                                try await clock.sleep(for: .seconds(1))
+                                if updateUserInfoData.data?.isFirstLogin == true {
+                                    send(.navigation(.presntOnboarding))
+                                } else {
+                                    send(.navigation(.presntMainHome))
+                                }
                             }
-                            
-                            send(.view(.closePopUp))
-                            
-                            try await Task.sleep(nanoseconds: 500_000_000)
-                                send(.navigation(.presntOnboarding))
                             
                         case .failure(let error):
                             send(.async(.updateUserInfoResponse(.failure(CustomError.map(error)))))
@@ -188,7 +195,11 @@ public struct SignUpPaging {
                 switch NavigationAction {
                 case .presntOnboarding:
                     return .none
+                    
+                case .presntMainHome:
+                    return .none
                 }
+                
                 
                 
             default:

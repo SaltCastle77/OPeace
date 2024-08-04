@@ -136,6 +136,16 @@ public struct Auth {
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
                     state.path.append(.editProfile(.init()))
+                    return .none
+                    
+                case .element(id: _, action: .home(.navigation(.presntLogin))):
+                    state.path.append(.login(.init()))
+                    return .none
+//
+                    case .element(id: _, action: .signUpPagging(.navigation(.presntMainHome))):
+                    state.path.append(.home(.init()))
+                    return .none
+                    
                     
                 default:
                     return .none

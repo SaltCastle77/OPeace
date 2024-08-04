@@ -37,6 +37,7 @@ public struct Login {
         var idToken: String?
         var kakaoModel : KakaoResponseModel? = nil
         var socialType: SocialType? = nil
+        var profileUserModel: UpdateUserInfoModel? = nil
         var refreshTokenModel: RefreshModel?
     }
     
@@ -62,6 +63,8 @@ public struct Login {
         case kakaoLoginResponse(Result<(String?, String?), CustomError>)
         case loginWIthKakao
         case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
+        case fetchUserProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+        case fetchUser
         case refreshTokenResponse(Result<RefreshModel, CustomError>)
         case refreshTokenRequest(refreshToken: String)
     }
@@ -174,13 +177,9 @@ public struct Login {
                         case .success(let resopnse):
                             if let responseData = resopnse {
                                 send(.async(.kakaoLoginApiResponse(.success(responseData))))
-                                try await self.clock.sleep(for: .seconds(0.3))
+                                try await self.clock.sleep(for: .seconds(0.05))
                                 
-                                if accessToken != "" {
-                                    send(.navigation(.presentMain))
-                                } else {
-                                    send(.navigation(.presnetAgreement))
-                                }
+                                send(.async(.fetchUser))
                             }
                             
                         case .failure(let error):
@@ -200,14 +199,51 @@ public struct Login {
                         try? Keychain().set(socialTypeValue, key: "socialType")
                         if state.kakaoModel?.data?.accessToken != "" {
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            try? Keychain().set( "", key: "LastLogin")
                         } else {
-                            
+                            try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                            try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            try? Keychain().set( "", key: "LastLogin")
                         }
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
                         state.socialType = .kakao
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
                         try? Keychain().set(socialTypeValue, key: "socialType")
+                    }
+                    return .none
+                    
+                case .fetchUser:
+                    return .run { @MainActor send in
+                        let fetchUserData = await Result {
+                            try await authUseCase.fetchUserInfo()
+                        }
+                        
+                        switch fetchUserData {
+                        case .success(let fetchUserResult):
+                            if let fetchUserResult = fetchUserResult {
+                                send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
+                                
+                                if fetchUserResult.data?.nickname != nil && fetchUserResult.data?.year != nil && fetchUserResult.data?.job != nil {
+                                    send(.navigation(.presentMain))
+                                } else {
+                                     UserDefaults.standard.set("true", forKey: "isFirstTimeUser")
+                                    send(.navigation(.presnetAgreement))
+                                }
+                                
+                            }
+                        case .failure(let error):
+                            send(.async(.fetchUserProfileResponse(.failure(CustomError.map(error)))))
+                            
+                        }
+                    }
+                    
+                case .fetchUserProfileResponse(let result):
+                    switch result {
+                    case .success(let resultData):
+                        state.profileUserModel = resultData
+                    case let .failure(error):
+                        Log.network("프로필 오류", error.localizedDescription)
                     }
                     return .none
                     
@@ -254,6 +290,7 @@ public struct Login {
                     return .none
                     
                 case .presentMain:
+                    try? Keychain().set("1", key: "LastLogin")
                     return .none
                 }
             }
