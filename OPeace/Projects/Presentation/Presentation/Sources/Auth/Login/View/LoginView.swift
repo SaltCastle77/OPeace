@@ -17,7 +17,7 @@ import KakaoSDKUser
 import Utills
 
 public struct LoginView: View {
-    
+//    @Perception.Bindable var store: StoreOf<Login>
     @Bindable var store: StoreOf<Login>
     
     public init(
