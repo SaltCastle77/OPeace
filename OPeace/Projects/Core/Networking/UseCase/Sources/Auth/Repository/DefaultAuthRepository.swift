@@ -46,7 +46,15 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     }
     
     
-    public func logoutUser(refreshToken: String) async throws -> UserLogOut? {
+    public func logoutUser(refreshToken: String) async throws -> UserLogOutModel? {
+        return nil
+    }
+    
+    public func autoLogin() async throws -> UseLoginModel? {
+        return nil
+    }
+    
+    public func deleteUser() async throws -> DeleteUserModel?{
         return nil
     }
 }

@@ -14,8 +14,9 @@ import CombineMoya
 extension Data {
     //MARK: -  async/ await 으로 디코딩
     func decoded<T: Decodable>(as type: T.Type) throws -> T {
-        return try JSONDecoder().decode(T.self, from: self)
-    }
+            let decoder = JSONDecoder()
+            return try decoder.decode(T.self, from: self)
+        }
     
     //MARK: - 컴바인으로 디코딩
     func decodedToCombine<T: Decodable>(as type: T.Type) -> AnyPublisher<T, CustomError> {

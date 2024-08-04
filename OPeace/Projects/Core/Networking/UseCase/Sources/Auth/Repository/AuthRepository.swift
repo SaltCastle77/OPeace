@@ -22,6 +22,8 @@ import Model
 
 
 @Observable public class AuthRepository: AuthRepositoryProtocol {
+  
+    
     private let provider = MoyaProvider<AuthService>(plugins: [MoyaLoggingPlugin()])
     
     public init() {}
@@ -191,12 +193,23 @@ import Model
     }
     
     //MARK: - 유저 로그아웃
-    public func logoutUser(refreshToken: String) async throws -> UserLogOut? {
+    public func logoutUser(refreshToken: String) async throws -> UserLogOutModel? {
         guard let refreshToken  = try? Keychain().get("REFRESH_TOKEN") else { return .none }
         return try await provider.requestAsync(
             .logoutUser(refreshToken: refreshToken),
-            decodeTo: UserLogOut.self)
+            decodeTo: UserLogOutModel.self)
     }
+    
+    //MARK: - 자동 로그인
+    public func autoLogin() async throws -> UseLoginModel? {
+        return try await provider.requestAsync(.autoLogin, decodeTo: UseLoginModel.self)
+    }
+    
+    //MARK: - 회원 탈퇴
+    public func deleteUser() async throws -> DeleteUserModel?  {
+        return try await provider.requestAsync(.deleteUser, decodeTo: DeleteUserModel.self)
+    }
+
 }
 
 

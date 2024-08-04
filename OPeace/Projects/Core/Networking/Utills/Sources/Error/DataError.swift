@@ -16,6 +16,7 @@ public enum DataError: Error {
     case statusCodeError(Int)
     case noData
     case badRequest
+    case customError(ErrorResponse)
     case unhandledStatusCode(Int)
     case errorData(String)
     case moyaError(MoyaError)

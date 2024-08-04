@@ -16,6 +16,8 @@ public enum AuthService {
     case refreshToken(refreshToken: String)
     case fetchUserInfo
     case logoutUser(refreshToken: String)
+    case autoLogin
+    case deleteUser
 }
 
 extension AuthService: BaseTargetType {
@@ -35,6 +37,12 @@ extension AuthService: BaseTargetType {
             
         case .logoutUser:
             return AuthAPI.logoutUser.authAPIDesc
+            
+        case .autoLogin:
+            return AuthAPI.autoLogin.authAPIDesc
+            
+        case .deleteUser:
+            return AuthAPI.deleteUser.authAPIDesc
         }
     }
     
@@ -54,6 +62,12 @@ extension AuthService: BaseTargetType {
             
         case .logoutUser:
             return .post
+            
+        case .autoLogin:
+            return .post
+            
+        case .deleteUser:
+            return .delete
         }
     }
     
@@ -82,6 +96,16 @@ extension AuthService: BaseTargetType {
                 "refresh_token" : refreshToken
                 ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            
+        case .autoLogin:
+            let parameters: [String: Any] = [:]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            
+        case .deleteUser:
+            let parameters: [String: Any] = [
+                 :
+                ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
         }
     }
     

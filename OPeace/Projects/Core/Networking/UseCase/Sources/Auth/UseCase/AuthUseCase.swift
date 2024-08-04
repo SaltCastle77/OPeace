@@ -53,8 +53,18 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     //MARK: - 유저 로그아웃
-    public func logoutUser(refreshToken: String) async throws -> UserLogOut? {
+    public func logoutUser(refreshToken: String) async throws -> UserLogOutModel? {
         try await repository.logoutUser(refreshToken: refreshToken)
+    }
+    
+    //MARK: - 자동 로그인
+    public func autoLogin() async throws -> UseLoginModel? {
+        try await repository.autoLogin()
+    }
+    
+    //MARK: - 회원탈퇴
+    public func deleteUser() async throws -> DeleteUserModel? {
+        try await repository.deleteUser()
     }
 }
 

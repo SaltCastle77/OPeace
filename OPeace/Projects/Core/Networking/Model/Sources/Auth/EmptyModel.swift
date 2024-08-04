@@ -6,11 +6,10 @@
 //
 
 public struct EmptyModel: Codable, Equatable {
-    public var code: String?
+    public let detail, code: String?
     
-    public init(
-        code: String? = nil
-    ) {
+    public init(detail: String?, code: String?) {
+        self.detail = detail
         self.code = code
     }
 }
