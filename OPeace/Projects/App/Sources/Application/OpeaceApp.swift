@@ -2,14 +2,17 @@ import SwiftUI
 import ComposableArchitecture
 import KakaoSDKAuth
 import KakaoSDKCommon
+import KeychainAccess
 
 @main
 struct OpeaceApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @State var isFirstUseApp = UserDefaults.standard.string(forKey: "isFirstTimeUser")
     
     init() {
         registerDependencies()
         initializeKakao()
+        isFirstApplication()
     }
     
     var body: some Scene {
@@ -47,5 +50,12 @@ extension OpeaceApp {
             return
         }
         KakaoSDK.initSDK(appKey: kakaoAppKey)
+    }
+    
+    private func isFirstApplication() {
+        print("isFirstUseApp : \(isFirstUseApp)")
+        if isFirstUseApp == nil {
+            try? Keychain().removeAll()
+        }
     }
 }
