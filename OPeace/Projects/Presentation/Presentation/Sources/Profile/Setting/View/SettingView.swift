@@ -72,7 +72,10 @@ extension SettingView {
                                 action()
                             }
                         case .withDraw:
-                            print(item.desc)
+                            closeModalAction()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                action()
+                            }
                         case .none:
                             print(item.desc)
                         }

@@ -42,7 +42,7 @@ public struct ProfileView: View {
                 userInfoTitle(
                     nickName: store.profileUserModel?.data?.nickname ?? "",
                     job: store.profileUserModel?.data?.job ?? "",
-                    generation:  store.profileGenerationText )
+                    generation: store.profileUserModel?.data?.generation ?? "")
                 
                 Spacer()
             }
@@ -65,8 +65,25 @@ public struct ProfileView: View {
             }
             
             .popup(item: $store.scope(state: \.destination?.popup, action: \.destination.popup)) { customPopUp in
-                CustomBasicPopUpView(store: customPopUp, tittle: store.logoutPopUpTitle) {
+                CustomBasicPopUpView(store: customPopUp, title: store.logoutPopUpTitle) {
                     store.send(.async(.logoutUser))
+                } cancelAction: {
+                    store.send(.view(.closeModal))
+                }
+                
+            }  customize: { popup in
+                popup
+                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
+                    .position(.bottom)
+                    .animation(.spring)
+                    .closeOnTap(true)
+                    .closeOnTapOutside(true)
+                    .backgroundColor(Color.basicBlack.opacity(0.8))
+            }
+            
+            .popup(item: $store.scope(state: \.destination?.deletePopUp, action: \.destination.deletePopUp)) { customPopUp in
+                CustomBasicPopUpView(store: customPopUp, title: store.deletePopUpTitle) {
+//                    store.send(.async(.deleteUser))
                 } cancelAction: {
                     store.send(.view(.closeModal))
                 }

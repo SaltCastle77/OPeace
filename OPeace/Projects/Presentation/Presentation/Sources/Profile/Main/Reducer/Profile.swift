@@ -27,17 +27,19 @@ public struct Profile {
         var profileGenerationText: String = ""
         
         var profileUserModel: UpdateUserInfoModel? = nil
-        var userLogoutModel: UserLogOut? = nil
+        var userLogoutModel: UserLogOutModel? = nil
+        var userDeleteModel: DeleteUserModel? = nil
         
         var profileGenerationYear: Int? = .zero
         var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
+        var deletePopUpTitle: String = "정말 탈퇴하시겠어요?"
         
         @Presents var destination: Destination.State?
         public init() {}
         
     }
     
-    public enum Action: ViewAction, BindableAction, FeatureAction {
+    public indirect enum Action: ViewAction, BindableAction, FeatureAction {
         case destination(PresentationAction<Destination.Action>)
         case binding(BindingAction<State>)
         case view(View)
@@ -51,6 +53,7 @@ public struct Profile {
     public enum Destination {
         case setting(Setting)
         case popup(CustomPopUp)
+        case deletePopUp(CustomPopUp)
     }
     
     //MARK: - ViewAction
@@ -59,6 +62,7 @@ public struct Profile {
         case tapPresntSettingModal
         case closeModal
         case presntPopUp
+        case presntDeltePopUp
         case closePopUp
         case updateGenerationInfo
         case switchModalAction(SettingProfile)
@@ -71,8 +75,10 @@ public struct Profile {
     public enum AsyncAction: Equatable {
         case fetchUserProfileResponse(Result<UpdateUserInfoModel, CustomError>)
         case fetchUser
-        case logoutUseResponse(Result<UserLogOut, CustomError>)
+        case logoutUseResponse(Result<UserLogOutModel, CustomError>)
         case logoutUser
+        case deleteUserResponse(Result<DeleteUserModel, CustomError>)
+        case deleteUser
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -120,6 +126,10 @@ public struct Profile {
                     state.destination = nil
                     return .none
                     
+                case .presntDeltePopUp:
+                    state.destination = .deletePopUp(.init())
+                    return .none
+                    
                 case .presntPopUp:
                     state.destination = .popup(.init())
                     return .none
@@ -148,11 +158,11 @@ public struct Profile {
                         case .editProfile:
                             await send(.navigation(.presntEditProfile))
                         case .blackManagement:
-                            Log.debug("회원탈퇴")
+                            Log.debug("차단")
                         case .logout:
                             await send(.view(.presntPopUp))
                         case .withDraw:
-                            Log.debug("회원탈퇴")
+                            await send(.view(.presntDeltePopUp))
                         }
                         
                     }
@@ -195,6 +205,7 @@ public struct Profile {
                     case .success(let userData):
                         state.userLogoutModel = userData
                         Log.debug("유저 로그아웃 성공", userData)
+                        try? Keychain().set(state.userLogoutModel?.data?.lastLogin ?? "", key: "LastLogin")
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }
@@ -214,8 +225,6 @@ public struct Profile {
                                 try Keychain().remove("REFRESH_TOKEN")
                                 send(.view(.closePopUp))
                                 try await self.clock.sleep(for: .seconds(1))
-                                
-                                
                                 send(.navigation(.presntLogout))
                             }
                             
@@ -223,6 +232,39 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
                         }
                     }
+                    
+                case .deleteUser:
+                    return .run { @MainActor send in
+                        let deleteUserData = await Result {
+                            try await authUseCase.deleteUser()
+                        }
+                        
+                        switch deleteUserData {
+                        case .success(let deleteUserData):
+                           if let deleteUserData = deleteUserData {
+                               send(.async(.deleteUserResponse(.success(deleteUserData))))
+                               
+                               send(.view(.closePopUp))
+                               try await self.clock.sleep(for: .seconds(1))
+                               send(.navigation(.presntLogout))
+                            }
+                        case .failure(let error):
+                            send(.async(.deleteUserResponse(.failure(CustomError.map(error)))))
+                        }
+                    }
+                    
+                case .deleteUserResponse(let result):
+                    switch result {
+                    case .success(let userDeleteData):
+                        state.userDeleteModel = userDeleteData
+                        try?  Keychain().remove("REFRESH_TOKEN")
+                        try?  Keychain().remove("ACCESS_TOKEN")
+                        try? Keychain().remove("LastLogin")
+                        try? Keychain().remove("socialType")
+                    case .failure(let error):
+                        Log.debug("회원 탈퇴 에러", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):
