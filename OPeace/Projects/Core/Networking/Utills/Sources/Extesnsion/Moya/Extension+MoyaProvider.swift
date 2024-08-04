@@ -11,17 +11,6 @@ import Combine
 import Moya
 import CombineMoya
 
-public struct ErrorResponse: Decodable {
-    let detail: String
-    let code: String
-    
-    public init(detail: String, code: String) {
-        self.detail = detail
-        self.code = code
-    }
-}
-
-
 
 extension MoyaProvider {
     //MARK: - MoyaProvider에 요청을 비동기적으로 처리하는 확장 함수 추가
