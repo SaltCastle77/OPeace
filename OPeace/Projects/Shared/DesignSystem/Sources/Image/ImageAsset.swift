@@ -30,5 +30,9 @@ public enum ImageAsset: String {
     case onBoardingFirst
     case onBoardingFirstTap
     case onBoardingSecond
+    
+    
+    //MARK: - LogOut
+    case succesLogout
     case empty
 }

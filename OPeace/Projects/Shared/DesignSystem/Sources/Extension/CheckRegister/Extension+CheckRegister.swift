@@ -70,4 +70,5 @@ extension CheckRegister {
             return "? 세대"
         }
     }
+    
 }
