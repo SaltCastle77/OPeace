@@ -9,6 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 import Utill
+import API
 
 @Reducer
 public struct HomeRoot {
@@ -36,6 +37,10 @@ public struct HomeRoot {
         case profile(Profile)
         case login(Login)
         case editProfile(EditProfile)
+        case agreeMent(AgreeMent)
+        case signUpPagging(SignUpPaging)
+        case webView(Web)
+        case onBoardingPagging(OnBoadingPagging)
     }
     
     //MARK: - ViewAction
@@ -73,7 +78,7 @@ public struct HomeRoot {
                     state.path.append(.profile(.init()))
                                 
                 case .element(id: _, action: .profile(.navigation(.presntLogout))):
-                    state.path.append(.login(.init()))
+                    state.path.append(.home(.init()))
                     state.path.removeFirst()
                     
                 case .element(id: _, action: .login(.navigation(.presentMain))):
@@ -82,6 +87,36 @@ public struct HomeRoot {
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
                     state.path.append(.editProfile(.init()))
+                    
+                case .element(id: _, action: .home(.navigation(.presntLogin))):
+                    state.path.append(.login(.init()))
+                    
+                case .element(id: _, action: .login(.navigation(.presnetAgreement))):
+                    state.path.append(.agreeMent(.init()))
+                    
+                    
+                case .element(id: _, action: .agreeMent(.navigation(.presntSignUpName))):
+                    state.path.append(.signUpPagging(.init()))
+                    
+                    
+                case .element(id: _, action: .agreeMent(.navigation(.presntServiceAgreeCheckTapped))):
+                    state.path.append(.webView(.init(url: AgreeMentAPI.seriveTerms.agreeMentDesc)))
+                    
+                    
+                case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
+                    state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
+                    
+                    
+                case .element(id: _, action: .login(.navigation(.presentMain))):
+                    state.path.append(.home(.init()))
+                    
+                    
+                case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
+                    state.path.append(.onBoardingPagging(.init()))
+                    
+                    
+                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
+                    state.path.append(.home(.init()))
                     
                     
                 default:

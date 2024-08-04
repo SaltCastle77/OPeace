@@ -36,7 +36,6 @@ public struct HomeRootView: View {
                         navigationController.interactivePopGestureRecognizer?.isEnabled = false
                     }
                    
-                
             case .profile(let profileStore):
                 ProfileView(store: profileStore) {
                     store.send(.inner(.removePath))
@@ -46,10 +45,31 @@ public struct HomeRootView: View {
                     navigationController.interactivePopGestureRecognizer?.isEnabled = true
                 }
               
-            
             case .login(let loginStore):
                 LoginView(store: loginStore)
                     .navigationBarBackButtonHidden()
+              
+            case .agreeMent(let agreeMentStore):
+                AgreeMentView(store: agreeMentStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
+                
+            case .webView(let webViewStore):
+                WebViews(store: webViewStore)
+                    .navigationBarBackButtonHidden()
+                
+            case .signUpPagging(let signUpPaggingStore):
+                SignUpPagingView(store: signUpPaggingStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
+                
+            case .onBoardingPagging(let onBoardingPaggingStore):
+                OnBoadingPaggingView(store: onBoardingPaggingStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
                 
             case .editProfile(let editProfileStore):
                 EditProfileView(store: editProfileStore) {
