@@ -49,7 +49,14 @@ public struct EditProfileView: View {
                     
                     CustomButton(
                         action: {
-                            store.send(.view(.appearPopUp))
+                            store.send(.async(.updateUserInfo(
+                                nickName: store.editProfileName,
+                                year: store.profileYear ,
+                                job:  store.profileSelectedJob ?? "",
+                                generation: store.editProfileGenerationText)))
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                backAction()
+                            }
                         }, title: store.editProfileComplete,
                         config: CustomButtonConfig.create()
                         ,isEnable: store.enableButton
@@ -98,6 +105,17 @@ public struct EditProfileView: View {
                     .closeOnTapOutside(true)
                     .backgroundColor(Color.basicBlack.opacity(0.8))
             })
+            
+            .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
+                FloatingPopUpView(store: floatingPopUpStore, title: "프로필이 수정 되었습니다!", image: .succesLogout)
+            }  customize: { popup in
+                popup
+                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.02))
+                    .position(.top)
+                    .animation(.spring)
+                    .closeOnTap(true)
+                    .closeOnTapOutside(true)
+            }
         }
     }
 }

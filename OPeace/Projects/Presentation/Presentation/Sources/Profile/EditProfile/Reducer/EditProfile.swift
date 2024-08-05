@@ -50,6 +50,8 @@ public struct EditProfile {
     @Reducer(state: .equatable)
     public enum Destination {
         case customPopUp(CustomPopUp)
+        case floatingPopUP(FloatingPopUp)
+        
     }
     
     //MARK: - ViewAction
@@ -57,6 +59,7 @@ public struct EditProfile {
     public enum View {
         case selectJob(String)
         case appearPopUp
+        case appearFloatingPopUp
         case closePopUp
         case updateGenerationInfo
     }
@@ -113,6 +116,10 @@ public struct EditProfile {
                     
                 case .appearPopUp:
                     state.destination = .customPopUp(.init())
+                    return .none
+                    
+                case .appearFloatingPopUp:
+                    state.destination = .floatingPopUP(.init())
                     return .none
                     
                 case .closePopUp:
@@ -228,7 +235,7 @@ public struct EditProfile {
                             if let updateUserInfoData = updateUserInfoData {
                                 send(.async(.updateUserInfoResponse(.success(updateUserInfoData))))
                                 
-                                send(.view(.closePopUp))
+                                send(.view(.appearFloatingPopUp))
                             }
                             
                         case .failure(let error):

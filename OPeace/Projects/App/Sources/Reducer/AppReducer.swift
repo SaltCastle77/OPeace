@@ -71,7 +71,7 @@ public struct AppReducer {
                  
                 case .presntView:
                     return .run { @MainActor send in
-                        try await self.clock.sleep(for: .seconds(6))
+                        try await self.clock.sleep(for: .seconds(4))
                          send(.view(.splash(.presentRootView)), animation: .easeOut(duration: 1))
                         send(.view(.presentRootView))
                     }

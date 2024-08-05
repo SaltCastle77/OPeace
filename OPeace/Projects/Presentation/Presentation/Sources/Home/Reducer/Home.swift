@@ -43,7 +43,7 @@ public struct Home {
     @Reducer(state: .equatable)
     public enum Destination {
         case customPopUp(CustomPopUp)
-        case floatintPopUp(FloatingPopUp)
+        case floatingPopUP(FloatingPopUp)
         
     }
     
@@ -109,7 +109,7 @@ public struct Home {
                     }
                     
                 case .presntFloatintPopUp:
-                    state.destination = .floatintPopUp(.init())
+                    state.destination = .floatingPopUP(.init())
                     return .none
                 }
                 

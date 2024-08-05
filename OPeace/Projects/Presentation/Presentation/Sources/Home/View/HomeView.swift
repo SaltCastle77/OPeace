@@ -63,7 +63,7 @@ public struct HomeView: View {
                 .backgroundColor(Color.basicBlack.opacity(0.8))
         }
         
-        .popup(item: $store.scope(state: \.destination?.floatintPopUp, action: \.destination.floatintPopUp)) { floatingPopUpStore in
+        .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
             FloatingPopUpView(store: floatingPopUpStore, title: "로그아웃 되었어요", image: .succesLogout)
             
         }  customize: { popup in
@@ -88,7 +88,7 @@ extension HomeView {
             HStack {
                 Spacer()
                 
-                if store.isLogin == true {
+                if store.isLogin == true || store.isLookAround == true {
                     Circle()
                         .fill(Color.gray500)
                         .frame(width: 40, height: 40)
@@ -105,7 +105,7 @@ extension HomeView {
                         .onTapGesture {
                             store.send(.view(.prsentLoginPopUp))
                         }
-                } else if store.isLookAround == false {
+                } else {
                     Circle()
                         .fill(Color.gray500)
                         .frame(width: 40, height: 40)
