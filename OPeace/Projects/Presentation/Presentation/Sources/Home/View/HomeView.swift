@@ -31,10 +31,10 @@ public struct HomeView: View {
                 Spacer()
             }
             .onAppear {
-                guard let lastLogin = try? Keychain().get("LastLogin") else { return }
-                print("lastlogin: \(lastLogin)")
-                if store.isLogin == true {
+                if store.isLogin == true  {
                     store.send(.view(.presntFloatintPopUp))
+                } else if store.isLookAround == true {
+                    
                 }
             }
 
@@ -88,46 +88,40 @@ extension HomeView {
             HStack {
                 Spacer()
                 
-                if let lastLogin = try? Keychain().get("LastLogin") {
-                    if lastLogin != "" {
-                        Circle()
-                            .fill(Color.gray500)
-                            .frame(width: 40, height: 40)
-                            .overlay {
-                                VStack{
-                                    Image(systemName: store.profileImage)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 15, height: 16)
-                                        .foregroundStyle(Color.gray200)
-                                        
-                                }
+                if store.isLogin == true {
+                    Circle()
+                        .fill(Color.gray500)
+                        .frame(width: 40, height: 40)
+                        .overlay {
+                            VStack{
+                                Image(systemName: store.profileImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 15, height: 16)
+                                    .foregroundStyle(Color.gray200)
+                                    
                             }
-                            .onTapGesture {
-                                store.send(.view(.prsentLoginPopUp))
+                        }
+                        .onTapGesture {
+                            store.send(.view(.prsentLoginPopUp))
+                        }
+                } else if store.isLookAround == false {
+                    Circle()
+                        .fill(Color.gray500)
+                        .frame(width: 40, height: 40)
+                        .overlay {
+                            VStack{
+                                Image(systemName: store.profileImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 15, height: 16)
+                                    .foregroundStyle(Color.gray200)
+                                    
                             }
-                    } else if lastLogin == "" {
-                        Circle()
-                            .fill(Color.gray500)
-                            .frame(width: 40, height: 40)
-                            .overlay {
-                                VStack{
-                                    Image(systemName: store.profileImage)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 15, height: 16)
-                                        .foregroundStyle(Color.gray200)
-                                        
-                                }
-                            }
-                            .onTapGesture {
-                                store.send(.navigation(.presntProfile))
-                            }
-                    }
-                    else {
-                        
-                    }
-                    
+                        }
+                        .onTapGesture {
+                            store.send(.navigation(.presntProfile))
+                        }
                 }
             }
             .padding(.horizontal, 16)

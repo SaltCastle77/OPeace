@@ -111,6 +111,10 @@ public struct Auth {
                     state.path.append(.home(.init()))
                     return .none
                     
+                case .element(id: _, action: .login(.navigation(.presntLookAround))):
+                    state.path.append(.home(.init()))
+                    return .none
+                    
                 case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
                     state.path.append(.onBoardingPagging(.init()))
                     return .none

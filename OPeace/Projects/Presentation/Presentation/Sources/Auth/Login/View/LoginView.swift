@@ -154,17 +154,7 @@ extension LoginView {
                 .foregroundStyle(Color.gray300)
                 .underline(true ,color: Color.gray300)
                 .onTapGesture {
-                    store.send(.navigation(.presentMain))
-//                    UserApi.shared.unlink {(error) in
-//                        if let error = error {
-//                            Log.debug("토크 에러", error.localizedDescription)
-//                        }
-//                        else {
-////                            completionHandler()
-//                            Log.debug("카카오 토큰 삭제")
-//                            store.send(.navigation(.presentMain))
-//                        }
-//                    }
+                    store.send(.navigation(.presntLookAround))
                 }
             
             Spacer()

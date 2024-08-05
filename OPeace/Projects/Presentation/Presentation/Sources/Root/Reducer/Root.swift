@@ -30,7 +30,7 @@ public struct Root {
         public init() {
 //            self = .auth(.init())
             
-            if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty || !token.isEmpty {
+            if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty && !token.isEmpty {
                 Log.debug(token, "refresh : \(refreshToken)")
                 self = .homeRoot(.init())
             } else {

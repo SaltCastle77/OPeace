@@ -7,7 +7,7 @@ import KeychainAccess
 @main
 struct OpeaceApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @State var isFirstUseApp = UserDefaults.standard.string(forKey: "isFirstTimeUser")
+    @State var isFirstUseApp = UserDefaults.standard.bool(forKey: "isFirstTimeUser")
     
     init() {
         registerDependencies()

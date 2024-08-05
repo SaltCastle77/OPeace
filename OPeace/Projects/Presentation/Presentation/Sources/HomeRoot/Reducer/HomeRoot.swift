@@ -84,6 +84,8 @@ public struct HomeRoot {
                 case .element(id: _, action: .login(.navigation(.presentMain))):
                     state.path.append(.home(.init()))
                     
+                case .element(id: _, action: .login(.navigation(.presntLookAround))):
+                    state.path.append(.home(.init()))
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
                     state.path.append(.editProfile(.init()))
@@ -105,10 +107,6 @@ public struct HomeRoot {
                     
                 case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
                     state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
-                    
-                    
-                case .element(id: _, action: .login(.navigation(.presentMain))):
-                    state.path.append(.home(.init()))
                     
                     
                 case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):

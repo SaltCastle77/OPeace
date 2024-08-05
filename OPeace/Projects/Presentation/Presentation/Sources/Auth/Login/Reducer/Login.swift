@@ -78,6 +78,7 @@ public struct Login {
     public enum NavigationAction: Equatable {
         case presnetAgreement
         case presentMain
+        case presntLookAround
     }
     
     
@@ -199,13 +200,13 @@ public struct Login {
                         try? Keychain().set(socialTypeValue, key: "socialType")
                         if state.kakaoModel?.data?.accessToken != "" {
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
-                            try? Keychain().set( "", key: "LastLogin")
                             UserDefaults.standard.set(false, forKey: "isLogOut")
+                            UserDefaults.standard.set(true, forKey: "isLookAround")
                         } else {
                             try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
-                            try? Keychain().set( "", key: "LastLogin")
                             UserDefaults.standard.set(false, forKey: "isLogOut")
+                            UserDefaults.standard.set(true, forKey: "isLookAround")
                         }
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
@@ -229,7 +230,7 @@ public struct Login {
                                 if fetchUserResult.data?.nickname != nil && fetchUserResult.data?.year != nil && fetchUserResult.data?.job != nil {
                                     send(.navigation(.presentMain))
                                 } else {
-                                     UserDefaults.standard.set("true", forKey: "isFirstTimeUser")
+                                    UserDefaults.standard.set(true, forKey: "isFirstTimeUser")
                                     send(.navigation(.presnetAgreement))
                                 }
                                 
@@ -292,7 +293,11 @@ public struct Login {
                     return .none
                     
                 case .presentMain:
-                    try? Keychain().set("1", key: "LastLogin")
+                    return .none
+                    
+                case .presntLookAround:
+                    UserDefaults.standard.set(true, forKey: "isLookAround")
+                    UserDefaults.standard.set(false, forKey: "isLogOut")
                     return .none
                 }
             }

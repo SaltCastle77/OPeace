@@ -22,6 +22,7 @@ public struct Home {
         var profileImage: String = "person.fill"
         var profile = Profile.State()
         var isLogin = UserDefaults.standard.bool(forKey: "isLogOut")
+        var isLookAround =  UserDefaults.standard.bool(forKey: "isLookAround")
         @Presents var destination: Destination.State?
         var loginTiltle: String = "로그인을 해야 다른 기능을 사용하실 수 있습니다. "
         
