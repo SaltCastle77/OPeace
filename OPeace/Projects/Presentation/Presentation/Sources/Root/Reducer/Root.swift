@@ -26,8 +26,11 @@ public struct Root {
         case signUpPAgging(SignUpPaging.State)
         case profile(Profile.State)
         static var kakaoModel : KakaoResponseModel? = nil
+        static var checkUserVerifyModel: CheckUserVerifyModel? = nil
+        static var refreshTokenModel: RefreshModel? = nil
         
         public init() {
+            
 //            self = .auth(.init())
             
             if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty && !token.isEmpty {
@@ -71,6 +74,12 @@ public struct Root {
         
         case loginWIthKakao
         case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
+        
+        case refreshTokenResponse(Result<RefreshModel, CustomError>)
+        case refreshTokenRequest(refreshToken: String)
+        
+        case checkUserVerfiy
+        case checkUserVerfiyResponse(Result<CheckUserVerifyModel , CustomError>)
         
     }
     
@@ -118,32 +127,37 @@ public struct Root {
                 switch AsyncAction {
                 case .autoLogin:
                     guard let socailType = try? Keychain().get("socialType") else { return .none }
-//                    nonisolated(unsafe) var kakaoLogin = state.auth?.login.kakaoModel?.data
-                    var kakaoLogin = state.auth?.login.kakaoModel?.data
-                    
                     return .run { @MainActor send in
                         switch socailType {
                         case "kakao":
 //                            try await clock.sleep(for: .seconds(1))
                             if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
                                 if refreshToken != nil {
+                                    send(.async(.checkUserVerfiy))
                                     send(.async(.loginWIthKakao))
                                 }
                             }
                             
                             if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
+                                if Root.State.checkUserVerifyModel?.data?.status == false {
+                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                        send(.async(.handleRefreshToken(refreshToken)))
+                                    } else if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
+                                        send(.view(.auth(.login(.async(.kakaoLogin)))))
+                                    }
+                                }
+                                print("epdlx \(Root.State.kakaoModel?.data?.isRefreshTokenExpires)")
+                                
+                                if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
+                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
+                                }
+                                
                                 if Root.State.kakaoModel?.data?.accessToken == accessToken {
-                                    if ((Root.State.kakaoModel?.data?.accessToken?.isEmpty) == nil) {
+                                    if ((Root.State.kakaoModel?.data?.accessToken?.isEmpty) != nil && Root.State.kakaoModel?.data?.isExpires != true) {
                                         send(.view(.changeScene(.homeRoot(.init()))))
                                     } else {
                                         send(.view(.changeScene(.auth(.init()))))
                                     }
-                                } else if Root.State.kakaoModel?.data?.isExpires == true {
-                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                        send(.async(.handleRefreshToken(refreshToken)))
-                                    }
-                                } else if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
-                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
                                 }
                             }
                             
@@ -172,11 +186,6 @@ public struct Root {
                     switch data {
                     case .success(let ResponseData):
                         Root.State.kakaoModel = ResponseData
-                        try? Keychain().set( "", key: "LastLogin")
-//                        try? Keychain().remove("ACCESS_TOKEN")
-//                        try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
-//                        try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
-                        
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
                         
@@ -193,12 +202,77 @@ public struct Root {
                         case .success(let resopnse):
                             if let responseData = resopnse {
                                 send(.async(.kakaoLoginApiResponse(.success(responseData))))
+                                
+                                if responseData.data?.isExpires == true && responseData.data?.isRefreshTokenExpires == true {
+                                    send(.async(.refreshTokenRequest(refreshToken: responseData.data?.refreshToken ?? "")))
+                                    
+                                }
                             }
                             
                         case .failure(let error):
                             send(.async(.kakaoLoginApiResponse(.failure(CustomError.map(error)))))
                         }
                     }
+                    
+                case .checkUserVerfiy:
+                    return .run { @MainActor send in
+                        let checkUserVerifyResult = await Result {
+                            try await authUseCase.checkUserVerify()
+                        }
+                        
+                        switch checkUserVerifyResult {
+                        case .success(let checkUserVerifyResult):
+                            if let responseData = checkUserVerifyResult {
+                                send(.async(.checkUserVerfiyResponse(.success(responseData))))
+                                
+                                send(.async(.loginWIthKakao))
+                            }
+                        case .failure(let error):
+                            send(.async(.checkUserVerfiyResponse(.failure(CustomError.tokenError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                case .checkUserVerfiyResponse(let result):
+                    switch result{
+                    case .success(let ResponseData):
+                        Root.State.checkUserVerifyModel = ResponseData
+                        
+                    case .failure(let error):
+                        Log.network("토큰 에러", error.localizedDescription)
+                    }
+                    return .none
+                
+                case .refreshTokenRequest(let refreshToken):
+                    return .run { @MainActor send in
+                        let refreshTokenRequest =  await Result {
+                            try await authUseCase.requestRefreshToken(refreshToken: refreshToken)
+                        }
+                        
+                        switch refreshTokenRequest {
+                        case .success(let refreshTokenData):
+                            if let refreshTokenData = refreshTokenData {
+                                send(.async(.refreshTokenResponse(.success(refreshTokenData))))
+                            }
+                        case .failure(let error):
+                            send(.async(.refreshTokenResponse(.failure(CustomError.map(error)))))
+                        }
+                        
+                    }
+                    
+                case .refreshTokenResponse(let result):
+                    switch result {
+                    case .success(let refreshTokenData):
+                        Root.State.refreshTokenModel = refreshTokenData
+                        Log.network("리프레쉬 토큰 발급", refreshTokenData)
+                        Log.network("refershToken", refreshTokenData)
+                        try? Keychain().set(Root.State.refreshTokenModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                        try? Keychain().set(Root.State.refreshTokenModel?.data?.accessToken ?? "", key: "ACCESS_TOKEN")
+                        
+                    case .failure(let error):
+                        Log.network("리프레쉬 토큰 발급 에러", error.localizedDescription)
+                    }
+                    return .none
+                    
                 }
                 
                 

@@ -19,4 +19,5 @@ public protocol AuthRepositoryProtocol {
     func logoutUser(refreshToken : String) async throws -> UserLogOutModel?
     func autoLogin() async throws -> UseLoginModel?
     func deleteUser() async throws -> DeleteUserModel?
+    func checkUserVerify() async throws -> CheckUserVerifyModel?
 }

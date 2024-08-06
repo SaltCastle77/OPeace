@@ -57,4 +57,8 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     public func deleteUser() async throws -> DeleteUserModel?{
         return nil
     }
+    
+    public func checkUserVerify() async throws -> CheckUserVerifyModel? {
+        return nil
+    }
 }

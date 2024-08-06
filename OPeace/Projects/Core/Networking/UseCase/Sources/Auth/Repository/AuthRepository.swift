@@ -210,6 +210,10 @@ import Model
         return try await provider.requestAsync(.deleteUser, decodeTo: DeleteUserModel.self)
     }
 
+    //MARK: - 유저 토큰 확인
+    public func checkUserVerify() async throws -> CheckUserVerifyModel? {
+        return try await provider.requestAsync(.userVerify, decodeTo: CheckUserVerifyModel.self)
+    }
 }
 
 

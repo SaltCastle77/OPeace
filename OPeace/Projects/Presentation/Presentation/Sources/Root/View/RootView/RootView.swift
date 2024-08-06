@@ -18,6 +18,8 @@ public struct RootView: View {
         store: StoreOf<Root>
     ) {
         self.store = store
+        
+        store.send(.async(.autoLogin))
     }
     
     public var body: some View {

@@ -83,7 +83,7 @@ public struct ProfileView: View {
             
             .popup(item: $store.scope(state: \.destination?.deletePopUp, action: \.destination.deletePopUp)) { customPopUp in
                 CustomBasicPopUpView(store: customPopUp, title: store.deletePopUpTitle) {
-//                    store.send(.async(.deleteUser))
+                    store.send(.async(.deleteUser))
                 } cancelAction: {
                     store.send(.view(.closeModal))
                 }

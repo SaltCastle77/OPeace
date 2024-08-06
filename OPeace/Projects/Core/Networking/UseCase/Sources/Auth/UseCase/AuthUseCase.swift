@@ -66,12 +66,17 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     public func deleteUser() async throws -> DeleteUserModel? {
         try await repository.deleteUser()
     }
+    
+    //MARK: - 유저 토큰 확인
+    public func checkUserVerify() async throws -> CheckUserVerifyModel? {
+        try await repository.checkUserVerify()
+    }
 }
 
 
 extension AuthUseCase: DependencyKey {
     public static let liveValue: AuthUseCase = {
         let authRepository = DependencyContainer.live.resolve(AuthRepositoryProtocol.self) ?? DefaultAuthRepository()
-         return AuthUseCase(repository: authRepository)
-       }()
+        return AuthUseCase(repository: authRepository)
+    }()
 }

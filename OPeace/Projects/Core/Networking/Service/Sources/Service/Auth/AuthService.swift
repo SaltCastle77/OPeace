@@ -18,6 +18,7 @@ public enum AuthService {
     case logoutUser(refreshToken: String)
     case autoLogin
     case deleteUser
+    case userVerify
 }
 
 extension AuthService: BaseTargetType {
@@ -43,6 +44,9 @@ extension AuthService: BaseTargetType {
             
         case .deleteUser:
             return AuthAPI.deleteUser.authAPIDesc
+            
+        case .userVerify:
+            return AuthAPI.userVerify.authAPIDesc
         }
     }
     
@@ -68,6 +72,9 @@ extension AuthService: BaseTargetType {
             
         case .deleteUser:
             return .delete
+            
+        case .userVerify:
+            return .post
         }
     }
     
@@ -86,7 +93,7 @@ extension AuthService: BaseTargetType {
             let parameters: [String: Any] = [
                 "refresh_token": refreshToken
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
         case .fetchUserInfo:
             return .requestPlain
@@ -103,10 +110,16 @@ extension AuthService: BaseTargetType {
             
         case .deleteUser:
             let parameters: [String: Any] = [
-                 :
-                ]
+                "reason" : "그냥"
+            ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.prettyPrinted)
+            
+        case .userVerify:
+            let parameters: [String: Any] = [ : ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            
         }
+        
     }
     
     public var headers: [String : String]? {

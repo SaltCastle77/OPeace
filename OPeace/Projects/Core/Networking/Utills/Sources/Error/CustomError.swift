@@ -14,6 +14,7 @@ public enum CustomError: Error, Equatable {
     case internalServer
     case responseBodyEmpty
     case decodeFailed
+    case tokenError(String)
     case kakaoTokenError(String)
     case invalidURL
     case invalidEventId
@@ -44,6 +45,8 @@ extension CustomError: LocalizedError {
             return "알 수 없는 eventId 입니다"
         case .unknownError:
             return "원인을 알 수 없는 에러 발생"
+        case .tokenError(let message):
+            return "토큰 만료 에러 발생: \(message)"
         case .firestoreError(let message):
             return "파이어 베이스 에러 발생: \(message)"
         case .encodingError(let message):
@@ -74,6 +77,8 @@ extension CustomError: LocalizedError {
         case .invalidEventId:
             return "개발팀에게 문의해주세요"
         case .unknownError:
+            return "개발팀에게 문의해주세요"
+        case .tokenError(_):
             return "개발팀에게 문의해주세요"
         case .firestoreError(_):
             return "개발팀에게 문의해주세요"
