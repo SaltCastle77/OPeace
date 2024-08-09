@@ -120,7 +120,7 @@ extension LoginView {
                         store.send(.async(.appleLogin(result)))
                         completion()
                     }
-                    .frame(width: 60, height: 60)
+                    .frame(width: 50, height: 50)
                     .clipShape(Circle())
                     .blendMode(.overlay)
                 }

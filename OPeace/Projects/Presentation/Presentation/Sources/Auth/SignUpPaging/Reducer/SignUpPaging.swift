@@ -164,7 +164,7 @@ public struct SignUpPaging {
                                 send(.view(.closePopUp))
                              
                                 try await clock.sleep(for: .seconds(1))
-                                if updateUserInfoData.data?.isFirstLogin == true {
+                                if updateUserInfoData.data?.isFirstLogin == false {
                                     send(.navigation(.presntOnboarding))
                                 } else {
                                     send(.navigation(.presntMainHome))

@@ -186,6 +186,8 @@ public struct Root {
                     switch data {
                     case .success(let ResponseData):
                         Root.State.kakaoModel = ResponseData
+                        UserDefaults.standard.set(false, forKey: "isLogOut")
+                        UserDefaults.standard.set(false, forKey: "isDeleteUser")
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
                         

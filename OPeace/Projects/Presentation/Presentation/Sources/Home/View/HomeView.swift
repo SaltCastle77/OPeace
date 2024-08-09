@@ -33,7 +33,14 @@ public struct HomeView: View {
             .onAppear {
                 if store.isLogin == true  {
                     store.send(.view(.presntFloatintPopUp))
+                    store.floatingText = "로그아웃 되었어요"
                 } else if store.isLookAround == true {
+                    store.floatingText = "로그인 해주세요"
+                } else if store.isDeleteUser == true  {
+                    store.send(.view(.presntFloatintPopUp))
+                    store.floatingText = "탈퇴 완료! 언젠가 다시 만나요"
+                } else {
+                    store.floatingText = "로그아웃 되었어요"
                     
                 }
             }
@@ -43,7 +50,7 @@ public struct HomeView: View {
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
             CustomBasicPopUpView(
                 store: customPopUp,
-                title: "로그인 해주세요!") {
+                title: store.floatingText) {
                     store.send(.view(.closePopUp))
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         store.send(.navigation(.presntLogin))
@@ -64,7 +71,7 @@ public struct HomeView: View {
         }
         
         .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
-            FloatingPopUpView(store: floatingPopUpStore, title: "로그아웃 되었어요", image: .succesLogout)
+            FloatingPopUpView(store: floatingPopUpStore, title: store.floatingText.isEmpty ? "로그아웃 되었어요" : store.floatingText, image: .succesLogout)
             
         }  customize: { popup in
             popup
@@ -88,7 +95,7 @@ extension HomeView {
             HStack {
                 Spacer()
                 
-                if store.isLogin == true || store.isLookAround == true {
+                if store.isLogin == true || store.isLookAround == true || store.isDeleteUser == true {
                     Circle()
                         .fill(Color.gray500)
                         .frame(width: 40, height: 40)

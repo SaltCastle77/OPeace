@@ -143,7 +143,7 @@ public struct Login {
                         case .success(let (accessToken, idToken)):
                             send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
                             
-                            try await clock.sleep(for: .seconds(2))
+                            try await clock.sleep(for: .seconds(1))
                             send(.async(.loginWIthKakao))
                             
                         case let .failure(error):
@@ -167,8 +167,7 @@ public struct Login {
                     return .none
                     
                 case .loginWIthKakao:
-                    var errorMessgage = state.error
-                    guard let accessToken = try? Keychain().get("ACCESS_TOKEN") else { return .none }
+
                     return .run { @MainActor send in
                         let kakaoRequest = await Result {
                             try await authUseCase.reauestKakaoLogin()
@@ -185,7 +184,6 @@ public struct Login {
                             
                         case .failure(let error):
                             send(.async(.kakaoLoginApiResponse(.failure(CustomError.kakaoTokenError(error.localizedDescription)))))
-                            errorMessgage = CustomError.kakaoTokenError(error.localizedDescription).recoverySuggestion ?? ""
                         }
                     }
                     
@@ -201,6 +199,7 @@ public struct Login {
                         if state.kakaoModel?.data?.accessToken != "" {
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                             UserDefaults.standard.set(false, forKey: "isLogOut")
+                            UserDefaults.standard.set(false, forKey: "isDeleteUser")
                             UserDefaults.standard.set(false, forKey: "isLookAround")
                         } else {
                             try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")

@@ -8,11 +8,22 @@
 import Foundation
 
 public struct DeleteUserModel: Equatable, Codable {
-    public let data: EmptyModel?
+    public let data: DeleteUserModelResponse?
     
     public init(
-        data: EmptyModel? = nil
+        data: DeleteUserModelResponse? = nil
     ) {
         self.data = data
     }
 }
+
+public struct DeleteUserModelResponse: Codable, Equatable {
+    public let status: Bool?
+    public let message: String?
+    
+    public init(status: Bool?, message: String?) {
+        self.status = status
+        self.message = message
+    }
+}
+

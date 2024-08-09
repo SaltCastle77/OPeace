@@ -112,7 +112,7 @@ extension AuthService: BaseTargetType {
             let parameters: [String: Any] = [
                 "reason" : "그냥"
             ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.prettyPrinted)
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
         case .userVerify:
             let parameters: [String: Any] = [ : ]

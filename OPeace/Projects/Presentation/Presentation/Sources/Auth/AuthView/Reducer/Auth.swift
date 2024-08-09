@@ -88,67 +88,51 @@ public struct Auth {
             switch action {       
             case let .path(action):
                 switch action {
-                case .element(id: _, action: .root):
-                return .none
-                    
-                case .element(id: _, action: .login(.navigation(.presnetAgreement))):
-                    state.path.append(.agreeMent(.init()))
-                    return .none
-                    
-                case .element(id: _, action: .agreeMent(.navigation(.presntSignUpName))):
-                    state.path.append(.signUpPagging(.init()))
-                    return .none
-                
-                case .element(id: _, action: .agreeMent(.navigation(.presntServiceAgreeCheckTapped))):
-                    state.path.append(.webView(.init(url: AgreeMentAPI.seriveTerms.agreeMentDesc)))
-                    return .none
-                    
-                case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
-                    state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
-                    return .none
-                    
-                case .element(id: _, action: .login(.navigation(.presentMain))):
-                    state.path.append(.home(.init()))
-                    return .none
-                    
-                case .element(id: _, action: .login(.navigation(.presntLookAround))):
-                    state.path.append(.home(.init()))
-                    return .none
-                    
-                case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
-                    state.path.append(.onBoardingPagging(.init()))
-                    return .none
-                    
-                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
-                    state.path.append(.home(.init()))
-                    return .none
+//                case .element(id: _, action: .root):
+//                return .none
                     
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
                     state.path.append(.profile(.init()))
-                    return .none
-                    
+                                
                 case .element(id: _, action: .profile(.navigation(.presntLogout))):
-                    // Append the login item
-                    state.path.append(.login(.init()))
-                    // Remove all items from the stack except for the login item
-                    state.path.removeAll { element in
-                        if case .login = element {
-                            return false // Keep the login item
-                        }
-                        return true // Remove other items
-                    }
+                    state.path.append(.home(.init()))
+                    state.path.removeFirst()
+                    
+                case .element(id: _, action: .login(.navigation(.presentMain))):
+                    state.path.append(.home(.init()))
+                    
+                case .element(id: _, action: .login(.navigation(.presntLookAround))):
+                    state.path.append(.home(.init()))
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
                     state.path.append(.editProfile(.init()))
-                    return .none
                     
                 case .element(id: _, action: .home(.navigation(.presntLogin))):
                     state.path.append(.login(.init()))
-                    return .none
-//
-                    case .element(id: _, action: .signUpPagging(.navigation(.presntMainHome))):
+                    
+                case .element(id: _, action: .login(.navigation(.presnetAgreement))):
+                    state.path.append(.agreeMent(.init()))
+                    
+                    
+                case .element(id: _, action: .agreeMent(.navigation(.presntSignUpName))):
+                    state.path.append(.signUpPagging(.init()))
+                    
+                    
+                case .element(id: _, action: .agreeMent(.navigation(.presntServiceAgreeCheckTapped))):
+                    state.path.append(.webView(.init(url: AgreeMentAPI.seriveTerms.agreeMentDesc)))
+                    
+                    
+                case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
+                    state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
+                    
+                    
+                case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
+                    state.path.append(.onBoardingPagging(.init()))
+                    
+                    
+                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
                     state.path.append(.home(.init()))
-                    return .none
+                    
                     
                     
                 default:

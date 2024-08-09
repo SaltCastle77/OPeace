@@ -25,10 +25,8 @@ extension MoyaProvider {
                         throw DataError.noData
                     }
                     switch httpResponse.statusCode {
-                    case 200, 201:
+                    case 200, 201, 204:
                         return response.data
-                    case 204:
-                        return Data() // Ensure empty data for 204 No Content
                     case 400:
                         throw DataError.badRequest
                     case 404:

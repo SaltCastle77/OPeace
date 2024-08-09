@@ -13,6 +13,8 @@ struct OpeaceApp: App {
         registerDependencies()
         initializeKakao()
         isFirstApplication()
+        
+        
     }
     
     var body: some Scene {

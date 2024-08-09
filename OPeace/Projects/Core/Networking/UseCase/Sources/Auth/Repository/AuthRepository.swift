@@ -179,7 +179,7 @@ import Model
     //MARK: - 카카오 로그인 api
     public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
         let kakaoAcessToken = (try? Keychain().get("KAKAO_ACCESS_TOKEN") ?? "")
-        return try await provider.requestAsync(.kakaoLogin( accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponseModel.self)
+        return try await provider.requestAsync(.kakaoLogin(accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponseModel.self)
     }
     
     //MARK: - 토큰 재발급

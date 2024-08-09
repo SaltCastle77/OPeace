@@ -183,7 +183,7 @@ public struct Profile {
                             if let fetchUserResult = fetchUserResult {
                                 send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
                                 send(.view(.updateGenerationInfo))
-                                
+                                UserDefaults.standard.set(false, forKey: "isLogOut")
                             }
                         case .failure(let error):
                             send(.async(.fetchUserProfileResponse(.failure(CustomError.map(error)))))
@@ -248,7 +248,9 @@ public struct Profile {
                                
                                send(.view(.closePopUp))
                                try await self.clock.sleep(for: .seconds(1))
-                               send(.navigation(.presntLogout))
+                               if deleteUserData.data?.status == true {
+                                   send(.navigation(.presntLogout))
+                               }
                             }
                         case .failure(let error):
                             send(.async(.deleteUserResponse(.failure(CustomError.map(error)))))
@@ -259,10 +261,8 @@ public struct Profile {
                     switch result {
                     case .success(let userDeleteData):
                         state.userDeleteModel = userDeleteData
-                        try?  Keychain().remove("REFRESH_TOKEN")
-                        try?  Keychain().remove("ACCESS_TOKEN")
-                        try? Keychain().remove("LastLogin")
-                        try? Keychain().remove("socialType")
+                        try? Keychain().removeAll()
+                        UserDefaults.standard.set(true, forKey: "isDeleteUser")
                     case .failure(let error):
                         Log.debug("회원 탈퇴 에러", error.localizedDescription)
                     }

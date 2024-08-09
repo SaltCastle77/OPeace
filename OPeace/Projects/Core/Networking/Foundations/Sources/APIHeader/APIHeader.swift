@@ -18,30 +18,30 @@ public struct APIHeader{
     
 }
 
-extension APIHeader {
-    static func baseHeaders(_ headers: [String: String]?) -> [String: String] {
-        var baseHeaders = baseHeader
-        if let headers = headers {
-            baseHeaders.merge(headers) { $1 }
+    extension APIHeader {
+        static func baseHeaders(_ headers: [String: String]?) -> [String: String] {
+            var baseHeaders = baseHeader
+            if let headers = headers {
+                baseHeaders.merge(headers) { $1 }
+            }
+            return baseHeaders
         }
-        return baseHeaders
+        
+        public static var baseHeader: Dictionary<String, String> {
+            [
+              contentType : APIHeaderManger.shared.contentType,
+              accessToken : accessTokenKeyChain ?? "",
+              accepot: APIHeaderManger.shared.contentType
+            ]
+        }
+        
+        public static var notAccessTokenHeader: Dictionary<String, String> {
+            [
+              contentType : APIHeaderManger.shared.contentType,
+    //          accessToken : "Bearer \(accessTokenKeyChain ?? "")",
+              accepot: APIHeaderManger.shared.contentType
+            ]
+        }
+        
     }
-    
-    public static var baseHeader: Dictionary<String, String> {
-        [
-          contentType : APIHeaderManger.shared.contentType,
-          accessToken : accessTokenKeyChain ?? "",
-          accepot: APIHeaderManger.shared.contentType
-        ]
-    }
-    
-    public static var notAccessTokenHeader: Dictionary<String, String> {
-        [
-          contentType : APIHeaderManger.shared.contentType,
-//          accessToken : "Bearer \(accessTokenKeyChain ?? "")",
-          accepot: APIHeaderManger.shared.contentType
-        ]
-    }
-    
-}
 
