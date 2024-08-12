@@ -37,6 +37,7 @@ public struct Profile {
         @Presents var destination: Destination.State?
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
+        @Shared(.inMemory("_isChangeProfile")) var isChangeProfile: Bool = false
         
         public init() {}
     }
@@ -107,6 +108,7 @@ public struct Profile {
                 return .none
                 
             case .scopeFetchUser:
+                state.isChangeProfile = false
                 return .run { @MainActor send in
                     send(.async(.fetchUser))
                 }
@@ -197,6 +199,7 @@ public struct Profile {
                     case .success(let resultData):
                         state.profileUserModel = resultData
                         state.profileGenerationYear =  state.profileUserModel?.data?.year
+                        state.isChangeProfile = false
                     case let .failure(error):
                         Log.network("프로필 오류", error.localizedDescription)
                     }
@@ -208,7 +211,7 @@ public struct Profile {
                         state.userLogoutModel = userData
                         Log.debug("유저 로그아웃 성공", userData)
                         state.isLogOut = true
-                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser))
+                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile))
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }

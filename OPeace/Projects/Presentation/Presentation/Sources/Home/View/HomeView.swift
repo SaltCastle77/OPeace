@@ -46,6 +46,7 @@ public struct HomeView: View {
                     store.send(.view(.presntFloatintPopUp))
                     store.floatingText = "수정이 완료되었어요!"
                     store.send(.view(.timeToCloseFloatingPopUp))
+                    store.isChangeProfile = false
                 } else {
                     store.floatingText = "로그인 해주세요"
                 }
