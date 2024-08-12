@@ -73,6 +73,14 @@ public struct AuthView: View {
             case .editProfile(let editProfileStore):
                 EditProfileView(store: editProfileStore) {
                     store.send(.inner(.removePath))
+                } backToHomeAction: {
+                    store.send(.inner(.removeToHome))
+                }
+                .navigationBarBackButtonHidden()
+                
+            case .withDraw(let withDrawStore):
+                WithDrawView(store: withDrawStore) {
+                    store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
                 

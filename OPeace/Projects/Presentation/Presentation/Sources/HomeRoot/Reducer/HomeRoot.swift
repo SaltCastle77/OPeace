@@ -20,6 +20,10 @@ public struct HomeRoot {
         public init() {}
         var path = StackState<Path.State>()
         var home = Home.State()
+        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
+        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
+        @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
+        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
     }
     
     public enum Action : ViewAction, FeatureAction {
@@ -41,6 +45,7 @@ public struct HomeRoot {
         case signUpPagging(SignUpPaging)
         case webView(Web)
         case onBoardingPagging(OnBoadingPagging)
+        case withDraw(WithDraw)
     }
     
     //MARK: - ViewAction
@@ -58,6 +63,7 @@ public struct HomeRoot {
     public enum InnerAction: Equatable {
         case removePath
          case removeAllPath
+        case removeToHome
     }
     
     //MARK: - NavigationAction
@@ -78,14 +84,26 @@ public struct HomeRoot {
                     state.path.append(.profile(.init()))
                                 
                 case .element(id: _, action: .profile(.navigation(.presntLogout))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile)))
                     state.path.removeFirst()
                     
                 case .element(id: _, action: .login(.navigation(.presentMain))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile)))
                     
                 case .element(id: _, action: .login(.navigation(.presntLookAround))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile)))
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
                     state.path.append(.editProfile(.init()))
@@ -114,10 +132,32 @@ public struct HomeRoot {
                     
                     
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround)))
                     
                 case .element(id: _, action: .signUpPagging(.navigation(.presntMainHome))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile)))
+                    
+                case .element(id: _, action: .profile(.navigation(.presntWithDraw))):
+                    state.path.append(.withDraw(.init()))
+                    
+                case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw:
+                            // Remove if the path is either .edit or .profile
+                            return true
+                        default:
+                            return false
+                        }
+                    }
+                    
                     
                 default:
                     return .none
@@ -145,6 +185,18 @@ public struct HomeRoot {
                     
                 case .removeAllPath:
                     state.path.removeAll()
+                    return .none
+                    
+                case .removeToHome:
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw:
+                            // Remove if the path is either .edit or .profile
+                            return true
+                        default:
+                            return false
+                        }
+                    }
                     return .none
                 }
                 

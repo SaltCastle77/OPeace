@@ -17,7 +17,7 @@ public enum AuthService {
     case fetchUserInfo
     case logoutUser(refreshToken: String)
     case autoLogin
-    case deleteUser
+    case deleteUser(reason: String)
     case userVerify
 }
 
@@ -108,9 +108,9 @@ extension AuthService: BaseTargetType {
             let parameters: [String: Any] = [:]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
-        case .deleteUser:
+        case .deleteUser(let reason):
             let parameters: [String: Any] = [
-                "reason" : "그냥"
+                "reason" : reason
             ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             

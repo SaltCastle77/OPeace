@@ -31,35 +31,42 @@ public struct HomeView: View {
                 Spacer()
             }
             .onAppear {
-                if store.isLogin == true  {
+                print("shared: \(store.isChangeProfile)")
+                if store.isLogOut == true  {
                     store.send(.view(.presntFloatintPopUp))
                     store.floatingText = "로그아웃 되었어요"
+                    store.send(.view(.timeToCloseFloatingPopUp))
                 } else if store.isLookAround == true {
                     store.floatingText = "로그인 해주세요"
                 } else if store.isDeleteUser == true  {
                     store.send(.view(.presntFloatintPopUp))
                     store.floatingText = "탈퇴 완료! 언젠가 다시 만나요"
+                    store.send(.view(.timeToCloseFloatingPopUp))
+                } else if store.isChangeProfile == true {
+                    store.send(.view(.presntFloatintPopUp))
+                    store.floatingText = "수정이 완료되었어요!"
+                    store.send(.view(.timeToCloseFloatingPopUp))
                 } else {
-                    store.floatingText = "로그아웃 되었어요"
-                    
+                    store.floatingText = "로그인 해주세요"
                 }
             }
 
         }
         
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
-            CustomBasicPopUpView(
-                store: customPopUp,
-                title: store.floatingText) {
-                    store.send(.view(.closePopUp))
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        store.send(.navigation(.presntLogin))
-                    }
+            if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                CustomBasicPopUpView(
+                    store: customPopUp,
+                    title: "로그인 해주세요!") {
+                        store.send(.view(.closePopUp))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            store.send(.navigation(.presntLogin))
+                        }
 
-            } cancelAction: {
-                store.send(.view(.closePopUp))
+                } cancelAction: {
+                    store.send(.view(.closePopUp))
+                }
             }
-            
         }  customize: { popup in
             popup
                 .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
@@ -95,7 +102,7 @@ extension HomeView {
             HStack {
                 Spacer()
                 
-                if store.isLogin == true || store.isLookAround == true || store.isDeleteUser == true {
+                if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                     Circle()
                         .fill(Color.gray500)
                         .frame(width: 40, height: 40)

@@ -206,8 +206,8 @@ import Model
     }
     
     //MARK: - 회원 탈퇴
-    public func deleteUser() async throws -> DeleteUserModel?  {
-        return try await provider.requestAsync(.deleteUser, decodeTo: DeleteUserModel.self)
+    public func deleteUser(reason: String) async throws -> DeleteUserModel?  {
+        return try await provider.requestAsync(.deleteUser(reason: reason), decodeTo: DeleteUserModel.self)
     }
 
     //MARK: - 유저 토큰 확인

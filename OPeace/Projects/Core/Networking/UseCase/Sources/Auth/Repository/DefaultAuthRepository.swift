@@ -54,7 +54,7 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
         return nil
     }
     
-    public func deleteUser() async throws -> DeleteUserModel?{
+    public func deleteUser(reason: String) async throws -> DeleteUserModel?{
         return nil
     }
     

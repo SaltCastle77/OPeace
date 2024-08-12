@@ -18,15 +18,28 @@ public struct Home {
     
     @ObservableState
     public struct State: Equatable {
-        public init() {}
+        
         var profileImage: String = "person.fill"
         var profile = Profile.State()
-        var isLogin = UserDefaults.standard.bool(forKey: "isLogOut")
-        var isDeleteUser = UserDefaults.standard.bool(forKey: "isDeleteUser")
-        var isLookAround =  UserDefaults.standard.bool(forKey: "isLookAround")
+        @Shared var isLogOut: Bool
+        @Shared var isDeleteUser: Bool
+        @Shared var isLookAround: Bool
+        @Shared var isChangeProfile: Bool
         @Presents var destination: Destination.State?
         var loginTiltle: String = "로그인을 해야 다른 기능을 사용하실 수 있습니다. "
         var floatingText: String = ""
+        
+        public init(
+            isLogOut: Bool = false,
+            isDeleteUser: Bool = false,
+            isLookAround: Bool = false,
+            isChangeProfile: Bool = false
+        ) {
+            self._isLogOut = Shared(wrappedValue: isLogOut, .inMemory("isLogOut"))
+            self._isDeleteUser = Shared(wrappedValue: isDeleteUser, .inMemory("isDeleteUser"))
+            self._isLookAround = Shared(wrappedValue: isLookAround, .inMemory("isLookAround"))
+            self._isChangeProfile = Shared(wrappedValue: isChangeProfile, .inMemory("isChangeProfile"))
+        }
         
     }
     
@@ -56,7 +69,7 @@ public struct Home {
         case prsentLoginPopUp
         case presntFloatintPopUp
         case closePopUp
-        case isLogoutCheckPopUp
+        case timeToCloseFloatingPopUp
     }
     
   
@@ -77,6 +90,8 @@ public struct Home {
         case presntLogin
     
     }
+    
+    @Dependency(\.continuousClock) var clock
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -101,18 +116,16 @@ public struct Home {
                     state.destination = nil
                     return .none
                     
-                case .isLogoutCheckPopUp:
-                    guard let lastLogin = try? Keychain().get("LastLogin") else { return .none }
-                    print("lastlogin: \(lastLogin)")
-                    return .run { @MainActor send in
-                        if !lastLogin.isEmpty {
-                            send(.view(.presntFloatintPopUp))
-                        }
-                    }
                     
                 case .presntFloatintPopUp:
                     state.destination = .floatingPopUP(.init())
                     return .none
+                    
+                case .timeToCloseFloatingPopUp:
+                    return .run { send in
+                        try await clock.sleep(for: .seconds(1.5))
+                        await send(.view(.closePopUp))
+                    }
                 }
                 
             case .async(let AsyncAction):

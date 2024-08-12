@@ -74,9 +74,18 @@ public struct HomeRootView: View {
             case .editProfile(let editProfileStore):
                 EditProfileView(store: editProfileStore) {
                     store.send(.inner(.removePath))
+                } backToHomeAction: {
+                    store.send(.inner(.removeToHome))
                 }
                 .navigationBarBackButtonHidden()
                 
+            case .withDraw(let withDrawStore):
+                WithDrawView(store: withDrawStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
+
+
             }
         }
         .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in

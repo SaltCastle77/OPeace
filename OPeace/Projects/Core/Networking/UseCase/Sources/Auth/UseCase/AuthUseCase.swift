@@ -63,8 +63,8 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     //MARK: - 회원탈퇴
-    public func deleteUser() async throws -> DeleteUserModel? {
-        try await repository.deleteUser()
+    public func deleteUser(reason: String) async throws -> DeleteUserModel? {
+        try await repository.deleteUser(reason: reason)
     }
     
     //MARK: - 유저 토큰 확인

@@ -39,6 +39,10 @@ public struct Login {
         var socialType: SocialType? = nil
         var profileUserModel: UpdateUserInfoModel? = nil
         var refreshTokenModel: RefreshModel?
+        @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
+        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
+        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
+        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -198,14 +202,17 @@ public struct Login {
                         try? Keychain().set(socialTypeValue, key: "socialType")
                         if state.kakaoModel?.data?.accessToken != "" {
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
-                            UserDefaults.standard.set(false, forKey: "isLogOut")
-                            UserDefaults.standard.set(false, forKey: "isDeleteUser")
-                            UserDefaults.standard.set(false, forKey: "isLookAround")
+                            state.isLogOut = false
+                            state.isLookAround = false
+                            state.isDeleteUser = false
+                            state.isChangeProfile = false
                         } else {
                             try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                             try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
-                            UserDefaults.standard.set(false, forKey: "isLogOut")
-                            UserDefaults.standard.set(false, forKey: "isLookAround")
+                            state.isLogOut = false
+                            state.isLookAround = false
+                            state.isDeleteUser = false
+                            state.isChangeProfile = false
                         }
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
@@ -295,8 +302,7 @@ public struct Login {
                     return .none
                     
                 case .presntLookAround:
-                    UserDefaults.standard.set(true, forKey: "isLookAround")
-                    UserDefaults.standard.set(false, forKey: "isLogOut")
+                    state.isLookAround = true
                     return .none
                 }
             }

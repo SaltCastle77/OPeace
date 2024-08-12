@@ -29,6 +29,9 @@ public struct Root {
         static var checkUserVerifyModel: CheckUserVerifyModel? = nil
         static var refreshTokenModel: RefreshModel? = nil
         
+//        @Shared(.inMemory("isLogOut"))  var isLogOut: Bool = false
+//        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
+        
         public init() {
             
 //            self = .auth(.init())
@@ -185,9 +188,11 @@ public struct Root {
                 case .kakaoLoginApiResponse(let data):
                     switch data {
                     case .success(let ResponseData):
+                        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
+                        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
                         Root.State.kakaoModel = ResponseData
-                        UserDefaults.standard.set(false, forKey: "isLogOut")
-                        UserDefaults.standard.set(false, forKey: "isDeleteUser")
+                        isLogOut = false
+                        isDeleteUser = false
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
                         

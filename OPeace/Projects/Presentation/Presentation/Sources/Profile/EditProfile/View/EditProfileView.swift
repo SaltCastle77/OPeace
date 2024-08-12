@@ -16,13 +16,16 @@ import PopupView
 public struct EditProfileView: View {
     @Bindable var store: StoreOf<EditProfile>
     var backAction: () -> Void = { }
+    var backToHomeAction: () -> Void = { }
     
     public init(
         store: StoreOf<EditProfile>,
-        backAction: @escaping () -> Void
+        backAction: @escaping () -> Void,
+        backToHomeAction: @escaping () -> Void
     ) {
         self.store = store
         self.backAction = backAction
+        self.backToHomeAction = backToHomeAction
     }
     
     
@@ -54,8 +57,9 @@ public struct EditProfileView: View {
                                 year: store.profileYear ,
                                 job:  store.profileSelectedJob ?? "",
                                 generation: store.editProfileGenerationText)))
+                            store.isChangeProfile = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                backAction()
+                                backToHomeAction()
                             }
                         }, title: store.editProfileComplete,
                         config: CustomButtonConfig.create()
@@ -74,47 +78,6 @@ public struct EditProfileView: View {
             }
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }
-            .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp), itemView: { customPopUpStore in
-                CheckSignUpPopUp(
-                    store: customPopUpStore,
-                    nickName: store.editProfileName,
-                    yearOfBirth: String(store.profileYear),
-                    job: store.profileSelectedJob ?? "",
-                    confirmButtonText: "수정하기",
-                    cancelAction: {
-                        store.send(.view(.closePopUp))
-                    }, confirmAction: {
-                        store.send(.async(.updateUserInfo(
-                            nickName: store.editProfileName,
-                            year: store.profileYear ,
-                            job:  store.profileSelectedJob ?? "",
-                            generation: store.editProfileGenerationText)))
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            backAction()
-                        }
-                    }
-                    
-                )
-            }, customize: { popup in
-                popup
-                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.2))
-                    .position(.bottom)
-                    .animation(.spring)
-                    .closeOnTap(true)
-                    .closeOnTapOutside(true)
-                    .backgroundColor(Color.basicBlack.opacity(0.8))
-            })
-            
-            .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
-                FloatingPopUpView(store: floatingPopUpStore, title: "프로필이 수정 되었습니다!", image: .succesLogout)
-            }  customize: { popup in
-                popup
-                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.02))
-                    .position(.top)
-                    .animation(.spring)
-                    .closeOnTap(true)
-                    .closeOnTapOutside(true)
             }
         }
     }

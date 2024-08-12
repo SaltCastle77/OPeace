@@ -35,9 +35,10 @@ public struct Profile {
         var deletePopUpTitle: String = "정말 탈퇴하시겠어요?"
         
         @Presents var destination: Destination.State?
-        @Shared(.appStorage("isLogOut")) var isLogOut: Bool = false
-        public init() {}
+        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
+        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
         
+        public init() {}
     }
     
     public indirect enum Action: ViewAction, BindableAction, FeatureAction {
@@ -55,6 +56,7 @@ public struct Profile {
         case setting(Setting)
         case popup(CustomPopUp)
         case deletePopUp(CustomPopUp)
+        case home(Home)
     }
     
     //MARK: - ViewAction
@@ -78,8 +80,7 @@ public struct Profile {
         case fetchUser
         case logoutUseResponse(Result<UserLogOutModel, CustomError>)
         case logoutUser
-        case deleteUserResponse(Result<DeleteUserModel, CustomError>)
-        case deleteUser
+        
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -91,6 +92,7 @@ public struct Profile {
     public enum NavigationAction: Equatable {
         case presntLogout
         case presntEditProfile
+        case presntWithDraw
         
     }
     
@@ -173,7 +175,7 @@ public struct Profile {
             case .async(let AsyncAction):
                 switch AsyncAction {
                 case .fetchUser:
-                    return .run { @MainActor send in
+                    return .run { @MainActor  send in
                         let fetchUserData = await Result {
                             try await authUseCase.fetchUserInfo()
                         }
@@ -183,7 +185,6 @@ public struct Profile {
                             if let fetchUserResult = fetchUserResult {
                                 send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
                                 send(.view(.updateGenerationInfo))
-                                UserDefaults.standard.set(false, forKey: "isLogOut")
                             }
                         case .failure(let error):
                             send(.async(.fetchUserProfileResponse(.failure(CustomError.map(error)))))
@@ -206,8 +207,8 @@ public struct Profile {
                     case .success(let userData):
                         state.userLogoutModel = userData
                         Log.debug("유저 로그아웃 성공", userData)
-                        try? Keychain().set(state.userLogoutModel?.data?.lastLogin ?? "", key: "LastLogin")
-                        UserDefaults.standard.set(true, forKey: "isLogOut")
+                        state.isLogOut = true
+                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser))
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }
@@ -234,39 +235,6 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
                         }
                     }
-                    
-                case .deleteUser:
-                    return .run { @MainActor send in
-                        let deleteUserData = await Result {
-                            try await authUseCase.deleteUser()
-                        }
-                        
-                        switch deleteUserData {
-                        case .success(let deleteUserData):
-                           if let deleteUserData = deleteUserData {
-                               send(.async(.deleteUserResponse(.success(deleteUserData))))
-                               
-                               send(.view(.closePopUp))
-                               try await self.clock.sleep(for: .seconds(1))
-                               if deleteUserData.data?.status == true {
-                                   send(.navigation(.presntLogout))
-                               }
-                            }
-                        case .failure(let error):
-                            send(.async(.deleteUserResponse(.failure(CustomError.map(error)))))
-                        }
-                    }
-                    
-                case .deleteUserResponse(let result):
-                    switch result {
-                    case .success(let userDeleteData):
-                        state.userDeleteModel = userDeleteData
-                        try? Keychain().removeAll()
-                        UserDefaults.standard.set(true, forKey: "isDeleteUser")
-                    case .failure(let error):
-                        Log.debug("회원 탈퇴 에러", error.localizedDescription)
-                    }
-                    return .none
                 }
                 
             case .inner(let InnerAction):
@@ -280,6 +248,9 @@ public struct Profile {
                     return .none
                     
                 case .presntEditProfile:
+                    return .none
+                    
+                case .presntWithDraw:
                     return .none
                 }
            

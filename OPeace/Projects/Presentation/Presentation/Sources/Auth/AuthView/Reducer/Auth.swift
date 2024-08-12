@@ -29,6 +29,10 @@ public struct Auth {
         var nonce: String = ""
         
         var login = Login.State()
+        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
+        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
+        @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
+        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
     }
     
     @Reducer(state: .equatable)
@@ -42,6 +46,8 @@ public struct Auth {
         case home(Home)
         case profile(Profile)
         case editProfile(EditProfile)
+        case withDraw(WithDraw)
+        
         
         
     }
@@ -74,6 +80,7 @@ public struct Auth {
     public enum InnerAction: Equatable {
        case removePath
         case removeAllPath
+        case removeToHome
     }
     
     //MARK: - NavigationAction
@@ -95,14 +102,28 @@ public struct Auth {
                     state.path.append(.profile(.init()))
                                 
                 case .element(id: _, action: .profile(.navigation(.presntLogout))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile)))
                     state.path.removeFirst()
                     
                 case .element(id: _, action: .login(.navigation(.presentMain))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile
+                    )))
                     
                 case .element(id: _, action: .login(.navigation(.presntLookAround))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile
+                    )))
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
                     state.path.append(.editProfile(.init()))
@@ -131,10 +152,40 @@ public struct Auth {
                     
                     
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile)))
                     
                 case .element(id: _, action: .signUpPagging(.navigation(.presntMainHome))):
-                    state.path.append(.home(.init()))
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile)))
+                    
+                case .element(id: _, action: .profile(.navigation(.presntWithDraw))):
+                    state.path.append(.withDraw(.init()))
+                    
+                case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
+                    let homeState = Home.State()
+
+                    
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw:
+                            return true
+                        case .home:
+                            return false
+                        default:
+                            return true
+                        }
+                    }
+                    if !state.path.contains(where: { $0 == .home(homeState) }) {
+                        state.path.append(.home(homeState))
+                    }
+                    
                     
                 default:
                     return .none
@@ -185,6 +236,26 @@ public struct Auth {
                     
                 case .removeAllPath:
                     state.path.removeAll()
+                    return .none
+                    
+                case .removeToHome:
+                    let homeState = Home.State()
+
+                    
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile:
+                            return true
+                        case .home:
+                            return false
+                        default:
+                            return true
+                        }
+                    }
+                    if !state.path.contains(where: { $0 == .home(homeState) }) {
+                        state.path.append(.home(homeState))
+                    }
+
                     return .none
                 }
                 
