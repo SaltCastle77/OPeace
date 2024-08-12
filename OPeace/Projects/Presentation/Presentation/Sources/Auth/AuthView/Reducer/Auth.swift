@@ -133,7 +133,8 @@ public struct Auth {
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
                     state.path.append(.home(.init()))
                     
-                    
+                case .element(id: _, action: .signUpPagging(.navigation(.presntMainHome))):
+                    state.path.append(.home(.init()))
                     
                 default:
                     return .none
