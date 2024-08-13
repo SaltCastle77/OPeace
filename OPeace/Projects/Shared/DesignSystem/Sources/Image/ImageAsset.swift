@@ -34,5 +34,8 @@ public enum ImageAsset: String {
     
     //MARK: - LogOut
     case succesLogout
+    
+    //MARK: - Profile
+    case questonSmail
     case empty
 }
