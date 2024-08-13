@@ -80,3 +80,10 @@ extension AuthUseCase: DependencyKey {
         return AuthUseCase(repository: authRepository)
     }()
 }
+
+public extension DependencyValues {
+    var authUseCase: AuthUseCaseProtocol {
+        get { self[AuthUseCase.self] }
+        set { self[AuthUseCase.self] = newValue as! AuthUseCase}
+    }
+}

@@ -6,3 +6,8 @@
 //
 
 import Foundation
+import Model
+
+public protocol QuestionUseCaseProtocol {
+    func fetchQuestionList(page: Int, pageSize: Int) async throws -> QuestionModel?
+}

@@ -46,10 +46,16 @@ public struct ProfileView: View {
                 
                 myPostWritingTitle()
                 
+                ScrollView {
+                    postingListView()
+                }
+                .bounce(false)
+                
                 Spacer()
             }
             .onAppear {
                 store.send(.async(.fetchUser))
+                store.send(.async(.fetchQuestion))
             }
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
                 navigationController.interactivePopGestureRecognizer?.isEnabled = true
@@ -187,7 +193,72 @@ extension ProfileView {
     }
     
     @ViewBuilder
+    private func postingListView() -> some View {
+        if store.questionListModel?.data?.results == [] {
+            noPostingListView()
+        } else {
+            
+        }
+    }
+    
+    @ViewBuilder
     private func myPostitngList() -> some View {
-        
+        VStack {}
+    }
+    
+    @ViewBuilder
+    private func noPostingListView() -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 16)
+            
+            RoundedRectangle(cornerRadius: 32)
+                .fill(Color.gray500)
+                .frame(height: UIScreen.screenHeight * 0.6)
+                .overlay(alignment: .center) {
+                    VStack {
+                        Spacer()
+                        
+                        Image(asset: .questonSmail)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 62, height: 62)
+                        
+                        Spacer()
+                            .frame(height: 16)
+                        
+                        Text("아직 작성한 고민이 없어요!")
+                            .pretendardFont(family: .SemiBold, size: 24)
+                            .foregroundStyle(Color.gray200)
+                        
+                        Spacer()
+                            .frame(height: 16)
+                        
+                        Text("지금 고민을 등록해 볼까요?")
+                            .pretendardFont(family: .Regular, size: 16)
+                            .foregroundStyle(Color.gray300)
+                        
+                        Spacer()
+                            .frame(height: 32)
+                        
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.basicWhite)
+                            .frame(width: 120, height: 56)
+                            .clipShape(Capsule())
+                            .overlay {
+                                Text("글쓰기")
+                                    .pretendardFont(family: .Medium, size: 20)
+                                    .foregroundStyle(Color.textColor100)
+                            }
+                            .onTapGesture {
+                                store.send(.navigation(.presnetCreateQuestionList))
+                            }
+                        
+                        Spacer()
+                    }
+                    
+                }
+        }
+        .padding(.horizontal, 16)
     }
 }

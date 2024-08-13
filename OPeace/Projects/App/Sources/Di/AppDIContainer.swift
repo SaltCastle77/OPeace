@@ -26,8 +26,7 @@ public final class AppDIContainer {
     private func registerUseCases() async {
         await registerAuthUseCase()
         await registerSignUpUseCase()
-
-//        await registerQrCodeUseCase()
+        await registerQuestionUseCase()
     }
 
     private func registerAuthUseCase() async {
@@ -49,14 +48,23 @@ public final class AppDIContainer {
             return SignUpUseCase(repository: repository)
         }
     }
+    
+    private func registerQuestionUseCase() async {
+        await diContainer.register(QuestionUseCaseProtocol.self) {
+            guard let repository = self.diContainer.resolve(QuestionRepositoryProtocol.self) else {
+                assertionFailure("QuestionRepositoryProtocol must be registered before registering QuestionUseCaseProtocol")
+                return QuestionUseCase(repository: DefaultQuestionRepository())
+            }
+            return QuestionUseCase(repository: repository)
+        }
+    }
 
 
     // MARK: - Repositories Registration
     private func registerRepositories() async {
         await registerAuthRepositories()
         await registerSignUpRepositories()
-//        await registerFireStoreRepositories()
-//        await registerQrCodeRepositories()
+        await registerQuestionRepositories()
     }
 
     private func registerAuthRepositories() async {
@@ -71,10 +79,11 @@ public final class AppDIContainer {
         }
     }
     
-//    private func registerQrCodeRepositories() async {
-//        await diContainer.register(QrCodeRepositoryProtcool.self) {
-//            QrCodeRepository()
-//        }
-//    }
+    
+    private func registerQuestionRepositories() async {
+        await diContainer.register(QuestionRepositoryProtocol.self) {
+            QuestionRepository()
+        }
+    }
 }
 

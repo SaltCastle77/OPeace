@@ -51,3 +51,10 @@ extension SignUpUseCase: DependencyKey {
          return SignUpUseCase(repository: authRepository)
        }()
 }
+
+public extension DependencyValues {
+    var signUpUseCase: SignUpUseCaseProtocol {
+        get { self[SignUpUseCase.self] }
+        set { self[SignUpUseCase.self] = newValue as! SignUpUseCase}
+    }
+}
