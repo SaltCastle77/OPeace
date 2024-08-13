@@ -5,31 +5,31 @@
 //  Created by 서원지 on 8/13/24.
 //
 
+import Testing
+import Presentation
+import ComposableArchitecture
+@testable import OPeace
+
 import XCTest
+import UseCase
+import Model
 
-final class ProfileTest: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+@MainActor
+struct ProfileTest {
+    let store = TestStore(initialState: Profile.State()) {
+        Profile()
+    } withDependencies: {
+        let repository = AuthRepository()
+        $0.authUseCase = AuthUseCase(repository: repository)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    @Test func testUserinfo_유저정보_조회테스트() async throws {
+        // Send the action to trigger the effect
+        await store.send(.async(.fetchUser))
+        
+        await store.finish()
+        
+         store.exhaustivity = .off
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
