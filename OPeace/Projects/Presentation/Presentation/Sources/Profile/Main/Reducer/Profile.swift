@@ -29,6 +29,7 @@ public struct Profile {
         var profileUserModel: UpdateUserInfoModel? = nil
         var userLogoutModel: UserLogOutModel? = nil
         var userDeleteModel: DeleteUserModel? = nil
+        var questionListModel: QuestionModel?  = nil
         
         var profileGenerationYear: Int? = .zero
         var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
@@ -81,6 +82,8 @@ public struct Profile {
         case fetchUser
         case logoutUseResponse(Result<UserLogOutModel, CustomError>)
         case logoutUser
+        case fetchQuestionResponse(Result<QuestionModel, CustomError>)
+        case fetchQuestion
         
     }
     
@@ -94,10 +97,12 @@ public struct Profile {
         case presntLogout
         case presntEditProfile
         case presntWithDraw
+        case presnetCreateQuestionList
         
     }
     
     @Dependency(AuthUseCase.self) var authUseCase
+    @Dependency(QuestionUseCase.self) var questionUseCase
     @Dependency(\.continuousClock) var clock
     
     public var body: some ReducerOf<Self> {
@@ -115,7 +120,7 @@ public struct Profile {
                 
             case .destination(.presented(.setting(.test))):
                 return .none
-        
+                
                 
                 
             case .view(let View):
@@ -238,6 +243,33 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
                         }
                     }
+                    
+                case .fetchQuestionResponse(let result):
+                    switch result {
+                    case .success(let questionData):
+                        state.questionListModel = questionData
+                        
+                    case .failure(let error):
+                        Log.debug("피드 목록 에러", error.localizedDescription)
+                    }
+                    
+                    return .none
+                    
+                case .fetchQuestion:
+                    return .run { @MainActor send in
+                        let questionResult = await Result {
+                            try await questionUseCase.fetchQuestionList(page: 1, pageSize: 20)
+                        }
+                        
+                        switch questionResult {
+                        case .success(let questionResult):
+                            if let questionData = questionResult {
+                                send(.async(.fetchQuestionResponse(.success(questionData))))
+                            }
+                        case .failure(let error):
+                            send(.async(.logoutUseResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                        }
+                    }
                 }
                 
             case .inner(let InnerAction):
@@ -255,11 +287,14 @@ public struct Profile {
                     
                 case .presntWithDraw:
                     return .none
+                    
+                case .presnetCreateQuestionList:
+                    return .none
                 }
-           
+                
             default:
                 return .none
-           
+                
             }
             
         }
