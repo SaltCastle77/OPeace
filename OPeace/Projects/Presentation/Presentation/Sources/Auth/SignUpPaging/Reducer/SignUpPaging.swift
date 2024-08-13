@@ -114,14 +114,6 @@ public struct SignUpPaging {
 //                state.selectedTab = 1
                 return .none
                 
-                
-//            case .signUpJob(.switchTabs):
-//                state.activeMenu = .signUpJob
-////                state.selectedTab = 1
-//                return .none
-                
-                
-                
             case .view(let View):
                 switch View {
                     

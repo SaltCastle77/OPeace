@@ -32,18 +32,12 @@ public struct HomeRootView: View {
             case .home(let homeStore):
                 HomeView(store: homeStore)
                     .navigationBarBackButtonHidden()
-                    .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-                        navigationController.interactivePopGestureRecognizer?.isEnabled = false
-                    }
                    
             case .profile(let profileStore):
                 ProfileView(store: profileStore) {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
-                .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-                    navigationController.interactivePopGestureRecognizer?.isEnabled = true
-                }
               
             case .login(let loginStore):
                 LoginView(store: loginStore)
@@ -85,20 +79,20 @@ public struct HomeRootView: View {
                 }
                 .navigationBarBackButtonHidden()
 
-
             }
         }
         .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
             if store.path.contains(.home(.init())) {
                 navigationController.interactivePopGestureRecognizer?.isEnabled = false
+            } else if store.path.contains(.signUpPagging(.init())) {
+                navigationController.interactivePopGestureRecognizer?.isEnabled = false
             } else if store.path.contains(.login(.init())) {
                 navigationController.interactivePopGestureRecognizer?.isEnabled = false
-            } else if store.path.contains(.profile(.init())) {
-                navigationController.interactivePopGestureRecognizer?.isEnabled = true
             } else {
-                navigationController.interactivePopGestureRecognizer?.isEnabled = true
+                navigationController.interactivePopGestureRecognizer?.isEnabled = false
             }
         }
+        
 
     }
 }

@@ -31,28 +31,14 @@ public struct HomeView: View {
                 Spacer()
             }
             .onAppear {
-                print("shared: \(store.isChangeProfile)")
-                if store.isLogOut == true  {
-                    store.send(.view(.presntFloatintPopUp))
-                    store.floatingText = "로그아웃 되었어요"
-                    store.send(.view(.timeToCloseFloatingPopUp))
-                } else if store.isLookAround == true {
-                    store.floatingText = "로그인 해주세요"
-                } else if store.isDeleteUser == true  {
-                    store.send(.view(.presntFloatintPopUp))
-                    store.floatingText = "탈퇴 완료! 언젠가 다시 만나요"
-                    store.send(.view(.timeToCloseFloatingPopUp))
-                } else if store.isChangeProfile == true {
-                    store.send(.view(.presntFloatintPopUp))
-                    store.floatingText = "수정이 완료되었어요!"
-                    store.send(.view(.timeToCloseFloatingPopUp))
-                    store.isChangeProfile = false
-                } else {
-                    store.floatingText = "로그인 해주세요"
-                }
+                appearFloatingPopUp()
+            }
+            .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
+                navigationController.interactivePopGestureRecognizer?.isEnabled = false
             }
 
         }
+        
         
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
             if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
@@ -140,6 +126,27 @@ extension HomeView {
                 }
             }
             .padding(.horizontal, 16)
+        }
+    }
+    
+    private func appearFloatingPopUp() {
+        if store.isLogOut == true  {
+            store.send(.view(.presntFloatintPopUp))
+            store.floatingText = "로그아웃 되었어요"
+            store.send(.view(.timeToCloseFloatingPopUp))
+        } else if store.isLookAround == true {
+            store.floatingText = "로그인 해주세요"
+        } else if store.isDeleteUser == true  {
+            store.send(.view(.presntFloatintPopUp))
+            store.floatingText = "탈퇴 완료! 언젠가 다시 만나요"
+            store.send(.view(.timeToCloseFloatingPopUp))
+        } else if store.isChangeProfile == true {
+            store.send(.view(.presntFloatintPopUp))
+            store.floatingText = "수정이 완료되었어요!"
+            store.send(.view(.timeToCloseFloatingPopUp))
+            store.isChangeProfile = false
+        } else {
+            store.floatingText = "로그인 해주세요"
         }
     }
 }

@@ -29,8 +29,7 @@ public struct Root {
         static var checkUserVerifyModel: CheckUserVerifyModel? = nil
         static var refreshTokenModel: RefreshModel? = nil
         
-//        @Shared(.inMemory("isLogOut"))  var isLogOut: Bool = false
-//        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
+     
         
         public init() {
             

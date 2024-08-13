@@ -44,9 +44,11 @@ public struct ProfileView: View {
                     job: store.profileUserModel?.data?.job ?? "",
                     generation: store.profileUserModel?.data?.generation ?? "")
                 
+                myPostWritingTitle()
+                
                 Spacer()
             }
-            .task {
+            .onAppear {
                 store.send(.async(.fetchUser))
             }
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
@@ -109,7 +111,11 @@ public struct ProfileView: View {
 extension ProfileView {
     
     @ViewBuilder
-    private func userInfoTitle(nickName: String, job: String, generation: String) -> some View {
+    private func userInfoTitle(
+        nickName: String,
+        job: String,
+        generation: String
+    ) -> some View {
         VStack {
             Spacer()
                 .frame(height: 16)
@@ -161,5 +167,27 @@ extension ProfileView {
             }
             .padding(.horizontal, 20)
         }
+    }
+    
+    @ViewBuilder
+    private func myPostWritingTitle() -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 32)
+            
+            HStack {
+                Text("내가 올린 글")
+                    .pretendardFont(family: .Regular, size: 16)
+                    .foregroundStyle(Color.gray200)
+                
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+        }
+    }
+    
+    @ViewBuilder
+    private func myPostitngList() -> some View {
+        
     }
 }

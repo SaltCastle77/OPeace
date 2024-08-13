@@ -5,37 +5,57 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="5.123019">
+      <testcase classname="fastlane.lanes" name="00: update_fastlane" time="5.158278">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000109">
+      <testcase classname="fastlane.lanes" name="01: default_platform" time="0.000211">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: app_store_connect_api_key" time="0.002474">
+      <testcase classname="fastlane.lanes" name="02: app_store_connect_api_key" time="0.001483">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: Switch to ios build_ipa lane" time="8.0e-05">
+      <testcase classname="fastlane.lanes" name="03: Switch to ios build_ipa lane" time="6.8e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: clear_derived_data" time="3.682844">
+      <testcase classname="fastlane.lanes" name="04: clear_derived_data" time="3.627028">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: build_app" time="231.524961">
+      <testcase classname="fastlane.lanes" name="05: build_app" time="230.503317">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: upload_to_testflight" time="105.349733">
+      <testcase classname="fastlane.lanes" name="06: upload_to_testflight" time="101.797229">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="07: Switch to ios send_slack lane" time="0.000417">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="08: get_version_number" time="0.050275">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="09: latest_testflight_build_number" time="1.322061">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: slack" time="0.808997">
         
       </testcase>
     
