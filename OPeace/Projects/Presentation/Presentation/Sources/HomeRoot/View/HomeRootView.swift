@@ -79,18 +79,15 @@ public struct HomeRootView: View {
                 }
                 .navigationBarBackButtonHidden()
 
+            case .createQuestion(let createQuestionStore):
+                CreateQuestionView(store: createQuestionStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
             }
         }
         .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-            if store.path.contains(.home(.init())) {
-                navigationController.interactivePopGestureRecognizer?.isEnabled = false
-            } else if store.path.contains(.signUpPagging(.init())) {
-                navigationController.interactivePopGestureRecognizer?.isEnabled = false
-            } else if store.path.contains(.login(.init())) {
-                navigationController.interactivePopGestureRecognizer?.isEnabled = false
-            } else {
-                navigationController.interactivePopGestureRecognizer?.isEnabled = false
-            }
+            navigationController.interactivePopGestureRecognizer?.isEnabled = false
         }
         
 

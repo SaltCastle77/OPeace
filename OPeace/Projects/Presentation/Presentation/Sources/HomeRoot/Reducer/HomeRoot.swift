@@ -46,6 +46,7 @@ public struct HomeRoot {
         case webView(Web)
         case onBoardingPagging(OnBoadingPagging)
         case withDraw(WithDraw)
+        case createQuestion(CreateQuestion)
     }
     
     //MARK: - ViewAction
@@ -158,6 +159,8 @@ public struct HomeRoot {
                         }
                     }
                     
+                case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
+                    state.path.append(.createQuestion(.init()))
                     
                 default:
                     return .none

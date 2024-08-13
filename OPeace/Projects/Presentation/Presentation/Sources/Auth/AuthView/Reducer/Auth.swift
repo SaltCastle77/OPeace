@@ -47,8 +47,7 @@ public struct Auth {
         case profile(Profile)
         case editProfile(EditProfile)
         case withDraw(WithDraw)
-        
-        
+        case createQuestion(CreateQuestion)
         
     }
     
@@ -186,6 +185,8 @@ public struct Auth {
                         state.path.append(.home(homeState))
                     }
                     
+                case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
+                    state.path.append(.createQuestion(.init()))
                     
                 default:
                     return .none
