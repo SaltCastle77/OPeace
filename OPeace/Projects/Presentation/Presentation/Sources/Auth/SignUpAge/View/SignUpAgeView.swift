@@ -122,18 +122,24 @@ extension SignUpAgeView {
                 .multilineTextAlignment(.center)
                 .submitLabel(.return)
                 .keyboardType(.numberPad)
+                .onChange(of: store.signUpAgeDisplay) { newValue in
+                    // Limit to 4 characters
+                    if newValue.count > 4 {
+                        store.signUpAgeDisplay = String(newValue.prefix(4))
+                    }
+                    // Ensure only digits are entered
+                    store.signUpAgeDisplay = store.signUpAgeDisplay.filter { $0.isNumber }
+                }
                 .onSubmit {
-                    if CheckRegister.containsInvalidCharacters(store.signUpAgeDisplay) {
-                        store.isErrorGenerationText = "정확한 연도를 입력해 주세요"
-                    } else if store.signUpAgeDisplay.isEmpty {
+                    if store.signUpAgeDisplay.count != 4 || Int(store.signUpAgeDisplay) == nil {
                         store.isErrorGenerationText = "정확한 연도를 입력해 주세요"
                     } else {
                         store.isErrorGenerationText = ""
+                        let (generation, color, textColor) = CheckRegister.getGeneration(year: Int(store.signUpAgeDisplay) ?? .zero, color: store.signUpAgeDisplayColor, textColor: store.checkGenerationTextColor)
+                        store.checkGenerationText = generation
+                        store.signUpAgeDisplayColor = color
+                        store.checkGenerationTextColor = textColor
                     }
-                    let (generation, color, textColor) = CheckRegister.getGeneration(year: Int(store.signUpAgeDisplay) ?? .zero, color: store.signUpAgeDisplayColor, textColor: store.checkGenerationTextColor)
-                    store.checkGenerationText = generation
-                    store.signUpAgeDisplayColor = color
-                    store.checkGenerationTextColor = textColor
                 }
             
             HStack {

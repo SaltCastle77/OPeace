@@ -29,4 +29,11 @@ public struct CheckRegister{
         let yearRegex = "^(?!0000)[0-9]{4}$"
         return age.contains(" ") || age.range(of: yearRegex, options: .regularExpression) != nil
     }
+    
+    @discardableResult
+    public static func isValidEmojiOnlyText(_ input: String) -> Bool {
+        let emojiRegex = "^[\\p{Emoji}\\p{Emoji_Presentation}\\p{Emoji_Modifier}\\p{Emoji_Modifier_Base}\\p{Emoji_Component}\\u{FE0F}]+$"
+                let predicate = NSPredicate(format: "SELF MATCHES %@", emojiRegex)
+                return predicate.evaluate(with: input)
+    }
 }

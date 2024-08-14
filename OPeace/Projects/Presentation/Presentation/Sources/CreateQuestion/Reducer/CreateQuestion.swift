@@ -9,6 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 import Utill
+import SwiftUI
 
 @Reducer
 public struct CreateQuestion {
@@ -16,6 +17,12 @@ public struct CreateQuestion {
     
     @ObservableState
     public struct State: Equatable {
+        var selectEmojiText: String = ""
+        var isSelectEmoji: Bool = false
+        var isInupustEmoji: Bool = false
+        var emojiImage: Image? = nil
+        var isWriteTextEditor: String = ""
+        var presntNextViewButtonTitle: String = "다음"
         public init() {}
     }
     
@@ -58,6 +65,11 @@ public struct CreateQuestion {
             case .binding(_):
                 return .none
                 
+            case .binding(\.selectEmojiText):
+                return .none
+                
+            case  .binding(\.isWriteTextEditor):
+                return .none
                 
             case .view(let View):
                 switch View {

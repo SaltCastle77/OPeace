@@ -1,5 +1,7 @@
 import SwiftUI
 import DesignSystem
+import ISEmojiView
+import UIKit
 
 public struct ContentView: View {
     public init() {}
@@ -15,8 +17,20 @@ public struct ContentView: View {
 }
 
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+#Preview {
+    @State var text: String = ""
+    ZStack {
+        Color.basicWhite
+      
+        if let image =  Image.emojiToImage(emoji:  "😀") {
+            image
+                .resizable()
+                .scaledToFit()
+        }
     }
+    
 }
+
+
+
+

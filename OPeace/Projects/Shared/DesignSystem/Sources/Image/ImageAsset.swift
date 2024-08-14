@@ -37,5 +37,8 @@ public enum ImageAsset: String {
     
     //MARK: - Profile
     case questonSmail
+    
+    //MARK: - Button
+    case plus
     case empty
 }

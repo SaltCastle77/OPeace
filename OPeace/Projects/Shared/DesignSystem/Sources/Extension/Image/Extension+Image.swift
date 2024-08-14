@@ -39,5 +39,16 @@ public extension UIImage {
         }
         return nil
     }
+    
+    func emojiToImage(emoji: String, size: CGSize = CGSize(width: 100, height: 100)) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        UIColor.clear.set()
+        let rect = CGRect(origin: .zero, size: size)
+        UIRectFill(rect)
+        (emoji as NSString).draw(in: rect, withAttributes: [.font: UIFont.systemFont(ofSize: size.width * 0.8)])
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
 }
 

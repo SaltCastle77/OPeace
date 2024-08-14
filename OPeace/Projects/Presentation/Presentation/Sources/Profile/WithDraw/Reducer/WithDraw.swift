@@ -54,7 +54,6 @@ public struct WithDraw {
     }
     
     
-    
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
         case deleteUserResponse(Result<DeleteUserModel, CustomError>)

@@ -124,7 +124,7 @@ extension ProfileView {
     ) -> some View {
         VStack {
             Spacer()
-                .frame(height: 16)
+                .frame(height: 20)
             
             HStack {
                 Text(nickName)

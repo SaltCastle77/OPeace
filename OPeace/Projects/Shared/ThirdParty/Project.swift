@@ -20,7 +20,8 @@ let project = Project.makeAppModule(
         .SPM.popupView,
         .SPM.firebaseAnalytics,
         .SPM.firebaseCrashlytics,
-        .SPM.swiftUIIntrospect
+        .SPM.swiftUIIntrospect,
+        .SPM.isEmojiView
     ],
     sources: ["Sources/**"]
 )

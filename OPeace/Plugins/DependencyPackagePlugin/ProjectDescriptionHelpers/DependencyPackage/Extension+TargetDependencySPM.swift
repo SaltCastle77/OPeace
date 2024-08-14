@@ -26,6 +26,7 @@ public extension TargetDependency.SPM {
     static let firebaseAnalytics = TargetDependency.external(name: "FirebaseAnalytics", condition: .none)
     static let firebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics", condition: .none)
     static let swiftUIIntrospect = TargetDependency.external(name: "SwiftUIIntrospect", condition: .none)
+    static let isEmojiView = TargetDependency.external(name: "ISEmojiView", condition: .none)
 }
   
 
