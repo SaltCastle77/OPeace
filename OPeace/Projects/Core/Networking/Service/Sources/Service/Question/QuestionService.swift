@@ -15,6 +15,13 @@ import Foundations
 
 public enum QuestionService {
     case fetchQuestionList(page: Int, pageSize: Int)
+    case createQuestion(
+        emoji: String,
+        title: String,
+        choiceA: String,
+        choiceB: String
+    )
+    
 }
 
 extension QuestionService: BaseTargetType {
@@ -22,6 +29,9 @@ extension QuestionService: BaseTargetType {
         switch self {
         case .fetchQuestionList:
             return QuestionAPI.feedList.questionAPIDesc
+            
+        case .createQuestion:
+            return QuestionAPI.createQuestion.questionAPIDesc
         }
     }
     
@@ -29,6 +39,9 @@ extension QuestionService: BaseTargetType {
         switch self {
         case .fetchQuestionList:
             return .get
+            
+        case .createQuestion:
+            return .post
         }
     }
     
@@ -40,13 +53,21 @@ extension QuestionService: BaseTargetType {
                 "page_size": pageSize
             ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+            
+        case .createQuestion(let emoji, let title,  let choiceA, let choiceB):
+            let parameters: [String: Any] = [
+                "emoji": 1,
+                "title": title,
+                "choice_a": choiceA,
+                "choice_b": choiceB
+            ]
+            
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
     }
+    
     public var headers: [String : String]? {
-        switch self {
-        case .fetchQuestionList:
-            return APIHeader.baseHeader
-            
+        switch self {      
         default:
             return APIHeader.baseHeader
         }

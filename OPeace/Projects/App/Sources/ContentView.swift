@@ -1,7 +1,9 @@
 import SwiftUI
 import DesignSystem
-import ISEmojiView
+
+import ComposableArchitecture
 import UIKit
+import Presentation
 
 public struct ContentView: View {
     public init() {}
@@ -18,18 +20,13 @@ public struct ContentView: View {
 
 
 #Preview {
-    @State var text: String = ""
-    ZStack {
-        Color.basicWhite
-      
-        if let image =  Image.emojiToImage(emoji:  "😀") {
-            image
-                .resizable()
-                .scaledToFit()
-        }
-    }
+    HomeView(store: Store(initialState: Home.State(), reducer: {
+        Home()
+    }))
     
 }
+    
+
 
 
 
