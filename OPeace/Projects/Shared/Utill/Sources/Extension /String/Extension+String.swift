@@ -33,7 +33,7 @@ public extension String {
       } else if title.count == 4 {
         return baseWidth + 30
       } else if title.count == 5 {
-        return baseWidth + 40
+        return baseWidth + 30
       }
       else {
         return baseWidth + extraWidthPerCharacter * CGFloat(title.count - 2)

@@ -5,6 +5,7 @@
 //  Created by 서원지 on 8/15/24.
 //
 
+import Foundation
 import UIKit
 
 public class UIEmojiTextField: UITextField {

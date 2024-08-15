@@ -36,4 +36,11 @@ public struct CheckRegister{
                 let predicate = NSPredicate(format: "SELF MATCHES %@", emojiRegex)
                 return predicate.evaluate(with: input)
     }
+    
+    @discardableResult
+    public static func containsInappropriateLanguage(_ input: String) -> Bool {
+        let inappropriateLanguageRegex = "[시씨씌슈쓔쉬쉽쒸쓉]([0-9]*)[바발벌빠빡빨뻘파팔펄]"
+        let predicate = NSPredicate(format: "SELF MATCHES %@", inappropriateLanguageRegex)
+        return predicate.evaluate(with: input)
+    }
 }

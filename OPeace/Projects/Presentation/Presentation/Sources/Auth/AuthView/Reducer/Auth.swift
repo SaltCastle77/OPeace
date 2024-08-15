@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import ComposableArchitecture
 
 import Utill
@@ -33,6 +34,9 @@ public struct Auth {
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
         @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("createQuestionEmoji")) var emojiText: String = ""
+        @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
+        
     }
     
     @Reducer(state: .equatable)
@@ -47,7 +51,8 @@ public struct Auth {
         case profile(Profile)
         case editProfile(EditProfile)
         case withDraw(WithDraw)
-        case createQuestion(CreateQuestion)
+        case writeQuestion(WriteQuestion)
+        case writeAnswer(WriteAnswer)
         
     }
     
@@ -186,7 +191,14 @@ public struct Auth {
                     }
                     
                 case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
-                    state.path.append(.createQuestion(.init()))
+                    state.path.append(.writeQuestion(.init()))
+                    
+                case .element(id: _, action: .writeQuestion(.navigation(.presntWriteAnswer))):
+                    state.path.append(.writeAnswer(.init(
+                        createQuestionEmoji: state.emojiText,
+                        createQuestionTitle: state.createQuestionTitle)
+                    ))
+                    
                     
                 default:
                     return .none

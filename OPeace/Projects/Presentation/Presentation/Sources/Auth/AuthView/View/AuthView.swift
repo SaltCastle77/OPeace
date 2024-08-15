@@ -85,8 +85,14 @@ public struct AuthView: View {
                 .navigationBarBackButtonHidden()
                 
                 
-            case .createQuestion(let createQuestionStore):
-                CreateQuestionView(store: createQuestionStore) {
+            case .writeQuestion(let writeQuestioStore):
+                WriteQuestionView(store: writeQuestioStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
+                
+            case .writeAnswer(let writeAnswerStore):
+                WriteAnswerView(store: writeAnswerStore) {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()

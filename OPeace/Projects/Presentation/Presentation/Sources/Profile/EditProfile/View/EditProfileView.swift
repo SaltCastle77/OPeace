@@ -63,7 +63,7 @@ public struct EditProfileView: View {
                             }
                         }, title: store.editProfileComplete,
                         config: CustomButtonConfig.create()
-                        ,isEnable: store.enableButton
+                        ,isEnable: !store.editProfileName.isEmpty  && store.enableButton
                     )
                     .padding(.horizontal, 20)
                     
@@ -98,9 +98,11 @@ extension EditProfileView {
                 .onSubmit {
                     if CheckRegister.isValidNickName(store.editProfileName) {
                         store.checkNickNameMessage = "사용 가능한 닉네임이에요"
+                        store.enableButton = true
                         store.send(.async(.checkNickName(nickName: store.editProfileName)))
                     } else if CheckRegister.containsInvalidCharacters(store.editProfileName) {
                         store.checkNickNameMessage = "띄어쓰기와 특수문자는 사용할 수 없어요"
+                        store.enableButton = false
                     } else if store.editProfileName.isEmpty {
                         store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
                         store.enableButton = false

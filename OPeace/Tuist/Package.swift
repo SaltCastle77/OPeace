@@ -41,7 +41,8 @@ let package = Package(
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "7.1.0"),
         .package(url: "https://github.com/kakao/kakao-ios-sdk", from: "2.21.0"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
-        .package(url: "https://github.com/siteline/swiftui-introspect.git", from: "1.3.0")
+        .package(url: "https://github.com/siteline/swiftui-introspect.git", from: "1.3.0"),
+        .package(url: "https://github.com/isaced/ISEmojiView.git", from: "0.3.4")
         
     ]
 )

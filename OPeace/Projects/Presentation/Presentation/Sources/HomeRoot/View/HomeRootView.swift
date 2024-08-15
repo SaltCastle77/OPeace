@@ -79,8 +79,14 @@ public struct HomeRootView: View {
                 }
                 .navigationBarBackButtonHidden()
 
-            case .createQuestion(let createQuestionStore):
-                CreateQuestionView(store: createQuestionStore) {
+            case .writeQuestion(let writeQuestionStore):
+                WriteQuestionView(store: writeQuestionStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
+                
+            case .writeAnswer(let writeAnswerStore):
+                WriteAnswerView(store: writeAnswerStore) {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()

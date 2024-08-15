@@ -11,17 +11,18 @@ import DesignSystem
 
 import ComposableArchitecture
 import PopupView
-import ISEmojiView
+
+import SwiftUIIntrospect
 
 import Utill
 
-public struct CreateQuestionView: View {
-    @Bindable var store: StoreOf<CreateQuestion>
+public struct WriteQuestionView: View {
+    @Bindable var store: StoreOf<WriteQuestion>
     var backAction: () -> Void = { }
     @State private var isFocused: Bool = false
     
     public init(
-        store: StoreOf<CreateQuestion>,
+        store: StoreOf<WriteQuestion>,
         backAction: @escaping () -> Void
     ) {
         self.store = store
@@ -50,12 +51,10 @@ public struct CreateQuestionView: View {
                     
                     CustomButton(
                         action: {
-                          
-                            
-                            
+                            store.send(.navigation(.presntWriteAnswer))
                         }, title: store.presntNextViewButtonTitle,
                         config: CustomButtonConfig.create()
-                        ,isEnable: !store.isWriteTextEditor.isEmpty)
+                        ,isEnable: !store.isWriteTextEditor.isEmpty && store.emojiImage != nil)
                     .padding(.horizontal, 20)
                     
                     Spacer()
@@ -63,17 +62,26 @@ public struct CreateQuestionView: View {
                 }
                 .bounce(false)
                 
-               
+            }
+            .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
+                FloatingPopUpView(store: floatingPopUpStore, title:  "60자까지 작성할 수 있어요" , image: .warning)
+                
+            }  customize: { popup in
+                popup
+                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.02))
+                    .position(.bottom)
+                    .animation(.spring)
+                    .closeOnTap(true)
+                    .closeOnTapOutside(true)
             }
             .onTapGesture {
-                UIApplication.shared.hideKeyboard()
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
-            
         }
     }
 }
 
-extension CreateQuestionView {
+extension WriteQuestionView {
     
     @ViewBuilder
     private func selectQuestionEmojeView() -> some View {
@@ -81,17 +89,22 @@ extension CreateQuestionView {
             Spacer()
                 .frame(height: 16)
             
-            if store.isInupustEmoji {
+            if store.isInuputEmoji {
                 HStack {
                     Spacer()
                         .frame(width: UIScreen.screenWidth * 0.4)
                         
-                    EmojiTextField(text: $store.selectEmojiText, emojiImage: $store.emojiImage, isInputEmoji: $store.isInupustEmoji, placeholder: "")
-                        .frame(width: 80, height: 80)
-                        .onTapGesture {
-                            UIApplication.shared.hideKeyboard()
+                    TextField("", text: $store.selectEmojiText)
+                        .pretendardFont(family: .SemiBold, size: 48)
+                        .onChange(of: store.selectEmojiText) { oldValue, newValue in
+                            if newValue.count == 1, newValue.unicodeScalars.allSatisfy({ $0.properties.isEmoji }) {
+                                self.store.emojiImage = Image.emojiToImage(emoji: newValue)
+                                store.isInuputEmoji = false
+                            } else {
+                                store.selectEmojiText = ""
+                            }
                         }
-                    
+                        
                     Spacer()
                 }
                 
@@ -103,7 +116,7 @@ extension CreateQuestionView {
                     .frame(width: 80, height: 80)
                     .clipShape(Circle())
                     .onTapGesture {
-                        store.isInupustEmoji.toggle()
+                        store.isInuputEmoji.toggle()
                         store.selectEmojiText = ""
                     }
                     .offset(x: 10)
@@ -117,7 +130,7 @@ extension CreateQuestionView {
                             .scaledToFit()
                             .frame(width: 32, height: 32)
                             .onTapGesture {
-                                store.isInupustEmoji.toggle()
+                                store.isInuputEmoji.toggle()
                             }
                     }
             }
@@ -129,6 +142,7 @@ extension CreateQuestionView {
         .padding()
     }
     
+    
     @ViewBuilder
     private func wittingQustionView() -> some View {
         VStack {
@@ -138,9 +152,6 @@ extension CreateQuestionView {
             TextEditor(text: $store.isWriteTextEditor)
                 .modifier(TextEditorModifier(placeholder: "여기를 눌러서 작성해주세요.", text: $store.isWriteTextEditor))
                 .frame(height: 160)
-                .onTapGesture {
-                    UIApplication.shared.hideKeyboard()
-                }
             
             Spacer()
                 .frame(height: 12)
@@ -151,14 +162,15 @@ extension CreateQuestionView {
                 .onChange(of: store.isWriteTextEditor) { newValue, oldValue in
                     if newValue.count > 60 {
                         store.isWriteTextEditor = String(newValue.prefix(60))
+                        store.send(.view(.presntFloatintPopUp))
+                        store.send(.view(.timeToCloseFloatingPopUp))
                     }
                 }
+            
                
         }
         .padding(.horizontal ,20)
-        .onTapGesture {
-            UIApplication.shared.hideKeyboard()
-        }
+        
     }
 }
 

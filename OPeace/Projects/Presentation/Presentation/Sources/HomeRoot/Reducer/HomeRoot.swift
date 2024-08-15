@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+import SwiftUI
 
 import Utill
 import API
@@ -24,6 +25,9 @@ public struct HomeRoot {
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
         @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("createQuestionEmoji")) var emojiText: String = ""
+        @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
+        @Shared(.inMemory("emojiImage")) var emojiImage: Image? = nil
     }
     
     public enum Action : ViewAction, FeatureAction {
@@ -46,7 +50,9 @@ public struct HomeRoot {
         case webView(Web)
         case onBoardingPagging(OnBoadingPagging)
         case withDraw(WithDraw)
-        case createQuestion(CreateQuestion)
+        case writeQuestion(WriteQuestion)
+        case writeAnswer(WriteAnswer)
+        
     }
     
     //MARK: - ViewAction
@@ -160,7 +166,13 @@ public struct HomeRoot {
                     }
                     
                 case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
-                    state.path.append(.createQuestion(.init()))
+                    state.path.append(.writeQuestion(.init()))
+                    
+                case .element(id: _, action: .writeQuestion(.navigation(.presntWriteAnswer))):
+                    state.path.append(.writeAnswer(.init(
+                        createQuestionEmoji: state.emojiText,
+                        createQuestionTitle: state.createQuestionTitle)
+                    ))
                     
                 default:
                     return .none

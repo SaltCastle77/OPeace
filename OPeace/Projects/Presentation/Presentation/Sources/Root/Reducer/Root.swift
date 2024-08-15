@@ -233,6 +233,7 @@ public struct Root {
                             if let responseData = checkUserVerifyResult {
                                 send(.async(.checkUserVerfiyResponse(.success(responseData))))
                                 
+                                try await clock.sleep(for: .seconds(1))
                                 send(.async(.loginWIthKakao))
                             }
                         case .failure(let error):
