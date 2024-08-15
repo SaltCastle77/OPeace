@@ -19,7 +19,7 @@ import Utill
 public struct WriteQuestionView: View {
     @Bindable var store: StoreOf<WriteQuestion>
     var backAction: () -> Void = { }
-    @State private var isFocused: Bool = false
+    @FocusState var isFocused: Bool
     
     public init(
         store: StoreOf<WriteQuestion>,
@@ -45,7 +45,6 @@ public struct WriteQuestionView: View {
                     
                     wittingQustionView()
                     
-                    
                     Spacer()
                         .frame(height: UIScreen.screenHeight * 0.35)
                     
@@ -54,7 +53,7 @@ public struct WriteQuestionView: View {
                             store.send(.navigation(.presntWriteAnswer))
                         }, title: store.presntNextViewButtonTitle,
                         config: CustomButtonConfig.create()
-                        ,isEnable: !store.isWriteTextEditor.isEmpty && store.emojiImage != nil)
+                        ,isEnable: !store.isWriteTextEditor.isEmpty && store.emojiImage != nil && store.enableButton)
                     .padding(.horizontal, 20)
                     
                     Spacer()
@@ -104,6 +103,7 @@ extension WriteQuestionView {
                                 store.selectEmojiText = ""
                             }
                         }
+                        .focused($isFocused)
                         
                     Spacer()
                 }
@@ -116,8 +116,10 @@ extension WriteQuestionView {
                     .frame(width: 80, height: 80)
                     .clipShape(Circle())
                     .onTapGesture {
+                        UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
                         store.isInuputEmoji.toggle()
                         store.selectEmojiText = ""
+                        isFocused.toggle()
                     }
                     .offset(x: 10)
             } else {
@@ -131,13 +133,11 @@ extension WriteQuestionView {
                             .frame(width: 32, height: 32)
                             .onTapGesture {
                                 store.isInuputEmoji.toggle()
+                                isFocused.toggle()
+                                UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
                             }
                     }
             }
-            
-            
-            
-            
         }
         .padding()
     }
@@ -160,14 +160,15 @@ extension WriteQuestionView {
                 .pretendardFont(family: .Regular, size: 16)
                 .foregroundStyle(Color.gray300)
                 .onChange(of: store.isWriteTextEditor) { newValue, oldValue in
-                    if newValue.count > 60 {
+                    if newValue.count >= 60 {
+                        store.enableButton = false
                         store.isWriteTextEditor = String(newValue.prefix(60))
                         store.send(.view(.presntFloatintPopUp))
                         store.send(.view(.timeToCloseFloatingPopUp))
+                    } else {
+                        store.enableButton = true
                     }
                 }
-            
-               
         }
         .padding(.horizontal ,20)
         

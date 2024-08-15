@@ -36,7 +36,16 @@ public struct HomeView: View {
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
                 navigationController.interactivePopGestureRecognizer?.isEnabled = false
             }
-
+            
+            VStack {
+                Spacer()
+                
+                writeQuestionButton()
+                    .padding(.bottom, 20) 
+            }
+            .edgesIgnoringSafeArea(.bottom)
+            
+            
         }
         
         
@@ -145,8 +154,32 @@ extension HomeView {
             store.floatingText = "수정이 완료되었어요!"
             store.send(.view(.timeToCloseFloatingPopUp))
             store.isChangeProfile = false
+        } else if store.isCreateQuestion == true {
+            store.send(.view(.presntFloatintPopUp))
+            store.floatingText = "고민 등록이 완료 되었어요!"
+            store.send(.view(.timeToCloseFloatingPopUp))
+            store.isCreateQuestion = false
         } else {
             store.floatingText = "로그인 해주세요"
         }
+    }
+    
+    @ViewBuilder
+    private func writeQuestionButton() -> some View {
+        RoundedRectangle(cornerRadius: 20)
+            .fill(Color.basicWhite)
+            .frame(width: 120, height: 56)
+            .clipShape(Capsule())
+            .overlay {
+                Text("글쓰기")
+                    .pretendardFont(family: .Regular, size: 20)
+                    .foregroundStyle(Color.textColor100)
+            }
+            .onTapGesture {
+                store.send(.navigation(.presntWriteQuestion))
+            }
+            .padding(.bottom, 16)
+            
+        
     }
 }

@@ -25,6 +25,7 @@ public struct Home {
         @Shared var isDeleteUser: Bool
         @Shared var isLookAround: Bool
         @Shared var isChangeProfile: Bool
+        @Shared var isCreateQuestion: Bool
         @Presents var destination: Destination.State?
         var loginTiltle: String = "로그인을 해야 다른 기능을 사용하실 수 있습니다. "
         var floatingText: String = ""
@@ -33,12 +34,14 @@ public struct Home {
             isLogOut: Bool = false,
             isDeleteUser: Bool = false,
             isLookAround: Bool = false,
-            isChangeProfile: Bool = false
+            isChangeProfile: Bool = false,
+            isCreateQuestion: Bool = false
         ) {
             self._isLogOut = Shared(wrappedValue: isLogOut, .inMemory("isLogOut"))
             self._isDeleteUser = Shared(wrappedValue: isDeleteUser, .inMemory("isDeleteUser"))
             self._isLookAround = Shared(wrappedValue: isLookAround, .inMemory("isLookAround"))
             self._isChangeProfile = Shared(wrappedValue: isChangeProfile, .inMemory("isChangeProfile"))
+            self._isCreateQuestion = Shared(wrappedValue: isCreateQuestion, .inMemory("isCreateQuestion"))
         }
         
     }
@@ -88,6 +91,7 @@ public struct Home {
     public enum NavigationAction: Equatable {
         case presntProfile
         case presntLogin
+        case presntWriteQuestion
     
     }
     
@@ -146,6 +150,9 @@ public struct Home {
                     }
                     
                 case .presntLogin:
+                    return .none
+                    
+                case .presntWriteQuestion:
                     return .none
                 }
                 

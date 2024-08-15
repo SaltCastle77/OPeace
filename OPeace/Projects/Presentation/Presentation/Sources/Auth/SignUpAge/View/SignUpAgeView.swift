@@ -74,8 +74,11 @@ public struct SignUpAgeView: View {
                 if !CheckRegister.containsInvalidAge(store.signUpAgeDisplay) {
                     store.enableButton = false
                     store.isErrorGenerationText = "정확한 연도를 입력해 주세요"
-                } else if store.signUpAgeDisplay.isEmpty {
+                } else if store.signUpAgeDisplay.isEmpty ||  store.signUpAgeDisplay.count != 4 || Int(store.signUpAgeDisplay) == nil {
                     store.isErrorGenerationText = "정확한 연도를 입력해 주세요"
+                    store.enableButton = false
+                } else if let year = Int(store.signUpAgeDisplay), year < 1900 {
+                    store.isErrorGenerationText = "연도는 1900년 이상이어야 합니다"
                     store.enableButton = false
                 } else {
                     store.enableButton = true
@@ -123,24 +126,32 @@ extension SignUpAgeView {
                 .submitLabel(.return)
                 .keyboardType(.numberPad)
                 .onChange(of: store.signUpAgeDisplay) { newValue in
-                    // Limit to 4 characters
                     if newValue.count > 4 {
                         store.signUpAgeDisplay = String(newValue.prefix(4))
                     }
-                    // Ensure only digits are entered
                     store.signUpAgeDisplay = store.signUpAgeDisplay.filter { $0.isNumber }
                 }
                 .onSubmit {
+                    // Check if the input is exactly 4 digits and can be converted to an integer
                     if store.signUpAgeDisplay.count != 4 || Int(store.signUpAgeDisplay) == nil {
                         store.isErrorGenerationText = "정확한 연도를 입력해 주세요"
+                    } else if let year = Int(store.signUpAgeDisplay), year < 1900 {
+                        store.isErrorGenerationText = "연도는 1900년 이상이어야 합니다"
+                        store.enableButton = false
                     } else {
+                        // No error, so proceed with generation check
                         store.isErrorGenerationText = ""
-                        let (generation, color, textColor) = CheckRegister.getGeneration(year: Int(store.signUpAgeDisplay) ?? .zero, color: store.signUpAgeDisplayColor, textColor: store.checkGenerationTextColor)
+                        let (generation, color, textColor) = CheckRegister.getGeneration(
+                            year: Int(store.signUpAgeDisplay) ?? .zero,
+                            color: store.signUpAgeDisplayColor,
+                            textColor: store.checkGenerationTextColor
+                        )
                         store.checkGenerationText = generation
                         store.signUpAgeDisplayColor = color
                         store.checkGenerationTextColor = textColor
                     }
                 }
+
             
             HStack {
                 Spacer()
@@ -148,9 +159,9 @@ extension SignUpAgeView {
                 if store.signUpAgeDisplay.isEmpty {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(Color.gray500)
-                        .frame(width: "? 세대".calculateWidthAge(for: "? 세대"), height: 32)
+                        .frame(width: "기타 세대".calculateWidthAge(for: "기타 세대"), height: 32)
                         .overlay {
-                            Text("? 세대")
+                            Text("기타 세대")
                                 .pretendardFont(family: .Regular, size: 16)
                                 .foregroundStyle(Color.gray200)
                         }
@@ -177,6 +188,10 @@ extension SignUpAgeView {
                 .frame(height: 20)
             
             if store.signUpAgeDisplay.isEmpty {
+                Text(store.isErrorGenerationText)
+                    .pretendardFont(family: .Regular, size: 16)
+                    .foregroundStyle(store.enableButton ? Color.basicPrimary : Color.alertError)
+            } else  if let year = Int(store.signUpAgeDisplay), year < 1900 || store.signUpAgeDisplay.count != 4 {
                 Text(store.isErrorGenerationText)
                     .pretendardFont(family: .Regular, size: 16)
                     .foregroundStyle(store.enableButton ? Color.basicPrimary : Color.alertError)

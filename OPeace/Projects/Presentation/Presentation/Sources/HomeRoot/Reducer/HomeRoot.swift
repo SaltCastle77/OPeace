@@ -28,6 +28,7 @@ public struct HomeRoot {
         @Shared(.inMemory("createQuestionEmoji")) var emojiText: String = ""
         @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
         @Shared(.inMemory("emojiImage")) var emojiImage: Image? = nil
+        @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
     }
     
     public enum Action : ViewAction, FeatureAction {
@@ -87,23 +88,17 @@ public struct HomeRoot {
                 switch action {
 //                case .element(id: _, action: .home):
                     
-                case .element(id: _, action: .home(.navigation(.presntProfile))):
-                    state.path.append(.profile(.init()))
-                                
-                case .element(id: _, action: .profile(.navigation(.presntLogout))):
-                    state.path.append(.home(.init(
-                        isLogOut: state.isLogOut,
-                        isDeleteUser: state.isDeleteUser,
-                        isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile)))
-                    state.path.removeFirst()
-                    
+                    //MARK: - Login
                 case .element(id: _, action: .login(.navigation(.presentMain))):
                     state.path.append(.home(.init(
                         isLogOut: state.isLogOut,
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile)))
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)))
+                    
+                case .element(id: _, action: .login(.navigation(.presnetAgreement))):
+                    state.path.append(.agreeMent(.init()))
                     
                 case .element(id: _, action: .login(.navigation(.presntLookAround))):
                     state.path.append(.home(.init(
@@ -112,16 +107,8 @@ public struct HomeRoot {
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile)))
                     
-                case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
-                    state.path.append(.editProfile(.init()))
                     
-                case .element(id: _, action: .home(.navigation(.presntLogin))):
-                    state.path.append(.login(.init()))
-                    
-                case .element(id: _, action: .login(.navigation(.presnetAgreement))):
-                    state.path.append(.agreeMent(.init()))
-                    
-                    
+                    //MARK: - Agree
                 case .element(id: _, action: .agreeMent(.navigation(.presntSignUpName))):
                     state.path.append(.signUpPagging(.init()))
                     
@@ -134,26 +121,57 @@ public struct HomeRoot {
                     state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
                     
                     
+                    //MARK: - SignUp
                 case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
                     state.path.append(.onBoardingPagging(.init()))
-                    
-                    
-                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
-                    state.path.append(.home(.init(
-                        isLogOut: state.isLogOut,
-                        isDeleteUser: state.isDeleteUser,
-                        isLookAround: state.isLookAround)))
                     
                 case .element(id: _, action: .signUpPagging(.navigation(.presntMainHome))):
                     state.path.append(.home(.init(
                         isLogOut: state.isLogOut,
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile)))
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)
+                    ))
                     
+                    //MARK: - OnBoarding
+                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround)))
+                    
+                    //MARK: - home
+                case .element(id: _, action: .home(.navigation(.presntProfile))):
+                    state.path.append(.profile(.init()))
+                    
+                case .element(id: _, action: .home(.navigation(.presntLogin))):
+                    state.path.append(.login(.init()))
+                                
+                case .element(id: _, action: .home(.navigation(.presntWriteQuestion))):
+                    state.path.append(.writeQuestion(.init()))
+                    
+                    //MARK: - profile
+                case .element(id: _, action: .profile(.navigation(.presntLogout))):
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)
+                    ))
+                    state.path.removeFirst()
+                    
+                case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
+                    state.path.append(.editProfile(.init()))
+                        
                 case .element(id: _, action: .profile(.navigation(.presntWithDraw))):
                     state.path.append(.withDraw(.init()))
+            
+                case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
+                    state.path.append(.writeQuestion(.init()))
                     
+                    //MARK: - WithDraw
                 case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
                     state.path.removeAll { path in
                         switch path {
@@ -165,14 +183,26 @@ public struct HomeRoot {
                         }
                     }
                     
-                case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
-                    state.path.append(.writeQuestion(.init()))
+            
                     
+                    //MARK: - CreateQuestion
                 case .element(id: _, action: .writeQuestion(.navigation(.presntWriteAnswer))):
                     state.path.append(.writeAnswer(.init(
                         createQuestionEmoji: state.emojiText,
                         createQuestionTitle: state.createQuestionTitle)
                     ))
+                    
+                case .element(id: _, action: .writeAnswer(.navigation(.presntMainHome))):
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw, .writeAnswer, .writeQuestion:
+                            return true
+                        default:
+                            return false
+                        }
+                    }
+                    
+                
                     
                 default:
                     return .none

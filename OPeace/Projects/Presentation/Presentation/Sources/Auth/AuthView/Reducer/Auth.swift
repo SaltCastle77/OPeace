@@ -36,6 +36,7 @@ public struct Auth {
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
         @Shared(.inMemory("createQuestionEmoji")) var emojiText: String = ""
         @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
+        @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
         
     }
     
@@ -102,43 +103,27 @@ public struct Auth {
 //                case .element(id: _, action: .root):
 //                return .none
                     
-                case .element(id: _, action: .home(.navigation(.presntProfile))):
-                    state.path.append(.profile(.init()))
-                                
-                case .element(id: _, action: .profile(.navigation(.presntLogout))):
-                    state.path.append(.home(.init(
-                        isLogOut: state.isLogOut,
-                        isDeleteUser: state.isDeleteUser,
-                        isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile)))
-                    state.path.removeFirst()
-                    
+                    //MARK: - Login
                 case .element(id: _, action: .login(.navigation(.presentMain))):
                     state.path.append(.home(.init(
                         isLogOut: state.isLogOut,
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile
-                    )))
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)))
                     
                 case .element(id: _, action: .login(.navigation(.presntLookAround))):
                     state.path.append(.home(.init(
                         isLogOut: state.isLogOut,
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile
-                    )))
-                    
-                case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
-                    state.path.append(.editProfile(.init()))
-                    
-                case .element(id: _, action: .home(.navigation(.presntLogin))):
-                    state.path.append(.login(.init()))
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)))
                     
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
                     
-                    
+                    //MARK: - Agree
                 case .element(id: _, action: .agreeMent(.navigation(.presntSignUpName))):
                     state.path.append(.signUpPagging(.init()))
                     
@@ -150,32 +135,60 @@ public struct Auth {
                 case .element(id: _, action: .agreeMent(.navigation(.presntPrivacyAgreeCheckTapped))):
                     state.path.append(.webView(.init(url: AgreeMentAPI.privacyPolicy.agreeMentDesc)))
                     
-                    
+                    //MARK: - SignUp
                 case .element(id: _, action: .signUpPagging(.navigation(.presntOnboarding))):
                     state.path.append(.onBoardingPagging(.init()))
-                    
-                    
-                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
-                    state.path.append(.home(.init(
-                        isLogOut: state.isLogOut,
-                        isDeleteUser: state.isDeleteUser,
-                        isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile)))
-                    
+             
                 case .element(id: _, action: .signUpPagging(.navigation(.presntMainHome))):
                     state.path.append(.home(.init(
                         isLogOut: state.isLogOut,
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile)))
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)))
+                    
+                    //MARK: - OnBoarding
+                case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)))
+                    
+                    //MARK: - home
+                case .element(id: _, action: .home(.navigation(.presntProfile))):
+                    state.path.append(.profile(.init()))
+                    
+                case .element(id: _, action: .home(.navigation(.presntLogin))):
+                    state.path.append(.login(.init()))
+                          
+                case .element(id: _, action: .home(.navigation(.presntWriteQuestion))):
+                    state.path.append(.writeQuestion(.init()))
+                    
+                    //MARK: - profile
+                case .element(id: _, action: .profile(.navigation(.presntLogout))):
+                    state.path.append(.home(.init(
+                        isLogOut: state.isLogOut,
+                        isDeleteUser: state.isDeleteUser,
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion)
+                    ))
+                    state.path.removeFirst()
+                    
+                case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
+                    state.path.append(.editProfile(.init()))
                     
                 case .element(id: _, action: .profile(.navigation(.presntWithDraw))):
                     state.path.append(.withDraw(.init()))
                     
+                case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
+                    state.path.append(.writeQuestion(.init()))
+                    
+                    //MARK: - WithDraw
                 case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
                     let homeState = Home.State()
-
-                    
                     state.path.removeAll { path in
                         switch path {
                         case .editProfile, .profile, .withDraw:
@@ -190,14 +203,28 @@ public struct Auth {
                         state.path.append(.home(homeState))
                     }
                     
-                case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
-                    state.path.append(.writeQuestion(.init()))
-                    
+                    //MARK: - CreateQuestion
                 case .element(id: _, action: .writeQuestion(.navigation(.presntWriteAnswer))):
                     state.path.append(.writeAnswer(.init(
                         createQuestionEmoji: state.emojiText,
                         createQuestionTitle: state.createQuestionTitle)
                     ))
+                    
+                case .element(id: _, action: .writeAnswer(.navigation(.presntMainHome))):
+                    let homeState = Home.State()
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw, .writeAnswer, .writeQuestion:
+                            return true
+                        case .home:
+                            return false
+                        default:
+                            return true
+                        }
+                    }
+                    if !state.path.contains(where: { $0 == .home(homeState) }) {
+                        state.path.append(.home(homeState))
+                    }
                     
                     
                 default:

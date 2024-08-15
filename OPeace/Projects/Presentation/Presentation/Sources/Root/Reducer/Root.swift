@@ -190,10 +190,12 @@ public struct Root {
                         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
                         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
                         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
+                        @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
                         Root.State.kakaoModel = ResponseData
                         isLogOut = false
                         isDeleteUser = false
                         isChangeProfile = false
+                        isCreateQuestion = false
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
                         

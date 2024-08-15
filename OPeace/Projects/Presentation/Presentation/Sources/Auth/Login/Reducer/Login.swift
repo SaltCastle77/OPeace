@@ -181,8 +181,6 @@ public struct Login {
                         case .success(let resopnse):
                             if let responseData = resopnse {
                                 send(.async(.kakaoLoginApiResponse(.success(responseData))))
-                                try await self.clock.sleep(for: .seconds(0.05))
-                                
                                 send(.async(.fetchUser))
                             }
                             

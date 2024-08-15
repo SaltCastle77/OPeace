@@ -18,12 +18,15 @@ public struct WriteQuestion {
     
     @ObservableState
     public struct State: Equatable {
+        @Shared(.inMemory("createQuestionEmoji")) var selectEmojiText: String = ""
+        @Shared(.inMemory("createQuestionTitle")) var isWriteTextEditor: String = ""
+        
         var isSelectEmoji: Bool = false
         var isInuputEmoji: Bool = false
         var emojiImage: Image? = nil
-        @Shared(.inMemory("createQuestionEmoji")) var selectEmojiText: String = ""
-        @Shared(.inMemory("createQuestionTitle")) var isWriteTextEditor: String = ""
         var presntNextViewButtonTitle: String = "다음"
+        var enableButton: Bool = false
+
         
         @Presents var destination: Destination.State?
         
