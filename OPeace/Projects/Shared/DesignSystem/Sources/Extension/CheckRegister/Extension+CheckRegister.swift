@@ -27,7 +27,7 @@ extension CheckRegister {
         } else if (2010...).contains(year) {
             return ("알파 세대", .basicGreen, .gray600)
         } else {
-            return ("? 세대", .gray500, .gray200)
+            return ("기타 세대", .gray500, .gray200)
         }
     }
     

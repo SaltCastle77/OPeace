@@ -75,4 +75,19 @@ public extension String {
     func size(withAttributes attrs: [NSAttributedString.Key: Any]) -> CGSize {
         return (self as NSString).size(withAttributes: attrs)
     }
+    
+    func convertEmojiToUnicode(_ emoji: String) -> String {
+        return emoji.unicodeScalars.map { "\\u\(String($0.value, radix: 16, uppercase: true))" }.joined()
+    }
+    
+    func convertUnicodeToEmoji(_ unicode: String) -> String? {
+        let cleanedUnicode = unicode.replacingOccurrences(of: "\\u", with: "")
+        if let scalarValue = UInt32(cleanedUnicode, radix: 16),
+           let scalar = UnicodeScalar(scalarValue) {
+            return String(scalar)
+        }
+        
+        return nil
+    }
+
 }
