@@ -28,6 +28,21 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
     ) async throws -> QuestionModel? {
         try await repository.fetchQuestionList(page: page, pageSize: pageSize)
     }
+    
+    //MARK: - 질문 생성
+    public func createQuestion(
+        emoji: String,
+        title: String,
+        choiceA: String,
+        choiceB: String
+    ) async throws -> CreateQuestionModel? {
+        try await repository.createQuestion(
+            emoji: emoji,
+            title: title,
+            choiceA: choiceA,
+            choiceB: choiceB
+        )
+    }
 }
 
 extension QuestionUseCase : DependencyKey {

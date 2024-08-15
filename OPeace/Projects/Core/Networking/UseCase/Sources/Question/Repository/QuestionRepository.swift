@@ -29,4 +29,18 @@ public class QuestionRepository: QuestionRepositoryProtocol {
             pageSize: pageSize
         ), decodeTo: QuestionModel.self)
     }
+    
+    //MARK: - 질문 생성API
+    public func createQuestion(
+        emoji: String,
+        title: String,
+        choiceA: String,
+        choiceB: String
+    ) async throws -> CreateQuestionModel? {
+        return try await provider.requestAsync(.createQuestion(
+            emoji: emoji,
+            title: title,
+            choiceA: choiceA,
+            choiceB: choiceB), decodeTo: CreateQuestionModel.self)
+    }
 }

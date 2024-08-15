@@ -21,6 +21,7 @@ public enum CustomError: Error, Equatable {
     case unknownError(String)
     case firestoreError(String)
     case encodingError(String)
+    case createQuestionError(String)
     case none
 }
 
@@ -52,7 +53,9 @@ extension CustomError: LocalizedError {
         case .encodingError(let message):
             return "파이어 인코딩 에러 발생: \(message)"
         case .kakaoTokenError(let message):
-            return "카카오 토큰 에러 방생: \(message)"
+            return "카카오 토큰 에러 발생: \(message)"
+        case .createQuestionError(let message):
+            return "짐문 생성 에러 발생: \(message)"
         case .none:
             return nil
         }
@@ -85,6 +88,8 @@ extension CustomError: LocalizedError {
         case .encodingError(_):
             return "개발팀에게 문의해주세요"
         case .kakaoTokenError(_):
+            return "개발팀에게 문의해주세요"
+        case .createQuestionError(_):
             return "개발팀에게 문의해주세요"
         case .none:
             return nil
