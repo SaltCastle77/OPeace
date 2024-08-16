@@ -230,11 +230,11 @@ public struct Login {
                         case .success(let fetchUserResult):
                             if let fetchUserResult = fetchUserResult {
                                 send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
+                                UserDefaults.standard.set(true, forKey: "isFirstTimeUser")
                                 
                                 if fetchUserResult.data?.nickname != nil && fetchUserResult.data?.year != nil && fetchUserResult.data?.job != nil {
                                     send(.navigation(.presentMain))
                                 } else {
-                                    UserDefaults.standard.set(true, forKey: "isFirstTimeUser")
                                     send(.navigation(.presnetAgreement))
                                 }
                                 

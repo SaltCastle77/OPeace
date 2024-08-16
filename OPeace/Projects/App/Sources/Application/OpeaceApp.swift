@@ -56,7 +56,7 @@ extension OpeaceApp {
     
     private func isFirstApplication() {
         print("isFirstUseApp : \(isFirstUseApp)")
-        if isFirstUseApp == nil {
+        if isFirstUseApp == false {
             try? Keychain().removeAll()
         }
     }

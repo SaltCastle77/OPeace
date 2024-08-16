@@ -144,7 +144,7 @@ extension HomeView {
             store.floatingText = "로그아웃 되었어요"
             store.send(.view(.timeToCloseFloatingPopUp))
         } else if store.isLookAround == true {
-            store.floatingText = "로그인 해주세요"
+            store.floatingText = "로그인 하시겠어요?"
         } else if store.isDeleteUser == true  {
             store.send(.view(.presntFloatintPopUp))
             store.floatingText = "탈퇴 완료! 언젠가 다시 만나요"
@@ -160,7 +160,7 @@ extension HomeView {
             store.send(.view(.timeToCloseFloatingPopUp))
             store.isCreateQuestion = false
         } else {
-            store.floatingText = "로그인 해주세요"
+            store.floatingText = "로그인 하시겠어요?"
         }
     }
     
