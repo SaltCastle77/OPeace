@@ -25,7 +25,7 @@ public struct Root {
         case onbaordingPagging(OnBoadingPagging.State)
         case signUpPAgging(SignUpPaging.State)
         case profile(Profile.State)
-        static var kakaoModel : KakaoResponseModel? = nil
+        static var userModel : UserLoginModel? = nil
         static var checkUserVerifyModel: CheckUserVerifyModel? = nil
         static var refreshTokenModel: RefreshModel? = nil
         
@@ -75,7 +75,7 @@ public struct Root {
         case handleKakaoLogin
         
         case loginWIthKakao
-        case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
+        case kakaoLoginApiResponse(Result<UserLoginModel, CustomError>)
         
         case refreshTokenResponse(Result<RefreshModel, CustomError>)
         case refreshTokenRequest(refreshToken: String)
@@ -144,18 +144,18 @@ public struct Root {
                                 if Root.State.checkUserVerifyModel?.data?.status == false {
                                     if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
                                         send(.async(.handleRefreshToken(refreshToken)))
-                                    } else if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
+                                    } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
                                         send(.view(.auth(.login(.async(.kakaoLogin)))))
                                     }
                                 }
-                                print("epdlx \(Root.State.kakaoModel?.data?.isRefreshTokenExpires)")
+                                print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
                                 
-                                if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
+                                if Root.State.userModel?.data?.isRefreshTokenExpires == true {
                                     send(.view(.auth(.login(.async(.kakaoLogin)))))
                                 }
                                 
-                                if Root.State.kakaoModel?.data?.accessToken == accessToken {
-                                    if ((Root.State.kakaoModel?.data?.accessToken?.isEmpty) != nil && Root.State.kakaoModel?.data?.isExpires != true) {
+                                if Root.State.userModel?.data?.accessToken == accessToken {
+                                    if ((Root.State.userModel?.data?.accessToken?.isEmpty) != nil && Root.State.userModel?.data?.isExpires != true) {
                                         send(.view(.changeScene(.homeRoot(.init()))))
                                     } else {
                                         send(.view(.changeScene(.auth(.init()))))
@@ -164,7 +164,35 @@ public struct Root {
                             }
                             
                         case "apple":
-                            break
+                            if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                if refreshToken != nil {
+                                    send(.async(.checkUserVerfiy))
+                                }
+                            }
+                            
+                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
+                                if Root.State.checkUserVerifyModel?.data?.status == false {
+                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                        send(.async(.handleRefreshToken(refreshToken)))
+                                    } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
+//                                        send(.view(.auth(.login(.async(.appleLogin)))))
+                                    }
+                                }
+                                print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
+                                
+                                if Root.State.userModel?.data?.isRefreshTokenExpires == true {
+//                                    send(.view(.auth(.login(.async(.appleLogin)))))
+                                }
+                                
+                                if Root.State.userModel?.data?.accessToken == accessToken {
+                                    if ((Root.State.userModel?.data?.accessToken?.isEmpty) != nil && Root.State.userModel?.data?.isExpires != true) {
+                                        send(.view(.changeScene(.homeRoot(.init()))))
+                                    } else {
+                                        send(.view(.changeScene(.auth(.init()))))
+                                    }
+                                }
+                            }
+                            
                         case "google":
                             break
                         default:
@@ -191,7 +219,7 @@ public struct Root {
                         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
                         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
                         @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
-                        Root.State.kakaoModel = ResponseData
+                        Root.State.userModel = ResponseData
                         isLogOut = false
                         isDeleteUser = false
                         isChangeProfile = false

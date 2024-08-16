@@ -35,7 +35,7 @@ public struct Login {
         var error: String = ""
         var accessToken: String?
         var idToken: String?
-        var kakaoModel : KakaoResponseModel? = nil
+        var userLoginModel : UserLoginModel? = nil
         var socialType: SocialType? = nil
         var profileUserModel: UpdateUserInfoModel? = nil
         var refreshTokenModel: RefreshModel?
@@ -63,10 +63,12 @@ public struct Login {
     public enum AsyncAction  {
         case fetchAppleRespose(Result<ASAuthorization, Error>)
         case appleLogin(Result<ASAuthorization, Error>)
+        case loginWithApple(token: String)
+        case loginWithAppleResponse(Result<UserLoginModel, CustomError>)
         case kakaoLogin
         case kakaoLoginResponse(Result<(String?, String?), CustomError>)
         case loginWIthKakao
-        case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
+        case kakaoLoginApiResponse(Result<UserLoginModel, CustomError>)
         case fetchUserProfileResponse(Result<UpdateUserInfoModel, CustomError>)
         case fetchUser
         case refreshTokenResponse(Result<RefreshModel, CustomError>)
@@ -101,10 +103,13 @@ public struct Login {
                 switch AsyncAction {
                     
                 case .appleLogin(let authData):
+                    var appleAccessToken = state.appleAccessToken
                     return .run { @MainActor send in
                         do {
                             let result = try await authUseCase.handleAppleLogin(authData)
                             send(.async(.fetchAppleRespose(.success(result))))
+                            try await clock.sleep(for: .seconds(1))
+                            send(.async(.loginWithApple(token: appleAccessToken)))
                         } catch {
                             print("Error handling Apple login: \(error)")
                         }
@@ -127,6 +132,54 @@ public struct Login {
                         }
                     case .failure(let error):
                         Log.error("애플로그인 에러", error)
+                    }
+                    return .none
+                    
+                case .loginWithApple(let token):
+                    return .run { @MainActor send in
+                        let appleLoginResult = await Result {
+                            try await authUseCase.appleLogin(token: token)
+                        }
+                        
+                        switch appleLoginResult {
+                        case .success(let appleLoginResult):
+                            if let appleLoginResult = appleLoginResult {
+                                send(.async(.loginWithAppleResponse(.success(appleLoginResult))))
+                                send(.async(.fetchUser))
+                            }
+                        case .failure(let error):
+                            send(.async(.loginWithAppleResponse(.failure(CustomError.kakaoTokenError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                case .loginWithAppleResponse(let result):
+                    switch result {
+                    case .success(let ResponseData):
+                        state.userLoginModel = ResponseData
+
+                        try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                        state.socialType = .kakao
+                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
+                        try? Keychain().set(socialTypeValue, key: "socialType")
+                        if state.userLoginModel?.data?.accessToken != "" {
+                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            state.isLogOut = false
+                            state.isLookAround = false
+                            state.isDeleteUser = false
+                            state.isChangeProfile = false
+                        } else {
+                            try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            state.isLogOut = false
+                            state.isLookAround = false
+                            state.isDeleteUser = false
+                            state.isChangeProfile = false
+                        }
+                    case .failure(let error):
+                        Log.network("카카오 로그인 에러", error.localizedDescription)
+                        state.socialType = .apple
+                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
+                        try? Keychain().set(socialTypeValue, key: "socialType")
                     }
                     return .none
                     
@@ -192,21 +245,21 @@ public struct Login {
                 case .kakaoLoginApiResponse(let data):
                     switch data {
                     case .success(let ResponseData):
-                        state.kakaoModel = ResponseData
+                        state.userLoginModel = ResponseData
 
-                        try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                        try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                         state.socialType = .kakao
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
                         try? Keychain().set(socialTypeValue, key: "socialType")
-                        if state.kakaoModel?.data?.accessToken != "" {
-                            try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                        if state.userLoginModel?.data?.accessToken != "" {
+                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                             state.isLogOut = false
                             state.isLookAround = false
                             state.isDeleteUser = false
                             state.isChangeProfile = false
                         } else {
-                            try? Keychain().set(state.kakaoModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
-                            try? Keychain().set(state.kakaoModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                             state.isLogOut = false
                             state.isLookAround = false
                             state.isDeleteUser = false

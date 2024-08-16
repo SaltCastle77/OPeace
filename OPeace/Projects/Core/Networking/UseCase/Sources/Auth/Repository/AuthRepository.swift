@@ -22,6 +22,10 @@ import Model
 
 
 @Observable public class AuthRepository: AuthRepositoryProtocol {
+    
+    
+    
+    
   
     
     private let provider = MoyaProvider<AuthService>(plugins: [MoyaLoggingPlugin()])
@@ -36,9 +40,10 @@ import Model
             switch authResults.credential {
             case let appleIDCredential as ASAuthorizationAppleIDCredential:
                 if let tokenData = appleIDCredential.identityToken,
-                   let _ = String(data: tokenData, encoding: .utf8) {
+                   let acessToken = String(data: tokenData, encoding: .utf8) {
                     do {
-                        _ = try await provider.requestAsync(.appleLogin, decodeTo: Data.self)
+                        try? Keychain().set(acessToken, key: "APPLE_ACCESS_TOKEN")
+                        _ = try await appleLogin(token: acessToken)
                     } catch {
                         throw error
                     }
@@ -57,6 +62,12 @@ import Model
         }
     }
     
+    //MARK: - 애플로그인 API
+    public func appleLogin(token: String) async throws -> UserLoginModel? {
+        guard let appleToken = try? Keychain().get("APPLE_ACCESS_TOKEN") else { return .none }
+        return try await provider.requestAsync(.appleLogin(accessToken: appleToken), decodeTo: UserLoginModel.self)
+    }
+   
     
     //MARK: - kakaoLoigin
     public func requestKakaoTokenAsync() async throws -> (String?, String?) {
@@ -176,10 +187,11 @@ import Model
         }
     }
     
+    
     //MARK: - 카카오 로그인 api
-    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
+    public func reauestKakaoLogin() async throws -> UserLoginModel? {
         let kakaoAcessToken = (try? Keychain().get("KAKAO_ACCESS_TOKEN") ?? "")
-        return try await provider.requestAsync(.kakaoLogin(accessToken: kakaoAcessToken ?? ""), decodeTo: KakaoResponseModel.self)
+        return try await provider.requestAsync(.kakaoLogin(accessToken: kakaoAcessToken ?? ""), decodeTo: UserLoginModel.self)
     }
     
     //MARK: - 토큰 재발급

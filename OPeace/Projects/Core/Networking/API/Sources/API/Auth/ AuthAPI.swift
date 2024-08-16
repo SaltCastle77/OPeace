@@ -22,7 +22,7 @@ public enum AuthAPI : String {
     public var authAPIDesc: String {
         switch self {
         case .appleLogin:
-            return "/oauth/apple/login/callback"
+            return "/oauth/apple/login/callback/"
             
         case .kakaoLogin:
             return "/oauth/kakao/login/"

@@ -23,11 +23,16 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     
-    //MARK: - 애플 로그인
+    //MARK: - 애플 로그인 토큰
     public func handleAppleLogin(
         _ request: Result<ASAuthorization, Error>
     ) async throws -> ASAuthorization {
         try await repository.handleAppleLogin(request)
+    }
+    
+    //MARK: - 애플 로그인
+    public func appleLogin(token: String) async throws -> UserLoginModel? {
+        try await repository.appleLogin(token: token)
     }
     
     //MARK: - 카카오 로그인 토근
@@ -36,7 +41,7 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     //MARK: - 카카오 로그인
-    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
+    public func reauestKakaoLogin() async throws -> UserLoginModel? {
         try await repository.reauestKakaoLogin()
     }
     

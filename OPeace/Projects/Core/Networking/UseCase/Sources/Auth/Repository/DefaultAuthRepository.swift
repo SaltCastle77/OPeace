@@ -26,12 +26,17 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
             }
         }
     }
+        
+    public func appleLogin(token : String) async throws -> UserLoginModel? {
+        return  nil
+    }
     
+
     public func requestKakaoTokenAsync() async throws -> (String?, String?) {
         return (nil, nil)
     }
     
-    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
+    public func reauestKakaoLogin() async throws -> UserLoginModel? {
         return nil
     }
     
