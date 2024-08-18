@@ -8,29 +8,26 @@
 
 import Foundation
 
-// MARK: - Welcome
-public struct QuestionModel: Codable , Equatable{
-    public let data: QuestionResponseModel?
+
+public struct QuestionModel: Codable, Equatable {
+    public var data: QuestionResponseModel?
     
-    public init(
-        data: QuestionResponseModel?
-    ) {
+    public init(data: QuestionResponseModel?) {
         self.data = data
     }
-    
 }
 
 // MARK: - DataClass
 public struct QuestionResponseModel: Codable, Equatable {
     public let count: Int?
     public let next, previous: String?
-    public let results: [QuestionResult]?
+    public let results: [ResultData]?
     
     public init(
         count: Int?,
         next: String?,
         previous: String?,
-        results: [QuestionResult]?
+        results: [ResultData]?
     ) {
         self.count = count
         self.next = next
@@ -38,14 +35,18 @@ public struct QuestionResponseModel: Codable, Equatable {
         self.results = results
     }
     
+    public enum CodingKeys: String, CodingKey {
+        case count, next, previous
+        case results = "results"
+    }
+    
 }
 
 // MARK: - Result
-public struct QuestionResult: Codable, Equatable {
+public struct ResultData: Codable, Equatable {
     public let id: Int?
     public let userInfo: UserInfo?
-    public let emoji: Int?
-    public let title, choiceA, choiceB: String?
+    public let emoji, title, choiceA, choiceB: String?
     public let answerCount: Int?
     public let answerRatio: AnswerRatio?
     public let likeCount, reportCount: Int?
@@ -64,34 +65,6 @@ public struct QuestionResult: Codable, Equatable {
         case reportCount = "report_count"
         case metadata
         case createAt = "create_at"
-    }
-    
-    public init(
-        id: Int?,
-        userInfo: UserInfo?,
-        emoji: Int?,
-        title: String?,
-        choiceA: String?,
-        choiceB: String?,
-        answerCount: Int?,
-        answerRatio: AnswerRatio?,
-        likeCount: Int?,
-        reportCount: Int?,
-        metadata: Metadata?,
-        createAt: String?
-    ) {
-        self.id = id
-        self.userInfo = userInfo
-        self.emoji = emoji
-        self.title = title
-        self.choiceA = choiceA
-        self.choiceB = choiceB
-        self.answerCount = answerCount
-        self.answerRatio = answerRatio
-        self.likeCount = likeCount
-        self.reportCount = reportCount
-        self.metadata = metadata
-        self.createAt = createAt
     }
 }
 
@@ -115,7 +88,7 @@ public struct AnswerRatio: Codable, Equatable {
 
 // MARK: - Metadata
 public struct Metadata: Codable, Equatable {
-    public let liked, voted: Bool?
+   public let liked, voted: Bool?
     public let votedTo: String?
 
     public enum CodingKeys: String, CodingKey {

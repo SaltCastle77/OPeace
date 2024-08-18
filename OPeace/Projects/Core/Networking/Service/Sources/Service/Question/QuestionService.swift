@@ -15,6 +15,7 @@ import Foundations
 
 public enum QuestionService {
     case fetchQuestionList(page: Int, pageSize: Int)
+    case myQuestionList(page: Int, pageSize: Int)
     case createQuestion(
         emoji: String,
         title: String,
@@ -30,6 +31,9 @@ extension QuestionService: BaseTargetType {
         case .fetchQuestionList:
             return QuestionAPI.feedList.questionAPIDesc
             
+        case .myQuestionList:
+            return QuestionAPI.myWriteQuestionList.questionAPIDesc
+            
         case .createQuestion:
             return QuestionAPI.createQuestion.questionAPIDesc
         }
@@ -38,6 +42,9 @@ extension QuestionService: BaseTargetType {
     public var method: Moya.Method {
         switch self {
         case .fetchQuestionList:
+            return .get
+            
+        case .myQuestionList:
             return .get
             
         case .createQuestion:
@@ -54,9 +61,16 @@ extension QuestionService: BaseTargetType {
             ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
             
+        case .myQuestionList(let page, let pageSize):
+            let parameters: [String: Any] = [
+                "page": page,
+                "page_size": pageSize
+            ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+            
         case .createQuestion(let emoji, let title,  let choiceA, let choiceB):
             let parameters: [String: Any] = [
-                "emoji": 1,
+                "emoji": emoji,
                 "title": title,
                 "choice_a": choiceA,
                 "choice_b": choiceB

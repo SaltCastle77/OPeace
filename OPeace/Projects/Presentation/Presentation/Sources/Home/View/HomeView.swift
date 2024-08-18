@@ -41,7 +41,7 @@ public struct HomeView: View {
                 Spacer()
                 
                 writeQuestionButton()
-                    .padding(.bottom, 20) 
+                    .padding(.bottom, 40)
             }
             .edgesIgnoringSafeArea(.bottom)
             
@@ -53,7 +53,7 @@ public struct HomeView: View {
             if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                 CustomBasicPopUpView(
                     store: customPopUp,
-                    title: "로그인 해주세요!") {
+                    title: "로그인 하시겠어요?") {
                         store.send(.view(.closePopUp))
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             store.send(.navigation(.presntLogin))
@@ -141,7 +141,7 @@ extension HomeView {
     private func appearFloatingPopUp() {
         if store.isLogOut == true  {
             store.send(.view(.presntFloatintPopUp))
-            store.floatingText = "로그아웃 되었어요"
+            store.floatingText = "로그아웃 하시겠어요?"
             store.send(.view(.timeToCloseFloatingPopUp))
         } else if store.isLookAround == true {
             store.floatingText = "로그인 하시겠어요?"
@@ -172,11 +172,16 @@ extension HomeView {
             .clipShape(Capsule())
             .overlay {
                 Text("글쓰기")
-                    .pretendardFont(family: .Regular, size: 20)
+                    .pretendardFont(family: .Bold, size: 20)
                     .foregroundStyle(Color.textColor100)
             }
             .onTapGesture {
-                store.send(.navigation(.presntWriteQuestion))
+                if !store.isLogOut && !store.isLookAround && !store.isDeleteUser {
+                    store.send(.navigation(.presntWriteQuestion))
+                } else {
+                    store.send(.view(.prsentLoginPopUp))
+                }
+                
             }
             .padding(.bottom, 16)
             

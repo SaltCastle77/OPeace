@@ -30,6 +30,17 @@ public class QuestionRepository: QuestionRepositoryProtocol {
         ), decodeTo: QuestionModel.self)
     }
     
+    //MARK: - 프로필 내가 쓴글 목록 조회 API
+    public func myQuestionList(
+        page: Int,
+        pageSize: Int
+    ) async throws -> QuestionModel? {
+        return try await provider.requestAsync(.myQuestionList(
+            page: page,
+            pageSize: pageSize
+        ), decodeTo: QuestionModel.self)
+    }
+    
     //MARK: - 질문 생성API
     public func createQuestion(
         emoji: String,

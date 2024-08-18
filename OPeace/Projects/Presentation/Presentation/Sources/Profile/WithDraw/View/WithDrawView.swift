@@ -58,6 +58,9 @@ public struct WithDrawView: View {
                 .bounce(false)
                 
             }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
     }
 }
@@ -88,26 +91,9 @@ extension WithDrawView {
             Spacer()
                 .frame(height: 16)
             
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.gray500)
-                .shadow(color: Color.basicBlack.opacity(0.007), radius: 0, x: 0, y: 0.04)
-                .blur(radius: 0.01)
-                .frame(height: 164)
-                .overlay {
-                    VStack {
-                        Spacer()
-                            .frame(height: 24)
-
-                        TextField("여기를 눌러서 작성해주세요.", text: $store.withDrawTitle)
-                            .pretendardFont(family: .Regular, size: 16)
-                            .foregroundStyle(store.withDrawTitle.isEmpty ? Color.gray300 : Color.basicWhite)
-                            .multilineTextAlignment(.leading)
-                            .padding(.horizontal , 20)
-                        
-                        Spacer()
-                         
-                    }   
-                }
+            TextEditor(text: $store.withDrawTitle)
+                .modifier(TextEditorModifier(placeholder: "여기를 눌러서 작성해주세요.", text: $store.withDrawTitle))
+                .frame(height: 160)
             
         }
         .padding(.horizontal, 20)

@@ -58,7 +58,7 @@ extension CustomBasicPopUpView {
                 .frame(height: 80)
             
             Text(title)
-                .pretendardFont(family: .Regular, size: 20)
+                .pretendardFont(family: .Bold, size: 20)
                 .foregroundStyle(Color.basicWhite)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)

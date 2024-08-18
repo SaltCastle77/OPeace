@@ -44,9 +44,7 @@ public struct RootView: View {
             }
                
         }
-        .task {
-            store.send(.async(.autoLogin))
-        }
+      
     }
 }
 

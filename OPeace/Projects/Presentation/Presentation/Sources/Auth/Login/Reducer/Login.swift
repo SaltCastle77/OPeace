@@ -158,7 +158,7 @@ public struct Login {
                         state.userLoginModel = ResponseData
 
                         try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
-                        state.socialType = .kakao
+                        state.socialType = .apple
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
                         try? Keychain().set(socialTypeValue, key: "socialType")
                         if state.userLoginModel?.data?.accessToken != "" {
@@ -166,7 +166,7 @@ public struct Login {
                             state.isLogOut = false
                             state.isLookAround = false
                             state.isDeleteUser = false
-                            state.isChangeProfile = false
+                            state.isChangeProfile = false 
                         } else {
                             try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                             try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
@@ -206,10 +206,8 @@ public struct Login {
                         case let .failure(error):
                             send(.async(.kakaoLoginResponse(.failure(CustomError.map(error)))))
                         }
-                       
                     }
                     
-               
                 case .kakaoLoginResponse(let result):
                     switch result {
                     case .success(let (accessToken, idToken)):
@@ -224,7 +222,6 @@ public struct Login {
                     return .none
                     
                 case .loginWIthKakao:
-
                     return .run { @MainActor send in
                         let kakaoRequest = await Result {
                             try await authUseCase.reauestKakaoLogin()

@@ -29,6 +29,14 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
         try await repository.fetchQuestionList(page: page, pageSize: pageSize)
     }
     
+    //MARK: - 프로필에서 내가 쓴글 조회
+    public func myQuestionList(
+        page: Int,
+        pageSize: Int
+    ) async throws -> QuestionModel? {
+        try await repository.myQuestionList(page: page, pageSize: pageSize)
+    }
+    
     //MARK: - 질문 생성
     public func createQuestion(
         emoji: String,

@@ -72,7 +72,6 @@ public struct Root {
         case autoLogin
         
         case handleRefreshToken(String)
-        case handleKakaoLogin
         
         case loginWIthKakao
         case kakaoLoginApiResponse(Result<UserLoginModel, CustomError>)
@@ -130,11 +129,12 @@ public struct Root {
                 case .autoLogin:
                     guard let socailType = try? Keychain().get("socialType") else { return .none }
                     return .run { @MainActor send in
+                        print(socailType)
                         switch socailType {
                         case "kakao":
 //                            try await clock.sleep(for: .seconds(1))
                             if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                if refreshToken != nil {
+                                if !refreshToken.isEmpty {
                                     send(.async(.checkUserVerfiy))
                                     send(.async(.loginWIthKakao))
                                 }
@@ -143,7 +143,7 @@ public struct Root {
                             if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
                                 if Root.State.checkUserVerifyModel?.data?.status == false {
                                     if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                        send(.async(.handleRefreshToken(refreshToken)))
+//                                        send(.async(.handleRefreshToken(refreshToken)))
                                     } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
                                         send(.view(.auth(.login(.async(.kakaoLogin)))))
                                     }
@@ -165,7 +165,7 @@ public struct Root {
                             
                         case "apple":
                             if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                if refreshToken != nil {
+                                if !refreshToken.isEmpty {
                                     send(.async(.checkUserVerfiy))
                                 }
                             }
@@ -173,7 +173,7 @@ public struct Root {
                             if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
                                 if Root.State.checkUserVerifyModel?.data?.status == false {
                                     if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                        send(.async(.handleRefreshToken(refreshToken)))
+//                                        send(.async(.handleRefreshToken(refreshToken)))
                                     } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
 //                                        send(.view(.auth(.login(.async(.appleLogin)))))
                                     }
@@ -206,12 +206,7 @@ public struct Root {
                         try await self.clock.sleep(for: .seconds(0.3))
                         send(.view(.auth(.login(.async(.loginWIthKakao)))))
                     }
-                    
-                case .handleKakaoLogin:
-                    return .run { @MainActor  send in
-                        send(.view(.auth(.login(.async(.loginWIthKakao)))))
-                    }
-                    
+                
                 case .kakaoLoginApiResponse(let data):
                     switch data {
                     case .success(let ResponseData):
@@ -264,7 +259,7 @@ public struct Root {
                                 send(.async(.checkUserVerfiyResponse(.success(responseData))))
                                 
                                 try await clock.sleep(for: .seconds(1))
-                                send(.async(.loginWIthKakao))
+//                                send(.async(.loginWIthKakao))
                             }
                         case .failure(let error):
                             send(.async(.checkUserVerfiyResponse(.failure(CustomError.tokenError(error.localizedDescription)))))

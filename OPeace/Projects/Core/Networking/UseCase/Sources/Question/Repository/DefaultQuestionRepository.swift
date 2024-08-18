@@ -13,7 +13,17 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
         
     }
     
-    public func fetchQuestionList(page: Int, pageSize: Int) async throws -> QuestionModel? {
+    public func fetchQuestionList(
+        page: Int,
+        pageSize: Int
+    ) async throws -> QuestionModel? {
+        return nil
+    }
+    
+    public func myQuestionList(
+        page: Int,
+        pageSize: Int
+    ) async throws -> QuestionModel? {
         return nil
     }
     

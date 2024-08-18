@@ -194,7 +194,7 @@ extension ProfileView {
     
     @ViewBuilder
     private func postingListView() -> some View {
-        if store.questionListModel?.data?.results == [] {
+        if store.myQuestionListModel?.data?.results == [] {
             noPostingListView()
         } else {
             

@@ -9,15 +9,19 @@ import Foundation
 
 public enum QuestionAPI: String {
     case feedList
+    case myWriteQuestionList
     case createQuestion
     
     public var questionAPIDesc: String {
         switch self {
         case .feedList:
-            return "/v2/questions/"
+            return "/v1/questions/"
+            
+        case .myWriteQuestionList:
+            return "/v1/questions/me/"
             
         case .createQuestion:
-            return "/v2/question/"
+            return "/v1/question/"
         }
     }
 }

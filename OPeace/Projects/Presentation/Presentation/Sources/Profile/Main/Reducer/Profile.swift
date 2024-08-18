@@ -29,7 +29,7 @@ public struct Profile {
         var profileUserModel: UpdateUserInfoModel? = nil
         var userLogoutModel: UserLogOutModel? = nil
         var userDeleteModel: DeleteUserModel? = nil
-        var questionListModel: QuestionModel?  = nil
+        var myQuestionListModel: QuestionModel?  = nil
         
         var profileGenerationYear: Int? = .zero
         var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
@@ -233,7 +233,8 @@ public struct Profile {
                             if let userLogOutData = userLogOutData {
                                 send(.async(.logoutUseResponse(.success(userLogOutData))))
                                 
-                                try Keychain().remove("REFRESH_TOKEN")
+                                try? Keychain().remove("REFRESH_TOKEN")
+                                try? Keychain().remove("socialType")
                                 send(.view(.closePopUp))
                                 try await self.clock.sleep(for: .seconds(1))
                                 send(.navigation(.presntLogout))
@@ -243,22 +244,11 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
                         }
                     }
-                    
-                case .fetchQuestionResponse(let result):
-                    switch result {
-                    case .success(let questionData):
-                        state.questionListModel = questionData
                         
-                    case .failure(let error):
-                        Log.debug("피드 목록 에러", error.localizedDescription)
-                    }
-                    
-                    return .none
-                    
                 case .fetchQuestion:
                     return .run { @MainActor send in
                         let questionResult = await Result {
-                            try await questionUseCase.fetchQuestionList(page: 1, pageSize: 20)
+                            try await questionUseCase.myQuestionList(page: 1, pageSize: 20)
                         }
                         
                         switch questionResult {
@@ -270,6 +260,16 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
                         }
                     }
+                    
+                case .fetchQuestionResponse(let result):
+                    switch result {
+                    case .success(let questionData):
+                        state.myQuestionListModel = questionData
+                        
+                    case .failure(let error):
+                        Log.debug("피드 목록 에러", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):
