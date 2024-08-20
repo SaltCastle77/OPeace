@@ -27,7 +27,6 @@ public struct HomeView: View {
             
             VStack {
                 navigationBaritem()
-                
                 Spacer()
             }
             .onAppear {
@@ -97,6 +96,21 @@ extension HomeView {
             
             HStack {
                 Spacer()
+                
+                HStack {
+                    RightImageButton(action: {
+                        
+                    }, title: "계열")
+                    
+                    RightImageButton(action: {
+                        
+                    }, title: "세대")
+                    
+                    RightImageButton(action: {
+                        
+                    }, title: "최신순")
+                }
+
                 
                 if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                     Circle()

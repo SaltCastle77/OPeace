@@ -162,7 +162,7 @@ public struct Profile {
                     return .none
                     
                 case .switchModalAction(let settingprofile):
-                    var settingProfile = settingprofile
+                    let settingProfile = settingprofile
                     return .run { send in
                         switch settingProfile {
                         case .editProfile:
