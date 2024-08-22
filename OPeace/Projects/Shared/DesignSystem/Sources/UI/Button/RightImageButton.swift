@@ -13,18 +13,27 @@ public struct RightImageButton: View {
     let title: String
     
     public var body: some View {
-        RoundedRectangle(cornerRadius: 15.0)
-            .stroke(Color.gray400, lineWidth: /*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/)
-            .fill(Color.gray500)
-            .frame(height: 40)
-            .overlay {
+        Button(action: action) {
+            //넓이를 이렇게 넣어줘야한다. overlay로 넣으면 제대로 넓이를 잡지 못함.
+            HStack(spacing: 4) {
                 Text(title)
                     .pretendardFont(family: .Regular, size: 16)
                     .foregroundStyle(Color.gray200)
+                
+                Image(asset: .arrowLeft)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 12, height: 12)
+                    .rotationEffect(.degrees(-90))
             }
-            .onTapGesture {
-                action()
-            }
+            .padding(.horizontal, 12)
+            .frame(height: 40)
+            .background(
+                RoundedRectangle(cornerRadius: 20.0)
+                    .stroke(Color.gray400, lineWidth: 1.0)
+                    .fill(Color.gray500)
+            )
+        }
     }
     
     public init(
