@@ -21,7 +21,7 @@ public struct CreateQuestionModel: Codable, Equatable {
 public struct CreateQuestionResponse: Codable, Equatable {
     public let id: Int?
     public let userID: String?
-    public let emoji: Int?
+    public let emoji: String?
     public let title, choiceA, choiceB, createAt: String?
     public let updateAt: String?
 
@@ -38,7 +38,7 @@ public struct CreateQuestionResponse: Codable, Equatable {
     public init(
         id: Int?,
         userID: String?,
-        emoji: Int?,
+        emoji: String?,
         title: String?,
         choiceA: String?,
         choiceB: String?,

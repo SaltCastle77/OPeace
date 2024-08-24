@@ -24,10 +24,19 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
     //MARK: - 피드 목록 조회
     public func fetchQuestionList(
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        job: String,
+        generation: String,
+        sortBy: QuestionSort
     ) async throws -> QuestionModel? {
-        try await repository.fetchQuestionList(page: page, pageSize: pageSize)
+        try await repository.fetchQuestionList(
+            page: page,
+            pageSize: pageSize,
+            job: job,
+            generation: generation,
+            sortBy: sortBy)
     }
+    
     
     //MARK: - 프로필에서 내가 쓴글 조회
     public func myQuestionList(

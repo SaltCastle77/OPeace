@@ -23,12 +23,21 @@ public class QuestionRepository: QuestionRepositoryProtocol {
     }
     
     //MARK: - 피드 목록API
-    public func fetchQuestionList(page: Int, pageSize: Int) async throws -> QuestionModel? {
+    public func fetchQuestionList(
+        page: Int,
+        pageSize: Int,
+        job: String,
+        generation: String,
+        sortBy: QuestionSort
+    ) async throws -> QuestionModel? {
         return try await provider.requestAsync(.fetchQuestionList(
             page: page,
-            pageSize: pageSize
-        ), decodeTo: QuestionModel.self)
+            pageSize: pageSize,
+            job: job,
+            generation: generation,
+            sortBy: sortBy.questionSortDesc), decodeTo: QuestionModel.self)
     }
+    
     
     //MARK: - 프로필 내가 쓴글 목록 조회 API
     public func myQuestionList(

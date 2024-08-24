@@ -31,8 +31,8 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     //MARK: - 애플 로그인
-    public func appleLogin(token: String) async throws -> UserLoginModel? {
-        try await repository.appleLogin(token: token)
+    public func appleLogin() async throws -> UserLoginModel? {
+        try await repository.appleLogin()
     }
     
     //MARK: - 카카오 로그인 토근

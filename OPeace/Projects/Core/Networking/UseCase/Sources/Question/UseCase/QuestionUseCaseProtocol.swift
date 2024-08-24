@@ -9,7 +9,12 @@ import Foundation
 import Model
 
 public protocol QuestionUseCaseProtocol {
-    func fetchQuestionList(page: Int, pageSize: Int) async throws -> QuestionModel?
+    func fetchQuestionList(
+        page: Int,
+        pageSize: Int,
+        job: String,
+        generation: String,
+        sortBy: QuestionSort) async throws -> QuestionModel?
     func myQuestionList(page: Int, pageSize: Int)  async throws -> QuestionModel?
     func createQuestion(
         emoji: String,

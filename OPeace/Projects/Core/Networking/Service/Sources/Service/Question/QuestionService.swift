@@ -14,7 +14,7 @@ import Foundations
 
 
 public enum QuestionService {
-    case fetchQuestionList(page: Int, pageSize: Int)
+    case fetchQuestionList(page: Int, pageSize: Int, job: String, generation: String, sortBy: String)
     case myQuestionList(page: Int, pageSize: Int)
     case createQuestion(
         emoji: String,
@@ -54,10 +54,13 @@ extension QuestionService: BaseTargetType {
     
     public var task: Moya.Task {
         switch self {
-        case .fetchQuestionList(let page, let pageSize):
+        case .fetchQuestionList(let page, let pageSize, let job, let generation, let sortBy):
             let parameters: [String: Any] = [
                 "page": page,
-                "page_size": pageSize
+                "page_size": pageSize,
+                "job": job,
+                "generation": generation,
+                "sort_by": sortBy
             ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
             

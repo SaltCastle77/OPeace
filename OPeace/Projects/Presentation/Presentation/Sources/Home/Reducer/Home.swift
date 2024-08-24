@@ -6,11 +6,15 @@
 //
 
 import Foundation
+import SwiftUI
+
 import ComposableArchitecture
 
 import Utill
 import KeychainAccess
 import DesignSystem
+import UseCase
+import Model
 
 @Reducer
 public struct Home {
@@ -20,15 +24,23 @@ public struct Home {
     public struct State: Equatable {
         
         var profileImage: String = "person.fill"
+        var loginTiltle: String = "로그인을 해야 다른 기능을 사용하실 수 있습니다. "
+        var floatingText: String = ""
+        
+        var questionModel: QuestionModel? = nil
+        var cardGenerationColor: Color = .basicBlack
+        
         var profile = Profile.State()
+        
         @Shared var isLogOut: Bool
         @Shared var isDeleteUser: Bool
         @Shared var isLookAround: Bool
         @Shared var isChangeProfile: Bool
         @Shared var isCreateQuestion: Bool
+        
         @Presents var destination: Destination.State?
-        var loginTiltle: String = "로그인을 해야 다른 기능을 사용하실 수 있습니다. "
-        var floatingText: String = ""
+        
+       
         
         public init(
             isLogOut: Bool = false,
@@ -79,7 +91,9 @@ public struct Home {
     
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
-       
+       case fetchQuestionList
+        case qusetsionListResponse(Result<QuestionModel, CustomError>)
+        
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -96,6 +110,7 @@ public struct Home {
     }
     
     @Dependency(\.continuousClock) var clock
+    @Dependency(QuestionUseCase.self) var questionUseCase
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -134,7 +149,32 @@ public struct Home {
                 
             case .async(let AsyncAction):
                 switch AsyncAction {
+                case .fetchQuestionList:
+                    return .run { @MainActor send in
+                        let questionResult = await Result {
+                            try await questionUseCase.fetchQuestionList(page: 1, pageSize: 20, job: "", generation: "", sortBy: .empty)
+                        }
+                        
+                        switch questionResult {
+                        case .success(let questionModel):
+                            if let questionModel = questionModel {
+                                send(.async(.qusetsionListResponse(.success(questionModel))))
+                            }
+                        case .failure(let error):
+                            send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+                        }
+                        
+                    }
                     
+                case .qusetsionListResponse(let result):
+                    switch result {
+                    case .success(let qusetsionListData):
+                        state.questionModel = qusetsionListData
+                    case .failure(let error):
+                        Log.error("QuestionList 에어", error.localizedDescription)
+                    }
+                    
+                    return .none
                 }
                 
             case .inner(let InnerAction):

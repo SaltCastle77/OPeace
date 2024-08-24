@@ -12,6 +12,7 @@ import ComposableArchitecture
 import SwiftUIIntrospect
 import PopupView
 import KeychainAccess
+import Utill
 
 public struct HomeView: View {
     @Bindable var store: StoreOf<Home>
@@ -28,9 +29,14 @@ public struct HomeView: View {
             VStack {
                 navigationBaritem()
                 
+                questionLIstView()
+                
                 Spacer()
+                    .frame(height: 10)
+                
             }
             .onAppear {
+                store.send(.async(.fetchQuestionList))
                 appearFloatingPopUp()
             }
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
@@ -47,7 +53,6 @@ public struct HomeView: View {
             
             
         }
-        
         
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
             if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
@@ -186,5 +191,240 @@ extension HomeView {
             .padding(.bottom, 16)
             
         
+    }
+    
+    @ViewBuilder
+    private func questionLIstView() -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 15)
+            
+            if store.questionModel?.data?.results == [] {
+                
+            } else {
+                
+                Spacer()
+                    .frame(height: 16)
+                
+                qustionCardView()
+            }
+        }
+    }
+    
+    
+    @ViewBuilder
+    private func qustionCardView() -> some View {
+        if let resultData = store.questionModel?.data?.results {
+            FlippableCardView(data: resultData) { item in
+                VStack {
+                    questionCardHeaderVIew(nickName: item.userInfo?.userNickname ?? "", job:  item.userInfo?.userJob ?? "", generation: item.userInfo?.userGeneration ?? "")
+                    
+                    questionEmojiView(emoji: item.emoji ?? "")
+                    
+                    questionWriteAndanswerView(title: item.title ?? "", choiceA: item.choiceA ?? "", choiceB:  item.choiceB ?? "")
+                    
+                    questionChoiceVoteButton()
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 24)
+                
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func questionCardHeaderVIew(
+        nickName: String,
+        job: String,
+        generation: String
+    ) -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 32)
+            
+            HStack {
+                Text(nickName)
+                    .pretendardFont(family: .Bold, size: 20)
+                    .foregroundStyle(Color.basicWhite)
+                
+                Spacer()
+                
+                Image(asset: .questionEdit)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 36, height: 36)
+                
+            }
+            
+            
+            Spacer()
+                .frame(height: 3)
+            
+            HStack {
+                Text(job)
+                    .pretendardFont(family: .Regular, size: 14)
+                    .foregroundStyle(Color.gray200)
+                
+                Spacer()
+                    .frame(width: 10)
+                
+                Rectangle()
+                    .frame(width: 1, height: 10)
+                    .foregroundStyle(Color.gray300)
+                
+                Spacer()
+                    .frame(width: 10)
+                
+                let (generation, color) = CheckRegister.generatuionTextColor(generation: generation, color: store.cardGenerationColor)
+
+                Text(generation)
+                    .pretendardFont(family: .Bold, size: 14)
+                    .foregroundStyle(color)
+                
+                Spacer()
+
+            }
+        }
+        .padding(.horizontal, 24)
+    }
+    
+    @ViewBuilder
+    private func questionEmojiView(emoji: String) -> some View {
+        VStack(alignment: .center) {
+            Spacer()
+                .frame(height: 26)
+            
+            
+            if let wirteAnswerEmoji = Image.emojiToImage(emoji: emoji.convertUnicodeToEmoji(unicodeString: emoji) ?? "") {
+                wirteAnswerEmoji
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func questionWriteAndanswerView(
+        title: String,
+        choiceA: String,
+        choiceB: String
+    ) -> some View {
+        VStack(alignment: .center) {
+            Spacer()
+                .frame(height: 16)
+            
+            Text(title)
+                .pretendardFont(family: .Bold, size: 28)
+                .foregroundStyle(Color.basicWhite)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 24)
+            
+            Spacer()
+                .frame(height: 16)
+            
+            questionChoiceAnswertRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
+            
+        }
+       
+    }
+    
+    @ViewBuilder
+    private func questionChoiceAnswertRoundView(
+        choiceTitleA: String,
+        choiceTitleB: String
+    ) -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 16)
+            
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.gray400)
+                .frame(height: 48)
+                .overlay {
+                    HStack {
+                        Spacer()
+                            .frame(width: 16)
+                        
+                        Text("A")
+                            .pretendardFont(family: .Bold, size: 16)
+                            .foregroundStyle(Color.gray200)
+                        
+                        Spacer()
+                        
+                        Text(choiceTitleA)
+                            .pretendardFont(family: .Bold, size: 16)
+                            .foregroundStyle(Color.gray200)
+                        
+                        
+                        Spacer()
+                        
+                    }
+                }
+            
+            Spacer()
+                .frame(height: 8)
+            
+            
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.gray400)
+                .frame(height: 48)
+                .overlay {
+                    HStack {
+                        Spacer()
+                            .frame(width: 16)
+                        
+                        Text("B")
+                            .pretendardFont(family: .Bold, size: 16)
+                            .foregroundStyle(Color.gray200)
+                        
+                        Spacer()
+                        
+                        Text(choiceTitleB)
+                            .pretendardFont(family: .Bold, size: 16)
+                            .foregroundStyle(Color.gray200)
+                        
+                        
+                        Spacer()
+                        
+                    }
+                }
+            
+        }
+        .padding(.horizontal, 24)
+    }
+    
+    @ViewBuilder
+    private func questionChoiceVoteButton() -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 24)
+            
+            HStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.basicPrimary)
+                    .frame(width: 144, height: 64)
+                    .clipShape(Capsule())
+                    .overlay {
+                        Text("A")
+                            .pretendardFont(family: .SemiBold, size: 24)
+                            .foregroundStyle(Color.gray600)
+                    }
+                
+                Spacer()
+                    .frame(width: 8)
+                
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.basicPrimary)
+                    .frame(width: 144, height: 64)
+                    .clipShape(Capsule())
+                    .overlay {
+                        Text("B")
+                            .pretendardFont(family: .SemiBold, size: 24)
+                            .foregroundStyle(Color.gray600)
+                    }
+            }
+        }
     }
 }

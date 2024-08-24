@@ -32,6 +32,26 @@ extension CheckRegister {
     }
     
     @discardableResult
+    public static func generatuionTextColor(
+        generation: String,
+        color: Color
+    ) -> (String, Color) {
+        if ("베이비붐 세대").contains(generation) {
+            return ("베이비붐 세대", .basicPurple)
+        } else if ("X 세대").contains(generation) {
+            return ("X 세대", .basicLightBlue)
+        } else if ("M 세대").contains(generation) {
+            return ("M 세대", .basicYellow)
+        } else if ("Z 세대").contains(generation) {
+            return ("Z 세대", .basicGreen)
+        } else if ("Z 세대").contains(generation) {
+            return ("알파 세대", .basicGreen)
+        } else {
+            return ("기타 세대", .gray300)
+        }
+    }
+    
+    @discardableResult
     public static func getGenerationProfile(
         year: Int,
         color: Color,
@@ -48,7 +68,7 @@ extension CheckRegister {
         } else if (2010...).contains(year) {
             return ("알파 세대", .basicGreen, .gray600)
         } else {
-            return ("? 세대", .gray500, .gray200)
+            return ("기타 세대", .gray500, .gray200)
         }
     }
     

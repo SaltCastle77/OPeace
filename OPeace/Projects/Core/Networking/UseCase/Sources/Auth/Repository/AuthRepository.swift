@@ -43,7 +43,7 @@ import Model
                    let acessToken = String(data: tokenData, encoding: .utf8) {
                     do {
                         try? Keychain().set(acessToken, key: "APPLE_ACCESS_TOKEN")
-                        _ = try await appleLogin(token: acessToken)
+                        _ = try await appleLogin()
                     } catch {
                         throw error
                     }
@@ -63,7 +63,7 @@ import Model
     }
     
     //MARK: - 애플로그인 API
-    public func appleLogin(token: String) async throws -> UserLoginModel? {
+    public func appleLogin() async throws -> UserLoginModel? {
         guard let appleToken = try? Keychain().get("APPLE_ACCESS_TOKEN") else { return .none }
         return try await provider.requestAsync(.appleLogin(accessToken: appleToken), decodeTo: UserLoginModel.self)
     }

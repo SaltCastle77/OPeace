@@ -7,12 +7,20 @@
 import Foundation
 
 public struct CheckUserVerifyModel: Codable, Equatable {
+    public let detail, code: String?
     public let data: CheckUserResponse?
+    public let message: [Message]?
     
     public init(
-        data: CheckUserResponse?
+        data: CheckUserResponse?,
+        detail: String?,
+        code: String?,
+        message: [Message]?
     ) {
         self.data = data
+        self.detail = detail
+        self.code = code
+        self.message = message
     }
 }
 
@@ -78,3 +86,25 @@ public struct User: Codable, Equatable {
         self.isFirstLogin = isFirstLogin
     }
 }
+
+// MARK: - Message
+public struct Message: Codable, Equatable {
+    public let tokenClass, tokenType, message: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case tokenClass = "token_class"
+        case tokenType = "token_type"
+        case message
+    }
+    
+    public init(
+        tokenClass: String?,
+        tokenType: String?,
+        message: String?
+    ) {
+        self.tokenClass = tokenClass
+        self.tokenType = tokenType
+        self.message = message
+    }
+}
+

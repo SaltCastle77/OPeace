@@ -138,7 +138,7 @@ public struct Login {
                 case .loginWithApple(let token):
                     return .run { @MainActor send in
                         let appleLoginResult = await Result {
-                            try await authUseCase.appleLogin(token: token)
+                            try await authUseCase.appleLogin()
                         }
                         
                         switch appleLoginResult {
@@ -176,7 +176,7 @@ public struct Login {
                             state.isChangeProfile = false
                         }
                     case .failure(let error):
-                        Log.network("카카오 로그인 에러", error.localizedDescription)
+                        Log.network("애플 로그인 에러", error.localizedDescription)
                         state.socialType = .apple
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
                         try? Keychain().set(socialTypeValue, key: "socialType")

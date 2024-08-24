@@ -25,7 +25,7 @@ extension MoyaProvider {
                         throw DataError.noData
                     }
                     switch httpResponse.statusCode {
-                    case 200, 201, 204:
+                    case 200, 201, 204, 401:
                         return response.data
                     case 400:
                         throw DataError.badRequest
@@ -154,5 +154,7 @@ extension MoyaProvider {
                 }
             }
         }
+    }
+
     
-}
+

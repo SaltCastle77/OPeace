@@ -9,15 +9,19 @@ import Foundation
 import Model
 
 public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
+ 
+    
     public init() {
         
     }
     
     public func fetchQuestionList(
         page: Int,
-        pageSize: Int
-    ) async throws -> QuestionModel? {
-        return nil
+        pageSize: Int,
+        job: String,
+        generation: String,
+        sortBy: QuestionSort) async throws -> QuestionModel? {
+            return nil
     }
     
     public func myQuestionList(

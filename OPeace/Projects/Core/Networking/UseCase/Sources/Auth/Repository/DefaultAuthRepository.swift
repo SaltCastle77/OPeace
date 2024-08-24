@@ -27,7 +27,7 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
         }
     }
         
-    public func appleLogin(token : String) async throws -> UserLoginModel? {
+    public func appleLogin() async throws -> UserLoginModel? {
         return  nil
     }
     

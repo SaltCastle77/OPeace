@@ -48,7 +48,7 @@ public struct WriteAnswerView: View {
                     CustomButton(
                         action: {
                             store.send(.async(.createQuestion(
-                                emoji: store.createQuestionEmoji,
+                                emoji: store.createQuestionEmoji.convertEmojiToUnicode(store.createQuestionEmoji),
                                 title: store.createQuestionTitle,
                                 choiceA: store.choiceAtext,
                                 choiceB: store.choiceBtext)))

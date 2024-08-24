@@ -41,5 +41,9 @@ public enum ImageAsset: String {
     
     //MARK: - Button
     case plus
+    
+    //MARK: - Question
+    case questionEdit
+    
     case empty
 }

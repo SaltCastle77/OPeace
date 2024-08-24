@@ -13,7 +13,7 @@ import Model
 public protocol AuthUseCaseProtocol {
     func handleAppleLogin(_ request: Result<ASAuthorization, Error>) async throws -> ASAuthorization
     func requestKakaoTokenAsync() async throws  -> (String?, String?)
-    func appleLogin(token : String) async throws -> UserLoginModel?
+    func appleLogin() async throws -> UserLoginModel?
     func reauestKakaoLogin() async throws -> UserLoginModel?
     func requestRefreshToken(refreshToken : String) async throws -> RefreshModel?
     func fetchUserInfo() async throws -> UpdateUserInfoModel?
