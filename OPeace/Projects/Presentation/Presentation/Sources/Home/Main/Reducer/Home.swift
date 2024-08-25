@@ -60,6 +60,7 @@ public struct Home {
     
     @Reducer(state: .equatable)
     public enum Destination {
+        case homeFilter(HomeFilter)
         case customPopUp(CustomPopUp)
         case floatingPopUP(FloatingPopUp)
         
@@ -73,6 +74,7 @@ public struct Home {
         case presntFloatintPopUp
         case closePopUp
         case timeToCloseFloatingPopUp
+        case firstFilterTapped
     }
     
   
@@ -99,12 +101,14 @@ public struct Home {
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
-        Reduce { state, action in
+        
+        Reduce<State, Action> { state, action in
             switch action {
             case .binding(_):
                 return .none
-               
             
+            case .destination(.presented(.homeFilter(.test))):
+                return .none
             case .view(let View):
                 switch View {
                 case .appaerProfiluserData:
@@ -115,6 +119,8 @@ public struct Home {
                 case .prsentLoginPopUp:
                     state.destination = .customPopUp(.init())
                     return .none
+                
+                
                     
                 case .closePopUp:
                     state.destination = nil
@@ -129,6 +135,12 @@ public struct Home {
                     return .run { send in
                         try await clock.sleep(for: .seconds(1.5))
                         await send(.view(.closePopUp))
+                    }
+                    
+                case .firstFilterTapped:
+                    state.destination = .homeFilter(.init())
+                    return .run { @MainActor send in
+                        send(.destination(.presented(.homeFilter(.test))))
                     }
                 }
                 

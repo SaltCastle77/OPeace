@@ -98,8 +98,14 @@ extension HomeView {
                 Spacer()
                 
                 RightImageButton(action: {
-                    
+                    store.send(.view(.firstFilterTapped))
                 }, title: "계열")
+                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+                    HomeFilterView(store: homeFilterStore)
+                        .presentationDetents([.medium])
+                        .presentationDragIndicator(.automatic)
+                }
+                
                 
                 RightImageButton(action: {
                     
