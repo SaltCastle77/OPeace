@@ -81,12 +81,23 @@ public extension String {
     }
     
     func convertUnicodeToEmoji(unicodeString: String) -> String? {
-        let hexString = unicodeString.replacingOccurrences(of: "u", with: "")
-        if let codePoint = Int(hexString, radix: 16),
+        let hexString = unicodeString
+            .replacingOccurrences(of: "u", with: "")
+            .replacingOccurrences(of: "U+", with: "")
+            .replacingOccurrences(of: "U", with: "")
+
+        let validHexCharacters = CharacterSet(charactersIn: "0123456789ABCDEFabcdef")
+        let filteredHexString = hexString.filter { character in
+            return String(character).rangeOfCharacter(from: validHexCharacters) != nil
+        }
+
+        if let codePoint = Int(filteredHexString, radix: 16),
            let unicodeScalar = UnicodeScalar(codePoint) {
             return String(unicodeScalar)
         }
+        
         return nil
     }
+
 
 }
