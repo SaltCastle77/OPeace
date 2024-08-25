@@ -12,7 +12,7 @@ public struct FlippableCardView<Content: View, T>: View {
     let content: (T) -> Content
 
     @State var currentPage: Int = 0
-    @State private var scrollViewDelegate: ScrollViewDelegate<QuestionModel>? 
+    @State private var scrollViewDelegate: ScrollViewDelegate<Content, T>? 
 
     public init(
         data: [T],
@@ -74,3 +74,71 @@ class ScrollViewDelegate<Content: View, T>: NSObject, UIScrollViewDelegate {
         }
     }
 }
+
+//public struct FlippableCardView: View {
+//    var data: QuestionModel
+//    var generationColor: Color
+//
+//    @State var currentPage: Int = 0
+//    @State private var scrollViewDelegate: ScrollViewDelegate<QuestionModel>?
+//
+//    public init(
+//        data: QuestionModel,
+//        generationColor: Color
+//    ) {
+//        self.data = data
+//        self.generationColor = generationColor
+//    }
+//
+//    public var body: some View {
+//        GeometryReader { geometry in
+//            ScrollView {
+//                contentVStack(geometry: geometry)
+//            }
+//            .scrollTargetLayout()
+//            .introspect(.scrollView, on: .iOS(.v17, .v18), customize: { scrollView in
+//                customizeScrollView(scrollView: scrollView)
+//            })
+//        }
+//        .edgesIgnoringSafeArea(.all)
+//    }
+//
+//    @ViewBuilder
+//    private func contentVStack(geometry: GeometryProxy) -> some View {
+//        VStack(spacing: 10) { // Spacing of 10 points between items
+//            ForEach(data.data?.results ?? [], id: \.userInfo?.userID) { item in
+//                createCardItemView(item: item, width: geometry.size.width)
+//            }
+//        }
+//    }
+//
+//    @ViewBuilder
+//    private func createCardItemView(item: ResultData, width: CGFloat) -> some View {
+//        VStack {
+//            CardItemView(
+//                id: item.userInfo?.userID ?? "",
+//                nickName: item.userInfo?.userNickname ?? "",
+//                job: item.userInfo?.userJob ?? "",
+//                generation: item.userInfo?.userGeneration ?? "",
+//                generationColor: generationColor,
+//                emoji: item.emoji ?? "",
+//                title: item.title ?? "",
+//                choiceA: item.choiceA ?? "",
+//                choiceB: item.choiceB ?? "",
+//                answerRatio: (A: item.answerRatio?.a ?? 0, B: item.answerRatio?.b ?? 0)
+//            )
+//        }
+//        .frame(width: width)
+//    }
+//
+//    private func customizeScrollView(scrollView: UIScrollView) {
+//        let delegate = ScrollViewDelegate<QuestionModel>(parent: self, itemHeight: 540)
+//        scrollViewDelegate = delegate
+//        scrollView.delegate = delegate
+//        scrollView.alwaysBounceVertical = true
+//        scrollView.contentInsetAdjustmentBehavior = .automatic
+//        scrollView.showsVerticalScrollIndicator = false
+//        scrollView.showsHorizontalScrollIndicator = false
+//        scrollView.decelerationRate = .fast
+//    }
+//}
