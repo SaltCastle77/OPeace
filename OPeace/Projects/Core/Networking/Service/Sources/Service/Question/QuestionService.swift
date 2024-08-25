@@ -22,6 +22,9 @@ public enum QuestionService {
         choiceA: String,
         choiceB: String
     )
+    case isVoteQustionLike(id: Int)
+    case isVoteQuestionAnswer(id: Int, userChoice: String)
+    
     
 }
 
@@ -36,6 +39,12 @@ extension QuestionService: BaseTargetType {
             
         case .createQuestion:
             return QuestionAPI.createQuestion.questionAPIDesc
+            
+        case .isVoteQustionLike(let id):
+            return QuestionAPI.questionLikeVote(id: id).questionAPIDesc
+            
+        case .isVoteQuestionAnswer(let id, _):
+            return QuestionAPI.questionAnswerVote(id: id).questionAPIDesc
         }
     }
     
@@ -48,6 +57,12 @@ extension QuestionService: BaseTargetType {
             return .get
             
         case .createQuestion:
+            return .post
+            
+        case .isVoteQustionLike:
+            return .post
+            
+        case .isVoteQuestionAnswer:
             return .post
         }
     }
@@ -80,6 +95,20 @@ extension QuestionService: BaseTargetType {
             ]
             
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            
+        case .isVoteQustionLike(id: let id):
+            let parmeters: [String: Any] = [
+                "id": id
+            ]
+            return .requestParameters(parameters: parmeters, encoding: JSONEncoding.default)
+            
+        case .isVoteQuestionAnswer(let id,  let userChoice):
+            let parmeters: [String: Any] = [
+                "id": id,
+                "user_choice": userChoice
+            ]
+            return .requestParameters(parameters: parmeters, encoding: JSONEncoding.default)
+            
         }
     }
     

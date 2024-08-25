@@ -79,13 +79,44 @@ extension MoyaProvider {
         decodeTo type: T.Type
     ) -> AsyncThrowingStream<T, Error> {
         // 퍼블리셔를 미리 준비합니다.
-        let publisher = self.requestWithProgressPublisher(target)
-            .compactMap { $0.response?.data }
-            .tryCompactMap { data in
-                try data.decoded(as: T.self)
+        let provider = MoyaProvider<Target>(plugins: [MoyaLoggingPlugin()])
+        let publisher = provider.requestPublisher(target)
+            .tryMap { response -> Data in
+                guard let httpResponse = response.response else {
+                    throw DataError.noData
+                }
+                switch httpResponse.statusCode {
+                case 200, 201, 204, 401:
+                    return response.data
+                case 400:
+                    throw DataError.badRequest
+                case 404:
+                    let errorResponse = try response.data.decoded(as: ErrorResponse.self)
+                    throw DataError.customError(errorResponse)
+                default:
+                    throw DataError.unhandledStatusCode(httpResponse.statusCode)
+                }
             }
-            .mapError {
-                DataError.error($0)
+            .tryCompactMap { data in
+                if data.isEmpty {
+                    if T.self == Void.self {
+                        return () as? T
+                    } else if let optionalType = T.self as? ExpressibleByNilLiteral.Type {
+                        return optionalType.init(nilLiteral: ()) as? T
+                    }
+                }
+                return try data.decoded(as: T.self)
+            }
+            .mapError { error in
+                if let moyaError = error as? MoyaError {
+                    return DataError.moyaError(moyaError)
+                } else if let decodingError = error as? DecodingError {
+                    return DataError.decodingError(decodingError)
+                } else if let dataError = error as? DataError {
+                    return dataError
+                } else {
+                    return DataError.unknownError
+                }
             }
             .eraseToAnyPublisher()
         
@@ -119,13 +150,44 @@ extension MoyaProvider {
         _ target: Target,
         decodeTo type: T.Type) -> AsyncStream<Result<T, Error>> {
             // 퍼블리셔를 미리 준비합니다.
-            let publisher = self.requestWithProgressPublisher(target)
-                .compactMap { $0.response?.data }
-                .tryCompactMap { data in
-                    try data.decoded(as: T.self)
+            let provider = MoyaProvider<Target>(plugins: [MoyaLoggingPlugin()])
+            let publisher = provider.requestPublisher(target)
+                .tryMap { response -> Data in
+                    guard let httpResponse = response.response else {
+                        throw DataError.noData
+                    }
+                    switch httpResponse.statusCode {
+                    case 200, 201, 204, 401:
+                        return response.data
+                    case 400:
+                        throw DataError.badRequest
+                    case 404:
+                        let errorResponse = try response.data.decoded(as: ErrorResponse.self)
+                        throw DataError.customError(errorResponse)
+                    default:
+                        throw DataError.unhandledStatusCode(httpResponse.statusCode)
+                    }
                 }
-                .mapError {
-                    DataError.error($0)
+                .tryCompactMap { data in
+                    if data.isEmpty {
+                        if T.self == Void.self {
+                            return () as? T
+                        } else if let optionalType = T.self as? ExpressibleByNilLiteral.Type {
+                            return optionalType.init(nilLiteral: ()) as? T
+                        }
+                    }
+                    return try data.decoded(as: T.self)
+                }
+                .mapError { error in
+                    if let moyaError = error as? MoyaError {
+                        return DataError.moyaError(moyaError)
+                    } else if let decodingError = error as? DecodingError {
+                        return DataError.decodingError(decodingError)
+                    } else if let dataError = error as? DataError {
+                        return dataError
+                    } else {
+                        return DataError.unknownError
+                    }
                 }
                 .eraseToAnyPublisher()
             

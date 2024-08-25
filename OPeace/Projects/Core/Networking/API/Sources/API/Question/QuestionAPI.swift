@@ -7,10 +7,12 @@
 
 import Foundation
 
-public enum QuestionAPI: String {
+public enum QuestionAPI {
     case feedList
     case myWriteQuestionList
     case createQuestion
+    case questionLikeVote(id: Int)
+    case questionAnswerVote(id: Int)
     
     public var questionAPIDesc: String {
         switch self {
@@ -22,6 +24,13 @@ public enum QuestionAPI: String {
             
         case .createQuestion:
             return "/v1/question/"
+            
+        case .questionLikeVote(let id):
+            return "/v1/questions/\(id)/like/"
+            
+        case .questionAnswerVote(let id):
+            return "v1/questions/\(id)/vote"
         }
     }
 }
+

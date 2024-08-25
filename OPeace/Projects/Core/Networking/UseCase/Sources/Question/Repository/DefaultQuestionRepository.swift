@@ -9,7 +9,6 @@ import Foundation
 import Model
 
 public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
- 
     
     public init() {
         
@@ -37,6 +36,17 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
         choiceA: String,
         choiceB: String
     ) async throws -> CreateQuestionModel? {
+        return nil
+    }
+    
+    public func isVoteQuestionLike(questionID: Int) async throws -> VoteQuestionLikeModel? {
+        return nil
+    }
+    
+    public func isVoteQuestionAnswer(
+        questionID: Int,
+        choicAnswer: String
+    ) async throws -> QuestionVoteModel? {
         return nil
     }
 }

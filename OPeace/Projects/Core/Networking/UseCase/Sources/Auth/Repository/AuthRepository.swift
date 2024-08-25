@@ -226,6 +226,15 @@ import Model
     public func checkUserVerify() async throws -> CheckUserVerifyModel? {
         return try await provider.requestAsync(.userVerify, decodeTo: CheckUserVerifyModel.self)
     }
+    
+    //MARK: - 유저 차단
+    public func userBlock(
+        questioniD: Int,
+        userID: String) async throws -> UserBlockModel? {
+            return try await provider.requestAsync(.userBlock(
+                questioniD: questioniD,
+                userID: userID), decodeTo: UserBlockModel.self)
+    }
 }
 
 

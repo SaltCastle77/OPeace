@@ -66,4 +66,8 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     public func checkUserVerify() async throws -> CheckUserVerifyModel? {
         return nil
     }
+    
+    public func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel? {
+        return nil
+    }
 }

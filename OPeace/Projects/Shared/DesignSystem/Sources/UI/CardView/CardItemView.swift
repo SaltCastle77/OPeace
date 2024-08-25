@@ -9,9 +9,11 @@ import SwiftUI
 
 public struct CardItemView: View {
     @State private var isRotated: Bool = false
-    @State private var isLikedTap: Bool = false
+    @State var isLikedTap: Bool = false
     @State private var answerRatio: (A: Int, B: Int)
-
+    @Binding var isTapAVote: Bool
+    @Binding var isTapBVote: Bool
+    
     private var id: String
     private var nickName: String
     private var job: String
@@ -24,6 +26,8 @@ public struct CardItemView: View {
     private var responseCount: Int
     private var likeCount: Int
     private var editTapAction: () -> Void = { }
+    private var likeTapAction: (String) -> Void = { _ in }
+    private var choiceTapAction: () -> Void = { }
 
     public init(
         id: String,
@@ -37,8 +41,14 @@ public struct CardItemView: View {
         choiceB: String,
         responseCount: Int,
         likeCount: Int,
+        isLikedTap: Bool,
         answerRatio: (A: Int, B: Int),
-        editTapAction: @escaping () -> Void
+        isRotated: Bool,
+        isTapAVote: Binding<Bool>,
+        isTapBVote: Binding<Bool>,
+        editTapAction: @escaping () -> Void,
+        likeTapAction: @escaping (String) -> Void,
+        choiceTapAction: @escaping () -> Void
     ) {
         self.id = id
         self.nickName = nickName
@@ -52,7 +62,13 @@ public struct CardItemView: View {
         self.responseCount = responseCount
         self.likeCount = likeCount
         _answerRatio = State(initialValue: answerRatio)
+        _isLikedTap = State(initialValue: isLikedTap)
+        _isRotated = State(initialValue: isRotated)
+        self._isTapAVote = isTapAVote
+        self._isTapBVote = isTapBVote
         self.editTapAction = editTapAction
+        self.likeTapAction = likeTapAction
+        self.choiceTapAction = choiceTapAction
     }
 
     public var body: some View {
@@ -100,6 +116,8 @@ public struct CardItemView: View {
                 }
                 .onTapGesture {
                     isRotated.toggle()
+                    isTapAVote = false
+                    isTapBVote = false
                 }
         }
         .rotation3DEffect(
@@ -135,9 +153,7 @@ extension CardItemView {
                     .scaledToFit()
                     .frame(width: 36, height: 36)
                     .onTapGesture {
-                        if id == id {
-                            editTapAction()
-                        }
+                        editTapAction()
                     }
                 
             }
@@ -236,6 +252,9 @@ extension CardItemView {
                         Text("A")
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
+                            .onTapGesture {
+                                isTapAVote = true
+                            }
                         
                         Spacer()
                         
@@ -262,6 +281,9 @@ extension CardItemView {
                         Text("B")
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
+                            .onTapGesture {
+                                isTapBVote = true
+                            }
                         
                         Spacer()
                         
@@ -352,7 +374,10 @@ extension CardItemView {
                     }
                 }
                 .onTapGesture {
-                    isLikedTap.toggle()
+                    if id == id {
+                        isLikedTap.toggle()
+                        likeTapAction(id)
+                    }
                 }
                 
                 Spacer()
@@ -362,43 +387,58 @@ extension CardItemView {
     }
     
     @ViewBuilder
-       private func questionChoiceVoteButton() -> some View {
-           VStack {
-               Spacer()
-                   .frame(height: 24)
-               
-               HStack {
-                   RoundedRectangle(cornerRadius: 10)
-                       .fill(Color.basicPrimary)
-                       .frame(width: 144, height: 64)
-                       .clipShape(Capsule())
-                       .overlay {
-                           Text("A")
-                               .pretendardFont(family: .SemiBold, size: 24)
-                               .foregroundStyle(Color.gray600)
-                       }
-                       .onTapGesture {
-                           answerRatio.A += 1
-                           isRotated.toggle()
-                       }
+    private func questionChoiceVoteButton() -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 24)
+            
+            HStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.basicPrimary)
+                    .frame(width: 144, height: 64)
+                    .clipShape(Capsule())
+                    .overlay {
+                        Text("A")
+                            .pretendardFont(family: .SemiBold, size: 24)
+                            .foregroundStyle(Color.gray600)
+                    }
+                    .onTapGesture {
+                        if id == id {
+                            answerRatio.A += 1
+                            isTapAVote.toggle()
+                            isRotated.toggle()
+                            choiceTapAction()
+                            
+                            isTapBVote = false
+                            
+                        }
+                    }
 
-                   Spacer()
-                       .frame(width: 8)
-                   
-                   RoundedRectangle(cornerRadius: 10)
-                       .fill(Color.basicPrimary)
-                       .frame(width: 144, height: 64)
-                       .clipShape(Capsule())
-                       .overlay {
-                           Text("B")
-                               .pretendardFont(family: .SemiBold, size: 24)
-                               .foregroundStyle(Color.gray600)
-                       }
-                       .onTapGesture {
-                           answerRatio.B += 1
-                           isRotated.toggle()
-                       }
-               }
-           }
-       }
+                Spacer()
+                    .frame(width: 8)
+                
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.basicPrimary)
+                    .frame(width: 144, height: 64)
+                    .clipShape(Capsule())
+                    .overlay {
+                        Text("B")
+                            .pretendardFont(family: .SemiBold, size: 24)
+                            .foregroundStyle(Color.gray600)
+                    }
+                    .onTapGesture {
+                        if id == id {
+                            answerRatio.B += 1
+                            isRotated.toggle()
+                            isTapBVote.toggle()
+                            choiceTapAction()
+                            
+                            // Check which option is selected
+                            isTapAVote = false
+                        }
+                    }
+            }
+        }
+    }
+
 }

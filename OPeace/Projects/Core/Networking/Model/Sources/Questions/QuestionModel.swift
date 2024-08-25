@@ -70,7 +70,7 @@ public struct ResultData: Codable, Equatable {
 
 // MARK: - AnswerRatio
 public struct AnswerRatio: Codable, Equatable {
-    public let a, b: Int?
+    public let a, b: Double?
 
     public enum CodingKeys: String, CodingKey {
         case a = "A"
@@ -78,8 +78,8 @@ public struct AnswerRatio: Codable, Equatable {
     }
     
     public init(
-        a: Int?,
-        b: Int?
+        a: Double?,
+        b: Double?
     ) {
         self.a = a
         self.b = b

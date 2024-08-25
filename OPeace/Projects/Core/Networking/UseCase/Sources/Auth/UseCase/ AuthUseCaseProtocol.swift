@@ -21,4 +21,5 @@ public protocol AuthUseCaseProtocol {
     func autoLogin() async throws -> UseLoginModel?
     func deleteUser(reason: String) async throws -> DeleteUserModel?
     func checkUserVerify() async throws -> CheckUserVerifyModel?
+    func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel?
 }

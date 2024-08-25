@@ -17,6 +17,7 @@ public enum AuthAPI : String {
     case deleteUser
     case logoutUser
     case userVerify
+    case userBlock
     
     
     public var authAPIDesc: String {
@@ -47,6 +48,9 @@ public enum AuthAPI : String {
             
         case .userVerify:
             return "/users/verify/"
+            
+        case .userBlock:
+            return "/users/block/"
         }
     }
 }

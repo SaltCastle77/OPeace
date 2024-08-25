@@ -76,6 +76,14 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     public func checkUserVerify() async throws -> CheckUserVerifyModel? {
         try await repository.checkUserVerify()
     }
+    
+    //MARK: - 유저 차단
+    public func userBlock(
+        questioniD: Int,
+        userID: String
+    ) async throws -> UserBlockModel? {
+        try await repository.userBlock(questioniD: questioniD, userID: userID)
+    }
 }
 
 

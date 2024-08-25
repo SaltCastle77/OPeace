@@ -19,6 +19,7 @@ public enum AuthService {
     case autoLogin
     case deleteUser(reason: String)
     case userVerify
+    case userBlock(questioniD: Int, userID: String)
 }
 
 extension AuthService: BaseTargetType {
@@ -47,6 +48,9 @@ extension AuthService: BaseTargetType {
             
         case .userVerify:
             return AuthAPI.userVerify.authAPIDesc
+            
+        case .userBlock:
+            return AuthAPI.userBlock.authAPIDesc
         }
     }
     
@@ -74,6 +78,9 @@ extension AuthService: BaseTargetType {
             return .delete
             
         case .userVerify:
+            return .post
+            
+        case .userBlock:
             return .post
         }
     }
@@ -115,12 +122,18 @@ extension AuthService: BaseTargetType {
             let parameters: [String: Any] = [
                 "reason" : reason
             ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
         case .userVerify:
             let parameters: [String: Any] = [ : ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
+        case .userBlock(let questioniD, let userID):
+            let parameters: [String: Any] = [
+                "question_id" : questioniD,
+                "blocked_user_id" : userID
+            ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
         
     }

@@ -52,20 +52,23 @@ extension EditQuestionView {
             ForEach(EditQuestionType.allCases, id: \.self) {
                  item in
                 editQustionListitem(title: item.editQuestionDesc) {
+                    store.send(.view(.tapEditQuestionitem(item)))
                     if item == store.editQuestionitem {
                         switch store.editQuestionitem {
                         case .reportUser:
+                            print(item.editQuestionDesc)
                             closeModalAction()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 action()
                             }
                         case .blockUser:
+                            print(item.editQuestionDesc)
                             closeModalAction()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 action()
                             }
                         case .none:
-                            break
+                            print(item.editQuestionDesc)
                             
                         }
                     }

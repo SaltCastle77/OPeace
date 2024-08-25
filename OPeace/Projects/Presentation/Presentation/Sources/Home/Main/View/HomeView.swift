@@ -6,16 +6,17 @@
 //
 
 import SwiftUI
-import DesignSystem
+import Combine
 
 import ComposableArchitecture
 import SwiftUIIntrospect
 import PopupView
 import KeychainAccess
-import Utill
 
 public struct HomeView: View {
     @Bindable var store: StoreOf<Home>
+    
+    @State private var refreshTimer: Timer?
     
     public init(store: StoreOf<Home>) {
         self.store = store
@@ -28,22 +29,20 @@ public struct HomeView: View {
             
             VStack {
                 navigationBaritem()
+                   
                 
                 questionLIstView()
-                
-//                Spacer()
-//                    .frame(height: 10)
-                
             }
             .onAppear {
                 store.send(.async(.fetchQuestionList))
+//                startRefreshData()
                 appearFloatingPopUp()
             }
-            .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-                navigationController.interactivePopGestureRecognizer?.isEnabled = false
+          
+            .onDisappear {
+//                refreshTimer?.invalidate()
             }
         
-            
             VStack {
                 Spacer()
                 
@@ -51,9 +50,25 @@ public struct HomeView: View {
                     .padding(.bottom, 40)
             }
             .edgesIgnoringSafeArea(.bottom)
-            
         }
-        
+        .sheet(item: $store.scope(state: \.destination?.editQuestion, action: \.destination.editQuestion)) { editQuestionStore in
+            EditQuestionView(store: editQuestionStore) {
+                guard let edititem =  editQuestionStore.editQuestionitem else {return}
+                store.send(.view(.switchModalAction(edititem )))
+                switch edititem {
+                case .blockUser:
+                    store.customPopUpText = "정말 차단하시겠어요?"
+                    store.isTapBlockUser = true
+                case .reportUser:
+                    break
+                }
+            } closeModalAction: {
+                store.send(.view(.closeEditQuestionModal))
+            }
+            .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
+            .presentationCornerRadius(20)
+            .presentationDragIndicator(.hidden)
+        }
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
             if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                 CustomBasicPopUpView(
@@ -79,7 +94,7 @@ public struct HomeView: View {
         }
         
         .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
-            FloatingPopUpView(store: floatingPopUpStore, title: store.floatingText.isEmpty ? "로그아웃 되었어요" : store.floatingText, image: .succesLogout)
+            FloatingPopUpView(store: floatingPopUpStore, title: store.floatingText.isEmpty ? "로그아웃 되었어요" : store.floatingText, image: store.floatingImage)
             
         }  customize: { popup in
             popup
@@ -90,19 +105,42 @@ public struct HomeView: View {
                 .closeOnTapOutside(true)
         }
         
-        .sheet(item: $store.scope(state: \.destination?.editQuestion, action: \.destination.editQuestion)) { editQuestionStore in
-            EditQuestionView(store: editQuestionStore) {
-                guard let editQuestionItem = editQuestionStore.editQuestionitem else { return }
-                store.send(.view(.switchModalAction(editQuestionItem )))
-            } closeModalAction: {
-                store.send(.view(.closeEditQuestionModal))
+        .popup(item: $store.scope(state: \.destination?.questionPopUp, action: \.destination.questionPopUp)) { customPopUp in
+            CustomBasicPopUpView(
+                store: customPopUp,
+                title: store.customPopUpText) {
+                    store.send(.view(.closePopUp))
+                    if store.isTapBlockUser == true {
+                        store.send(.async(.blockUser(qusetionID: store.questionID ?? .zero, userID: store.userID ?? "")))
+                    }
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                        store.send(.navigation(.presntLogin))
+//                    }
+
+            } cancelAction: {
+                store.send(.view(.closePopUp))
             }
-            .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
-            .presentationCornerRadius(20)
-            .presentationDragIndicator(.hidden)
+        }  customize: { popup in
+            popup
+                .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
+                .position(.bottom)
+                .animation(.spring)
+                .closeOnTap(true)
+                .closeOnTapOutside(true)
+                .backgroundColor(Color.basicBlack.opacity(0.8))
+        }
+        
+    }
+    
+    private func startRefreshData() {
+        refreshTimer?.invalidate()
+        
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+            store.send(.async(.fetchQuestionList))
         }
     }
 }
+
 
 extension HomeView {
     
@@ -241,9 +279,25 @@ extension HomeView {
                     choiceB: item.choiceB ?? "",
                     responseCount: item.answerCount ?? .zero,
                     likeCount: item.likeCount ?? .zero,
-                    answerRatio: (A: item.answerRatio?.a ?? 0, B: item.answerRatio?.b ?? 0),
+                    isLikedTap: store.isLikeTap,
+                    answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+                    isRotated: store.isRoatinCard,
+                    isTapAVote: $store.isTapAVote,
+                    isTapBVote: $store.isTapBVote,
                     editTapAction: {
+                        store.userID = item.userInfo?.userID ?? ""
+                        store.questionID = item.id ?? .zero
                         store.send(.view(.presntEditQuestion))
+                        print("store id \(store.userID), \(store.questionID)")
+                    },
+                    likeTapAction: { userid in
+                        store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))
+                    }, choiceTapAction: {
+                        if store.isTapAVote == true  {
+                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+                        } else if store.isTapBVote == true {
+                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                        }
                     }
                 )
                 

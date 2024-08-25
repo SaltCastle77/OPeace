@@ -60,6 +60,19 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
             choiceB: choiceB
         )
     }
+    
+    //MARK: - 좋아요 누르기
+    public func isVoteQuestionLike(questionID: Int) async throws -> VoteQuestionLikeModel? {
+        try await repository.isVoteQuestionLike(questionID: questionID)
+    }
+    
+    //MARK: - 응답 선택
+    public func isVoteQuestionAnswer(
+        questionID: Int,
+        choicAnswer: String
+    ) async throws -> QuestionVoteModel? {
+        try await repository.isVoteQuestionAnswer(questionID: questionID, choicAnswer: choicAnswer)
+    }
 }
 
 extension QuestionUseCase : DependencyKey {

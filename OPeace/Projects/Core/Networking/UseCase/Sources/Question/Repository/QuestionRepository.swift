@@ -63,4 +63,20 @@ public class QuestionRepository: QuestionRepositoryProtocol {
             choiceA: choiceA,
             choiceB: choiceB), decodeTo: CreateQuestionModel.self)
     }
+    
+    //MARK: - 좋아요 API
+    public func isVoteQuestionLike(questionID: Int) async throws -> VoteQuestionLikeModel? {
+        return try await provider.requestAsync(.isVoteQustionLike(
+            id: questionID), decodeTo: VoteQuestionLikeModel.self)
+    }
+    
+    //MARK: - 유저 투표 API
+    public func isVoteQuestionAnswer(
+        questionID: Int,
+        choicAnswer: String
+    ) async throws -> QuestionVoteModel? {
+        return try await provider.requestAsync(.isVoteQuestionAnswer(
+            id: questionID,
+            userChoice: choicAnswer), decodeTo: QuestionVoteModel.self)
+    }
 }
