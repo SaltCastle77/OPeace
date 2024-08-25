@@ -36,7 +36,7 @@ public struct Setting {
     //MARK: - ViewAction
     @CasePathable
     public enum View {
-        case tapSettintitem(SettingProfile)
+        case tapSettingitem(SettingProfile)
     }
     
     
@@ -67,11 +67,10 @@ public struct Setting {
                 return .none
                 
             case .test:
-                print("test 애셕")
                 return .none
             case .view(let View):
                 switch View {
-                case .tapSettintitem(let item):
+                case .tapSettingitem(let item):
                     state.settingtitem = item
                     return .none
                 }

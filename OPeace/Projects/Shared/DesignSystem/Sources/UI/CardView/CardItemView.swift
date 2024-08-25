@@ -9,6 +9,7 @@ import SwiftUI
 
 public struct CardItemView: View {
     @State private var isRotated: Bool = false
+    @State private var isLikedTap: Bool = false
     @State private var answerRatio: (A: Int, B: Int)
 
     private var id: String
@@ -20,6 +21,9 @@ public struct CardItemView: View {
     private var title: String
     private var choiceA: String
     private var choiceB: String
+    private var responseCount: Int
+    private var likeCount: Int
+    private var editTapAction: () -> Void = { }
 
     public init(
         id: String,
@@ -31,7 +35,10 @@ public struct CardItemView: View {
         title: String,
         choiceA: String,
         choiceB: String,
-        answerRatio: (A: Int, B: Int)
+        responseCount: Int,
+        likeCount: Int,
+        answerRatio: (A: Int, B: Int),
+        editTapAction: @escaping () -> Void
     ) {
         self.id = id
         self.nickName = nickName
@@ -42,7 +49,10 @@ public struct CardItemView: View {
         self.title = title
         self.choiceA = choiceA
         self.choiceB = choiceB
+        self.responseCount = responseCount
+        self.likeCount = likeCount
         _answerRatio = State(initialValue: answerRatio)
+        self.editTapAction = editTapAction
     }
 
     public var body: some View {
@@ -54,24 +64,50 @@ public struct CardItemView: View {
                 .overlay {
                     VStack {
                         cardHeaderVIew(nickName: nickName, job: job, generation: generation)
-                        
+                            
                         cardEmojiView(emoji: emoji)
-                        
-                        cardWriteAndanswerView(title: title, choiceA: choiceA, choiceB: choiceB)
-                        
-                        questionChoiceVoteButton()
+                            
+                        if isRotated {
+                            cardWriteAndanswerView(
+                                title: title,
+                                choiceA: choiceA,
+                                choiceB: choiceB,
+                                isRoated: isRotated)
+                            
+                            isVotedResultView(
+                                responseCount: responseCount,
+                                likeCount: likeCount
+                            )
+                            
+                        } else {
+                            cardWriteAndanswerView(
+                                title: title,
+                                choiceA: choiceA,
+                                choiceB: choiceB,
+                                isRoated: isRotated)
+                            
+                            questionChoiceVoteButton()
+                        }
                         
                         Spacer()
                     }
+                    .rotation3DEffect(
+                        .degrees(isRotated ? 180 : 0),
+                        axis: (x: 0, y: 1, z: 0),
+                        perspective: 0.5
+                    )
                     .padding(.horizontal,24)
                 }
-                .rotation3DEffect(
-                    .degrees(isRotated ? 180 : 0),
-                    axis: (x: 0, y: 1, z: 0),
-                    perspective: 0.5
-                )
-                .animation(.easeInOut(duration: 0.5), value: isRotated)
+                .onTapGesture {
+                    isRotated.toggle()
+                }
         }
+        .rotation3DEffect(
+            .degrees(isRotated ? 180 : 0),
+            axis: (x: 0, y: 1, z: 0),
+            perspective: 0.5
+        )
+        .animation(.easeInOut(duration: 0.5), value: isRotated)
     }
 }
 
@@ -98,6 +134,11 @@ extension CardItemView {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 36, height: 36)
+                    .onTapGesture {
+                        if id == id {
+                            editTapAction()
+                        }
+                    }
                 
             }
             
@@ -151,7 +192,8 @@ extension CardItemView {
     private func cardWriteAndanswerView(
         title: String,
         choiceA: String,
-        choiceB: String
+        choiceB: String,
+        isRoated: Bool
     ) -> some View {
         VStack(alignment: .center) {
             Spacer()
@@ -166,10 +208,12 @@ extension CardItemView {
             Spacer()
                 .frame(height: 16)
             
-            choiceAnswertRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
-            
+            if isRoated {
+                choiceAnswertRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
+            } else {
+                choiceAnswertRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
+            }
         }
-       
     }
     
     @ViewBuilder
@@ -198,8 +242,7 @@ extension CardItemView {
                         Text(choiceTitleA)
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
-                        
-                        
+                    
                         Spacer()
                         
                     }
@@ -207,7 +250,6 @@ extension CardItemView {
             
             Spacer()
                 .frame(height: 8)
-            
             
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.gray400)
@@ -227,7 +269,6 @@ extension CardItemView {
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
                         
-                        
                         Spacer()
                         
                     }
@@ -235,6 +276,89 @@ extension CardItemView {
             
         }
         .padding(.horizontal, 24)
+    }
+    
+    @ViewBuilder
+    private func isVotedResultView(
+        responseCount: Int,
+        likeCount: Int
+    ) -> some View {
+        VStack {
+            Spacer()
+                .frame(height: 36)
+            
+            HStack {
+                Spacer()
+                
+                Image(asset: .resultRespond)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 18, height: 18)
+                
+                Spacer()
+                    .frame(width: 4)
+                
+                Text("웅답")
+                    .pretendardFont(family: .Bold, size: 16)
+                    .foregroundStyle(Color.gray200)
+                
+                Spacer()
+                    .frame(width: 4)
+                
+                if responseCount > 999 {
+                    Text("\(responseCount)+")
+                        .pretendardFont(family: .Medium, size: 16)
+                        .foregroundStyle(Color.gray200)
+                } else {
+                    Text(responseCount.description)
+                        .pretendardFont(family: .Medium, size: 16)
+                        .foregroundStyle(Color.gray200)
+                }
+                
+                Spacer()
+                    .frame(width: 12)
+                
+                Rectangle()
+                    .fill(Color.gray200)
+                    .frame(width: 1, height: 15)
+                
+                Spacer()
+                    .frame(width: 12)
+                
+                HStack {
+                    Image(asset: isLikedTap ? .isTapResultLike : .resultLike)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 18, height: 18)
+                        
+                    Spacer()
+                        .frame(width: 4)
+                    
+                    Text("공감")
+                        .pretendardFont(family: .Bold, size: 16)
+                        .foregroundStyle(isLikedTap ? Color.basicPrimary : Color.gray200)
+                    
+                    Spacer()
+                        .frame(width: 4)
+                    
+                    if likeCount > 999 {
+                        Text("\(likeCount)+")
+                            .pretendardFont(family: .Medium, size: 16)
+                            .foregroundStyle(isLikedTap ? Color.basicPrimary : Color.gray200)
+                    } else {
+                        Text(likeCount.description)
+                            .pretendardFont(family: .Medium, size: 16)
+                            .foregroundStyle(isLikedTap ? Color.basicPrimary : Color.gray200)
+                    }
+                }
+                .onTapGesture {
+                    isLikedTap.toggle()
+                }
+                
+                Spacer()
+                
+            }
+        }
     }
     
     @ViewBuilder

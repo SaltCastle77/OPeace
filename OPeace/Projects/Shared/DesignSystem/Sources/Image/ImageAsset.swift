@@ -44,6 +44,9 @@ public enum ImageAsset: String {
     
     //MARK: - Question
     case questionEdit
+    case resultRespond
+    case resultLike
+    case isTapResultLike
     
     case empty
 }

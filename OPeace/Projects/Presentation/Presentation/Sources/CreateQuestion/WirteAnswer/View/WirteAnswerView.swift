@@ -107,7 +107,7 @@ extension WriteAnswerView {
             
             RoundTextField(
                 choiceTitle: "A",
-                placeholder: "작성할 A 답변을 적어주세요!",
+                placeholder: "내용을 입려해 주세요",
                 choiceAnswerText: $store.choiceAtext,
                 isErrorStoke: $store.isErrorEnableAnswerAStroke)  { newAnswer in
                     if newAnswer.count >= 14 {
@@ -132,7 +132,7 @@ extension WriteAnswerView {
             
             RoundTextField(
                 choiceTitle: "B",
-                placeholder: "작성할  B 답변을 적어주세요!",
+                placeholder:  "내용을 입려해 주세요",
                 choiceAnswerText: $store.choiceBtext,
                 isErrorStoke: $store.isErrorEnableAnswerBStroke) { newAnswer in
                     if newAnswer.count >= 14 {
