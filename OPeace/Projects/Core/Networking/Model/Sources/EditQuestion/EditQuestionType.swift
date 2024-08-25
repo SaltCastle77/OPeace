@@ -1,5 +1,5 @@
 //
-//  EditQuestion.swift
+//  EditQuestionType.swift
 //  Model
 //
 //  Created by 서원지 on 8/25/24.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-public enum EditQuestion : String, CaseIterable {
+public enum EditQuestionType : String, CaseIterable, Equatable {
     case reportUser
     case blockUser
     
-    var editQuestionDesc: String {
+    public var editQuestionDesc: String {
         switch self {
         case .reportUser:
             return "신고하기"
