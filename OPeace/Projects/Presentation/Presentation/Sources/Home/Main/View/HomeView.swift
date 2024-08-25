@@ -42,6 +42,7 @@ public struct HomeView: View {
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
                 navigationController.interactivePopGestureRecognizer?.isEnabled = false
             }
+        
             
             VStack {
                 Spacer()
@@ -50,7 +51,6 @@ public struct HomeView: View {
                     .padding(.bottom, 40)
             }
             .edgesIgnoringSafeArea(.bottom)
-            
             
         }
         
@@ -88,6 +88,18 @@ public struct HomeView: View {
                 .animation(.spring)
                 .closeOnTap(true)
                 .closeOnTapOutside(true)
+        }
+        
+        .sheet(item: $store.scope(state: \.destination?.editQuestion, action: \.destination.editQuestion)) { editQuestionStore in
+            EditQuestionView(store: editQuestionStore) {
+                guard let editQuestionItem = editQuestionStore.editQuestionitem else { return }
+                store.send(.view(.switchModalAction(editQuestionItem )))
+            } closeModalAction: {
+                store.send(.view(.closeEditQuestionModal))
+            }
+            .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
+            .presentationCornerRadius(20)
+            .presentationDragIndicator(.hidden)
         }
     }
 }
@@ -231,7 +243,7 @@ extension HomeView {
                     likeCount: item.likeCount ?? .zero,
                     answerRatio: (A: item.answerRatio?.a ?? 0, B: item.answerRatio?.b ?? 0),
                     editTapAction: {
-                        
+                        store.send(.view(.presntEditQuestion))
                     }
                 )
                 

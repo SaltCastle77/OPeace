@@ -74,6 +74,7 @@ public struct Home {
     public enum Destination {
         case customPopUp(CustomPopUp)
         case floatingPopUP(FloatingPopUp)
+        case editQuestion(EditQuestion)
         
     }
     
@@ -83,8 +84,11 @@ public struct Home {
         case appaerProfiluserData
         case prsentLoginPopUp
         case presntFloatintPopUp
+        case presntEditQuestion
+        case closeEditQuestionModal
         case closePopUp
         case timeToCloseFloatingPopUp
+        case switchModalAction(EditQuestionType)
     }
     
   
@@ -144,6 +148,25 @@ public struct Home {
                     return .run { send in
                         try await clock.sleep(for: .seconds(1.5))
                         await send(.view(.closePopUp))
+                    }
+                    
+                case .presntEditQuestion:
+                    state.destination = .editQuestion(.init())
+                    return .none
+                    
+                case .closeEditQuestionModal:
+                    state.destination = nil
+                    return .none
+                    
+                case .switchModalAction(let editQuestion):
+                    var editQuestion = editQuestion
+                    return .run { send in
+                        switch editQuestion {
+                        case .reportUser:
+                            Log.debug("신고하기")
+                        case .blockUser:
+                            Log.debug("차단하기")
+                        }
                     }
                 }
                 
