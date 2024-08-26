@@ -12,7 +12,7 @@ public struct FlippableCardView<Content: View, T>: View {
     let content: (T) -> Content
 
     @State var currentPage: Int = 0
-    @State private var scrollViewDelegate: ScrollViewDelegate<Content, T>? 
+    @State private var scrollViewDelegate: ScrollViewDelegate<Content, T>? = nil
 
     public init(
         data: [T],
@@ -37,22 +37,28 @@ public struct FlippableCardView<Content: View, T>: View {
                                 Spacer()
                                     .frame(height: 10)
                             }
-                            
                         }
                         .frame(width: geometry.size.width)
                     }
                 }
             }
+            .disabled(data.count == 1) 
+            .scrollDisabled(data.count == 1)
             .scrollTargetLayout()
+            .onAppear {
+                if scrollViewDelegate == nil && data.count > 1 {
+                    scrollViewDelegate = ScrollViewDelegate<Content, T>(parent: self, itemHeight: 520)
+                }
+            }
             .introspect(.scrollView, on: .iOS(.v17, .v18), customize: { scrollView in
-                let delegate = ScrollViewDelegate<Content, T>(parent: self, itemHeight: 520)
-                scrollViewDelegate = delegate
-                scrollView.delegate = delegate
-                scrollView.alwaysBounceVertical = true
-                scrollView.contentInsetAdjustmentBehavior = .automatic
-                scrollView.showsVerticalScrollIndicator = false
-                scrollView.showsHorizontalScrollIndicator = false
-                scrollView.decelerationRate = .fast
+                if let delegate = scrollViewDelegate {
+                    scrollView.delegate = delegate
+                    scrollView.alwaysBounceVertical = true
+                    scrollView.contentInsetAdjustmentBehavior = .automatic
+                    scrollView.showsVerticalScrollIndicator = false
+                    scrollView.showsHorizontalScrollIndicator = false
+                    scrollView.decelerationRate = .fast
+                }
             })
         }
         .edgesIgnoringSafeArea(.all)

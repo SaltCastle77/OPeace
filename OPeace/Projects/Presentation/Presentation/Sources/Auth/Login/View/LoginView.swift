@@ -75,12 +75,12 @@ extension LoginView {
             HStack {
                 Spacer()
                 
-                loginButton(image: store.googleLoginImage, completion: {
-                    store.send(.navigation(.presnetAgreement))
-                }, isApple: false)
-                
-                Spacer()
-                    .frame(width: 16)
+//                loginButton(image: store.googleLoginImage, completion: {
+//                    store.send(.navigation(.presnetAgreement))
+//                }, isApple: false)
+//                
+//                Spacer()
+//                    .frame(width: 16)
                 
                 loginButton(image: store.appleLoginImage, completion: {
                     
