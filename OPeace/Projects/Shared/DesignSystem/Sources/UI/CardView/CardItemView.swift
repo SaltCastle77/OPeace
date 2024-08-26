@@ -454,11 +454,8 @@ extension CardItemView {
                             isTapAVote.toggle()
                             isRotated.toggle()
                             choiceTapAction()
-                            
                             isTapBVote = false
-                            
-                        }
-                        else if id == userID {
+                        } else if id == userID {
                             
                         }
                     }
@@ -481,11 +478,8 @@ extension CardItemView {
                             isRotated.toggle()
                             isTapBVote.toggle()
                             choiceTapAction()
-                            
-                            // Check which option is selected
                             isTapAVote = false
-                        }
-                        else if id == userID {
+                        } else if id == userID {
                             
                         }
                     }

@@ -42,7 +42,6 @@ public struct FlippableCardView<Content: View, T>: View {
                     }
                 }
             }
-            .disabled(data.count == 1) 
             .scrollDisabled(data.count == 1)
             .scrollTargetLayout()
             .onAppear {
