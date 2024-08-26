@@ -167,9 +167,9 @@ struct ContentView_Previews: PreviewProvider {
 
 
 #Preview {
-    HomeView(store: Store(initialState: Home.State(), reducer: {
-        Home()
-    }))
+    BlockUserView(store: Store(initialState: BlockUser.State(), reducer: {
+        BlockUser()
+    }), backAction: {})
     
 }
     

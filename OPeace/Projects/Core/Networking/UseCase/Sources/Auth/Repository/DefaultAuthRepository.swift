@@ -70,4 +70,12 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     public func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel? {
         return nil
     }
+    
+    public func fetchUserBlockList() async throws -> UserBlockListModel? {
+        return nil
+    }
+    
+    public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
+        return nil
+    }
 }

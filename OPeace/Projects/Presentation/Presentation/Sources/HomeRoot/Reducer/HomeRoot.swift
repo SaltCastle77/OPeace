@@ -57,6 +57,7 @@ public struct HomeRoot {
         case writeQuestion(WriteQuestion)
         case writeAnswer(WriteAnswer)
         case report(Report)
+        case blockUser(BlockUser)
         
     }
     
@@ -199,6 +200,9 @@ public struct HomeRoot {
             
                 case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
                     state.path.append(.writeQuestion(.init()))
+                    
+                case .element(id: _, action: .profile(.navigation(.presntUserBlock))):
+                    state.path.append(.blockUser(.init()))
                     
                     //MARK: - WithDraw
                 case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):

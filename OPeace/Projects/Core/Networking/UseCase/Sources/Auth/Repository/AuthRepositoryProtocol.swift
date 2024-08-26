@@ -22,4 +22,7 @@ public protocol AuthRepositoryProtocol {
     func deleteUser(reason: String) async throws -> DeleteUserModel?
     func checkUserVerify() async throws -> CheckUserVerifyModel?
     func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel?
+    func fetchUserBlockList() async throws -> UserBlockListModel?
+    func realseUserBlock(userID: String) async throws -> UserBlockModel?
+    
 }

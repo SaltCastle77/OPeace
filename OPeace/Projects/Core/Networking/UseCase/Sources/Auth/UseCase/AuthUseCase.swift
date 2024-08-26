@@ -84,6 +84,16 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     ) async throws -> UserBlockModel? {
         try await repository.userBlock(questioniD: questioniD, userID: userID)
     }
+    
+    //MARK: - 유저차단 목록
+    public func fetchUserBlockList() async throws -> UserBlockListModel? {
+        try await repository.fetchUserBlockList()
+    }
+    
+    //MARK: - 유저 차단 해제
+    public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
+        try await repository.realseUserBlock(userID: userID)
+    }
 }
 
 

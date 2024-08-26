@@ -108,6 +108,7 @@ public struct Profile {
         case presntWithDraw
         case presnetCreateQuestionList
         case presntDeleteQuestion
+        case presntUserBlock
         
     }
     
@@ -170,9 +171,9 @@ public struct Profile {
                     var settingProfile = settingprofile
                     switch settingProfile {
                     case .editProfile:
-                        break
+                        Log.debug("프로필 수정")
                     case .blackManagement:
-                        break
+                        Log.debug("차단")
                     case .logout:
                         state.popUpText = "로그아웃 하시겠어요?"
                         state.isLogOutPopUp = true
@@ -186,6 +187,7 @@ public struct Profile {
                             await send(.navigation(.presntEditProfile))
                         case .blackManagement:
                             Log.debug("차단")
+                            await send(.navigation(.presntUserBlock))
                         case .logout:
                             await send(.view(.presntPopUp))
                         case .withDraw:
@@ -339,6 +341,9 @@ public struct Profile {
                     return .none
                     
                 case .presntDeleteQuestion:
+                    return .none
+                    
+                case .presntUserBlock:
                     return .none
                 }
                 

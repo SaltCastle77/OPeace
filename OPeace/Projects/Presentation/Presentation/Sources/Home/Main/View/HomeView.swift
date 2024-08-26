@@ -20,7 +20,6 @@ public struct HomeView: View {
     
     public init(store: StoreOf<Home>) {
         self.store = store
-        store.send(.async(.fetchQuestionList))
     }
     
     public var body: some View {
@@ -33,24 +32,29 @@ public struct HomeView: View {
                 
                 questionLIstView()
             }
+            .task{
+                store.send(.async(.fetchQuestionList))
+            }
             .onAppear {
                 store.send(.async(.fetchQuestionList))
                 store.send(.async(.fetchUserProfile))
                 startRefreshData()
                 appearFloatingPopUp()
-                store.send(.profile(.scopeFetchUser))
             }
             .onDisappear {
                 refreshTimer?.invalidate()
             }
-            
-            VStack {
-                Spacer()
+            if store.questionModel?.data?.results == []  || ((store.questionModel?.data?.results?.isEmpty) == nil)  {
                 
-                writeQuestionButton()
-                    .padding(.bottom, 40)
+            } else {
+                VStack {
+                    Spacer()
+                    
+                    writeQuestionButton()
+                        .padding(.bottom, 40)
+                }
+                .edgesIgnoringSafeArea(.bottom)
             }
-            .edgesIgnoringSafeArea(.bottom)
         }
         
         .sheet(item: $store.scope(state: \.destination?.editQuestion, action: \.destination.editQuestion)) { editQuestionStore in
@@ -250,8 +254,11 @@ extension HomeView {
             Spacer()
                 .frame(height: 15)
             
-            if store.questionModel?.data?.results == [] {
+            if store.questionModel?.data?.results == []  || ((store.questionModel?.data?.results?.isEmpty) == nil) {
                 Spacer()
+                    .frame(height: 16)
+                
+                noQuestionCardView()
                 
             } else {
                 Spacer()
@@ -305,6 +312,54 @@ extension HomeView {
                 )
                 
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func noQuestionCardView() -> some View {
+        VStack {
+            Spacer()
+            
+            Image(asset: .questonSmail)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 80, height: 80)
+            
+            Spacer()
+                .frame(height: 16)
+            
+            Text("조건에 맞는 고민이 없어요")
+                .pretendardFont(family: .SemiBold, size: 24)
+                .foregroundStyle(Color.gray200)
+            
+            Spacer()
+                .frame(height: 16)
+            
+            Text("직접 고민을 등록해보세요")
+                .pretendardFont(family: .Regular, size: 16)
+                .foregroundStyle(Color.gray300)
+            
+            Spacer()
+                .frame(height: 32)
+            
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.basicWhite)
+                .frame(width: 120, height: 56)
+                .clipShape(Capsule())
+                .overlay {
+                    Text("글쓰기")
+                        .pretendardFont(family: .Medium, size: 20)
+                        .foregroundStyle(Color.textColor100)
+                }
+                .onTapGesture {
+                    if !store.isLogOut && !store.isLookAround && !store.isDeleteUser {
+                        store.send(.navigation(.presntWriteQuestion))
+                    } else {
+                        store.send(.view(.prsentCustomPopUp))
+                    }
+                }
+            
+            Spacer()
         }
     }
 }

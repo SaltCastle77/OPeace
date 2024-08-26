@@ -58,6 +58,7 @@ public struct Auth {
         case writeQuestion(WriteQuestion)
         case writeAnswer(WriteAnswer)
         case report(Report)
+        case blockUser(BlockUser)
         
     }
     
@@ -219,6 +220,9 @@ public struct Auth {
                     if !state.path.contains(where: { $0 == .home(homeState) }) {
                         state.path.append(.home(homeState))
                     }
+                    
+                case .element(id: _, action: .profile(.navigation(.presntUserBlock))):
+                    state.path.append(.blockUser(.init()))
                     
                     //MARK: - WithDraw
                 case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):

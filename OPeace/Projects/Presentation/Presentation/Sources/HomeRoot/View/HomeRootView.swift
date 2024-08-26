@@ -96,6 +96,12 @@ public struct HomeRootView: View {
                     store.send(.inner(.removePath))
                 }
                 .navigationBarBackButtonHidden()
+                
+            case .blockUser(let blockUserStore):
+                BlockUserView(store: blockUserStore) {
+                    store.send(.inner(.removePath))
+                }
+                .navigationBarBackButtonHidden()
             }
         }
         .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in

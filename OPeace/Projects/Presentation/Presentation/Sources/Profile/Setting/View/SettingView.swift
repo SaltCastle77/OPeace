@@ -63,7 +63,10 @@ extension SettingView {
                                 action()
                             }
                         case .blackManagement:
-                            print(item.desc)
+                            closeModalAction()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                action()
+                            }
                         case .logout:
                             closeModalAction()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

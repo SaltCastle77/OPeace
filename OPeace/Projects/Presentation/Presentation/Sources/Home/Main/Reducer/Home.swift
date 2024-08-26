@@ -45,6 +45,7 @@ public struct Home {
         var isTapBVote: Bool = false
         
         var profile = Profile.State()
+        var pageSize: Int  = 20
         
         var isTapBlockUser: Bool = false
         var isShowSelectEditModal: Bool = false
@@ -132,6 +133,7 @@ public struct Home {
         case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
         case fetchUserProfile
         case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+        case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
         
     }
     
@@ -225,20 +227,48 @@ public struct Home {
                 switch AsyncAction {
                 case .fetchQuestionList:
                     var isLikeTap = state.isLikeTap
-                    return .run { @MainActor send in
+                    var pageSize = state.pageSize
+                    return .run {  send in
                         let questionResult = await Result {
-                            try await questionUseCase.fetchQuestionList(page: 1, pageSize: 20, job: "", generation: "", sortBy: .empty)
+                            try await questionUseCase.fetchQuestionList(
+                                page: 1,
+                                pageSize: pageSize,
+                                job: "",
+                                generation: "",
+                                sortBy: .empty)
                         }
                         
                         switch questionResult {
                         case .success(let questionModel):
                             if let questionModel = questionModel {
-                                send(.async(.qusetsionListResponse(.success(questionModel))))
-                                
-                                
+                                await send(.async(.qusetsionListResponse(.success(questionModel))))
                             }
                         case .failure(let error):
-                            send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+                            await send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+                        }
+                        
+                    }
+                    
+                
+                case .filterQuestionList(let job, let generation, let sortBy):
+                    var pageSize = state.pageSize
+                    return .run {  @MainActor send in
+                        let questionResult = await Result {
+                            try await questionUseCase.fetchQuestionList(
+                                page: 1,
+                                pageSize: pageSize,
+                                job: job,
+                                generation: generation,
+                                sortBy: sortBy)
+                        }
+                        
+                        switch questionResult {
+                        case .success(let questionModel):
+                            if let questionModel = questionModel {
+                                 send(.async(.qusetsionListResponse(.success(questionModel))))
+                            }
+                        case .failure(let error):
+                             send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
                         }
                         
                     }
@@ -247,6 +277,7 @@ public struct Home {
                     switch result {
                     case .success(let qusetsionListData):
                         state.questionModel = qusetsionListData
+                        state.pageSize += 20
                     case .failure(let error):
                         Log.error("QuestionList 에어", error.localizedDescription)
                     }

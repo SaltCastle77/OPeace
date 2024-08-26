@@ -23,11 +23,6 @@ import Model
 
 @Observable public class AuthRepository: AuthRepositoryProtocol {
     
-    
-    
-    
-  
-    
     private let provider = MoyaProvider<AuthService>(plugins: [MoyaLoggingPlugin()])
     
     public init() {}
@@ -188,23 +183,23 @@ import Model
     }
     
     
-    //MARK: - 카카오 로그인 api
+    //MARK: - 카카오 로그인 API
     public func reauestKakaoLogin() async throws -> UserLoginModel? {
         let kakaoAcessToken = (try? Keychain().get("KAKAO_ACCESS_TOKEN") ?? "")
         return try await provider.requestAsync(.kakaoLogin(accessToken: kakaoAcessToken ?? ""), decodeTo: UserLoginModel.self)
     }
     
-    //MARK: - 토큰 재발급
+    //MARK: - 토큰 재발급 API
     public func requestRefreshToken(refreshToken: String) async throws -> RefreshModel? {
         return try await provider.requestAsync(.refreshToken(refreshToken: refreshToken), decodeTo: RefreshModel.self)
     }
     
-    //MARK: - 유저정보 조회
+    //MARK: - 유저정보 조회 API
     public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
         return try await provider.requestAsync(.fetchUserInfo, decodeTo: UpdateUserInfoModel.self)
     }
     
-    //MARK: - 유저 로그아웃
+    //MARK: - 유저 로그아웃 API
     public func logoutUser(refreshToken: String) async throws -> UserLogOutModel? {
         guard let refreshToken  = try? Keychain().get("REFRESH_TOKEN") else { return .none }
         return try await provider.requestAsync(
@@ -212,28 +207,38 @@ import Model
             decodeTo: UserLogOutModel.self)
     }
     
-    //MARK: - 자동 로그인
+    //MARK: - 자동 로그인 API
     public func autoLogin() async throws -> UseLoginModel? {
         return try await provider.requestAsync(.autoLogin, decodeTo: UseLoginModel.self)
     }
     
-    //MARK: - 회원 탈퇴
+    //MARK: - 회원 탈퇴 API
     public func deleteUser(reason: String) async throws -> DeleteUserModel?  {
         return try await provider.requestAsync(.deleteUser(reason: reason), decodeTo: DeleteUserModel.self)
     }
 
-    //MARK: - 유저 토큰 확인
+    //MARK: - 유저 토큰 확인 API
     public func checkUserVerify() async throws -> CheckUserVerifyModel? {
         return try await provider.requestAsync(.userVerify, decodeTo: CheckUserVerifyModel.self)
     }
     
-    //MARK: - 유저 차단
+    //MARK: - 유저 차단 API
     public func userBlock(
         questioniD: Int,
         userID: String) async throws -> UserBlockModel? {
             return try await provider.requestAsync(.userBlock(
                 questioniD: questioniD,
                 userID: userID), decodeTo: UserBlockModel.self)
+        }
+    
+    //MARK: - 유저 차단 리스트 조회 API
+    public func fetchUserBlockList() async throws -> UserBlockListModel? {
+        return try await provider.requestAsync(.fectchUserBlock, decodeTo: UserBlockListModel.self)
+    }
+    
+    //MARK: - 유저 차단 해제 API
+    public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
+        return try await provider.requestAsync(.realseUserBlock(userID: userID), decodeTo: UserBlockModel.self)
     }
 }
 
