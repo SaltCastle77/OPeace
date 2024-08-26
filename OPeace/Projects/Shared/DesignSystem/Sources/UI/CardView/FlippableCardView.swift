@@ -24,7 +24,7 @@ public struct FlippableCardView<Content: View, T>: View {
 
     public var body: some View {
         GeometryReader { geometry in
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: .zero) {
                     ForEach(data.indices, id: \.self) { index in
                         VStack {
@@ -45,7 +45,7 @@ public struct FlippableCardView<Content: View, T>: View {
             .scrollDisabled(data.count == 1)
             .scrollTargetLayout()
             .onAppear {
-                if scrollViewDelegate == nil && data.count > 1 {
+                if scrollViewDelegate == nil || data.count > 1 {
                     scrollViewDelegate = ScrollViewDelegate<Content, T>(parent: self, itemHeight: 520)
                 }
             }

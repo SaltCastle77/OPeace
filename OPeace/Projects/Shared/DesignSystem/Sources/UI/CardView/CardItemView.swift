@@ -195,6 +195,8 @@ extension CardItemView {
                         } else {
                             if id != userID {
                                 editTapAction()
+                            } else if id == userID {
+                                
                             }
                         }
                     }

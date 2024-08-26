@@ -75,7 +75,7 @@ extension WithDrawView {
             
             HStack {
                 Text("탈퇴 사유를 작성해주세요")
-                    .pretendardFont(family: .Regular, size: 16)
+                    .pretendardFont(family: .Bold, size: 16)
                     .foregroundStyle(Color.basicWhite)
                 
                 Spacer()

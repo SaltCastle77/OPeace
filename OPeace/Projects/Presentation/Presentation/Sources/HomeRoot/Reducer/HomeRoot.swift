@@ -30,6 +30,8 @@ public struct HomeRoot {
         @Shared(.inMemory("emojiImage")) var emojiImage: Image? = nil
         @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
         @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
+        @Shared(.inMemory("isReportQuestion")) var isReportQuestion: Bool = false
+        @Shared(.inMemory("questionID")) var questionID: Int = 0
     }
     
     public enum Action : ViewAction, FeatureAction {
@@ -54,6 +56,7 @@ public struct HomeRoot {
         case withDraw(WithDraw)
         case writeQuestion(WriteQuestion)
         case writeAnswer(WriteAnswer)
+        case report(Report)
         
     }
     
@@ -97,7 +100,8 @@ public struct HomeRoot {
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
-                        isDeleteQuestion: state.isDeleteQuestion)))
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion)))
                     
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
@@ -109,7 +113,8 @@ public struct HomeRoot {
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
-                        isDeleteQuestion: state.isDeleteQuestion)))
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion)))
                     
                     
                     //MARK: - Agree
@@ -136,8 +141,8 @@ public struct HomeRoot {
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
-                        isDeleteQuestion: state.isDeleteQuestion)
-                    ))
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion)))
                     
                     //MARK: - OnBoarding
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
@@ -147,7 +152,8 @@ public struct HomeRoot {
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
-                        isDeleteQuestion: state.isDeleteQuestion)))
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion)))
                     
                     //MARK: - home
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
@@ -158,6 +164,11 @@ public struct HomeRoot {
                                 
                 case .element(id: _, action: .home(.navigation(.presntWriteQuestion))):
                     state.path.append(.writeQuestion(.init()))
+                    
+                case .element(id: _, action: .home(.navigation(.presntReport))):
+                    state.path.append(.report(.init(
+                        questionID: state.questionID
+                    )))
                     
                     //MARK: - profile
                 case .element(id: _, action: .profile(.navigation(.presntLogout))):
@@ -200,6 +211,16 @@ public struct HomeRoot {
                         }
                     }
                     
+                    //MARK: - Report
+                case .element(id: _, action: .report(.navigation(.presntMainHome))):
+                    state.path.removeAll { path in
+                        switch path {
+                        case .report:
+                            return true
+                        default:
+                            return false
+                        }
+                    }
             
                     
                     //MARK: - CreateQuestion

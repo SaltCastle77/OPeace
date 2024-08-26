@@ -35,6 +35,10 @@ public struct Profile {
         var profileGenerationYear: Int? = .zero
         var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
         var deletePopUpTitle: String = "정말 탈퇴하시겠어요?"
+        var isLogOutPopUp: Bool = false
+        var isDeleteUserPopUp: Bool = false
+        var isDeleteQuestionPopUp: Bool = false
+        var popUpText: String = ""
         
         var cardGenerationColor: Color = .basicBlack
         var deleteQuestionId: Int = .zero
@@ -62,8 +66,6 @@ public struct Profile {
     public enum Destination {
         case setting(Setting)
         case popup(CustomPopUp)
-        case deletePopUp(CustomPopUp)
-        case deleteQuestionPopUp(CustomPopUp)
         case home(Home)
     }
     
@@ -73,8 +75,6 @@ public struct Profile {
         case tapPresntSettingModal
         case closeModal
         case presntPopUp
-        case presntDeltePopUp
-        case presentDeleteQuestionPopUp
         case closePopUp
         case updateGenerationInfo
         case switchModalAction(SettingProfile)
@@ -146,20 +146,12 @@ public struct Profile {
                     state.destination = nil
                     return .none
                     
-                case .presntDeltePopUp:
-                    state.destination = .deletePopUp(.init())
-                    return .none
-                    
                 case .presntPopUp:
                     state.destination = .popup(.init())
                     return .none
                     
                 case .closePopUp:
                     state.destination = nil
-                    return .none
-                    
-                case .presentDeleteQuestionPopUp:
-                    state.destination = .deleteQuestionPopUp(.init())
                     return .none
                     
                 case .updateGenerationInfo:
@@ -176,6 +168,18 @@ public struct Profile {
                     
                 case .switchModalAction(let settingprofile):
                     var settingProfile = settingprofile
+                    switch settingProfile {
+                    case .editProfile:
+                        break
+                    case .blackManagement:
+                        break
+                    case .logout:
+                        state.popUpText = "로그아웃 하시겠어요?"
+                        state.isLogOutPopUp = true
+                    case .withDraw:
+                        state.popUpText = "정말 탈퇴하시겠어요?"
+                        state.isDeleteUserPopUp = true
+                    }
                     return .run { send in
                         switch settingProfile {
                         case .editProfile:
@@ -185,7 +189,7 @@ public struct Profile {
                         case .logout:
                             await send(.view(.presntPopUp))
                         case .withDraw:
-                            await send(.view(.presntDeltePopUp))
+                            await send(.view(.presntPopUp))
                         }
                         
                     }

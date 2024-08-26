@@ -20,6 +20,7 @@ public struct HomeView: View {
     
     public init(store: StoreOf<Home>) {
         self.store = store
+        store.send(.async(.fetchQuestionList))
     }
     
     public var body: some View {
@@ -29,23 +30,20 @@ public struct HomeView: View {
             
             VStack {
                 navigationBaritem()
-                   
                 
                 questionLIstView()
             }
             .onAppear {
-                
                 store.send(.async(.fetchQuestionList))
                 store.send(.async(.fetchUserProfile))
-
+                startRefreshData()
                 appearFloatingPopUp()
                 store.send(.profile(.scopeFetchUser))
             }
-          
             .onDisappear {
-//                refreshTimer?.invalidate()
+                refreshTimer?.invalidate()
             }
-        
+            
             VStack {
                 Spacer()
                 
@@ -54,6 +52,7 @@ public struct HomeView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
         }
+        
         .sheet(item: $store.scope(state: \.destination?.editQuestion, action: \.destination.editQuestion)) { editQuestionStore in
             EditQuestionView(store: editQuestionStore) {
                 guard let edititem =  editQuestionStore.editQuestionitem else {return}
@@ -65,6 +64,7 @@ public struct HomeView: View {
             .presentationCornerRadius(20)
             .presentationDragIndicator(.hidden)
         }
+        
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
             if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                 CustomBasicPopUpView(
@@ -74,10 +74,32 @@ public struct HomeView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             store.send(.navigation(.presntLogin))
                         }
-
-                } cancelAction: {
-                    store.send(.view(.closePopUp))
-                }
+                        
+                    } cancelAction: {
+                        store.send(.view(.closePopUp))
+                    }
+            }
+            else if store.isTapBlockUser == true {
+                CustomBasicPopUpView(
+                    store: customPopUp,
+                    title: store.customPopUpText) {
+                        store.send(.view(.closePopUp))
+                        store.send(.async(.blockUser(qusetionID: store.questionID ?? .zero, userID: store.userID ?? "")))
+                    } cancelAction: {
+                        store.send(.view(.closePopUp))
+                    }
+            }
+            else if store.isReportQuestionPopUp == true {
+                CustomBasicPopUpView(
+                    store: customPopUp,
+                    title: store.customPopUpText) {
+                        store.send(.view(.closePopUp))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            store.send(.navigation(.presntReport))
+                        }
+                    } cancelAction: {
+                        store.send(.view(.closePopUp))
+                    }
             }
         }  customize: { popup in
             popup
@@ -90,8 +112,7 @@ public struct HomeView: View {
         }
         
         .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
-            FloatingPopUpView(store: floatingPopUpStore, title: store.floatingText.isEmpty ? "로그아웃 되었어요" : store.floatingText, image: store.floatingImage)
-            
+            FloatingPopUpView(store: floatingPopUpStore, title: store.floatingText, image: store.floatingImage)
         }  customize: { popup in
             popup
                 .type(.floater(verticalPadding: UIScreen.screenHeight * 0.02))
@@ -101,33 +122,12 @@ public struct HomeView: View {
                 .closeOnTapOutside(true)
         }
         
-        .popup(item: $store.scope(state: \.destination?.questionPopUp, action: \.destination.questionPopUp)) { customPopUp in
-            CustomBasicPopUpView(
-                store: customPopUp,
-                title: store.customPopUpText) {
-                    store.send(.view(.closePopUp))
-                    if store.isTapBlockUser == true {
-                        store.send(.async(.blockUser(qusetionID: store.questionID ?? .zero, userID: store.userID ?? "")))
-                    }
-            } cancelAction: {
-                store.send(.view(.closePopUp))
-            }
-        }  customize: { popup in
-            popup
-                .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
-                .position(.bottom)
-                .animation(.spring)
-                .closeOnTap(true)
-                .closeOnTapOutside(true)
-                .backgroundColor(Color.basicBlack.opacity(0.8))
-        }
-        
     }
     
     private func startRefreshData() {
         refreshTimer?.invalidate()
         
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
             store.send(.async(.fetchQuestionList))
         }
     }
@@ -156,11 +156,10 @@ extension HomeView {
                                     .scaledToFit()
                                     .frame(width: 15, height: 16)
                                     .foregroundStyle(Color.gray200)
-                                    
                             }
                         }
                         .onTapGesture {
-                            store.send(.view(.prsentLoginPopUp))
+                            store.send(.view(.prsentCustomPopUp))
                         }
                 } else {
                     Circle()
@@ -173,7 +172,7 @@ extension HomeView {
                                     .scaledToFit()
                                     .frame(width: 15, height: 16)
                                     .foregroundStyle(Color.gray200)
-                                    
+                                
                             }
                         }
                         .onTapGesture {
@@ -188,7 +187,7 @@ extension HomeView {
     private func appearFloatingPopUp() {
         if store.isLogOut == true  {
             store.send(.view(.presntFloatintPopUp))
-            store.floatingText = "로그아웃 하시겠어요?"
+            store.floatingText = "로그아웃 되었어요"
             store.send(.view(.timeToCloseFloatingPopUp))
         } else if store.isLookAround == true {
             store.floatingText = "로그인 하시겠어요?"
@@ -211,6 +210,12 @@ extension HomeView {
             store.floatingText = "고민이 삭제되었어요!"
             store.send(.view(.timeToCloseFloatingPopUp))
             store.isDeleteQuestion = false
+        } else if store.isReportQuestion == true {
+            store.send(.view(.presntFloatintPopUp))
+            store.floatingText = "신고가 완료 되었어요"
+            store.floatingImage = .warning
+            store.send(.view(.timeToCloseFloatingPopUp))
+            store.isReportQuestion = false
         } else {
             store.floatingText = "로그인 하시겠어요?"
         }
@@ -231,12 +236,12 @@ extension HomeView {
                 if !store.isLogOut && !store.isLookAround && !store.isDeleteUser {
                     store.send(.navigation(.presntWriteQuestion))
                 } else {
-                    store.send(.view(.prsentLoginPopUp))
+                    store.send(.view(.prsentCustomPopUp))
                 }
                 
             }
             .padding(.bottom, 16)
-            
+        
     }
     
     @ViewBuilder
@@ -284,9 +289,9 @@ extension HomeView {
                     isTapBVote: $store.isTapBVote,
                     editTapAction: {
                         store.userID = item.userInfo?.userID ?? ""
+                        store.reportQuestionID = item.id ?? .zero
                         store.questionID = item.id ?? .zero
                         store.send(.view(.presntEditQuestion))
-                        print("store id \(store.userID), \(store.questionID)")
                     },
                     likeTapAction: { userid in
                         store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))

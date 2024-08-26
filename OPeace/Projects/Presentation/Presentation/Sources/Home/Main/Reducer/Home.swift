@@ -48,6 +48,8 @@ public struct Home {
         
         var isTapBlockUser: Bool = false
         var isShowSelectEditModal: Bool = false
+        var isBlockQuestionPopUp: Bool = false
+        var isReportQuestionPopUp: Bool = false
         
         @Shared var isLogOut: Bool
         @Shared var isDeleteUser: Bool
@@ -55,6 +57,9 @@ public struct Home {
         @Shared var isChangeProfile: Bool
         @Shared var isCreateQuestion: Bool
         @Shared var isDeleteQuestion: Bool
+        @Shared var isReportQuestion: Bool
+        
+        @Shared(.inMemory("questionID")) var reportQuestionID: Int = 0
         
         @Presents var destination: Destination.State?
         
@@ -65,7 +70,8 @@ public struct Home {
             isLookAround: Bool = false,
             isChangeProfile: Bool = false,
             isCreateQuestion: Bool = false,
-            isDeleteQuestion: Bool = false
+            isDeleteQuestion: Bool = false,
+            isReportQuestion: Bool = false
         ) {
             self._isLogOut = Shared(wrappedValue: isLogOut, .inMemory("isLogOut"))
             self._isDeleteUser = Shared(wrappedValue: isDeleteUser, .inMemory("isDeleteUser"))
@@ -73,6 +79,7 @@ public struct Home {
             self._isChangeProfile = Shared(wrappedValue: isChangeProfile, .inMemory("isChangeProfile"))
             self._isCreateQuestion = Shared(wrappedValue: isCreateQuestion, .inMemory("isCreateQuestion"))
             self._isDeleteQuestion = Shared(wrappedValue: isDeleteQuestion, .inMemory("isDeleteQuestion"))
+            self._isReportQuestion = Shared(wrappedValue: isReportQuestion, .inMemory("isReportQuestion"))
         }
         
     }
@@ -94,21 +101,19 @@ public struct Home {
         case customPopUp(CustomPopUp)
         case floatingPopUP(FloatingPopUp)
         case editQuestion(EditQuestion)
-        case questionPopUp(CustomPopUp)
         
     }
     
     //MARK: - ViewAction
     public enum View {
         case appaerProfiluserData
-        case prsentLoginPopUp
+        case prsentCustomPopUp
         case presntFloatintPopUp
         case presntEditQuestion
         case closeEditQuestionModal
         case closePopUp
         case timeToCloseFloatingPopUp
         case switchModalAction(EditQuestionType)
-        case presntQuestionEditPopUp
         
         
     }
@@ -140,6 +145,7 @@ public struct Home {
         case presntProfile
         case presntLogin
         case presntWriteQuestion
+        case presntReport
     
     }
     
@@ -162,7 +168,7 @@ public struct Home {
                         send(.profile(.scopeFetchUser))
                     }
                            
-                case .prsentLoginPopUp:
+                case .prsentCustomPopUp:
                     state.destination = .customPopUp(.init())
                     return .none
                     
@@ -194,6 +200,8 @@ public struct Home {
                     switch editQuestion {
                     case .reportUser:
                         Log.debug("신고하기")
+                        state.customPopUpText = "정말 신고하시겠어요?"
+                        state.isReportQuestionPopUp = true
                     case .blockUser:
                         Log.debug("차단하기")
                         state.customPopUpText = "정말 차단하시겠어요?"
@@ -204,15 +212,13 @@ public struct Home {
                         switch editQuestion {
                         case .reportUser:
                             Log.debug("신고하기")
+                            send(.view(.prsentCustomPopUp))
                         case .blockUser:
                             Log.debug("차단하기")
-                            send(.view(.presntQuestionEditPopUp))
+                            send(.view(.prsentCustomPopUp))
                         }
                     }
                     
-                case .presntQuestionEditPopUp:
-                    state.destination = .questionPopUp(.init())
-                    return .none
                 }
                 
             case .async(let AsyncAction):
@@ -379,6 +385,9 @@ public struct Home {
                     return .none
                     
                 case .presntWriteQuestion:
+                    return .none
+                    
+                case .presntReport:
                     return .none
                 }
                 

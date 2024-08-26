@@ -16,7 +16,7 @@ import Utill
 
 public struct ProfileView: View {
     @Bindable var store: StoreOf<Profile>
-
+    
     var backAction: () -> Void = {}
     
     
@@ -26,6 +26,7 @@ public struct ProfileView: View {
     ) {
         self.store = store
         self.backAction = backAction
+        store.send(.async(.fetchUser))
     }
     
     public var body: some View {
@@ -51,7 +52,6 @@ public struct ProfileView: View {
                 Spacer()
             }
             .onAppear {
-                store.send(.async(.fetchUser))
                 store.send(.async(.fetchQuestion))
             }
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
@@ -70,52 +70,32 @@ public struct ProfileView: View {
             }
             
             .popup(item: $store.scope(state: \.destination?.popup, action: \.destination.popup)) { customPopUp in
-                CustomBasicPopUpView(store: customPopUp, title: store.logoutPopUpTitle) {
-                    store.send(.async(.logoutUser))
-                } cancelAction: {
-                    store.send(.view(.closeModal))
-                }
-                
-            }  customize: { popup in
-                popup
-                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
-                    .position(.bottom)
-                    .animation(.spring)
-                    .closeOnTap(true)
-                    .closeOnTapOutside(true)
-                    .backgroundColor(Color.basicBlack.opacity(0.8))
-            }
-            
-            .popup(item: $store.scope(state: \.destination?.deleteQuestionPopUp, action: \.destination.deleteQuestionPopUp)) { customPopUp in
-                CustomBasicPopUpView(store: customPopUp, title: "고민을 삭제하시겠어요?") {
-                    store.send(.view(.closeModal))
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                        store.send(.async(.deleteQuestion(questionID: store.deleteQuestionId)))
+                if store.isLogOutPopUp {
+                    CustomBasicPopUpView(store: customPopUp, title: store.popUpText) {
+                        store.send(.async(.logoutUser))
+                    } cancelAction: {
+                        store.send(.view(.closeModal))
                     }
-                } cancelAction: {
-                    store.send(.view(.closeModal))
-                }
-                
-            }  customize: { popup in
-                popup
-                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
-                    .position(.bottom)
-                    .animation(.spring)
-                    .closeOnTap(true)
-                    .closeOnTapOutside(true)
-                    .backgroundColor(Color.basicBlack.opacity(0.8))
-            }
-            
-            .popup(item: $store.scope(state: \.destination?.deletePopUp, action: \.destination.deletePopUp)) { customPopUp in
-                CustomBasicPopUpView(store: customPopUp, title: store.deletePopUpTitle) {
-                    store.send(.view(.closeModal))
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                        store.send(.navigation(.presntWithDraw))
+                } else if store.isDeleteUserPopUp {
+                    CustomBasicPopUpView(store: customPopUp, title: store.popUpText) {
+                        store.send(.view(.closeModal))
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                            store.send(.navigation(.presntWithDraw))
+                        }
+                    } cancelAction: {
+                        store.send(.view(.closeModal))
                     }
-                } cancelAction: {
-                    store.send(.view(.closeModal))
+                } else if store.isDeleteQuestionPopUp {
+                    CustomBasicPopUpView(store: customPopUp, title: store.popUpText) {
+                        store.send(.view(.closeModal))
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            store.send(.async(.deleteQuestion(questionID: store.deleteQuestionId)))
+                        }
+                    } cancelAction: {
+                        store.send(.view(.closeModal))
+                    }
                 }
                 
             }  customize: { popup in
@@ -249,13 +229,12 @@ extension ProfileView {
                         isTapBVote: .constant(false),
                         editTapAction: {
                             store.deleteQuestionId = item.id ?? .zero
-                            store.send(.view(.presentDeleteQuestionPopUp))
+                            store.isDeleteQuestionPopUp = true
+                            store.popUpText = "고민을 삭제하시겠어요?"
+                            store.send(.view(.presntPopUp))
                         },
-                        likeTapAction: { userid in
-                           
-                        }, choiceTapAction: {
-                            
-                        }
+                        likeTapAction: { _  in },
+                        choiceTapAction: { }
                     )
                     
                 }
