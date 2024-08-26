@@ -119,8 +119,6 @@ public struct Home {
                 case .prsentLoginPopUp:
                     state.destination = .customPopUp(.init())
                     return .none
-                
-                
                     
                 case .closePopUp:
                     state.destination = nil

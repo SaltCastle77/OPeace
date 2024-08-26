@@ -20,6 +20,8 @@ public struct HomeFilter  {
     @ObservableState
     public struct State : Equatable {
         
+        var jsobListModel: SignUpJobModel? = nil
+        
         public init() {}
     }
     
@@ -40,7 +42,8 @@ public struct HomeFilter  {
     
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
-      
+        case fetchJobList
+        case fetchJobResponse(Result<SignUpJobModel, CustomError>)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -53,16 +56,46 @@ public struct HomeFilter  {
         
     }
     
+    
+    @Dependency(SignUpUseCase.self) var signUpUseCase
+    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         
         Reduce<State, Action> { state, action  in
             switch action {
-                
             case .binding(_):
                 return .none
             case .view(_):
                 return .none
+            case .async(let asyncAction):
+                switch asyncAction {
+                case .fetchJobList:
+                    return .run { @MainActor  send in
+                        let result = await Result {
+                            try await self.signUpUseCase.fetchJobList()
+                        }
+                        
+                        switch result  {
+                        case .success(let data):
+                            if let data  = data {
+                                send(.async(.fetchJobResponse(.success(data))))
+                            }
+                        case .failure(let error):
+                            send(.async(.fetchJobResponse(.failure(CustomError.map(error)))))
+                        }
+                        
+                    }
+                case .fetchJobResponse(let result):
+                    switch result {
+                    case .success(let data):
+                        state.jsobListModel  = data
+                    case .failure(let error):
+                        Log.network("JobList 에러", error.localizedDescription)
+                    }
+                    
+                    return .none
+                }
             case .test:
                 return .none
             }

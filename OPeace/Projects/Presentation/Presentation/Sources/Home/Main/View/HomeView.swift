@@ -104,8 +104,8 @@ extension HomeView {
                     HomeFilterView(store: homeFilterStore)
                         .presentationDetents([.fraction(0.7)])
                         .presentationDragIndicator(.visible)
+                        .presentationCornerRadius(20)
                 }
-                
                 
                 RightImageButton(action: {
                     
