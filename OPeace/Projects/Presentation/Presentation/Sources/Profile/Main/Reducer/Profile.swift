@@ -17,6 +17,7 @@ import Utills
 import UseCase
 
 import KakaoSDKAuth
+import KakaoSDKUser
 
 @Reducer
 public struct Profile {
@@ -233,7 +234,7 @@ public struct Profile {
                     return .none
                     
                 case .socilalLogOutUser:
-                    guard let socialType = Keychain().get("socialType") else {return .none}
+                    guard let socialType = try? Keychain().get("socialType") else {return .none}
                     return .run { @MainActor send in
                         switch socialType {
                         case "kakao":
@@ -247,6 +248,8 @@ public struct Profile {
                             }
                         case "apple":
                             send(.async(.logoutUser))
+                        default:
+                            break
                         }
                     }
                     
@@ -257,6 +260,7 @@ public struct Profile {
                         Log.debug("유저 로그아웃 성공", userData)
                         state.isLogOut = true
                         state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile, isDeleteQuestion: state.isDeleteQuestion))
+                        try? Keychain().remove("ACCESS_TOKEN")
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }

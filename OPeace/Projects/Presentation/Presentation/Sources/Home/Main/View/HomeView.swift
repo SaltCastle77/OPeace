@@ -301,12 +301,20 @@ extension HomeView {
                         store.send(.view(.presntEditQuestion))
                     },
                     likeTapAction: { userid in
-                        store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))
+                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                            store.send(.view(.prsentCustomPopUp))
+                        } else {
+                            store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))
+                        }
                     }, choiceTapAction: {
-                        if store.isTapAVote == true  {
-                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
-                        } else if store.isTapBVote == true {
-                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                            store.send(.view(.prsentCustomPopUp))
+                        } else {
+                            if store.isTapAVote == true  {
+                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+                            } else if store.isTapBVote == true {
+                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                            }
                         }
                     }
                 )

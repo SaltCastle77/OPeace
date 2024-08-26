@@ -15,6 +15,7 @@ import Utills
 import UseCase
 
 import KakaoSDKAuth
+import KakaoSDKUser
 
 
 @Reducer
@@ -102,13 +103,13 @@ public struct WithDraw {
                         
                         switch deleteUserData {
                         case .success(let deleteUserData):
-                           if let deleteUserData = deleteUserData {
-                               send(.async(.deleteUserResponse(.success(deleteUserData))))
-                               
-                               try await self.clock.sleep(for: .seconds(1))
-                               if deleteUserData.data?.status == true {
-                                   send(.navigation(.presntDeleteUser))
-                               }
+                            if let deleteUserData = deleteUserData {
+                                send(.async(.deleteUserResponse(.success(deleteUserData))))
+                                
+                                try await self.clock.sleep(for: .seconds(1))
+                                if deleteUserData.data?.status == true {
+                                    send(.navigation(.presntDeleteUser))
+                                }
                             }
                         case .failure(let error):
                             send(.async(.deleteUserResponse(.failure(CustomError.map(error)))))
@@ -128,21 +129,26 @@ public struct WithDraw {
                     return .none
                     
                 case .deletUserSocialType(let reason):
-                    guard let socialType = Keychain().get("socialType") else {return .none}
-                    return .run {
-                    case "kakao":
-                        UserApi.shared.unlink {(error) in
-                            if let error = error {
-                                Log.error("카카오 회원 탈퇴 에러", error.localizedDescription)
+                    guard let socialType = try? Keychain().get("socialType") else {return .none}
+                    return .run { @MainActor send in
+                        switch socialType {
+                        case "kakao":
+                            UserApi.shared.unlink {(error) in
+                                if let error = error {
+                                    Log.error("카카오 회원 탈퇴 에러", error.localizedDescription)
+                                }
+                                else {
+                                    send(.async(.deleteUser(reason: reason)))
+                                }
                             }
-                            else {
-                                send(.async(.deleteUser(reason: reason)))
-                            }
+                        case "apple":
+                            send(.async(.deleteUser(reason: reason)))
+                        default:
+                            break
                         }
-                    case "apple":
-                        send(.async(.deleteUser(reason: reason)))
                     }
                 }
+                
                 
             case .inner(let InnerAction):
                 switch InnerAction {
