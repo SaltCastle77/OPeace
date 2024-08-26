@@ -14,6 +14,8 @@ import Model
 import Utills
 import UseCase
 
+import KakaoSDKAuth
+
 
 @Reducer
 public struct WithDraw {
@@ -58,6 +60,7 @@ public struct WithDraw {
     public enum AsyncAction: Equatable {
         case deleteUserResponse(Result<DeleteUserModel, CustomError>)
         case deleteUser(reason: String)
+        case deletUserSocialType(reason: String)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -123,6 +126,22 @@ public struct WithDraw {
                         Log.debug("회원 탈퇴 에러", error.localizedDescription)
                     }
                     return .none
+                    
+                case .deletUserSocialType(let reason):
+                    guard let socialType = Keychain().get("socialType") else {return .none}
+                    return .run {
+                    case "kakao":
+                        UserApi.shared.unlink {(error) in
+                            if let error = error {
+                                Log.error("카카오 회원 탈퇴 에러", error.localizedDescription)
+                            }
+                            else {
+                                send(.async(.deleteUser(reason: reason)))
+                            }
+                        }
+                    case "apple":
+                        send(.async(.deleteUser(reason: reason)))
+                    }
                 }
                 
             case .inner(let InnerAction):

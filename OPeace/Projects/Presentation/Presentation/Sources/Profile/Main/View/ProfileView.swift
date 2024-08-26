@@ -72,7 +72,7 @@ public struct ProfileView: View {
             .popup(item: $store.scope(state: \.destination?.popup, action: \.destination.popup)) { customPopUp in
                 if store.isLogOutPopUp {
                     CustomBasicPopUpView(store: customPopUp, title: store.popUpText) {
-                        store.send(.async(.logoutUser))
+                        store.send(.async(.socilalLogOutUser))
                     } cancelAction: {
                         store.send(.view(.closeModal))
                     }

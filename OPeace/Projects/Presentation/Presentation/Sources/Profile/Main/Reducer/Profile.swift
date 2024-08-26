@@ -16,6 +16,8 @@ import Model
 import Utills
 import UseCase
 
+import KakaoSDKAuth
+
 @Reducer
 public struct Profile {
     public init() {}
@@ -89,6 +91,7 @@ public struct Profile {
         case fetchUser
         case logoutUseResponse(Result<UserLogOutModel, CustomError>)
         case logoutUser
+        case socilalLogOutUser
         case fetchQuestionResponse(Result<QuestionModel, CustomError>)
         case fetchQuestion
         case deleteQuestion(questionID: Int)
@@ -228,6 +231,24 @@ public struct Profile {
                         Log.network("프로필 오류", error.localizedDescription)
                     }
                     return .none
+                    
+                case .socilalLogOutUser:
+                    guard let socialType = Keychain().get("socialType") else {return .none}
+                    return .run { @MainActor send in
+                        switch socialType {
+                        case "kakao":
+                            UserApi.shared.logout {(error) in
+                                if let error = error {
+                                    Log.debug("카카오 로그아웃 오류", error.localizedDescription)
+                                }
+                                else {
+                                    send(.async(.logoutUser))
+                                }
+                            }
+                        case "apple":
+                            send(.async(.logoutUser))
+                        }
+                    }
                     
                 case .logoutUseResponse(let result):
                     switch result{
