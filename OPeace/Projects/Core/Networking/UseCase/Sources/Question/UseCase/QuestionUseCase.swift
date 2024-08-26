@@ -78,6 +78,17 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
     public func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel? {
         try await repository.deleteQuestion(questionID: questionID)
     }
+    
+    //MARK: - 유저글 신고
+    public func reportQuestion(
+        questionID: Int,
+        reason: String
+    ) async throws -> ReportQuestionModel? {
+        try await repository.reportQuestion(
+            questionID: questionID,
+            reason: reason
+        )
+    }
 }
 
 extension QuestionUseCase : DependencyKey {

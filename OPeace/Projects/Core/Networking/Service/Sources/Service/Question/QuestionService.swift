@@ -25,6 +25,7 @@ public enum QuestionService {
     case isVoteQustionLike(id: Int)
     case isVoteQuestionAnswer(id: Int, userChoice: String)
     case deleteQuestion(id: Int)
+    case reportQuestion(id: Int, reason: String)
     
     
 }
@@ -49,6 +50,9 @@ extension QuestionService: BaseTargetType {
             
         case .deleteQuestion(let id):
             return QuestionAPI.questionDelete(id: id).questionAPIDesc
+            
+        case .reportQuestion(let id, _):
+            return QuestionAPI.quetionReport(id: id).questionAPIDesc
         }
     }
     
@@ -71,6 +75,9 @@ extension QuestionService: BaseTargetType {
             
         case .deleteQuestion:
             return .delete
+            
+        case .reportQuestion:
+            return .post
         }
     }
     
@@ -121,6 +128,14 @@ extension QuestionService: BaseTargetType {
             let parameters: [String: Any] = [
                 "id": id
                 ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            
+        case .reportQuestion(let id, let reason):
+            let parameters: [String: Any] = [
+                "id": id,
+                "reason": reason
+                ]
+            
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
     }

@@ -122,7 +122,7 @@ extension AuthService: BaseTargetType {
             let parameters: [String: Any] = [
                 "reason" : reason
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             
         case .userVerify:
             let parameters: [String: Any] = [ : ]

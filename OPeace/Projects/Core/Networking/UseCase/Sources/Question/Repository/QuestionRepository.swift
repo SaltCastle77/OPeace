@@ -84,4 +84,15 @@ public class QuestionRepository: QuestionRepositoryProtocol {
     public func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel? {
         return try await provider.requestAsync(.deleteQuestion(id: questionID), decodeTo: DeleteQuestionModel.self)
     }
+    
+    //MARK: - 유저 질문 신고 API
+    public func reportQuestion(
+        questionID: Int,
+        reason: String
+    ) async throws -> ReportQuestionModel? {
+        return try await provider.requestAsync(.reportQuestion(
+            id: questionID,
+            reason: reason
+        ), decodeTo: ReportQuestionModel.self)
+    }
 }

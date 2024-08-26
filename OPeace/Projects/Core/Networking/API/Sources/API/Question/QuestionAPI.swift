@@ -14,6 +14,7 @@ public enum QuestionAPI {
     case questionLikeVote(id: Int)
     case questionAnswerVote(id: Int)
     case questionDelete(id: Int)
+    case quetionReport(id: Int)
     
     public var questionAPIDesc: String {
         switch self {
@@ -34,6 +35,9 @@ public enum QuestionAPI {
             
         case .questionDelete(let id):
             return "/v1/question/\(id)/"
+            
+        case .quetionReport(let id):
+            return "/v1/questions/\(id)/report/"
         }
     }
 }
