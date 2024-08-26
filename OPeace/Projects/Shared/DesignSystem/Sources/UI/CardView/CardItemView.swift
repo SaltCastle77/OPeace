@@ -82,7 +82,7 @@ public struct CardItemView: View {
             VStack {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color.gray500)
-                    .frame(height: 530)
+                    .frame(height: 520)
                     .padding(.horizontal, 20)
                     .overlay {
                         VStack {
@@ -111,7 +111,7 @@ public struct CardItemView: View {
             VStack {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color.gray500)
-                    .frame(height: 530)
+                    .frame(height: 520)
                     .padding(.horizontal, 20)
                     .overlay {
                         VStack {
@@ -190,7 +190,13 @@ extension CardItemView {
                     .scaledToFit()
                     .frame(width: 36, height: 36)
                     .onTapGesture {
-                        editTapAction()
+                        if isProfile {
+                            editTapAction()
+                        } else {
+                            if id != userID {
+                                editTapAction()
+                            }
+                        }
                     }
                 
             }

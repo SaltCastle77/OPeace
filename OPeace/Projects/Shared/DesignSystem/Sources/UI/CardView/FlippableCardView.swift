@@ -30,8 +30,14 @@ public struct FlippableCardView<Content: View, T>: View {
                         VStack {
                             content(data[index])
                             
-                            Spacer()
-                                .frame(height: 10)
+                            if index == data.indices.last {
+                                Spacer()
+                                    .frame(height: UIScreen.screenHeight * 0.15)
+                            } else {
+                                Spacer()
+                                    .frame(height: 10)
+                            }
+                            
                         }
                         .frame(width: geometry.size.width)
                     }
