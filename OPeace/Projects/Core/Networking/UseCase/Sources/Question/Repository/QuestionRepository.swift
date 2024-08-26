@@ -79,4 +79,9 @@ public class QuestionRepository: QuestionRepositoryProtocol {
             id: questionID,
             userChoice: choicAnswer), decodeTo: QuestionVoteModel.self)
     }
+    
+    //MARK: - 질문 삭제 API
+    public func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel? {
+        return try await provider.requestAsync(.deleteQuestion(id: questionID), decodeTo: DeleteQuestionModel.self)
+    }
 }

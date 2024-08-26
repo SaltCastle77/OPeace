@@ -49,4 +49,8 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
     ) async throws -> QuestionVoteModel? {
         return nil
     }
+    
+    public func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel? {
+        return nil
+    }
 }

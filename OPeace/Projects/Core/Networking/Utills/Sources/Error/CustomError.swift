@@ -19,7 +19,7 @@ public enum CustomError: Error, Equatable {
     case invalidURL
     case invalidEventId
     case unknownError(String)
-    case firestoreError(String)
+    case userError(String)
     case encodingError(String)
     case createQuestionError(String)
     case none
@@ -48,8 +48,8 @@ extension CustomError: LocalizedError {
             return "원인을 알 수 없는 에러 발생"
         case .tokenError(let message):
             return "토큰 만료 에러 발생: \(message)"
-        case .firestoreError(let message):
-            return "파이어 베이스 에러 발생: \(message)"
+        case .userError(let message):
+            return "유저 확인 에러 발생: \(message)"
         case .encodingError(let message):
             return "파이어 인코딩 에러 발생: \(message)"
         case .kakaoTokenError(let message):
@@ -83,7 +83,7 @@ extension CustomError: LocalizedError {
             return "개발팀에게 문의해주세요"
         case .tokenError(_):
             return "개발팀에게 문의해주세요"
-        case .firestoreError(_):
+        case .userError(_):
             return "개발팀에게 문의해주세요"
         case .encodingError(_):
             return "개발팀에게 문의해주세요"

@@ -9,8 +9,7 @@
 public struct QuestionVoteModel: Codable, Equatable {
     public let data: QuestionVoteResponseModel?
     
-    public init
-    (data: QuestionVoteResponseModel?
+    public init(data: QuestionVoteResponseModel?
     ) {
         self.data = data
     }

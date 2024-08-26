@@ -37,6 +37,7 @@ public struct Auth {
         @Shared(.inMemory("createQuestionEmoji")) var emojiText: String = ""
         @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
         @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
+        @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
         
     }
     
@@ -110,7 +111,9 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion
+                    )))
                     
                 case .element(id: _, action: .login(.navigation(.presntLookAround))):
                     state.path.append(.home(.init(
@@ -118,7 +121,9 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion
+                    )))
                     
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
@@ -154,7 +159,9 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion
+                    )))
                     
                     //MARK: - home
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
@@ -173,7 +180,8 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion)
                     ))
                     state.path.removeFirst()
                     
@@ -185,6 +193,22 @@ public struct Auth {
                     
                 case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
                     state.path.append(.writeQuestion(.init()))
+                    
+                case .element(id: _, action: .profile(.navigation(.presntDeleteQuestion))):
+                    let homeState = Home.State()
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw:
+                            return true
+                        case .home:
+                            return false
+                        default:
+                            return true
+                        }
+                    }
+                    if !state.path.contains(where: { $0 == .home(homeState) }) {
+                        state.path.append(.home(homeState))
+                    }
                     
                     //MARK: - WithDraw
                 case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):

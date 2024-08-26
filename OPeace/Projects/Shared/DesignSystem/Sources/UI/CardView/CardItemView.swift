@@ -14,7 +14,9 @@ public struct CardItemView: View {
     @Binding var isTapAVote: Bool
     @Binding var isTapBVote: Bool
     
+    private var isProfile: Bool
     private var id: String
+    private var userID: String
     private var nickName: String
     private var job: String
     private var generation: String
@@ -30,7 +32,9 @@ public struct CardItemView: View {
     private var choiceTapAction: () -> Void = { }
 
     public init(
+        isProfile: Bool,
         id: String,
+        userID: String,
         nickName: String,
         job: String,
         generation: String,
@@ -50,7 +54,9 @@ public struct CardItemView: View {
         likeTapAction: @escaping (String) -> Void,
         choiceTapAction: @escaping () -> Void
     ) {
+        self.isProfile = isProfile
         self.id = id
+        self.userID = userID
         self.nickName = nickName
         self.job = job
         self.generation = generation
@@ -72,18 +78,18 @@ public struct CardItemView: View {
     }
 
     public var body: some View {
-        VStack {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.gray500)
-                .frame(height: 530)
-                .padding(.horizontal, 20)
-                .overlay {
-                    VStack {
-                        cardHeaderVIew(nickName: nickName, job: job, generation: generation)
-                            
-                        cardEmojiView(emoji: emoji)
-                            
-                        if isRotated {
+        if isProfile {
+            VStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.gray500)
+                    .frame(height: 530)
+                    .padding(.horizontal, 20)
+                    .overlay {
+                        VStack {
+                            cardHeaderVIew(nickName: nickName, job: job, generation: generation)
+                                
+                            cardEmojiView(emoji: emoji)
+                                
                             cardWriteAndanswerView(
                                 title: title,
                                 choiceA: choiceA,
@@ -95,37 +101,68 @@ public struct CardItemView: View {
                                 likeCount: likeCount
                             )
                             
-                        } else {
-                            cardWriteAndanswerView(
-                                title: title,
-                                choiceA: choiceA,
-                                choiceB: choiceB,
-                                isRoated: isRotated)
-                            
-                            questionChoiceVoteButton()
+                            Spacer()
                         }
-                        
-                        Spacer()
+                       
+                        .padding(.horizontal,24)
                     }
-                    .rotation3DEffect(
-                        .degrees(isRotated ? 180 : 0),
-                        axis: (x: 0, y: 1, z: 0),
-                        perspective: 0.5
-                    )
-                    .padding(.horizontal,24)
-                }
-                .onTapGesture {
-                    isRotated.toggle()
-                    isTapAVote = false
-                    isTapBVote = false
-                }
+            }
+        } else {
+            VStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.gray500)
+                    .frame(height: 530)
+                    .padding(.horizontal, 20)
+                    .overlay {
+                        VStack {
+                            cardHeaderVIew(nickName: nickName, job: job, generation: generation)
+                                
+                            cardEmojiView(emoji: emoji)
+                                
+                            if isRotated {
+                                cardWriteAndanswerView(
+                                    title: title,
+                                    choiceA: choiceA,
+                                    choiceB: choiceB,
+                                    isRoated: isRotated)
+                                
+                                isVotedResultView(
+                                    responseCount: responseCount,
+                                    likeCount: likeCount
+                                )
+                                
+                            } else {
+                                cardWriteAndanswerView(
+                                    title: title,
+                                    choiceA: choiceA,
+                                    choiceB: choiceB,
+                                    isRoated: isRotated)
+                                
+                                questionChoiceVoteButton()
+                            }
+                            
+                            Spacer()
+                        }
+                        .rotation3DEffect(
+                            .degrees(isRotated ? 180 : 0),
+                            axis: (x: 0, y: 1, z: 0),
+                            perspective: 0.5
+                        )
+                        .padding(.horizontal,24)
+                    }
+                    .onTapGesture {
+                        isRotated.toggle()
+                        isTapAVote = false
+                        isTapBVote = false
+                    }
+            }
+            .rotation3DEffect(
+                .degrees(isRotated ? 180 : 0),
+                axis: (x: 0, y: 1, z: 0),
+                perspective: 0.5
+            )
+            .animation(.easeInOut(duration: 0.5), value: isRotated)
         }
-        .rotation3DEffect(
-            .degrees(isRotated ? 180 : 0),
-            axis: (x: 0, y: 1, z: 0),
-            perspective: 0.5
-        )
-        .animation(.easeInOut(duration: 0.5), value: isRotated)
     }
 }
 
@@ -378,6 +415,9 @@ extension CardItemView {
                         isLikedTap.toggle()
                         likeTapAction(id)
                     }
+                    else if id == userID {
+                        
+                    }
                 }
                 
                 Spacer()
@@ -412,6 +452,9 @@ extension CardItemView {
                             isTapBVote = false
                             
                         }
+                        else if id == userID {
+                            
+                        }
                     }
 
                 Spacer()
@@ -435,6 +478,9 @@ extension CardItemView {
                             
                             // Check which option is selected
                             isTapAVote = false
+                        }
+                        else if id == userID {
+                            
                         }
                     }
             }

@@ -24,4 +24,5 @@ public protocol QuestionUseCaseProtocol {
     ) async throws -> CreateQuestionModel?
     func isVoteQuestionLike(questionID: Int) async throws -> VoteQuestionLikeModel?
     func isVoteQuestionAnswer(questionID: Int, choicAnswer: String) async throws -> QuestionVoteModel?
+    func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel?
 }

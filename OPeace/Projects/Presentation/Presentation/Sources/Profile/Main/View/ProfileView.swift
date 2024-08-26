@@ -46,10 +46,7 @@ public struct ProfileView: View {
                 
                 myPostWritingTitle()
                 
-                ScrollView {
-                    postingListView()
-                }
-                .bounce(false)
+                postingListView()
                 
                 Spacer()
             }
@@ -89,6 +86,27 @@ public struct ProfileView: View {
                     .backgroundColor(Color.basicBlack.opacity(0.8))
             }
             
+            .popup(item: $store.scope(state: \.destination?.deleteQuestionPopUp, action: \.destination.deleteQuestionPopUp)) { customPopUp in
+                CustomBasicPopUpView(store: customPopUp, title: "고민을 삭제하시겠어요?") {
+                    store.send(.view(.closeModal))
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        store.send(.async(.deleteQuestion(questionID: store.deleteQuestionId)))
+                    }
+                } cancelAction: {
+                    store.send(.view(.closeModal))
+                }
+                
+            }  customize: { popup in
+                popup
+                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
+                    .position(.bottom)
+                    .animation(.spring)
+                    .closeOnTap(true)
+                    .closeOnTapOutside(true)
+                    .backgroundColor(Color.basicBlack.opacity(0.8))
+            }
+            
             .popup(item: $store.scope(state: \.destination?.deletePopUp, action: \.destination.deletePopUp)) { customPopUp in
                 CustomBasicPopUpView(store: customPopUp, title: store.deletePopUpTitle) {
                     store.send(.view(.closeModal))
@@ -112,6 +130,7 @@ public struct ProfileView: View {
         }
     }
 }
+
 
 
 extension ProfileView {
@@ -197,13 +216,51 @@ extension ProfileView {
         if store.myQuestionListModel?.data?.results == [] {
             noPostingListView()
         } else {
-            
+            myPostitngList()
         }
     }
     
     @ViewBuilder
     private func myPostitngList() -> some View {
-        VStack {}
+        VStack {
+            Spacer()
+                .frame(height: 16)
+            
+            if let resultData = store.myQuestionListModel?.data?.results {
+                FlippableCardView(data: resultData) { item in
+                    CardItemView(
+                        isProfile: true,
+                        id: item.userInfo?.userID ?? "",
+                        userID: store.profileUserModel?.data?.socialID ?? "",
+                        nickName: item.userInfo?.userNickname ?? "",
+                        job: item.userInfo?.userJob ?? "",
+                        generation: item.userInfo?.userGeneration ?? "",
+                        generationColor: store.cardGenerationColor,
+                        emoji: item.emoji ?? "",
+                        title: item.title ?? "",
+                        choiceA: item.choiceA ?? "",
+                        choiceB: item.choiceB ?? "",
+                        responseCount: item.answerCount ?? .zero,
+                        likeCount: item.likeCount ?? .zero,
+                        isLikedTap: false,
+                        answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+                        isRotated: false,
+                        isTapAVote: .constant(false),
+                        isTapBVote: .constant(false),
+                        editTapAction: {
+                            store.deleteQuestionId = item.id ?? .zero
+                            store.send(.view(.presentDeleteQuestionPopUp))
+                        },
+                        likeTapAction: { userid in
+                           
+                        }, choiceTapAction: {
+                            
+                        }
+                    )
+                    
+                }
+            }
+        }
     }
     
     @ViewBuilder

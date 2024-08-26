@@ -30,6 +30,7 @@ public struct Home {
         var isVoteLikeQuestionModel: VoteQuestionLikeModel? = nil
         var userBlockModel: UserBlockModel? = nil
         var isVoteAnswerQuestionModel: QuestionVoteModel? = nil
+        var profileUserModel: UpdateUserInfoModel? = nil
         
         var cardGenerationColor: Color = .basicBlack
         var isLikeTap: Bool = false
@@ -53,23 +54,25 @@ public struct Home {
         @Shared var isLookAround: Bool
         @Shared var isChangeProfile: Bool
         @Shared var isCreateQuestion: Bool
+        @Shared var isDeleteQuestion: Bool
         
         @Presents var destination: Destination.State?
         
        
-        
         public init(
             isLogOut: Bool = false,
             isDeleteUser: Bool = false,
             isLookAround: Bool = false,
             isChangeProfile: Bool = false,
-            isCreateQuestion: Bool = false
+            isCreateQuestion: Bool = false,
+            isDeleteQuestion: Bool = false
         ) {
             self._isLogOut = Shared(wrappedValue: isLogOut, .inMemory("isLogOut"))
             self._isDeleteUser = Shared(wrappedValue: isDeleteUser, .inMemory("isDeleteUser"))
             self._isLookAround = Shared(wrappedValue: isLookAround, .inMemory("isLookAround"))
             self._isChangeProfile = Shared(wrappedValue: isChangeProfile, .inMemory("isChangeProfile"))
             self._isCreateQuestion = Shared(wrappedValue: isCreateQuestion, .inMemory("isCreateQuestion"))
+            self._isDeleteQuestion = Shared(wrappedValue: isDeleteQuestion, .inMemory("isDeleteQuestion"))
         }
         
     }
@@ -122,7 +125,8 @@ public struct Home {
         case blockUserResponse(Result<UserBlockModel, CustomError>)
         case isVoteQuestionAnswer(questionID: Int, choiceAnswer: String)
         case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
-        
+        case fetchUserProfile
+        case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
         
     }
     
@@ -187,6 +191,15 @@ public struct Home {
                     
                 case .switchModalAction(let editQuestion):
                     var editQuestion = editQuestion
+                    switch editQuestion {
+                    case .reportUser:
+                        Log.debug("신고하기")
+                    case .blockUser:
+                        Log.debug("차단하기")
+                        state.customPopUpText = "정말 차단하시겠어요?"
+                        state.isTapBlockUser = true
+                    }
+                    
                     return .run { @MainActor send in
                         switch editQuestion {
                         case .reportUser:
@@ -306,7 +319,6 @@ public struct Home {
                                 send(.async(.isVoteQuestionAnsweResponse(
                                     .success(voteQuestionResult))))
                                 
-//                                send(.async(.fetchQuestionList))
                             }
                         case .failure(let error):
                             send(.async(.isVoteQuestionAnsweResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
@@ -320,6 +332,33 @@ public struct Home {
                         state.isRoatinCard = true
                     case .failure(let error):
                         Log.error("유저 투표 에러", error.localizedDescription)
+                    }
+                    return .none
+                    
+                    
+                case .fetchUserProfile:
+                    return .run { @MainActor  send in
+                        let fetchUserData = await Result {
+                            try await authUseCase.fetchUserInfo()
+                        }
+                        
+                        switch fetchUserData {
+                        case .success(let fetchUserResult):
+                            if let fetchUserResult = fetchUserResult {
+                                send(.async(.userProfileResponse(.success(fetchUserResult))))
+                            }
+                        case .failure(let error):
+                            send(.async(.userProfileResponse(.failure(CustomError.userError(error.localizedDescription)))))
+                            
+                        }
+                    }
+                    
+                case .userProfileResponse(let result):
+                    switch result {
+                    case .success(let resultData):
+                        state.profileUserModel = resultData
+                    case let .failure(error):
+                        Log.network("프로필 오류", error.localizedDescription)
                     }
                     return .none
                 }

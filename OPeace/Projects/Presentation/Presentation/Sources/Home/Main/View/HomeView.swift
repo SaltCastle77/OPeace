@@ -34,9 +34,12 @@ public struct HomeView: View {
                 questionLIstView()
             }
             .onAppear {
+                
                 store.send(.async(.fetchQuestionList))
-//                startRefreshData()
+                store.send(.async(.fetchUserProfile))
+
                 appearFloatingPopUp()
+                store.send(.profile(.scopeFetchUser))
             }
           
             .onDisappear {
@@ -55,13 +58,6 @@ public struct HomeView: View {
             EditQuestionView(store: editQuestionStore) {
                 guard let edititem =  editQuestionStore.editQuestionitem else {return}
                 store.send(.view(.switchModalAction(edititem )))
-                switch edititem {
-                case .blockUser:
-                    store.customPopUpText = "정말 차단하시겠어요?"
-                    store.isTapBlockUser = true
-                case .reportUser:
-                    break
-                }
             } closeModalAction: {
                 store.send(.view(.closeEditQuestionModal))
             }
@@ -113,10 +109,6 @@ public struct HomeView: View {
                     if store.isTapBlockUser == true {
                         store.send(.async(.blockUser(qusetionID: store.questionID ?? .zero, userID: store.userID ?? "")))
                     }
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//                        store.send(.navigation(.presntLogin))
-//                    }
-
             } cancelAction: {
                 store.send(.view(.closePopUp))
             }
@@ -214,6 +206,11 @@ extension HomeView {
             store.floatingText = "고민 등록이 완료 되었어요!"
             store.send(.view(.timeToCloseFloatingPopUp))
             store.isCreateQuestion = false
+        } else if store.isDeleteQuestion == true {
+            store.send(.view(.presntFloatintPopUp))
+            store.floatingText = "고민이 삭제되었어요!"
+            store.send(.view(.timeToCloseFloatingPopUp))
+            store.isDeleteQuestion = false
         } else {
             store.floatingText = "로그인 하시겠어요?"
         }
@@ -240,7 +237,6 @@ extension HomeView {
             }
             .padding(.bottom, 16)
             
-        
     }
     
     @ViewBuilder
@@ -268,7 +264,9 @@ extension HomeView {
         if let resultData = store.questionModel?.data?.results {
             FlippableCardView(data: resultData) { item in
                 CardItemView(
+                    isProfile: false,
                     id: item.userInfo?.userID ?? "",
+                    userID: store.profileUserModel?.data?.socialID ?? "",
                     nickName: item.userInfo?.userNickname ?? "",
                     job: item.userInfo?.userJob ?? "",
                     generation: item.userInfo?.userGeneration ?? "",

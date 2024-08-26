@@ -30,15 +30,20 @@ public struct Profile {
         var userLogoutModel: UserLogOutModel? = nil
         var userDeleteModel: DeleteUserModel? = nil
         var myQuestionListModel: QuestionModel?  = nil
+        var deleteQuestionModel: DeleteQuestionModel? = nil
         
         var profileGenerationYear: Int? = .zero
         var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
         var deletePopUpTitle: String = "정말 탈퇴하시겠어요?"
         
+        var cardGenerationColor: Color = .basicBlack
+        var deleteQuestionId: Int = .zero
+        
         @Presents var destination: Destination.State?
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
-        @Shared(.inMemory("_isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
         
         public init() {}
     }
@@ -58,6 +63,7 @@ public struct Profile {
         case setting(Setting)
         case popup(CustomPopUp)
         case deletePopUp(CustomPopUp)
+        case deleteQuestionPopUp(CustomPopUp)
         case home(Home)
     }
     
@@ -68,6 +74,7 @@ public struct Profile {
         case closeModal
         case presntPopUp
         case presntDeltePopUp
+        case presentDeleteQuestionPopUp
         case closePopUp
         case updateGenerationInfo
         case switchModalAction(SettingProfile)
@@ -84,6 +91,8 @@ public struct Profile {
         case logoutUser
         case fetchQuestionResponse(Result<QuestionModel, CustomError>)
         case fetchQuestion
+        case deleteQuestion(questionID: Int)
+        case deleteQuestionResponse(Result<DeleteQuestionModel, CustomError>)
         
     }
     
@@ -98,6 +107,7 @@ public struct Profile {
         case presntEditProfile
         case presntWithDraw
         case presnetCreateQuestionList
+        case presntDeleteQuestion
         
     }
     
@@ -148,6 +158,9 @@ public struct Profile {
                     state.destination = nil
                     return .none
                     
+                case .presentDeleteQuestionPopUp:
+                    state.destination = .deleteQuestionPopUp(.init())
+                    return .none
                     
                 case .updateGenerationInfo:
                     let (generation, color, textColor) = CheckRegister.getGeneration(
@@ -216,7 +229,7 @@ public struct Profile {
                         state.userLogoutModel = userData
                         Log.debug("유저 로그아웃 성공", userData)
                         state.isLogOut = true
-                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile))
+                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile, isDeleteQuestion: state.isDeleteQuestion))
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }
@@ -270,6 +283,36 @@ public struct Profile {
                         Log.debug("피드 목록 에러", error.localizedDescription)
                     }
                     return .none
+                    
+                case .deleteQuestion(let questionID):
+                    return .run { @MainActor send in
+                        let deleteQuestionResult = await Result {
+                            try await questionUseCase.deleteQuestion(questionID: questionID)
+                        }
+                        
+                        switch deleteQuestionResult {
+                        case .success(let deleteQuestionResult):
+                            if let deleteQuestionResult = deleteQuestionResult {
+                                send(.async(.deleteQuestionResponse(.success(deleteQuestionResult))))
+                                
+                                try await self.clock.sleep(for: .seconds(1))
+                                send(.navigation(.presntDeleteQuestion))
+                            }
+                        case .failure(let error):
+                            send(.async(.deleteQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                        }
+                    }
+                
+                case .deleteQuestionResponse(let result):
+                    switch result {
+                    case .success(let deleteQuestionData):
+                        state.deleteQuestionModel = deleteQuestionData
+                        state.isDeleteQuestion = true
+                        
+                    case .failure(let error):
+                        Log.debug("질문 삭제 에러", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):
@@ -289,6 +332,9 @@ public struct Profile {
                     return .none
                     
                 case .presnetCreateQuestionList:
+                    return .none
+                    
+                case .presntDeleteQuestion:
                     return .none
                 }
                 
