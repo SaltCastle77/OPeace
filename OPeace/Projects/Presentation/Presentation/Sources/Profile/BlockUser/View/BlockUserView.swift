@@ -105,7 +105,6 @@ extension BlockUserView {
                         nickName: "엠제이엠제이",
                         job: "개발",
                         generation: "Z 세대",
-                        generationColor: store.generationColor,
                         completion: {
                             store.send(.async(.realseUserBlock(blockUserID: item.blockedUserID ?? "")))
                         })
@@ -161,7 +160,6 @@ extension BlockUserView {
         nickName: String,
         job: String,
         generation: String,
-        generationColor: Color,
         completion: @escaping () -> Void
     ) -> some View {
         RoundedRectangle(cornerRadius: 16)
@@ -198,11 +196,9 @@ extension BlockUserView {
                         Spacer()
                             .frame(width: 8)
                         
-                        let (generation, color) = CheckRegister.generatuionTextColor(generation: generation, color: generationColor)
-                        
                         Text(generation)
                             .pretendardFont(family: .Medium, size: 14)
-                            .foregroundStyle(color)
+                            .foregroundStyle(Color.gray200)
                         
                         Spacer()
                         
