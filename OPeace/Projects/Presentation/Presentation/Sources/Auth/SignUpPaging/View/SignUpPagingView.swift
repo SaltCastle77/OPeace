@@ -71,9 +71,9 @@ public struct SignUpPagingView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .animation(.none, value: store.activeMenu)
-                .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-                    navigationController.interactivePopGestureRecognizer?.isEnabled = false
-                }
+//                .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
+//                    navigationController.interactivePopGestureRecognizer?.isEnabled = false
+//                }
                 
                 Spacer()
             }

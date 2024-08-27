@@ -93,7 +93,11 @@ extension WriteQuestionView {
                     Spacer()
                         .frame(width: UIScreen.screenWidth * 0.4)
                         
-                    TextField("", text: $store.selectEmojiText)
+                    EmojiTextField(
+                        text: $store.selectEmojiText,
+                        emojiImage: $store.emojiImage,
+                        isInputEmoji: $store.isInuputEmoji )
+//                    TextField("", text: $store.selectEmojiText)
                         .pretendardFont(family: .SemiBold, size: 48)
                         .onChange(of: store.selectEmojiText) { oldValue, newValue in
                             if newValue.count == 1, newValue.unicodeScalars.allSatisfy({ $0.properties.isEmoji }) {

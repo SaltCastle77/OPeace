@@ -261,6 +261,7 @@ public struct Profile {
                         state.isLogOut = true
                         state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile, isDeleteQuestion: state.isDeleteQuestion))
                         try? Keychain().remove("ACCESS_TOKEN")
+                        try? Keychain().remove("REFRESH_TOKEN")
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }
