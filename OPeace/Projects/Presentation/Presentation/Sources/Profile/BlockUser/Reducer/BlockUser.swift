@@ -22,7 +22,6 @@ public struct BlockUser {
     @ObservableState
     public struct State: Equatable {
         public init() {}
-        var generationColor: Color = .red
         var userBlockListModel: UserBlockListModel?  = nil
         var realseUserBlocModel: UserBlockModel?  = nil
         
