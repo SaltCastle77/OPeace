@@ -238,14 +238,18 @@ public struct Profile {
                     return .run { @MainActor send in
                         switch socialType {
                         case "kakao":
-                            UserApi.shared.logout {(error) in
+                            UserApi.shared.logout { error in
                                 if let error = error {
                                     Log.debug("카카오 로그아웃 오류", error.localizedDescription)
-                                }
-                                else {
-                                    send(.async(.logoutUser))
+                                } else {
+                                    // Handle async operations in a Task
+                                    Task {
+                                        try await self.clock.sleep(for: .seconds(1))
+                                         send(.async(.logoutUser))
+                                    }
                                 }
                             }
+
                         case "apple":
                             send(.async(.logoutUser))
                         default:

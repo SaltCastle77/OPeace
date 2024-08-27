@@ -108,7 +108,7 @@ public struct Login {
                         do {
                             let result = try await authUseCase.handleAppleLogin(authData)
                             send(.async(.fetchAppleRespose(.success(result))))
-                            try await clock.sleep(for: .seconds(1))
+                            try await clock.sleep(for: .seconds(0.8))
                             send(.async(.loginWithApple(token: appleAccessToken)))
                         } catch {
                             print("Error handling Apple login: \(error)")
@@ -204,7 +204,7 @@ public struct Login {
                         case .success(let (accessToken, idToken)):
                             send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
                             
-                            try await clock.sleep(for: .seconds(1))
+                            try await clock.sleep(for: .seconds(0.8))
                             send(.async(.loginWIthKakao))
                             
                         case let .failure(error):
