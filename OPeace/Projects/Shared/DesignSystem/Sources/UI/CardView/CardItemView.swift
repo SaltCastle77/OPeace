@@ -442,8 +442,12 @@ extension CardItemView {
                 }
                 .onTapGesture {
                     if !isUserInteractionDisabled {
-                        isLikedTap.toggle()
-                        likeTapAction(id)
+                        if id != userID {
+                            isLikedTap.toggle()
+                            likeTapAction(id)
+                        } else if isProfile {
+                            
+                        }
                     }
                 }
                 
@@ -471,16 +475,16 @@ extension CardItemView {
                     }
                     .onTapGesture {
                         if !isUserInteractionDisabled {
-                            answerRatio.A += 1
-                            isTapAVote.toggle()
-                            if isTapAVote == true {
-                                isRotated.toggle()
+                            if id != userID {
+                                answerRatio.A += 1
+                                isTapAVote.toggle()
+                                if isTapAVote == true {
+                                    isRotated.toggle()
+                                }
+                                choiceTapAction()
+                                isTapBVote = false
                             }
-                            choiceTapAction()
-                            isTapBVote = false
-                        } else {
-                            choiceTapAction()
-                        }
+                        } 
                     }
 
                 Spacer()
@@ -497,19 +501,18 @@ extension CardItemView {
                     }
                     .onTapGesture {
                         if !isUserInteractionDisabled {
-                            answerRatio.B += 1
-                            isTapBVote.toggle()
-                            if isTapBVote  == true {
-                                isRotated.toggle()
+                            if id != userID {
+                                answerRatio.B += 1
+                                isTapBVote.toggle()
+                                if isTapBVote  == true {
+                                    isRotated.toggle()
+                                }
+                                choiceTapAction()
+                                isTapAVote = false
                             }
-                            choiceTapAction()
-                            isTapAVote = false
-                        } else {
-                            choiceTapAction()
                         }
                     }
             }
         }
     }
-
 }

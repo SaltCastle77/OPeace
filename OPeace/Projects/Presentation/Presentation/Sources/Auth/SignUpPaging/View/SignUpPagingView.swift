@@ -65,15 +65,12 @@ public struct SignUpPagingView: View {
                     
                     SignUpJobView(store: self.store.scope(state: \.signUpJob, action: \.signUpJob), confirmAction: {
                         store.send(.view(.appearPopUp))
-                           
                     })
                         .tag(SignUpTab.signUpJob)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .animation(.none, value: store.activeMenu)
-//                .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-//                    navigationController.interactivePopGestureRecognizer?.isEnabled = false
-//                }
+
                 
                 Spacer()
             }

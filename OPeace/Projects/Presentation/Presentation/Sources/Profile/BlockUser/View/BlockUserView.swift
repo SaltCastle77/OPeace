@@ -8,6 +8,7 @@
 import SwiftUI
 
 import ComposableArchitecture
+import PopupView
 
 import DesignSystem
 
@@ -45,6 +46,19 @@ public struct BlockUserView: View {
             }
             .onAppear {
                 store.send(.async(.fetchUserBlockList))
+            }
+            .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
+                FloatingPopUpView(store: floatingPopUpStore, title: "차단이 해제되었어요", image: .succesLogout)
+                    .onAppear{
+                        store.send(.view(.timeToCloseFloatingPopUp))
+                    }
+            }  customize: { popup in
+                popup
+                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.02))
+                    .position(.bottom)
+                    .animation(.spring)
+                    .closeOnTap(true)
+                    .closeOnTapOutside(true)
             }
         }
     }

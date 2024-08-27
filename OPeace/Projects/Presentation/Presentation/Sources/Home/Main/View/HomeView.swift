@@ -56,7 +56,6 @@ public struct HomeView: View {
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
-        
         .sheet(item: $store.scope(state: \.destination?.editQuestion, action: \.destination.editQuestion)) { editQuestionStore in
             EditQuestionView(store: editQuestionStore) {
                 guard let edititem =  editQuestionStore.editQuestionitem else {return}
@@ -220,12 +219,6 @@ extension HomeView {
             store.floatingImage = .warning
             store.send(.view(.timeToCloseFloatingPopUp))
             store.isReportQuestion = false
-        } else if store.isRealseBlockUser == true {
-            store.send(.view(.presntFloatintPopUp))
-            store.floatingText = "신고가 차단이 해제 되었어요"
-            store.floatingImage = .succesLogout
-            store.send(.view(.timeToCloseFloatingPopUp))
-            store.isRealseBlockUser = false
         } else {
             store.floatingText = "로그인 하시겠어요?"
         }
@@ -300,8 +293,8 @@ extension HomeView {
                     isRotated: store.isRoatinCard,
                     isTapAVote: $store.isTapAVote,
                     isTapBVote: $store.isTapBVote,
-                    isLogOut: store.isLogOut,  // Replace with the actual condition from your store
-                    isLookAround: store.isLookAround,  // Replace with the actual condition from your store
+                    isLogOut: store.isLogOut,
+                    isLookAround: store.isLookAround,
                     isDeleteUser: store.isDeleteUser,
                     editTapAction: {
                         store.userID = item.userInfo?.userID ?? ""
@@ -311,22 +304,21 @@ extension HomeView {
                     },
                     likeTapAction: { userid in
                         if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
-                            store.isRoatinCard = false
                             store.send(.view(.prsentCustomPopUp))
                         } else {
                             store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))
+                            store.send(.async(.fetchQuestionList))
                         }
                     }, choiceTapAction: {
                         if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
-                            store.isRoatinCard = false
-                            store.isTapAVote = false
-                            store.isTapBVote = false
                             store.send(.view(.prsentCustomPopUp))
                         } else {
                             if store.isTapAVote == true  {
                                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+                                store.send(.async(.fetchQuestionList))
                             } else if store.isTapBVote == true {
                                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                                store.send(.async(.fetchQuestionList))
                             }
                         }
                     }

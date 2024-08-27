@@ -40,7 +40,6 @@ public struct Auth {
         @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
         @Shared(.inMemory("isReportQuestion")) var isReportQuestion: Bool = false
         @Shared(.inMemory("questionID")) var questionID: Int = 0
-        @Shared(.inMemory("isRealseBlockUser")) var isRealseBlockUser: Bool = false
         
     }
     
@@ -118,8 +117,7 @@ public struct Auth {
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
-                        isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        isReportQuestion: state.isReportQuestion)))
                     
                 case .element(id: _, action: .login(.navigation(.presntLookAround))):
                     state.path.append(.home(.init(
@@ -129,8 +127,7 @@ public struct Auth {
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
-                        isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        isReportQuestion: state.isReportQuestion)))
                     
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
@@ -158,8 +155,7 @@ public struct Auth {
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
-                        isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        isReportQuestion: state.isReportQuestion)))
                     
                     //MARK: - OnBoarding
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
@@ -170,8 +166,7 @@ public struct Auth {
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
-                        isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        isReportQuestion: state.isReportQuestion)))
                     
                     //MARK: - home
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
@@ -198,8 +193,7 @@ public struct Auth {
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
-                        isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        isReportQuestion: state.isReportQuestion)))
                     state.path.removeFirst()
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
@@ -288,21 +282,6 @@ public struct Auth {
                     }
                     
                     //MARK: - Block
-                case .element(id: _, action: .blockUser(.navigation(.presntMainHome))):
-                    let homeState = Home.State()
-                    state.path.removeAll { path in
-                        switch path {
-                        case .blockUser:
-                            return true
-                        case .home:
-                            return false
-                        default:
-                            return false
-                        }
-                    }
-                    if !state.path.contains(where: { $0 == .home(homeState) }) {
-                        state.path.append(.home(homeState))
-                    }
                     
                 default:
                     return .none
