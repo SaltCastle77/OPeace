@@ -37,6 +37,10 @@ public struct Auth {
         @Shared(.inMemory("createQuestionEmoji")) var emojiText: String = ""
         @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
         @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
+        @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
+        @Shared(.inMemory("isReportQuestion")) var isReportQuestion: Bool = false
+        @Shared(.inMemory("questionID")) var questionID: Int = 0
+        @Shared(.inMemory("isRealseBlockUser")) var isRealseBlockUser: Bool = false
         
     }
     
@@ -54,6 +58,8 @@ public struct Auth {
         case withDraw(WithDraw)
         case writeQuestion(WriteQuestion)
         case writeAnswer(WriteAnswer)
+        case report(Report)
+        case blockUser(BlockUser)
         
     }
     
@@ -110,7 +116,10 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     
                 case .element(id: _, action: .login(.navigation(.presntLookAround))):
                     state.path.append(.home(.init(
@@ -118,7 +127,10 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
@@ -145,7 +157,9 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     
                     //MARK: - OnBoarding
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
@@ -154,7 +168,10 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     
                     //MARK: - home
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
@@ -166,6 +183,12 @@ public struct Auth {
                 case .element(id: _, action: .home(.navigation(.presntWriteQuestion))):
                     state.path.append(.writeQuestion(.init()))
                     
+                case .element(id: _, action: .home(.navigation(.presntReport))):
+                    state.path.append(.report(.init(
+                        questionID: state.questionID
+                        
+                    )))
+                    
                     //MARK: - profile
                 case .element(id: _, action: .profile(.navigation(.presntLogout))):
                     state.path.append(.home(.init(
@@ -173,8 +196,10 @@ public struct Auth {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)
-                    ))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     state.path.removeFirst()
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
@@ -185,6 +210,25 @@ public struct Auth {
                     
                 case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
                     state.path.append(.writeQuestion(.init()))
+                    
+                case .element(id: _, action: .profile(.navigation(.presntDeleteQuestion))):
+                    let homeState = Home.State()
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw:
+                            return true
+                        case .home:
+                            return false
+                        default:
+                            return true
+                        }
+                    }
+                    if !state.path.contains(where: { $0 == .home(homeState) }) {
+                        state.path.append(.home(homeState))
+                    }
+                    
+                case .element(id: _, action: .profile(.navigation(.presntUserBlock))):
+                    state.path.append(.blockUser(.init()))
                     
                     //MARK: - WithDraw
                 case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
@@ -226,6 +270,39 @@ public struct Auth {
                         state.path.append(.home(homeState))
                     }
                     
+                    //MARK: - Report
+                case .element(id: _, action: .report(.navigation(.presntMainHome))):
+                    let homeState = Home.State()
+                    state.path.removeAll { path in
+                        switch path {
+                        case .report:
+                            return true
+                        case .home:
+                            return false
+                        default:
+                            return false
+                        }
+                    }
+                    if !state.path.contains(where: { $0 == .home(homeState) }) {
+                        state.path.append(.home(homeState))
+                    }
+                    
+                    //MARK: - Block
+                case .element(id: _, action: .blockUser(.navigation(.presntMainHome))):
+                    let homeState = Home.State()
+                    state.path.removeAll { path in
+                        switch path {
+                        case .blockUser:
+                            return true
+                        case .home:
+                            return false
+                        default:
+                            return false
+                        }
+                    }
+                    if !state.path.contains(where: { $0 == .home(homeState) }) {
+                        state.path.append(.home(homeState))
+                    }
                     
                 default:
                     return .none

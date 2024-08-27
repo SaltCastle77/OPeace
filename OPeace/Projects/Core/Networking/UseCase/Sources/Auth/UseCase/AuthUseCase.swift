@@ -23,11 +23,16 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     
-    //MARK: - 애플 로그인
+    //MARK: - 애플 로그인 토큰
     public func handleAppleLogin(
         _ request: Result<ASAuthorization, Error>
     ) async throws -> ASAuthorization {
         try await repository.handleAppleLogin(request)
+    }
+    
+    //MARK: - 애플 로그인
+    public func appleLogin() async throws -> UserLoginModel? {
+        try await repository.appleLogin()
     }
     
     //MARK: - 카카오 로그인 토근
@@ -36,7 +41,7 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     }
     
     //MARK: - 카카오 로그인
-    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
+    public func reauestKakaoLogin() async throws -> UserLoginModel? {
         try await repository.reauestKakaoLogin()
     }
     
@@ -70,6 +75,24 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     //MARK: - 유저 토큰 확인
     public func checkUserVerify() async throws -> CheckUserVerifyModel? {
         try await repository.checkUserVerify()
+    }
+    
+    //MARK: - 유저 차단
+    public func userBlock(
+        questioniD: Int,
+        userID: String
+    ) async throws -> UserBlockModel? {
+        try await repository.userBlock(questioniD: questioniD, userID: userID)
+    }
+    
+    //MARK: - 유저차단 목록
+    public func fetchUserBlockList() async throws -> UserBlockListModel? {
+        try await repository.fetchUserBlockList()
+    }
+    
+    //MARK: - 유저 차단 해제
+    public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
+        try await repository.realseUserBlock(userID: userID)
     }
 }
 

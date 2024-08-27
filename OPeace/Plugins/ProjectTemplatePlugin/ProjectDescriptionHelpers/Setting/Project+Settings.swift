@@ -42,7 +42,7 @@ extension Settings {
                 .setCFBundleDisplayName(Project.Environment.appDevName)
                 .setOtherLdFlags("-ObjC -all_load")
                 .setDebugInformationFormat("non-global")
-                .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
+                .setProvisioningProfileSpecifier("match AppStore \(Project.Environment.bundlePrefix)")
                 .setSkipInstall(false)
             ),
             .release(name: .release, settings: SettingsDictionary()

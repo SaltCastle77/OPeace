@@ -8,15 +8,15 @@
 import Foundation
 
 // MARK: - Welcome
-public struct KakaoResponseModel: Codable, Equatable {
-    public let data: KakaoResponse?
+public struct UserLoginModel: Codable, Equatable {
+    public let data: UserLoginResponse?
     
-    public init(data: KakaoResponse?) {
+    public init(data: UserLoginResponse?) {
         self.data = data
     }
 }
 
-public struct KakaoResponse: Codable, Equatable {
+public struct UserLoginResponse: Codable, Equatable {
     public let socialID, accessToken, refreshToken: String?
     public let expiresIn, refreshTokenExpiresIn: Int?
     public let isExpires, isRefreshTokenExpires: Bool?

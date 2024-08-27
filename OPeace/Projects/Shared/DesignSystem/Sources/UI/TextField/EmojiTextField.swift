@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SwiftUI
+import UIKit
 
 public struct EmojiTextField: UIViewRepresentable {
     @Binding var text: String
@@ -17,25 +19,27 @@ public struct EmojiTextField: UIViewRepresentable {
         text: Binding<String>,
         emojiImage: Binding<Image?>,
         isInputEmoji: Binding<Bool>,
-        placeholder: String) {
-        self._text = text
-        self._emojiImage = emojiImage
-        self._isInputEmoji = isInputEmoji
-        self.placeholder = placeholder
-    }
+        placeholder: String = "") {
+            self._text = text
+            self._emojiImage = emojiImage
+            self._isInputEmoji = isInputEmoji
+            self.placeholder = placeholder
+        }
     
-    public func makeUIView(context: Context) -> UIEmojiTextField {
-        let emojiTextField = UIEmojiTextField()
+    public func makeUIView(context: Context) -> EmojiEnabledTextField {
+        let emojiTextField = EmojiEnabledTextField()
         emojiTextField.placeholder = placeholder
         emojiTextField.text = text
         emojiTextField.delegate = context.coordinator
         emojiTextField.font = UIFont.systemFont(ofSize: 48)
-        emojiTextField.returnKeyType = .done  // Set the return key type to 'Done'
+        emojiTextField.returnKeyType = .done
         return emojiTextField
     }
     
-    public func updateUIView(_ uiView: UIEmojiTextField, context: Context) {
-        uiView.text = text
+    public func updateUIView(_ uiView: EmojiEnabledTextField, context: Context) {
+        if uiView.text != text {
+            uiView.text = text
+        }
     }
     
     public func makeCoordinator() -> Coordinator {
@@ -54,20 +58,22 @@ public struct EmojiTextField: UIViewRepresentable {
                 guard let self = self else { return }
                 let newValue = textField.text ?? ""
                 
-                // When an emoji is selected, convert it to an image and exit emoji input mode
                 if newValue.count == 1, newValue.unicodeScalars.allSatisfy({ $0.properties.isEmoji }) {
+                    self.parent.text = newValue
                     self.parent.emojiImage = Image.emojiToImage(emoji: newValue)
                     self.parent.isInputEmoji = false
-                } else {
+                } else if newValue.isEmpty {
                     self.parent.text = ""
-                    textField.text = ""
+                    self.parent.emojiImage = nil
+                    self.parent.isInputEmoji = true
+                } else {
+                    self.parent.text = newValue
                 }
             }
         }
         
-        // Handle the return key press
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()  // Dismiss the keyboard
+            textField.resignFirstResponder()
             return true
         }
     }

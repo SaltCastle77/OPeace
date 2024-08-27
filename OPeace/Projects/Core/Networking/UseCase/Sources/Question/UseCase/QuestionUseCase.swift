@@ -24,9 +24,26 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
     //MARK: - 피드 목록 조회
     public func fetchQuestionList(
         page: Int,
+        pageSize: Int,
+        job: String,
+        generation: String,
+        sortBy: QuestionSort
+    ) async throws -> QuestionModel? {
+        try await repository.fetchQuestionList(
+            page: page,
+            pageSize: pageSize,
+            job: job,
+            generation: generation,
+            sortBy: sortBy)
+    }
+    
+    
+    //MARK: - 프로필에서 내가 쓴글 조회
+    public func myQuestionList(
+        page: Int,
         pageSize: Int
     ) async throws -> QuestionModel? {
-        try await repository.fetchQuestionList(page: page, pageSize: pageSize)
+        try await repository.myQuestionList(page: page, pageSize: pageSize)
     }
     
     //MARK: - 질문 생성
@@ -41,6 +58,35 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
             title: title,
             choiceA: choiceA,
             choiceB: choiceB
+        )
+    }
+    
+    //MARK: - 좋아요 누르기
+    public func isVoteQuestionLike(questionID: Int) async throws -> VoteQuestionLikeModel? {
+        try await repository.isVoteQuestionLike(questionID: questionID)
+    }
+    
+    //MARK: - 응답 선택
+    public func isVoteQuestionAnswer(
+        questionID: Int,
+        choicAnswer: String
+    ) async throws -> QuestionVoteModel? {
+        try await repository.isVoteQuestionAnswer(questionID: questionID, choicAnswer: choicAnswer)
+    }
+    
+    //MARK: - 내가 쓴글 삭제
+    public func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel? {
+        try await repository.deleteQuestion(questionID: questionID)
+    }
+    
+    //MARK: - 유저글 신고
+    public func reportQuestion(
+        questionID: Int,
+        reason: String
+    ) async throws -> ReportQuestionModel? {
+        try await repository.reportQuestion(
+            questionID: questionID,
+            reason: reason
         )
     }
 }

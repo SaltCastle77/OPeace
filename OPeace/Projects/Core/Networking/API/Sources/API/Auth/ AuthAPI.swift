@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum AuthAPI : String {
+public enum AuthAPI {
     case appleLogin
     case kakaoLogin
     case kakaoLoginCallback
@@ -17,12 +17,15 @@ public enum AuthAPI : String {
     case deleteUser
     case logoutUser
     case userVerify
+    case userBlock
+    case fetchUserBlock
+    case realseBlockUser(userID: String)
     
     
     public var authAPIDesc: String {
         switch self {
         case .appleLogin:
-            return "/oauth/apple/login/callback"
+            return "/oauth/apple/login/callback/"
             
         case .kakaoLogin:
             return "/oauth/kakao/login/"
@@ -47,6 +50,15 @@ public enum AuthAPI : String {
             
         case .userVerify:
             return "/users/verify/"
+            
+        case .userBlock:
+            return "/users/block/"
+            
+        case .fetchUserBlock:
+            return "/users/blocks/"
+            
+        case .realseBlockUser(let userID):
+            return "/users/block/\(userID)/"
         }
     }
 }

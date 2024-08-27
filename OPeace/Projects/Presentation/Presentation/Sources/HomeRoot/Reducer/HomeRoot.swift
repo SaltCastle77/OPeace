@@ -29,6 +29,10 @@ public struct HomeRoot {
         @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
         @Shared(.inMemory("emojiImage")) var emojiImage: Image? = nil
         @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
+        @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
+        @Shared(.inMemory("isReportQuestion")) var isReportQuestion: Bool = false
+        @Shared(.inMemory("questionID")) var questionID: Int = 0
+        @Shared(.inMemory("isRealseBlockUser")) var isRealseBlockUser: Bool = false
     }
     
     public enum Action : ViewAction, FeatureAction {
@@ -53,6 +57,8 @@ public struct HomeRoot {
         case withDraw(WithDraw)
         case writeQuestion(WriteQuestion)
         case writeAnswer(WriteAnswer)
+        case report(Report)
+        case blockUser(BlockUser)
         
     }
     
@@ -95,7 +101,10 @@ public struct HomeRoot {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
@@ -105,7 +114,11 @@ public struct HomeRoot {
                         isLogOut: state.isLogOut,
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
-                        isChangeProfile: state.isChangeProfile)))
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     
                     
                     //MARK: - Agree
@@ -131,15 +144,21 @@ public struct HomeRoot {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)
-                    ))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion,
+                        isRealseBlockUser: state.isRealseBlockUser)))
                     
                     //MARK: - OnBoarding
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
                     state.path.append(.home(.init(
                         isLogOut: state.isLogOut,
                         isDeleteUser: state.isDeleteUser,
-                        isLookAround: state.isLookAround)))
+                        isLookAround: state.isLookAround,
+                        isChangeProfile: state.isChangeProfile,
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion)))
                     
                     //MARK: - home
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
@@ -151,6 +170,11 @@ public struct HomeRoot {
                 case .element(id: _, action: .home(.navigation(.presntWriteQuestion))):
                     state.path.append(.writeQuestion(.init()))
                     
+                case .element(id: _, action: .home(.navigation(.presntReport))):
+                    state.path.append(.report(.init(
+                        questionID: state.questionID
+                    )))
+                    
                     //MARK: - profile
                 case .element(id: _, action: .profile(.navigation(.presntLogout))):
                     state.path.append(.home(.init(
@@ -158,8 +182,9 @@ public struct HomeRoot {
                         isDeleteUser: state.isDeleteUser,
                         isLookAround: state.isLookAround,
                         isChangeProfile: state.isChangeProfile,
-                        isCreateQuestion: state.isCreateQuestion)
-                    ))
+                        isCreateQuestion: state.isCreateQuestion,
+                        isDeleteQuestion: state.isDeleteQuestion,
+                        isReportQuestion: state.isReportQuestion)))
                     state.path.removeFirst()
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
@@ -167,22 +192,44 @@ public struct HomeRoot {
                         
                 case .element(id: _, action: .profile(.navigation(.presntWithDraw))):
                     state.path.append(.withDraw(.init()))
+                    
+                case .element(id: _, action: .profile(.navigation(.presntDeleteQuestion))):
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw:
+                            return true
+                        default:
+                            return false
+                        }
+                    }
             
                 case .element(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
                     state.path.append(.writeQuestion(.init()))
+                    
+                case .element(id: _, action: .profile(.navigation(.presntUserBlock))):
+                    state.path.append(.blockUser(.init()))
                     
                     //MARK: - WithDraw
                 case  .element(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
                     state.path.removeAll { path in
                         switch path {
                         case .editProfile, .profile, .withDraw:
-                            // Remove if the path is either .edit or .profile
                             return true
                         default:
                             return false
                         }
                     }
                     
+                    //MARK: - Report
+                case .element(id: _, action: .report(.navigation(.presntMainHome))):
+                    state.path.removeAll { path in
+                        switch path {
+                        case .report:
+                            return true
+                        default:
+                            return false
+                        }
+                    }
             
                     
                     //MARK: - CreateQuestion
@@ -202,7 +249,16 @@ public struct HomeRoot {
                         }
                     }
                     
-                
+                    //MARK: - Block
+                case .element(id: _, action: .blockUser(.navigation(.presntMainHome))):
+                    state.path.removeAll { path in
+                        switch path {
+                        case .editProfile, .profile, .withDraw, .writeAnswer, .writeQuestion, .blockUser:
+                            return true
+                        default:
+                            return false
+                        }
+                    }
                     
                 default:
                     return .none

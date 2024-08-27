@@ -12,12 +12,17 @@ import Model
 
 public protocol AuthRepositoryProtocol {
     func handleAppleLogin(_ request: Result<ASAuthorization, Error>) async throws -> ASAuthorization
+    func appleLogin() async throws -> UserLoginModel?
     func requestKakaoTokenAsync() async throws  -> (String?, String?)
-    func reauestKakaoLogin() async throws -> KakaoResponseModel?
+    func reauestKakaoLogin() async throws -> UserLoginModel?
     func requestRefreshToken(refreshToken : String) async throws -> RefreshModel?
     func fetchUserInfo() async throws -> UpdateUserInfoModel?
     func logoutUser(refreshToken : String) async throws -> UserLogOutModel?
     func autoLogin() async throws -> UseLoginModel?
     func deleteUser(reason: String) async throws -> DeleteUserModel?
     func checkUserVerify() async throws -> CheckUserVerifyModel?
+    func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel?
+    func fetchUserBlockList() async throws -> UserBlockListModel?
+    func realseUserBlock(userID: String) async throws -> UserBlockModel?
+    
 }

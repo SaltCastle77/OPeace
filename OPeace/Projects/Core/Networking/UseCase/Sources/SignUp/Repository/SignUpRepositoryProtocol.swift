@@ -7,7 +7,6 @@
 
 import Foundation
 
-import Model
 
 public protocol SignUpRepositoryProtocol {
     func checkNickName(_ nickName: String) async throws -> CheckNickNameModel?

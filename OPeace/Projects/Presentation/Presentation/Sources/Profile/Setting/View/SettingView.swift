@@ -39,9 +39,7 @@ public struct SettingView: View {
                 
                 settingList()
                 
-                
                 Spacer()
-                
             }
         }
     }
@@ -56,7 +54,7 @@ extension SettingView {
         VStack {
             ForEach(SettingProfile.allCases, id: \.self) { item in
                 settingListitem(title: item.desc) {
-                    store.send(.view(.tapSettintitem(item)))
+                    store.send(.view(.tapSettingitem(item)))
                     if item == store.settingtitem {
                         switch store.settingtitem {
                         case .editProfile:
@@ -65,7 +63,10 @@ extension SettingView {
                                 action()
                             }
                         case .blackManagement:
-                            print(item.desc)
+                            closeModalAction()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                action()
+                            }
                         case .logout:
                             closeModalAction()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

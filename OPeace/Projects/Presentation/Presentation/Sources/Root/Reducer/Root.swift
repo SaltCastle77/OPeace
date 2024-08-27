@@ -25,15 +25,15 @@ public struct Root {
         case onbaordingPagging(OnBoadingPagging.State)
         case signUpPAgging(SignUpPaging.State)
         case profile(Profile.State)
-        static var kakaoModel : KakaoResponseModel? = nil
+        static var userModel : UserLoginModel? = nil
         static var checkUserVerifyModel: CheckUserVerifyModel? = nil
         static var refreshTokenModel: RefreshModel? = nil
         
-     
+        
         
         public init() {
             
-//            self = .auth(.init())
+            //            self = .auth(.init())
             
             if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty && !token.isEmpty {
                 Log.debug(token, "refresh : \(refreshToken)")
@@ -49,7 +49,7 @@ public struct Root {
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
-       
+        
     }
     
     @CasePathable
@@ -72,16 +72,19 @@ public struct Root {
         case autoLogin
         
         case handleRefreshToken(String)
-        case handleKakaoLogin
         
         case loginWIthKakao
-        case kakaoLoginApiResponse(Result<KakaoResponseModel, CustomError>)
+        case kakaoLoginApiResponse(Result<UserLoginModel, CustomError>)
         
         case refreshTokenResponse(Result<RefreshModel, CustomError>)
         case refreshTokenRequest(refreshToken: String)
         
         case checkUserVerfiy
         case checkUserVerfiyResponse(Result<CheckUserVerifyModel , CustomError>)
+        
+        case appleLogin
+        case appleLoginResponse(Result<UserLoginModel, CustomError>)
+        
         
     }
     
@@ -130,11 +133,12 @@ public struct Root {
                 case .autoLogin:
                     guard let socailType = try? Keychain().get("socialType") else { return .none }
                     return .run { @MainActor send in
+                        print(socailType)
                         switch socailType {
                         case "kakao":
-//                            try await clock.sleep(for: .seconds(1))
+                            //                            try await clock.sleep(for: .seconds(1))
                             if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                if refreshToken != nil {
+                                if !refreshToken.isEmpty {
                                     send(.async(.checkUserVerfiy))
                                     send(.async(.loginWIthKakao))
                                 }
@@ -143,19 +147,19 @@ public struct Root {
                             if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
                                 if Root.State.checkUserVerifyModel?.data?.status == false {
                                     if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
-                                        send(.async(.handleRefreshToken(refreshToken)))
-                                    } else if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
+                                        //                                        send(.async(.handleRefreshToken(refreshToken)))
+                                    } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
                                         send(.view(.auth(.login(.async(.kakaoLogin)))))
                                     }
                                 }
-                                print("epdlx \(Root.State.kakaoModel?.data?.isRefreshTokenExpires)")
+                                print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
                                 
-                                if Root.State.kakaoModel?.data?.isRefreshTokenExpires == true {
+                                if Root.State.userModel?.data?.isRefreshTokenExpires == true {
                                     send(.view(.auth(.login(.async(.kakaoLogin)))))
                                 }
                                 
-                                if Root.State.kakaoModel?.data?.accessToken == accessToken {
-                                    if ((Root.State.kakaoModel?.data?.accessToken?.isEmpty) != nil && Root.State.kakaoModel?.data?.isExpires != true) {
+                                if Root.State.userModel?.data?.accessToken == accessToken {
+                                    if ((Root.State.userModel?.data?.accessToken?.isEmpty) != nil && Root.State.userModel?.data?.isExpires != true) {
                                         send(.view(.changeScene(.homeRoot(.init()))))
                                     } else {
                                         send(.view(.changeScene(.auth(.init()))))
@@ -164,24 +168,56 @@ public struct Root {
                             }
                             
                         case "apple":
-                            break
+                            if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                if !refreshToken.isEmpty {
+                                    send(.async(.checkUserVerfiy))
+                                }
+                            }
+                            
+                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
+                                if Root.State.checkUserVerifyModel?.data?.status == false || Root.State.checkUserVerifyModel?.code == "token_not_valid" {
+                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                        send(.async(.handleRefreshToken(refreshToken)))
+                                    } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
+                                        //                                        send(.view(.auth(.login(.async(.appleLogin)))))
+                                    }
+                                }
+                                print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
+                                
+                                if Root.State.userModel?.data?.isRefreshTokenExpires == true {
+                                    //                                    send(.view(.auth(.login(.async(.appleLogin)))))
+                                }
+                                
+                                if Root.State.userModel?.data?.accessToken == accessToken {
+                                    if ((Root.State.userModel?.data?.accessToken?.isEmpty) != nil && Root.State.userModel?.data?.isExpires != true) {
+                                        send(.view(.changeScene(.homeRoot(.init()))))
+                                    } else {
+                                        send(.view(.changeScene(.auth(.init()))))
+                                    }
+                                }
+                            }
+                            
                         case "google":
                             break
                         default:
                             break
                         }
                     }
-              
-                case let .handleRefreshToken(refreshToken):
-                    return .run { @MainActor  send in
-                        send(.view(.auth(.login(.async(.refreshTokenRequest(refreshToken: refreshToken))))))
-                        try await self.clock.sleep(for: .seconds(0.3))
-                        send(.view(.auth(.login(.async(.loginWIthKakao)))))
-                    }
                     
-                case .handleKakaoLogin:
+                case let .handleRefreshToken(refreshToken):
+                    guard let socailType = try? Keychain().get("socialType") else { return .none }
                     return .run { @MainActor  send in
-                        send(.view(.auth(.login(.async(.loginWIthKakao)))))
+                        send(.async(.refreshTokenRequest(refreshToken: refreshToken )))
+                        try await self.clock.sleep(for: .seconds(0.3))
+                        switch socailType {
+                        case "kakao":
+                            send(.async(.loginWIthKakao))
+                        case "apple":
+                            send(.async(.appleLogin))
+                            
+                        default:
+                            break
+                        }
                     }
                     
                 case .kakaoLoginApiResponse(let data):
@@ -191,7 +227,7 @@ public struct Root {
                         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
                         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
                         @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
-                        Root.State.kakaoModel = ResponseData
+                        Root.State.userModel = ResponseData
                         isLogOut = false
                         isDeleteUser = false
                         isChangeProfile = false
@@ -234,9 +270,6 @@ public struct Root {
                         case .success(let checkUserVerifyResult):
                             if let responseData = checkUserVerifyResult {
                                 send(.async(.checkUserVerfiyResponse(.success(responseData))))
-                                
-                                try await clock.sleep(for: .seconds(1))
-                                send(.async(.loginWIthKakao))
                             }
                         case .failure(let error):
                             send(.async(.checkUserVerfiyResponse(.failure(CustomError.tokenError(error.localizedDescription)))))
@@ -252,7 +285,7 @@ public struct Root {
                         Log.network("토큰 에러", error.localizedDescription)
                     }
                     return .none
-                
+                    
                 case .refreshTokenRequest(let refreshToken):
                     return .run { @MainActor send in
                         let refreshTokenRequest =  await Result {
@@ -284,6 +317,30 @@ public struct Root {
                     }
                     return .none
                     
+                case .appleLogin:
+                    return .run { @MainActor send in
+                        let appleLoginResult = await Result {
+                            try await authUseCase.appleLogin()
+                        }
+                        
+                        switch appleLoginResult {
+                        case .success(let appleLoginResult):
+                            if let appleLoginResult = appleLoginResult {
+                                send(.async(.appleLoginResponse(.success(appleLoginResult))))
+                            }
+                        case .failure(let error):
+                            send(.async(.appleLoginResponse(.failure(CustomError.unAuthorized))))
+                        }
+                    }
+                    
+                case .appleLoginResponse(let result):
+                    switch result {
+                    case .success(let userResponseModel):
+                        Root.State.userModel = userResponseModel
+                    case .failure(let error):
+                        Log.network("애플로그인 에러", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
                 

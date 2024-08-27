@@ -16,7 +16,7 @@ import Utill
 
 public struct ProfileView: View {
     @Bindable var store: StoreOf<Profile>
-
+    
     var backAction: () -> Void = {}
     
     
@@ -26,6 +26,7 @@ public struct ProfileView: View {
     ) {
         self.store = store
         self.backAction = backAction
+        store.send(.async(.fetchUser))
     }
     
     public var body: some View {
@@ -46,15 +47,11 @@ public struct ProfileView: View {
                 
                 myPostWritingTitle()
                 
-                ScrollView {
-                    postingListView()
-                }
-                .bounce(false)
+                postingListView()
                 
                 Spacer()
             }
             .onAppear {
-                store.send(.async(.fetchUser))
                 store.send(.async(.fetchQuestion))
             }
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
@@ -73,31 +70,32 @@ public struct ProfileView: View {
             }
             
             .popup(item: $store.scope(state: \.destination?.popup, action: \.destination.popup)) { customPopUp in
-                CustomBasicPopUpView(store: customPopUp, title: store.logoutPopUpTitle) {
-                    store.send(.async(.logoutUser))
-                } cancelAction: {
-                    store.send(.view(.closeModal))
-                }
-                
-            }  customize: { popup in
-                popup
-                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
-                    .position(.bottom)
-                    .animation(.spring)
-                    .closeOnTap(true)
-                    .closeOnTapOutside(true)
-                    .backgroundColor(Color.basicBlack.opacity(0.8))
-            }
-            
-            .popup(item: $store.scope(state: \.destination?.deletePopUp, action: \.destination.deletePopUp)) { customPopUp in
-                CustomBasicPopUpView(store: customPopUp, title: store.deletePopUpTitle) {
-                    store.send(.view(.closeModal))
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                        store.send(.navigation(.presntWithDraw))
+                if store.isLogOutPopUp {
+                    CustomBasicPopUpView(store: customPopUp, title: store.popUpText) {
+                        store.send(.async(.logoutUser))
+                    } cancelAction: {
+                        store.send(.view(.closeModal))
                     }
-                } cancelAction: {
-                    store.send(.view(.closeModal))
+                } else if store.isDeleteUserPopUp {
+                    CustomBasicPopUpView(store: customPopUp, title: store.popUpText) {
+                        store.send(.view(.closeModal))
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                            store.send(.navigation(.presntWithDraw))
+                        }
+                    } cancelAction: {
+                        store.send(.view(.closeModal))
+                    }
+                } else if store.isDeleteQuestionPopUp {
+                    CustomBasicPopUpView(store: customPopUp, title: store.popUpText) {
+                        store.send(.view(.closeModal))
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            store.send(.async(.deleteQuestion(questionID: store.deleteQuestionId)))
+                        }
+                    } cancelAction: {
+                        store.send(.view(.closeModal))
+                    }
                 }
                 
             }  customize: { popup in
@@ -112,6 +110,7 @@ public struct ProfileView: View {
         }
     }
 }
+
 
 
 extension ProfileView {
@@ -194,16 +193,56 @@ extension ProfileView {
     
     @ViewBuilder
     private func postingListView() -> some View {
-        if store.questionListModel?.data?.results == [] {
+        if store.myQuestionListModel?.data?.results == [] {
             noPostingListView()
         } else {
-            
+            myPostitngList()
         }
     }
     
     @ViewBuilder
     private func myPostitngList() -> some View {
-        VStack {}
+        VStack {
+            Spacer()
+                .frame(height: 16)
+            
+            if let resultData = store.myQuestionListModel?.data?.results {
+                FlippableCardView(data: resultData) { item in
+                    CardItemView(
+                        isProfile: true,
+                        id: item.userInfo?.userID ?? "",
+                        userID: store.profileUserModel?.data?.socialID ?? "",
+                        nickName: item.userInfo?.userNickname ?? "",
+                        job: item.userInfo?.userJob ?? "",
+                        generation: item.userInfo?.userGeneration ?? "",
+                        generationColor: store.cardGenerationColor,
+                        emoji: item.emoji ?? "",
+                        title: item.title ?? "",
+                        choiceA: item.choiceA ?? "",
+                        choiceB: item.choiceB ?? "",
+                        responseCount: item.answerCount ?? .zero,
+                        likeCount: item.likeCount ?? .zero,
+                        isLikedTap: false,
+                        answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+                        isRotated: false,
+                        isTapAVote: .constant(false),
+                        isTapBVote: .constant(false),
+                        isLogOut: false,
+                        isLookAround: false,  
+                        isDeleteUser: false,
+                        editTapAction: {
+                            store.deleteQuestionId = item.id ?? .zero
+                            store.isDeleteQuestionPopUp = true
+                            store.popUpText = "고민을 삭제하시겠어요?"
+                            store.send(.view(.presntPopUp))
+                        },
+                        likeTapAction: { _  in },
+                        choiceTapAction: { }
+                    )
+                    
+                }
+            }
+        }
     }
     
     @ViewBuilder

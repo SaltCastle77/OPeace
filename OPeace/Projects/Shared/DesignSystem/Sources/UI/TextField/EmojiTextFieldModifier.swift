@@ -5,14 +5,13 @@
 //  Created by 서원지 on 8/15/24.
 //
 
-import UIKit
 import SwiftUI
-import SwiftUIIntrospect
-
+import UIKit
 
 public struct EmojiTextFieldModifier: ViewModifier {
     @Binding var text: String
-
+    @FocusState private var isFocused: Bool
+    
     public init(text: Binding<String>) {
         self._text = text
     }

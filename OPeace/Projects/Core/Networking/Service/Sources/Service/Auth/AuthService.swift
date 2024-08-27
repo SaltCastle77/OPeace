@@ -11,7 +11,7 @@ import API
 import Foundations
 
 public enum AuthService {
-    case appleLogin
+    case appleLogin(accessToken: String)
     case kakaoLogin(accessToken: String)
     case refreshToken(refreshToken: String)
     case fetchUserInfo
@@ -19,6 +19,9 @@ public enum AuthService {
     case autoLogin
     case deleteUser(reason: String)
     case userVerify
+    case userBlock(questioniD: Int, userID: String)
+    case fectchUserBlock
+    case realseUserBlock(userID: String)
 }
 
 extension AuthService: BaseTargetType {
@@ -47,6 +50,15 @@ extension AuthService: BaseTargetType {
             
         case .userVerify:
             return AuthAPI.userVerify.authAPIDesc
+            
+        case .userBlock:
+            return AuthAPI.userBlock.authAPIDesc
+            
+        case .fectchUserBlock:
+            return AuthAPI.fetchUserBlock.authAPIDesc
+            
+        case .realseUserBlock(let userID):
+            return AuthAPI.realseBlockUser(userID: userID).authAPIDesc
         }
     }
     
@@ -75,13 +87,25 @@ extension AuthService: BaseTargetType {
             
         case .userVerify:
             return .post
+            
+        case .userBlock:
+            return .post
+            
+        case .fectchUserBlock:
+            return .get
+        
+        case .realseUserBlock:
+            return .delete
         }
     }
     
     public var task: Moya.Task {
         switch self {
-        case .appleLogin:
-            return .requestPlain
+        case .appleLogin(let accessToken):
+            let parameters: [String: Any] = [
+                "access_token": accessToken
+            ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
         case .kakaoLogin(let accessToken):
             let parameters: [String: Any] = [
@@ -118,6 +142,21 @@ extension AuthService: BaseTargetType {
             let parameters: [String: Any] = [ : ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
+        case .userBlock(let questioniD, let userID):
+            let parameters: [String: Any] = [
+                "question_id" : questioniD,
+                "blocked_user_id" : userID
+            ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            
+        case .fectchUserBlock:
+            return .requestPlain
+            
+        case .realseUserBlock(let userID):
+            let parameters: [String: Any] = [
+                "blocked_user_id" : userID
+            ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
         
     }
@@ -125,6 +164,9 @@ extension AuthService: BaseTargetType {
     public var headers: [String : String]? {
         switch self {
         case .kakaoLogin:
+            return APIHeader.notAccessTokenHeader
+            
+        case .appleLogin:
             return APIHeader.notAccessTokenHeader
             
             

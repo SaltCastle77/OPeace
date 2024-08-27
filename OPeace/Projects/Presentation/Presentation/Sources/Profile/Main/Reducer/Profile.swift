@@ -16,6 +16,9 @@ import Model
 import Utills
 import UseCase
 
+import KakaoSDKAuth
+import KakaoSDKUser
+
 @Reducer
 public struct Profile {
     public init() {}
@@ -29,16 +32,25 @@ public struct Profile {
         var profileUserModel: UpdateUserInfoModel? = nil
         var userLogoutModel: UserLogOutModel? = nil
         var userDeleteModel: DeleteUserModel? = nil
-        var questionListModel: QuestionModel?  = nil
+        var myQuestionListModel: QuestionModel?  = nil
+        var deleteQuestionModel: DeleteQuestionModel? = nil
         
         var profileGenerationYear: Int? = .zero
         var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
         var deletePopUpTitle: String = "정말 탈퇴하시겠어요?"
+        var isLogOutPopUp: Bool = false
+        var isDeleteUserPopUp: Bool = false
+        var isDeleteQuestionPopUp: Bool = false
+        var popUpText: String = ""
+        
+        var cardGenerationColor: Color = .basicBlack
+        var deleteQuestionId: Int = .zero
         
         @Presents var destination: Destination.State?
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
-        @Shared(.inMemory("_isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
         
         public init() {}
     }
@@ -57,7 +69,6 @@ public struct Profile {
     public enum Destination {
         case setting(Setting)
         case popup(CustomPopUp)
-        case deletePopUp(CustomPopUp)
         case home(Home)
     }
     
@@ -67,7 +78,6 @@ public struct Profile {
         case tapPresntSettingModal
         case closeModal
         case presntPopUp
-        case presntDeltePopUp
         case closePopUp
         case updateGenerationInfo
         case switchModalAction(SettingProfile)
@@ -82,8 +92,11 @@ public struct Profile {
         case fetchUser
         case logoutUseResponse(Result<UserLogOutModel, CustomError>)
         case logoutUser
+        case socilalLogOutUser
         case fetchQuestionResponse(Result<QuestionModel, CustomError>)
         case fetchQuestion
+        case deleteQuestion(questionID: Int)
+        case deleteQuestionResponse(Result<DeleteQuestionModel, CustomError>)
         
     }
     
@@ -98,6 +111,8 @@ public struct Profile {
         case presntEditProfile
         case presntWithDraw
         case presnetCreateQuestionList
+        case presntDeleteQuestion
+        case presntUserBlock
         
     }
     
@@ -136,10 +151,6 @@ public struct Profile {
                     state.destination = nil
                     return .none
                     
-                case .presntDeltePopUp:
-                    state.destination = .deletePopUp(.init())
-                    return .none
-                    
                 case .presntPopUp:
                     state.destination = .popup(.init())
                     return .none
@@ -147,7 +158,6 @@ public struct Profile {
                 case .closePopUp:
                     state.destination = nil
                     return .none
-                    
                     
                 case .updateGenerationInfo:
                     let (generation, color, textColor) = CheckRegister.getGeneration(
@@ -162,17 +172,30 @@ public struct Profile {
                     return .none
                     
                 case .switchModalAction(let settingprofile):
-                    let settingProfile = settingprofile
+                    var settingProfile = settingprofile
+                    switch settingProfile {
+                    case .editProfile:
+                        Log.debug("프로필 수정")
+                    case .blackManagement:
+                        Log.debug("차단")
+                    case .logout:
+                        state.popUpText = "로그아웃 하시겠어요?"
+                        state.isLogOutPopUp = true
+                    case .withDraw:
+                        state.popUpText = "정말 탈퇴하시겠어요?"
+                        state.isDeleteUserPopUp = true
+                    }
                     return .run { send in
                         switch settingProfile {
                         case .editProfile:
                             await send(.navigation(.presntEditProfile))
                         case .blackManagement:
                             Log.debug("차단")
+                            await send(.navigation(.presntUserBlock))
                         case .logout:
                             await send(.view(.presntPopUp))
                         case .withDraw:
-                            await send(.view(.presntDeltePopUp))
+                            await send(.view(.presntPopUp))
                         }
                         
                     }
@@ -210,13 +233,33 @@ public struct Profile {
                     }
                     return .none
                     
+                case .socilalLogOutUser:
+                    guard let socialType = try? Keychain().get("socialType") else {return .none}
+                    return .run { @MainActor send in
+                        switch socialType {
+                        case "kakao":
+                            UserApi.shared.logout {(error) in
+                                if let error = error {
+                                    Log.debug("카카오 로그아웃 오류", error.localizedDescription)
+                                }
+                                else {
+                                    send(.async(.logoutUser))
+                                }
+                            }
+                        case "apple":
+                            send(.async(.logoutUser))
+                        default:
+                            break
+                        }
+                    }
+                    
                 case .logoutUseResponse(let result):
                     switch result{
                     case .success(let userData):
                         state.userLogoutModel = userData
                         Log.debug("유저 로그아웃 성공", userData)
                         state.isLogOut = true
-                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile))
+                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile, isDeleteQuestion: state.isDeleteQuestion))
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }
@@ -233,9 +276,10 @@ public struct Profile {
                             if let userLogOutData = userLogOutData {
                                 send(.async(.logoutUseResponse(.success(userLogOutData))))
                                 
-                                try Keychain().remove("REFRESH_TOKEN")
+                                try? Keychain().remove("REFRESH_TOKEN")
+                                try? Keychain().remove("socialType")
                                 send(.view(.closePopUp))
-                                try await self.clock.sleep(for: .seconds(1))
+                                try await self.clock.sleep(for: .seconds(0.4))
                                 send(.navigation(.presntLogout))
                             }
                             
@@ -243,22 +287,12 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
                         }
                     }
-                    
-                case .fetchQuestionResponse(let result):
-                    switch result {
-                    case .success(let questionData):
-                        state.questionListModel = questionData
+
                         
-                    case .failure(let error):
-                        Log.debug("피드 목록 에러", error.localizedDescription)
-                    }
-                    
-                    return .none
-                    
                 case .fetchQuestion:
                     return .run { @MainActor send in
                         let questionResult = await Result {
-                            try await questionUseCase.fetchQuestionList(page: 1, pageSize: 20)
+                            try await questionUseCase.myQuestionList(page: 1, pageSize: 20)
                         }
                         
                         switch questionResult {
@@ -270,6 +304,46 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
                         }
                     }
+                    
+                case .fetchQuestionResponse(let result):
+                    switch result {
+                    case .success(let questionData):
+                        state.myQuestionListModel = questionData
+                        
+                    case .failure(let error):
+                        Log.debug("피드 목록 에러", error.localizedDescription)
+                    }
+                    return .none
+                    
+                case .deleteQuestion(let questionID):
+                    return .run { @MainActor send in
+                        let deleteQuestionResult = await Result {
+                            try await questionUseCase.deleteQuestion(questionID: questionID)
+                        }
+                        
+                        switch deleteQuestionResult {
+                        case .success(let deleteQuestionResult):
+                            if let deleteQuestionResult = deleteQuestionResult {
+                                send(.async(.deleteQuestionResponse(.success(deleteQuestionResult))))
+                                
+                                try await self.clock.sleep(for: .seconds(1))
+                                send(.navigation(.presntDeleteQuestion))
+                            }
+                        case .failure(let error):
+                            send(.async(.deleteQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                        }
+                    }
+                
+                case .deleteQuestionResponse(let result):
+                    switch result {
+                    case .success(let deleteQuestionData):
+                        state.deleteQuestionModel = deleteQuestionData
+                        state.isDeleteQuestion = true
+                        
+                    case .failure(let error):
+                        Log.debug("질문 삭제 에러", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):
@@ -289,6 +363,12 @@ public struct Profile {
                     return .none
                     
                 case .presnetCreateQuestionList:
+                    return .none
+                    
+                case .presntDeleteQuestion:
+                    return .none
+                    
+                case .presntUserBlock:
                     return .none
                 }
                 

@@ -29,6 +29,9 @@ public struct RootView: View {
             case .homeRoot:
                 if let store = store.scope(state: \.homeRoot, action: \.view.homeRoot) {
                     HomeRootView(store: store)
+                        .onAppear {
+                            store.send(.home(.async(.fetchQuestionList)))
+                        }
                 }
          
             case .auth:
@@ -44,9 +47,7 @@ public struct RootView: View {
             }
                
         }
-        .task {
-            store.send(.async(.autoLogin))
-        }
+      
     }
 }
 

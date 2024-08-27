@@ -7,17 +7,38 @@
 
 import Foundation
 
-public enum QuestionAPI: String {
+public enum QuestionAPI {
     case feedList
+    case myWriteQuestionList
     case createQuestion
+    case questionLikeVote(id: Int)
+    case questionAnswerVote(id: Int)
+    case questionDelete(id: Int)
+    case quetionReport(id: Int)
     
     public var questionAPIDesc: String {
         switch self {
         case .feedList:
-            return "/v2/questions/"
+            return "/v1/questions/"
+            
+        case .myWriteQuestionList:
+            return "/v1/questions/me/"
             
         case .createQuestion:
-            return "/v2/question/"
+            return "/v1/question/"
+            
+        case .questionLikeVote(let id):
+            return "/v1/questions/\(id)/like/"
+            
+        case .questionAnswerVote(let id):
+            return "v1/questions/\(id)/vote"
+            
+        case .questionDelete(let id):
+            return "/v1/question/\(id)/"
+            
+        case .quetionReport(let id):
+            return "/v1/questions/\(id)/report/"
         }
     }
 }
+

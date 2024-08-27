@@ -26,12 +26,17 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
             }
         }
     }
+        
+    public func appleLogin() async throws -> UserLoginModel? {
+        return  nil
+    }
     
+
     public func requestKakaoTokenAsync() async throws -> (String?, String?) {
         return (nil, nil)
     }
     
-    public func reauestKakaoLogin() async throws -> KakaoResponseModel? {
+    public func reauestKakaoLogin() async throws -> UserLoginModel? {
         return nil
     }
     
@@ -59,6 +64,18 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     }
     
     public func checkUserVerify() async throws -> CheckUserVerifyModel? {
+        return nil
+    }
+    
+    public func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel? {
+        return nil
+    }
+    
+    public func fetchUserBlockList() async throws -> UserBlockListModel? {
+        return nil
+    }
+    
+    public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
         return nil
     }
 }
