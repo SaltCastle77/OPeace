@@ -227,6 +227,9 @@ extension ProfileView {
                         isRotated: false,
                         isTapAVote: .constant(false),
                         isTapBVote: .constant(false),
+                        isLogOut: false,
+                        isLookAround: false,  
+                        isDeleteUser: false,
                         editTapAction: {
                             store.deleteQuestionId = item.id ?? .zero
                             store.isDeleteQuestionPopUp = true

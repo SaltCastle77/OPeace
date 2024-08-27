@@ -156,8 +156,6 @@ public struct Login {
                     switch result {
                     case .success(let ResponseData):
                         state.userLoginModel = ResponseData
-                        
-                        try? Keychain().remove("ACCESS_TOKEN")
                         try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                         state.socialType = .apple
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
@@ -166,10 +164,10 @@ public struct Login {
                             try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                             state.isLogOut = false
                             state.isLookAround = false
+                            
                             state.isDeleteUser = false
                             state.isChangeProfile = false 
                         } else {
-                            try? Keychain().remove("ACCESS_TOKEN")
                             try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
                             try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
                             state.isLogOut = false

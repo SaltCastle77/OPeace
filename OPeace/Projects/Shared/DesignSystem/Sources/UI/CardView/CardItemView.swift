@@ -27,6 +27,12 @@ public struct CardItemView: View {
     private var choiceB: String
     private var responseCount: Int
     private var likeCount: Int
+    
+    // New flags for user restrictions
+    private var isLogOut: Bool
+    private var isLookAround: Bool
+    private var isDeleteUser: Bool
+    
     private var editTapAction: () -> Void = { }
     private var likeTapAction: (String) -> Void = { _ in }
     private var choiceTapAction: () -> Void = { }
@@ -50,6 +56,9 @@ public struct CardItemView: View {
         isRotated: Bool,
         isTapAVote: Binding<Bool>,
         isTapBVote: Binding<Bool>,
+        isLogOut: Bool,             // Pass the log out flag
+        isLookAround: Bool,         // Pass the look around flag
+        isDeleteUser: Bool,         // Pass the delete user flag
         editTapAction: @escaping () -> Void,
         likeTapAction: @escaping (String) -> Void,
         choiceTapAction: @escaping () -> Void
@@ -72,9 +81,16 @@ public struct CardItemView: View {
         _isRotated = State(initialValue: isRotated)
         self._isTapAVote = isTapAVote
         self._isTapBVote = isTapBVote
+        self.isLogOut = isLogOut
+        self.isLookAround = isLookAround
+        self.isDeleteUser = isDeleteUser
         self.editTapAction = editTapAction
         self.likeTapAction = likeTapAction
         self.choiceTapAction = choiceTapAction
+    }
+
+    private var isUserInteractionDisabled: Bool {
+        return isLogOut || isLookAround || isDeleteUser
     }
 
     public var body: some View {
@@ -86,11 +102,11 @@ public struct CardItemView: View {
                     .padding(.horizontal, 20)
                     .overlay {
                         VStack {
-                            cardHeaderVIew(nickName: nickName, job: job, generation: generation)
+                            cardHeaderView(nickName: nickName, job: job, generation: generation)
                                 
                             cardEmojiView(emoji: emoji)
                                 
-                            cardWriteAndanswerView(
+                            cardWriteAndAnswerView(
                                 title: title,
                                 choiceA: choiceA,
                                 choiceB: choiceB,
@@ -104,7 +120,7 @@ public struct CardItemView: View {
                             Spacer()
                         }
                        
-                        .padding(.horizontal,24)
+                        .padding(.horizontal, 24)
                     }
             }
         } else {
@@ -115,12 +131,12 @@ public struct CardItemView: View {
                     .padding(.horizontal, 20)
                     .overlay {
                         VStack {
-                            cardHeaderVIew(nickName: nickName, job: job, generation: generation)
+                            cardHeaderView(nickName: nickName, job: job, generation: generation)
                                 
                             cardEmojiView(emoji: emoji)
                                 
                             if isRotated {
-                                cardWriteAndanswerView(
+                                cardWriteAndAnswerView(
                                     title: title,
                                     choiceA: choiceA,
                                     choiceB: choiceB,
@@ -132,7 +148,7 @@ public struct CardItemView: View {
                                 )
                                 
                             } else {
-                                cardWriteAndanswerView(
+                                cardWriteAndAnswerView(
                                     title: title,
                                     choiceA: choiceA,
                                     choiceB: choiceB,
@@ -148,12 +164,14 @@ public struct CardItemView: View {
                             axis: (x: 0, y: 1, z: 0),
                             perspective: 0.5
                         )
-                        .padding(.horizontal,24)
+                        .padding(.horizontal, 24)
                     }
                     .onTapGesture {
-                        isRotated.toggle()
-                        isTapAVote = false
-                        isTapBVote = false
+                        if !isUserInteractionDisabled {
+                            isRotated.toggle()
+                            isTapAVote = false
+                            isTapBVote = false
+                        }
                     }
             }
             .rotation3DEffect(
@@ -169,7 +187,7 @@ public struct CardItemView: View {
 extension CardItemView {
     
     @ViewBuilder
-    private func cardHeaderVIew(
+    private func cardHeaderView(
         nickName: String,
         job: String,
         generation: String
@@ -190,13 +208,13 @@ extension CardItemView {
                     .scaledToFit()
                     .frame(width: 36, height: 36)
                     .onTapGesture {
-                        if isProfile {
-                            editTapAction()
-                        } else {
-                            if id != userID {
+                        if !isUserInteractionDisabled {
+                            if isProfile {
                                 editTapAction()
-                            } else if id == userID {
-                                
+                            } else {
+                                if id != userID {
+                                    editTapAction()
+                                }
                             }
                         }
                     }
@@ -250,7 +268,7 @@ extension CardItemView {
     }
     
     @ViewBuilder
-    private func cardWriteAndanswerView(
+    private func cardWriteAndAnswerView(
         title: String,
         choiceA: String,
         choiceB: String,
@@ -270,15 +288,15 @@ extension CardItemView {
                 .frame(height: 16)
             
             if isRoated {
-                choiceAnswertRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
+                choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
             } else {
-                choiceAnswertRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
+                choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
             }
         }
     }
     
     @ViewBuilder
-    private func choiceAnswertRoundView(
+    private func choiceAnswerRoundView(
         choiceTitleA: String,
         choiceTitleB: String
     ) -> some View {
@@ -298,7 +316,9 @@ extension CardItemView {
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
                             .onTapGesture {
-                                isTapAVote = true
+                                if !isUserInteractionDisabled {
+                                    isTapAVote = true
+                                }
                             }
                         
                         Spacer()
@@ -327,7 +347,9 @@ extension CardItemView {
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
                             .onTapGesture {
-                                isTapBVote = true
+                                if !isUserInteractionDisabled {
+                                    isTapBVote = true
+                                }
                             }
                         
                         Spacer()
@@ -419,12 +441,9 @@ extension CardItemView {
                     }
                 }
                 .onTapGesture {
-                    if id == id {
+                    if !isUserInteractionDisabled {
                         isLikedTap.toggle()
                         likeTapAction(id)
-                    }
-                    else if id == userID {
-                        
                     }
                 }
                 
@@ -451,14 +470,16 @@ extension CardItemView {
                             .foregroundStyle(Color.gray600)
                     }
                     .onTapGesture {
-                        if id == id {
+                        if !isUserInteractionDisabled {
                             answerRatio.A += 1
                             isTapAVote.toggle()
-                            isRotated.toggle()
+                            if isTapAVote == true {
+                                isRotated.toggle()
+                            }
                             choiceTapAction()
                             isTapBVote = false
-                        } else if id == userID {
-                            
+                        } else {
+                            choiceTapAction()
                         }
                     }
 
@@ -475,14 +496,16 @@ extension CardItemView {
                             .foregroundStyle(Color.gray600)
                     }
                     .onTapGesture {
-                        if id == id {
+                        if !isUserInteractionDisabled {
                             answerRatio.B += 1
-                            isRotated.toggle()
                             isTapBVote.toggle()
+                            if isTapBVote  == true {
+                                isRotated.toggle()
+                            }
                             choiceTapAction()
                             isTapAVote = false
-                        } else if id == userID {
-                            
+                        } else {
+                            choiceTapAction()
                         }
                     }
             }

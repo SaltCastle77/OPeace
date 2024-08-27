@@ -294,6 +294,9 @@ extension HomeView {
                     isRotated: store.isRoatinCard,
                     isTapAVote: $store.isTapAVote,
                     isTapBVote: $store.isTapBVote,
+                    isLogOut: store.isLogOut,  // Replace with the actual condition from your store
+                    isLookAround: store.isLookAround,  // Replace with the actual condition from your store
+                    isDeleteUser: store.isDeleteUser,
                     editTapAction: {
                         store.userID = item.userInfo?.userID ?? ""
                         store.reportQuestionID = item.id ?? .zero
@@ -302,12 +305,16 @@ extension HomeView {
                     },
                     likeTapAction: { userid in
                         if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                            store.isRoatinCard = false
                             store.send(.view(.prsentCustomPopUp))
                         } else {
                             store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))
                         }
                     }, choiceTapAction: {
                         if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                            store.isRoatinCard = false
+                            store.isTapAVote = false
+                            store.isTapBVote = false
                             store.send(.view(.prsentCustomPopUp))
                         } else {
                             if store.isTapAVote == true  {
