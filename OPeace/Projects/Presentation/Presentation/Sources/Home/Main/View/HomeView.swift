@@ -331,6 +331,11 @@ extension HomeView {
                         }
                     }
                 )
+                .onAppear {
+                    if item == store.questionModel?.data?.results?.last {
+                        store.send(.async(.fetchQuestionList))
+                    }
+                }
                 
             }
         }
