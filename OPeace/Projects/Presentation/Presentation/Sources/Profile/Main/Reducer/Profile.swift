@@ -260,8 +260,6 @@ public struct Profile {
                         Log.debug("유저 로그아웃 성공", userData)
                         state.isLogOut = true
                         state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile, isDeleteQuestion: state.isDeleteQuestion))
-                        try? Keychain().remove("ACCESS_TOKEN")
-                        try? Keychain().remove("REFRESH_TOKEN")
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }
@@ -281,7 +279,7 @@ public struct Profile {
                                 try? Keychain().remove("REFRESH_TOKEN")
                                 try? Keychain().remove("socialType")
                                 send(.view(.closePopUp))
-                                try await self.clock.sleep(for: .seconds(1))
+                                try await self.clock.sleep(for: .seconds(0.4))
                                 send(.navigation(.presntLogout))
                             }
                             
@@ -289,6 +287,7 @@ public struct Profile {
                             send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
                         }
                     }
+
                         
                 case .fetchQuestion:
                     return .run { @MainActor send in
