@@ -25,6 +25,8 @@ public struct BlockUser {
         var generationColor: Color = .red
         var userBlockListModel: UserBlockListModel?  = nil
         var realseUserBlocModel: UserBlockModel?  = nil
+        
+        @Shared(.inMemory("isRealseBlockUser")) var isRealseBlockUser: Bool = false
     }
     
     public enum Action: ViewAction, BindableAction, FeatureAction {
@@ -41,7 +43,6 @@ public struct BlockUser {
         
     }
     
-    
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
         case fetchUserBlockList
@@ -57,9 +58,10 @@ public struct BlockUser {
     
     //MARK: - NavigationAction
     public enum NavigationAction: Equatable {
-        
+        case presntMainHome
         
     }
+    
     @Dependency(AuthUseCase.self) var authUseCase
     @Dependency(\.continuousClock) var clock
     
@@ -115,6 +117,9 @@ public struct BlockUser {
                         case .success(let realseUserBlockResultData):
                             if let realseUserBlockResultData = realseUserBlockResultData {
                                 send(.async(.realseUserBlockResponse(.success(realseUserBlockResultData))))
+                                
+                                try await clock.sleep(for: .seconds(0.5))
+                                send(.navigation(.presntMainHome))
                             }
                         case .failure(let error):
                             send(.async(.realseUserBlockResponse(.failure(CustomError.userError(error.localizedDescription)))))
@@ -125,6 +130,7 @@ public struct BlockUser {
                     switch result {
                     case .success(let realseUserBlockResult):
                         state.realseUserBlocModel = realseUserBlockResult
+                        state.isRealseBlockUser = true
                     case .failure(let error):
                         Log.error("유저 차단 해제 에러", error.localizedDescription)
                     }
@@ -138,7 +144,8 @@ public struct BlockUser {
                 
             case .navigation(let NavigationAction):
                 switch NavigationAction {
-                    
+                case .presntMainHome:
+                    return .none
                 }
             }
         }

@@ -59,6 +59,7 @@ public struct Home {
         @Shared var isCreateQuestion: Bool
         @Shared var isDeleteQuestion: Bool
         @Shared var isReportQuestion: Bool
+        @Shared var isRealseBlockUser: Bool
         
         @Shared(.inMemory("questionID")) var reportQuestionID: Int = 0
         
@@ -72,7 +73,8 @@ public struct Home {
             isChangeProfile: Bool = false,
             isCreateQuestion: Bool = false,
             isDeleteQuestion: Bool = false,
-            isReportQuestion: Bool = false
+            isReportQuestion: Bool = false,
+            isRealseBlockUser: Bool = false
         ) {
             self._isLogOut = Shared(wrappedValue: isLogOut, .inMemory("isLogOut"))
             self._isDeleteUser = Shared(wrappedValue: isDeleteUser, .inMemory("isDeleteUser"))
@@ -81,6 +83,7 @@ public struct Home {
             self._isCreateQuestion = Shared(wrappedValue: isCreateQuestion, .inMemory("isCreateQuestion"))
             self._isDeleteQuestion = Shared(wrappedValue: isDeleteQuestion, .inMemory("isDeleteQuestion"))
             self._isReportQuestion = Shared(wrappedValue: isReportQuestion, .inMemory("isReportQuestion"))
+            self._isRealseBlockUser = Shared(wrappedValue: isRealseBlockUser, .inMemory("isRealseBlockUser"))
         }
         
     }

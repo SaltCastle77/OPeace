@@ -220,6 +220,12 @@ extension HomeView {
             store.floatingImage = .warning
             store.send(.view(.timeToCloseFloatingPopUp))
             store.isReportQuestion = false
+        } else if store.isRealseBlockUser == true {
+            store.send(.view(.presntFloatintPopUp))
+            store.floatingText = "신고가 차단이 해제 되었어요"
+            store.floatingImage = .succesLogout
+            store.send(.view(.timeToCloseFloatingPopUp))
+            store.isRealseBlockUser = false
         } else {
             store.floatingText = "로그인 하시겠어요?"
         }

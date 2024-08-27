@@ -37,7 +37,7 @@ public struct BlockUserView: View {
                 blockUserHeader()
                 
                 ScrollView(showsIndicators: false) {
-                    blockUserListView()
+                    userBlockListView()
                    
                 }
                 
