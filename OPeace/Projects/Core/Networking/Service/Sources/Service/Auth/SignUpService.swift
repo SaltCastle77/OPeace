@@ -22,6 +22,7 @@ public enum SignUpService {
         job: String,
         generation: String
     )
+    case checkGeneration(year: Int)
 }
 
 
@@ -37,6 +38,9 @@ extension SignUpService: BaseTargetType {
             
         case .updateUserInfo:
             return SignUpAPI.updateProfile.signUpAPIDesc
+            
+        case .checkGeneration:
+            return SignUpAPI.checkGeneration.signUpAPIDesc
         }
     }
     
@@ -51,13 +55,18 @@ extension SignUpService: BaseTargetType {
             
         case .updateUserInfo:
             return .patch
+            
+        case .checkGeneration:
+            return .get
         }
     }
     
     public var task: Moya.Task {
         switch self {
         case .nickNameCheck(let nickname):
-            let parameters: [String: Any] = ["nickname": nickname]
+            let parameters: [String: Any] = [
+                "nickname": nickname
+            ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
             
         case .signUpJob:
@@ -71,6 +80,12 @@ extension SignUpService: BaseTargetType {
                 "generation": generation
             ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            
+        case .checkGeneration(let year):
+            let parameters: [String: Any] = [
+                "year": year
+            ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
         }
     }
     

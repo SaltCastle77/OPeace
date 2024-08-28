@@ -11,6 +11,27 @@ import SwiftUI
 extension CheckRegister {
     
     @discardableResult
+    public static func getGenerationSignUp(
+        generation: String,
+        color: Color,
+        textColor: Color
+    ) -> (Color, Color) {
+        if ("베이비붐 세대").contains(generation) {
+            return (.basicPurple, .gray600)
+        } else if ("X 세대").contains(generation) {
+            return (.basicLightBlue, .gray600)
+        } else if ("M 세대").contains(generation) {
+            return (.basicYellow, .gray600)
+        } else if ("Z 세대").contains(generation) {
+            return (.basicGreen, .gray600)
+        } else if ("알파 세대").contains(generation) {
+            return (.basicGreen, .gray600)
+        } else {
+            return (.gray500, .gray200)
+        }
+    }
+    
+    @discardableResult
     public static func getGeneration(
         year: Int,
         color: Color,

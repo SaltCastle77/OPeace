@@ -61,8 +61,6 @@ public struct SignUpPagingView: View {
                     SignUpAgeView(store: self.store.scope(state: \.signUpAge, action: \.signUpAge))
                         .tag(SignUpTab.signUpGeneration)
                      
-                    
-                    
                     SignUpJobView(store: self.store.scope(state: \.signUpJob, action: \.signUpJob), confirmAction: {
                         store.send(.view(.appearPopUp))
                     })

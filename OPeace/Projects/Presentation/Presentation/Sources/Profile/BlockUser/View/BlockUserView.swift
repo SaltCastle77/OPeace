@@ -100,11 +100,11 @@ extension BlockUserView {
                 .frame(height: 16)
             
             if let userBlockData = store.userBlockListModel?.data {
-                ForEach(userBlockData, id: \.id) { item in
+                ForEach(userBlockData, id: \.blockID) { item in
                     blockUserListItem(
-                        nickName: "엠제이엠제이",
-                        job: "개발",
-                        generation: "Z 세대",
+                        nickName: item.nickname ?? "",
+                        job: item.job ?? "",
+                        generation: item.generation ?? "",
                         completion: {
                             store.send(.async(.realseUserBlock(blockUserID: item.blockedUserID ?? "")))
                         })

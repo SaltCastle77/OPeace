@@ -31,4 +31,8 @@ public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
     ) async throws -> UpdateUserInfoModel? {
         return nil
     }
+    
+    public func checkGeneration(year: Int) async throws -> CheckGeneraionModel? {
+        return nil
+    }
 }

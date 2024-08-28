@@ -11,6 +11,7 @@ public enum SignUpAPI : String{
     case nickNameCheck
     case signUpJob
     case updateProfile
+    case checkGeneration
     
     
     public  var signUpAPIDesc: String {
@@ -23,6 +24,9 @@ public enum SignUpAPI : String{
             
         case .updateProfile:
             return "/users/"
+            
+        case .checkGeneration:
+            return "/users/generation/"
         }
     }
 }

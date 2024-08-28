@@ -18,34 +18,26 @@ public struct UserBlockListModel: Codable, Equatable {
 
 // MARK: - Datum
 public struct UserBlockListResponseModel: Codable, Equatable {
-    public let id, question: Int?
-    public let userID, blockedUserID, blockYn, createAt: String?
-    public let updateAt: String?
-
+    public let blockID: Int?
+    public let blockedUserID, nickname, job, generation: String?
+    
     public enum CodingKeys: String, CodingKey {
-        case id, question
-        case userID = "user_id"
+        case blockID = "block_id"
         case blockedUserID = "blocked_user_id"
-        case blockYn = "block_yn"
-        case createAt = "create_at"
-        case updateAt = "update_at"
+        case nickname, job, generation
     }
     
     public init(
-        id: Int?,
-        question: Int?,
-        userID: String?,
+        blockID: Int?,
         blockedUserID: String?,
-        blockYn: String?,
-        createAt: String?,
-        updateAt: String?
+        nickname: String?,
+        job: String?,
+        generation: String?
     ) {
-        self.id = id
-        self.question = question
-        self.userID = userID
+        self.blockID = blockID
         self.blockedUserID = blockedUserID
-        self.blockYn = blockYn
-        self.createAt = createAt
-        self.updateAt = updateAt
+        self.nickname = nickname
+        self.job = job
+        self.generation = generation
     }
 }

@@ -14,6 +14,8 @@ import SwiftUI
 import Model
 import DesignSystem
 import KeychainAccess
+import Utills
+import UseCase
 
 @Reducer
 public struct SignUpAge {
@@ -35,6 +37,7 @@ public struct SignUpAge {
         var signUpName: String? = nil
         var signUpNames: String = ""
         
+        var chekcGenerationModel: CheckGeneraionModel? = nil
         @Presents var destination: Destination.State?
         var activeMenu: SignUpTab = .signUpName
         var signUpJob = SignUpJob.State()
@@ -62,6 +65,7 @@ public struct SignUpAge {
     @CasePathable
     public enum View {
         case apperName
+        case updateGeneration(generation: String)
     }
     
 
@@ -70,6 +74,8 @@ public struct SignUpAge {
     public enum AsyncAction: Equatable {
         case fetchJobList
         case updateName
+        case checkGeneration(year: Int)
+        case chekcGenerationResponse(Result<CheckGeneraionModel, CustomError>)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -92,10 +98,7 @@ public struct SignUpAge {
         case signUpJob(SignUpJob)
     }
     
-                        
-    
-                        
-                        
+    @Dependency(SignUpUseCase.self) var signUpUseCase
     public var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
@@ -115,6 +118,16 @@ public struct SignUpAge {
              
                 case .apperName:
                     return .none
+                    
+                case .updateGeneration(generation: let generation):
+                    let (color, textColor) = CheckRegister.getGenerationSignUp(
+                        generation: generation,
+                        color: state.signUpAgeDisplayColor,
+                        textColor: state.checkGenerationTextColor)
+//                        store.checkGenerationText = generation
+                    state.signUpAgeDisplayColor = color
+                    state.checkGenerationTextColor = textColor
+                    return .none
                 }
                 
             case .async(let AsyncAction):
@@ -129,6 +142,39 @@ public struct SignUpAge {
                     return .run { @MainActor send in
                         send(.signUpJob(.appearName(signUpName ?? "")))
                     }
+                    
+                case .checkGeneration(year: let year):
+                    var checkGenerationText = state.checkGenerationText
+                    var signUpAgeDisplayColor = state.signUpAgeDisplayColor
+                    var checkGenerationTextColor = state.checkGenerationTextColor
+                    return .run { @MainActor send in
+                        let checkGenerationResult = await Result {
+                            try await signUpUseCase.checkGeneration(year: year)
+                        }
+                        
+                        switch checkGenerationResult {
+                        case .success(let checkGenerationData):
+                            if let checkGenerationData = checkGenerationData {
+                                send(.async(.chekcGenerationResponse(.success(checkGenerationData))))
+                                
+                                send(.view(.updateGeneration(generation: checkGenerationData.data?.data ?? "")))
+                                
+                            }
+                        case .failure(let error):
+                            send(.async(.chekcGenerationResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                case .chekcGenerationResponse(let result):
+                    switch result {
+                    case .success(let checkGenrationResult):
+                        state.chekcGenerationModel = checkGenrationResult
+                        state.checkGenerationText = checkGenrationResult.data?.data ?? ""
+//                        state.checkGenerationText = checkGenrationResult.data?.data
+                    case .failure(let error):
+                        Log.error("세대 확인 에러", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):

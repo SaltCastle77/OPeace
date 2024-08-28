@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Model
 
 public protocol SignUpRepositoryProtocol {
     func checkNickName(_ nickName: String) async throws -> CheckNickNameModel?
@@ -17,4 +17,5 @@ public protocol SignUpRepositoryProtocol {
         job: String,
         generation: String
     ) async throws -> UpdateUserInfoModel?
+    func checkGeneration(year: Int) async throws -> CheckGeneraionModel?
 }
