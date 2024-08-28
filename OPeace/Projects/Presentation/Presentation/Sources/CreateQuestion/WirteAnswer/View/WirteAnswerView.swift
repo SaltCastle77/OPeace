@@ -66,6 +66,9 @@ public struct WriteAnswerView: View {
                 }
                 .bounce(false)
             }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
             .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
                 FloatingPopUpView(store: floatingPopUpStore, title:  store.floatinPopUpText.isEmpty ? "14자까지 작성할 수 있어요": store.floatinPopUpText , image: .warning)
                 
