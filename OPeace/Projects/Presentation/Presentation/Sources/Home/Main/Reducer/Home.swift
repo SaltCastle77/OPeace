@@ -10,7 +10,6 @@ import SwiftUI
 import Combine
 
 import ComposableArchitecture
-import KeychainAccess
 
 @Reducer
 public struct Home {
@@ -59,6 +58,7 @@ public struct Home {
         @Shared var isCreateQuestion: Bool
         @Shared var isDeleteQuestion: Bool
         @Shared var isReportQuestion: Bool
+        @Shared var loginSocialType: SocialType?
         
         @Shared(.inMemory("questionID")) var reportQuestionID: Int = 0
         
@@ -72,7 +72,8 @@ public struct Home {
             isChangeProfile: Bool = false,
             isCreateQuestion: Bool = false,
             isDeleteQuestion: Bool = false,
-            isReportQuestion: Bool = false
+            isReportQuestion: Bool = false,
+            loginSocialType: SocialType? = nil
         ) {
             self._isLogOut = Shared(wrappedValue: isLogOut, .inMemory("isLogOut"))
             self._isDeleteUser = Shared(wrappedValue: isDeleteUser, .inMemory("isDeleteUser"))
@@ -81,6 +82,7 @@ public struct Home {
             self._isCreateQuestion = Shared(wrappedValue: isCreateQuestion, .inMemory("isCreateQuestion"))
             self._isDeleteQuestion = Shared(wrappedValue: isDeleteQuestion, .inMemory("isDeleteQuestion"))
             self._isReportQuestion = Shared(wrappedValue: isReportQuestion, .inMemory("isReportQuestion"))
+            self._loginSocialType = Shared(wrappedValue: loginSocialType, .inMemory("loginSocialType"))
         }
         
     }

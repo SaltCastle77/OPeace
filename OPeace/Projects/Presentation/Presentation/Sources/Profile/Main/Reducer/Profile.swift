@@ -51,6 +51,7 @@ public struct Profile {
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
         @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
+        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
         
         public init() {}
     }
@@ -234,10 +235,10 @@ public struct Profile {
                     return .none
                     
                 case .socilalLogOutUser:
-                    guard let socialType = try? Keychain().get("socialType") else {return .none}
+                    var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
-                        switch socialType {
-                        case "kakao":
+                        switch loginSocialType {
+                        case .kakao:
                             UserApi.shared.logout { error in
                                 if let error = error {
                                     Log.debug("카카오 로그아웃 오류", error.localizedDescription)
@@ -250,7 +251,7 @@ public struct Profile {
                                 }
                             }
 
-                        case "apple":
+                        case .apple:
                             send(.async(.logoutUser))
                         default:
                             break

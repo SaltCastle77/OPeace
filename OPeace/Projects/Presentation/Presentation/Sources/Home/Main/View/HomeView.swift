@@ -36,6 +36,7 @@ public struct HomeView: View {
                 store.send(.async(.fetchQuestionList))
             }
             .onAppear {
+                print("socialType:", store.loginSocialType ?? .apple)
                 store.send(.async(.fetchQuestionList))
                 store.send(.async(.fetchUserProfile))
                 startRefreshData()
@@ -273,7 +274,9 @@ extension HomeView {
     @ViewBuilder
     private func qustionCardView() -> some View {
         if let resultData = store.questionModel?.data?.results {
-            FlippableCardView(data: resultData) { item in
+            FlippableCardView(data: resultData) {
+                store.send(.async(.fetchQuestionList))
+            } content: { item in
                 CardItemView(
                     isProfile: false,
                     id: item.userInfo?.userID ?? "",
@@ -323,12 +326,6 @@ extension HomeView {
                         }
                     }
                 )
-                .onAppear {
-                    if item == store.questionModel?.data?.results?.last {
-                        store.send(.async(.fetchQuestionList))
-                    }
-                }
-                
             }
         }
     }
