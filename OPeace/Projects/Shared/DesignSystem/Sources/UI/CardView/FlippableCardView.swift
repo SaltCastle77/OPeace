@@ -10,25 +10,35 @@ import SwiftUIIntrospect
 public struct FlippableCardView<Content: View, T>: View {
     var data: [T]
     let content: (T) -> Content
-
+    let onAppearLastItem: (() -> Void)?
+    
     @State var currentPage: Int = 0
-    @State private var scrollViewDelegate: ScrollViewDelegate<Content, T>? = nil
-
+    @State var scrollViewDelegate: ScrollViewDelegate<Content, T>? = nil
+    
     public init(
         data: [T],
+        onAppearLastItem: (() -> Void)? = nil,
         content: @escaping (T) -> Content
     ) {
         self.data = data
         self.content = content
+        self.onAppearLastItem = onAppearLastItem
     }
-
+    
     public var body: some View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: false) {
-                VStack(spacing: .zero) {
+                LazyVStack(spacing: .zero) {
                     ForEach(data.indices, id: \.self) { index in
-                        VStack {
+                        LazyVStack {
                             content(data[index])
+                                .containerRelativeFrame(.horizontal)
+                                .scrollTargetLayout()
+                                .onAppear {
+                                    if index == data.indices.last {
+                                        onAppearLastItem?()
+                                    }
+                                }
                             
                             if index == data.indices.last {
                                 Spacer()
@@ -39,24 +49,30 @@ public struct FlippableCardView<Content: View, T>: View {
                             }
                         }
                         .frame(width: geometry.size.width)
+                        .scrollTargetLayout()
                     }
                 }
+
             }
             .scrollDisabled(data.count == 1)
-            .scrollTargetLayout()
+            .scrollIndicators(.hidden)
+            .scrollTargetBehavior(.viewAligned)
+//            .contentMargins(.vertical, 10)
             .onAppear {
                 if scrollViewDelegate == nil || data.count > 1 {
-                    scrollViewDelegate = ScrollViewDelegate<Content, T>(parent: self, itemHeight: 520)
+                    scrollViewDelegate = ScrollViewDelegate<Content, T>(parent: self, itemHeight: 527)
                 }
             }
             .introspect(.scrollView, on: .iOS(.v17, .v18), customize: { scrollView in
                 if let delegate = scrollViewDelegate {
                     scrollView.delegate = delegate
                     scrollView.alwaysBounceVertical = true
-                    scrollView.contentInsetAdjustmentBehavior = .automatic
+                    scrollView.contentInsetAdjustmentBehavior = .never
                     scrollView.showsVerticalScrollIndicator = false
                     scrollView.showsHorizontalScrollIndicator = false
                     scrollView.decelerationRate = .fast
+                    scrollView.contentInset = .zero
+                    scrollView.scrollIndicatorInsets = .zero
                 }
             })
         }
