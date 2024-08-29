@@ -34,7 +34,7 @@ public struct FlippableCardView<Content: View, T>: View {
                     LazyVStack(spacing: 0) {
                         ForEach(data.indices, id: \.self) { index in
                             content(data[index])
-                                .frame(width: geometry.size.width, height: 524)
+                                .frame(width: geometry.size.width, height: 520)
                                 .background(Color.clear)
                                 .scrollTargetLayout()
                                 .id(index)
@@ -50,12 +50,16 @@ public struct FlippableCardView<Content: View, T>: View {
                     }
                     .gesture(DragGesture()
                         .updating($dragOffset) { value, state, _ in
-                            state = value.translation.height // Track the current drag offset
+                            state = value.translation.height * 0.2 // Dampen the drag effect
                         }
                         .onEnded { value in
-                            // Determine the nearest index based on the drag velocity and position
+                            // Determine the nearest index based on drag velocity and position
                             let velocity = value.predictedEndLocation.y - value.startLocation.y
-                            let nearestIndex = calculateNearestIndex(geometry: geometry, currentPage: currentPage, velocity: velocity)
+                            let nearestIndex = calculateNearestIndex(
+                                geometry: geometry,
+                                currentPage: currentPage,
+                                velocity: velocity
+                            )
                             currentPage = nearestIndex
                             lastViewedPage = nearestIndex // Save the current page as the last viewed page
                             scrollToCenter(scrollViewProxy: scrollViewProxy, index: nearestIndex)
@@ -64,8 +68,7 @@ public struct FlippableCardView<Content: View, T>: View {
                 .scrollTargetBehavior(.viewAligned)
                 .scrollIndicators(.hidden)
                 .onAppear {
-                    // Restore the last viewed page when the view appears
-                    currentPage = min(lastViewedPage, data.count - 1) // Ensure the page doesn't exceed available indices
+                    currentPage = min(lastViewedPage, data.count - 1)
                     scrollToCenter(scrollViewProxy: scrollViewProxy, index: currentPage)
                 }
                 .onChange(of: scenePhase) { oldValue, newValue in
@@ -86,10 +89,15 @@ public struct FlippableCardView<Content: View, T>: View {
     }
     
     
-    private func calculateNearestIndex(geometry: GeometryProxy, currentPage: Int, velocity: CGFloat) -> Int {
-        if velocity > 0 {
+    private func calculateNearestIndex(
+        geometry: GeometryProxy,
+        currentPage: Int,
+        velocity: CGFloat
+    ) -> Int {
+        let threshold: CGFloat = 30 // Minimum velocity needed to trigger a scroll change
+        if velocity > threshold {
             return max(currentPage - 1, 0)
-        } else if velocity < 0 {
+        } else if velocity < -threshold {
             return min(currentPage + 1, data.count - 1)
         }
         return currentPage
@@ -113,7 +121,6 @@ struct ScrollEffectModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .offset(y: calculateOffset())
-//            .animation(.easeOut(duration: 0.3), value: dragOffset)
     }
     
     private func calculateOffset() -> CGFloat {
