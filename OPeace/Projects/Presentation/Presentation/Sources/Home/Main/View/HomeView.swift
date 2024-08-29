@@ -12,6 +12,7 @@ import ComposableArchitecture
 import SwiftUIIntrospect
 import PopupView
 import KeychainAccess
+import DesignSystem
 
 public struct HomeView: View {
     @Bindable var store: StoreOf<Home>
@@ -278,57 +279,44 @@ extension HomeView {
                 store.send(.async(.fetchQuestionList))
             } content: { item in
                 CardItemView(
+                    resultData: item,
                     isProfile: false,
-                    id: item.userInfo?.userID ?? "",
-                    cardID: item.id ?? .zero,
-                    userID: store.profileUserModel?.data?.socialID ?? "",
-                    nickName: item.userInfo?.userNickname ?? "",
-                    job: item.userInfo?.userJob ?? "",
-                    generation: item.userInfo?.userGeneration ?? "",
+                    userLoginID: store.profileUserModel?.data?.socialID ?? "",
                     generationColor: store.cardGenerationColor,
-                    emoji: item.emoji ?? "",
-                    title: item.title ?? "",
-                    choiceA: item.choiceA ?? "",
-                    choiceB: item.choiceB ?? "",
-                    responseCount: item.answerCount ?? .zero,
-                    likeCount: item.likeCount ?? .zero,
-                    isLikedTap: store.isLikeTap,
-                    liked: item.metadata?.liked ?? false,
-                    answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
                     isTapAVote: $store.isTapAVote,
                     isTapBVote: $store.isTapBVote,
-                    voted: item.metadata?.voted ?? false,
-                    votedTo: item.metadata?.votedTo ?? "",
                     isLogOut: store.isLogOut,
                     isLookAround: store.isLookAround,
                     isDeleteUser: store.isDeleteUser,
+                    answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
                     editTapAction: {
-                        store.userID = item.userInfo?.userID ?? ""
-                        store.reportQuestionID = item.id ?? .zero
-                        store.questionID = item.id ?? .zero
-                        store.send(.view(.presntEditQuestion))
-                    },
-                    likeTapAction: { userid in
                         if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                             store.send(.view(.prsentCustomPopUp))
                         } else {
-                            store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))
+                            store.userID = item.userInfo?.userID ?? ""
+                            store.reportQuestionID = item.id ?? .zero
+                            store.questionID = item.id ?? .zero
+                            store.send(.view(.presntEditQuestion))
+                        }
+                    },
+                    likeTapAction: { userID in
+                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                            store.send(.view(.prsentCustomPopUp))
+                        } else {
+                            store.send(.async(.isVoteQuestionLike(questioniD: Int(userID) ?? .zero)))
                             store.send(.async(.fetchQuestionList))
                         }
-                    }, choiceTapAction: {
-                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
-                            store.send(.view(.prsentCustomPopUp))
+                    },choiceTapAction: {
+                        if store.isTapAVote == true  {
+                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+                            store.send(.async(.fetchQuestionList))
+                        } else if store.isTapBVote == true {
+                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                            store.send(.async(.fetchQuestionList))
                         } else {
-                            if store.isTapAVote == true  {
-                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
-                                store.send(.async(.fetchQuestionList))
-                            } else if store.isTapBVote == true {
-                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
-                                store.send(.async(.fetchQuestionList))
-                            }
+                            store.send(.view(.prsentCustomPopUp))
                         }
-                    }
-                )
+                    })
             }
         }
     }

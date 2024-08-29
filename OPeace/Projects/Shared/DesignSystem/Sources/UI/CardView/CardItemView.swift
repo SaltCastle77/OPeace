@@ -6,103 +6,62 @@
 //
 
 import SwiftUI
+import Model
 
 public struct CardItemView: View {
     @State private var isRotated: Bool = false
     @State var isLikedTap: Bool = false
-    @State private var answerRatio: (A: Int, B: Int)
     @Binding var isTapAVote: Bool
     @Binding var isTapBVote: Bool
-    
+    @State private var answerRatio: (A: Int, B: Int)
+
+    private var resultData: ResultData
+    private var userLoginID: String
     private var isProfile: Bool
-    private var id: String
-    private var cardID: Int
-    private var userID: String
-    private var nickName: String
-    private var job: String
-    private var generation: String
-    private var generationColor: Color
-    private var emoji: String
-    private var title: String
-    private var choiceA: String
-    private var choiceB: String
-    private var responseCount: Int
-    private var likeCount: Int
-    
     private var isLogOut: Bool
     private var isLookAround: Bool
     private var isDeleteUser: Bool
-    private var liked: Bool
-    private var voted: Bool
-    private var votedTo: String?
+    private var generationColor: Color
     
     private var editTapAction: () -> Void = { }
     private var likeTapAction: (String) -> Void = { _ in }
     private var choiceTapAction: () -> Void = { }
-    
+
     public init(
+        resultData: ResultData,
         isProfile: Bool,
-        id: String,
-        cardID: Int,
-        userID: String,
-        nickName: String,
-        job: String,
-        generation: String,
+        userLoginID: String,
         generationColor: Color,
-        emoji: String,
-        title: String,
-        choiceA: String,
-        choiceB: String,
-        responseCount: Int,
-        likeCount: Int,
-        isLikedTap: Bool,
-        liked: Bool,
-        answerRatio: (A: Int, B: Int),
         isTapAVote: Binding<Bool>,
         isTapBVote: Binding<Bool>,
-        voted: Bool,
-        votedTo: String?,
         isLogOut: Bool,
         isLookAround: Bool,
         isDeleteUser: Bool,
+        answerRatio: (A: Int, B: Int),
         editTapAction: @escaping () -> Void,
         likeTapAction: @escaping (String) -> Void,
         choiceTapAction: @escaping () -> Void
     ) {
+        self.resultData = resultData
         self.isProfile = isProfile
-        self.id = id
-        self.userID = userID
-        self.cardID = cardID
-        self.nickName = nickName
-        self.job = job
-        self.generation = generation
+        self.userLoginID = userLoginID
         self.generationColor = generationColor
-        self.emoji = emoji
-        self.title = title
-        self.choiceA = choiceA
-        self.choiceB = choiceB
-        self.responseCount = responseCount
-        self.likeCount = likeCount
-        self.liked = liked
-        _answerRatio = State(initialValue: answerRatio)
-        _isLikedTap = State(initialValue: isLikedTap)
-        //        _isRotated = State(initialValue: isRotated)
         self._isTapAVote = isTapAVote
         self._isTapBVote = isTapBVote
-        self.voted = voted
-        self.votedTo = votedTo
         self.isLogOut = isLogOut
         self.isLookAround = isLookAround
         self.isDeleteUser = isDeleteUser
         self.editTapAction = editTapAction
         self.likeTapAction = likeTapAction
         self.choiceTapAction = choiceTapAction
+        _answerRatio = State(initialValue: (Int(resultData.answerRatio?.a ?? .zero), Int(resultData.answerRatio?.b ?? .zero)))
+        _isLikedTap = State(initialValue: isLikedTap)
     }
-    
+
     private var isUserInteractionDisabled: Bool {
         return isLogOut || isLookAround || isDeleteUser
     }
-    
+
     public var body: some View {
         if isProfile {
             profileCardView()
@@ -113,7 +72,7 @@ public struct CardItemView: View {
 }
 
 extension CardItemView {
-    
+
     @ViewBuilder
     private func profileCardView() -> some View {
         VStack {
@@ -123,17 +82,29 @@ extension CardItemView {
                 .padding(.horizontal, 20)
                 .overlay {
                     VStack {
-                        cardHeaderView(nickName: nickName, job: job, generation: generation)
-                        cardEmojiView(emoji: emoji)
-                        cardWriteAndAnswerView(title: title, choiceA: choiceA, choiceB: choiceB, isRoated: isRotated)
-                        isVotedResultView(responseCount: responseCount, likeCount: likeCount)
+                        cardHeaderView(
+                            nickName: resultData.userInfo?.userNickname ?? "",
+                            job: resultData.userInfo?.userJob ?? "",
+                            generation: resultData.userInfo?.userGeneration ?? ""
+                        )
+                        cardEmojiView(emoji: resultData.emoji ?? "")
+                        cardWriteAndAnswerView(
+                            title: resultData.title ?? "",
+                            choiceA: resultData.choiceA ?? "",
+                            choiceB: resultData.choiceB ?? "",
+                            isRoated: isRotated
+                        )
+                        isVotedResultView(
+                            responseCount: resultData.answerCount ?? 0,
+                            likeCount: resultData.likeCount ?? 0
+                        )
                         Spacer()
                     }
                     .padding(.horizontal, 24)
                 }
         }
     }
-    
+
     @ViewBuilder
     private func votingCardView() -> some View {
         VStack {
@@ -143,21 +114,38 @@ extension CardItemView {
                 .padding(.horizontal, 20)
                 .overlay {
                     VStack {
-                        cardHeaderView(nickName: nickName, job: job, generation: generation)
-                        cardEmojiView(emoji: emoji)
+                        cardHeaderView(
+                            nickName: resultData.userInfo?.userNickname ?? "",
+                            job: resultData.userInfo?.userJob ?? "",
+                            generation: resultData.userInfo?.userGeneration ?? ""
+                        )
+                        cardEmojiView(emoji: resultData.emoji ?? "")
                         
                         if isRotated {
-                            cardWriteAndAnswerView(title: title, choiceA: choiceA, choiceB: choiceB, isRoated: isRotated)
-                            isVotedResultView(responseCount: responseCount, likeCount: likeCount)
+                            cardWriteAndAnswerView(
+                                title: resultData.title ?? "",
+                                choiceA: resultData.choiceA ?? "",
+                                choiceB: resultData.choiceB ?? "",
+                                isRoated: isRotated
+                            )
+                            isVotedResultView(
+                                responseCount: resultData.answerCount ?? 0,
+                                likeCount: resultData.likeCount ?? 0
+                            )
                         } else {
-                            cardWriteAndAnswerView(title: title, choiceA: choiceA, choiceB: choiceB, isRoated: isRotated)
+                            cardWriteAndAnswerView(
+                                title: resultData.title ?? "",
+                                choiceA: resultData.choiceA ?? "",
+                                choiceB: resultData.choiceB ?? "",
+                                isRoated: isRotated
+                            )
                             questionChoiceVoteButton()
                         }
                         
                         Spacer()
                     }
                     .rotation3DEffect(
-                        .degrees((isRotated) ? 180 : 0),
+                        .degrees((isRotated ) ? 180 : 0),
                         axis: (x: 0, y: 1, z: 0),
                         perspective: 0.5
                     )
@@ -168,17 +156,18 @@ extension CardItemView {
                         isRotated.toggle()
                         isTapAVote = false
                         isTapBVote = false
+                    } else {
+                        isRotated.toggle()
                     }
                 }
         }
         .rotation3DEffect(
-            .degrees((isRotated) ? 180 : 0),
+            .degrees((isRotated ) ? 180 : 0),
             axis: (x: 0, y: 1, z: 0),
             perspective: 0.5
         )
         .animation(.easeInOut(duration: 0.5), value: isRotated)
     }
-    
     
     @ViewBuilder
     private func cardHeaderView(
@@ -206,13 +195,14 @@ extension CardItemView {
                             if isProfile {
                                 editTapAction()
                             } else {
-                                if id != userID {
+                                if userLoginID != resultData.userInfo?.userID {
                                     editTapAction()
                                 }
                             }
+                        } else if isUserInteractionDisabled {
+                            editTapAction()
                         }
                     }
-                
             }
             
             Spacer()
@@ -240,7 +230,6 @@ extension CardItemView {
                     .foregroundStyle(color)
                 
                 Spacer()
-                
             }
         }
         .padding(.horizontal, 24)
@@ -252,8 +241,8 @@ extension CardItemView {
             Spacer()
                 .frame(height: 26)
             
-            if let wirteAnswerEmoji = Image.emojiToImage(emoji: emoji.convertUnicodeToEmoji(unicodeString: emoji) ?? "") {
-                wirteAnswerEmoji
+            if let emojiImage = Image.emojiToImage(emoji: emoji.convertUnicodeToEmoji(unicodeString: emoji) ?? "") {
+                emojiImage
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
@@ -281,11 +270,7 @@ extension CardItemView {
             Spacer()
                 .frame(height: 16)
             
-            if isRoated {
-                choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
-            } else {
-                choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
-            }
+            choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
         }
     }
     
@@ -311,7 +296,7 @@ extension CardItemView {
                             .foregroundStyle(Color.gray200)
                             .onTapGesture {
                                 if !isUserInteractionDisabled {
-                                    isTapAVote = true
+                                    handleVote(for: "A")
                                 }
                             }
                         
@@ -322,7 +307,6 @@ extension CardItemView {
                             .foregroundStyle(Color.gray200)
                         
                         Spacer()
-                        
                     }
                 }
             
@@ -342,7 +326,7 @@ extension CardItemView {
                             .foregroundStyle(Color.gray200)
                             .onTapGesture {
                                 if !isUserInteractionDisabled {
-                                    isTapBVote = true
+                                    handleVote(for: "B")
                                 }
                             }
                         
@@ -353,10 +337,8 @@ extension CardItemView {
                             .foregroundStyle(Color.gray200)
                         
                         Spacer()
-                        
                     }
                 }
-            
         }
         .padding(.horizontal, 24)
     }
@@ -393,7 +375,7 @@ extension CardItemView {
                         .pretendardFont(family: .Medium, size: 16)
                         .foregroundStyle(Color.gray200)
                 } else {
-                    Text(responseCount.description)
+                    Text("\(responseCount)")
                         .pretendardFont(family: .Medium, size: 16)
                         .foregroundStyle(Color.gray200)
                 }
@@ -408,13 +390,13 @@ extension CardItemView {
                 Spacer()
                     .frame(width: 12)
                 
-                if liked && !isProfile {
+                if resultData.metadata?.liked == true {
                     HStack {
                         Image(asset: isLikedTap ? .isTapResultLike : .resultLike)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 18, height: 18)
-                        
+                            
                         Spacer()
                             .frame(width: 4)
                         
@@ -430,26 +412,30 @@ extension CardItemView {
                                 .pretendardFont(family: .Medium, size: 16)
                                 .foregroundStyle(isLikedTap ? Color.basicPrimary : Color.gray200)
                         } else {
-                            Text(likeCount.description)
+                            Text("\(likeCount)")
                                 .pretendardFont(family: .Medium, size: 16)
                                 .foregroundStyle(isLikedTap ? Color.basicPrimary : Color.gray200)
                         }
                     }
                     .onTapGesture {
+                        // Check if user interactions are restricted
                         if !isUserInteractionDisabled {
-                            if id != userID {
-                                if cardID == cardID {
-                                    isLikedTap.toggle()
-                                    likeTapAction(id)
-                                }
-                            } else if isProfile {
-                                
+                            // Only toggle and perform action if the user is not the owner
+                            if userLoginID != resultData.userInfo?.userID {
+                                isLikedTap.toggle()
+                                likeTapAction(String(resultData.id ?? 0))
                             }
+                        } else if userLoginID == resultData.userInfo?.userID {
+                            // Ensure no action or toggle occurs if the user is the owner
+                            isLikedTap = false
+                        } else if isUserInteractionDisabled {
+                            // Perform the like action when the interaction is restricted and the user is not the owner
+                            likeTapAction("")
                         }
                     }
+
                     .onAppear {
                         isLikedTap = true
-                        
                     }
                 } else {
                     HStack {
@@ -457,7 +443,7 @@ extension CardItemView {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 18, height: 18)
-                        
+                            
                         Spacer()
                             .frame(width: 4)
                         
@@ -473,25 +459,31 @@ extension CardItemView {
                                 .pretendardFont(family: .Medium, size: 16)
                                 .foregroundStyle(isLikedTap ? Color.basicPrimary : Color.gray200)
                         } else {
-                            Text(likeCount.description)
+                            Text("\(likeCount)")
                                 .pretendardFont(family: .Medium, size: 16)
                                 .foregroundStyle(isLikedTap ? Color.basicPrimary : Color.gray200)
                         }
                     }
                     .onTapGesture {
+                        // Check if user interactions are restricted
                         if !isUserInteractionDisabled {
-                            if id != userID {
+                            // Only toggle and perform action if the user is not the owner
+                            if userLoginID != resultData.userInfo?.userID {
                                 isLikedTap.toggle()
-                                likeTapAction(id)
-                            } else if isProfile {
-                                
+                                likeTapAction(String(resultData.id ?? 0))
                             }
+                        } else if userLoginID == resultData.userInfo?.userID {
+                            // Ensure no action or toggle occurs if the user is the owner
+                            isLikedTap = false
+                        } else if isUserInteractionDisabled {
+                            // Perform the like action when the interaction is restricted and the user is not the owner
+                            likeTapAction("")
                         }
                     }
+
                 }
                 
                 Spacer()
-                
             }
         }
     }
@@ -499,7 +491,9 @@ extension CardItemView {
     @ViewBuilder
     private func questionChoiceVoteButton() -> some View {
         VStack {
-            Spacer().frame(height: 24)
+            Spacer()
+                .frame(height: 24)
+            
             HStack {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.basicPrimary)
@@ -514,7 +508,8 @@ extension CardItemView {
                         handleVote(for: "A")
                     }
                 
-                Spacer().frame(width: 8)
+                Spacer()
+                    .frame(width: 8)
                 
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.basicPrimary)
@@ -531,30 +526,44 @@ extension CardItemView {
             }
         }
     }
-    
-    
+
     private func handleVote(for choice: String) {
-        if choice == "A" && cardID == cardID {
-            isTapAVote = true
-            if isTapAVote {
-                answerRatio.A += 1
-                isRotated = true
+        if !isUserInteractionDisabled {
+            if choice == "A" {
+                if userLoginID != resultData.userInfo?.userID {
+                    isTapAVote = true
+                    if isTapAVote {
+                        answerRatio.A += 1
+                        isRotated = true
+                    }
+                    choiceTapAction()
+                    isTapBVote = false
+                } else if userLoginID == resultData.userInfo?.userID {
+                    isRotated.toggle()
+                }
+            } else if choice == "B" {
+                if userLoginID != resultData.userInfo?.userID {
+                    isTapBVote = true
+                    if isTapBVote {
+                        answerRatio.B += 1
+                        isRotated = true
+                    }
+                    choiceTapAction()
+                    isTapAVote = false
+                } else if userLoginID == resultData.userInfo?.userID {
+                    isRotated.toggle()
+                }
+            } else if userLoginID == resultData.userInfo?.userID {
+                isRotated.toggle()
+            } else {
+                isRotated = false
+                choiceTapAction()
             }
-            choiceTapAction()
-            isTapBVote = false
-        } else if choice == "B" && cardID == cardID {
-            isTapBVote = true
-            if isTapBVote {
-                answerRatio.B += 1
-                isRotated = true
-            }
-            choiceTapAction()
-            isTapAVote = false
-        }
-        else if isUserInteractionDisabled {
-            isRotated = false
+        } else if isUserInteractionDisabled {
             choiceTapAction()
         }
     }
+
 }
+
 

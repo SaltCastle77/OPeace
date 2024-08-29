@@ -30,11 +30,7 @@ public struct Root {
         static var refreshTokenModel: RefreshModel? = nil
         
         
-        
         public init() {
-            
-            //            self = .auth(.init())
-            
             if let token = UserDefaults.standard.string(forKey: "ACCESS_TOKEN") , let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN") , !refreshToken.isEmpty && !token.isEmpty {
                 Log.debug(token, "refresh : \(refreshToken)")
                 self = .homeRoot(.init())

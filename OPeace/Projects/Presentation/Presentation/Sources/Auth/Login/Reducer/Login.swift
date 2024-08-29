@@ -43,6 +43,7 @@ public struct Login {
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
         @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
+        @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -353,6 +354,7 @@ public struct Login {
                     
                 case .presntLookAround:
                     state.isLookAround = true
+                    state.lastViewedPage = 0
                     return .none
                 }
             }

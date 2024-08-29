@@ -13,6 +13,7 @@ import Utill
 
 public struct RootView: View {
     @Bindable var store: StoreOf<Root>
+    @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
     
     public init(
         store: StoreOf<Root>
@@ -30,6 +31,7 @@ public struct RootView: View {
                 if let store = store.scope(state: \.homeRoot, action: \.view.homeRoot) {
                     HomeRootView(store: store)
                         .onAppear {
+                            lastViewedPage = .zero
                             store.send(.home(.async(.fetchQuestionList)))
                         }
                 }
