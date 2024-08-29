@@ -52,7 +52,7 @@ public struct HomeView: View {
                     Spacer()
                     
                     writeQuestionButton()
-                        .padding(.bottom, 40)
+                        .padding(.bottom, 10)
                 }
                 .edgesIgnoringSafeArea(.bottom)
             }
@@ -280,6 +280,7 @@ extension HomeView {
                 CardItemView(
                     isProfile: false,
                     id: item.userInfo?.userID ?? "",
+                    cardID: item.id ?? .zero,
                     userID: store.profileUserModel?.data?.socialID ?? "",
                     nickName: item.userInfo?.userNickname ?? "",
                     job: item.userInfo?.userJob ?? "",
@@ -292,10 +293,12 @@ extension HomeView {
                     responseCount: item.answerCount ?? .zero,
                     likeCount: item.likeCount ?? .zero,
                     isLikedTap: store.isLikeTap,
+                    liked: item.metadata?.liked ?? false,
                     answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
-                    isRotated: store.isRoatinCard,
                     isTapAVote: $store.isTapAVote,
                     isTapBVote: $store.isTapBVote,
+                    voted: item.metadata?.voted ?? false,
+                    votedTo: item.metadata?.votedTo ?? "",
                     isLogOut: store.isLogOut,
                     isLookAround: store.isLookAround,
                     isDeleteUser: store.isDeleteUser,

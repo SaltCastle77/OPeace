@@ -243,7 +243,6 @@ public struct Profile {
                                 if let error = error {
                                     Log.debug("카카오 로그아웃 오류", error.localizedDescription)
                                 } else {
-                                    // Handle async operations in a Task
                                     Task {
                                         try await self.clock.sleep(for: .seconds(1))
                                          send(.async(.logoutUser))
@@ -271,6 +270,7 @@ public struct Profile {
                     return .none
                     
                 case .logoutUser:
+                    var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
                         let userLogOutData = await Result {
                             try await authUseCase.logoutUser(refreshToken: "")
@@ -280,9 +280,8 @@ public struct Profile {
                         case .success(let userLogOutData):
                             if let userLogOutData = userLogOutData {
                                 send(.async(.logoutUseResponse(.success(userLogOutData))))
-                                
-                                try? Keychain().remove("REFRESH_TOKEN")
-                                try? Keychain().remove("socialType")
+                                UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
+                                loginSocialType = nil
                                 send(.view(.closePopUp))
                                 try await self.clock.sleep(for: .seconds(0.4))
                                 send(.navigation(.presntLogout))
