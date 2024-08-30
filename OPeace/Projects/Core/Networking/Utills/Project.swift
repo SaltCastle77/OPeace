@@ -4,7 +4,7 @@ import DependencyPlugin
 import ProjectTemplatePlugin
 import DependencyPackagePlugin
 
-let project = Project.makeAppModule(
+let project = Project.makeModule(
     name: "Utills",
     bundleId: .appBundleID(name: ".Utills"),
     product: .staticFramework,
