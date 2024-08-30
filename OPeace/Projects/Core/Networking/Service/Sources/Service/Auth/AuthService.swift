@@ -99,6 +99,27 @@ extension AuthService: BaseTargetType {
         }
     }
     
+    public var validationType: ValidationType {
+        switch self {
+        case .fetchUserInfo:
+            return .successCodes
+        case .autoLogin:
+            return .successCodes
+        case .deleteUser:
+            return .successCodes
+        case .userVerify:
+            return .successCodes
+        case .userBlock:
+            return .successCodes
+        case .fectchUserBlock:
+            return .successCodes
+        case .realseUserBlock:
+            return .successCodes
+        default:
+            return .none
+        }
+    }
+    
     public var task: Moya.Task {
         switch self {
         case .appleLogin(let accessToken):

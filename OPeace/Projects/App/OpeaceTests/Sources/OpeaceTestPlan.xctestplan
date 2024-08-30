@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "72AE2D8E-559F-4CCD-85EC-331E53512151",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:OPeace.xcodeproj",
+      "identifier" : "67D9F4592180F61529ADFF00",
+      "name" : "OPeace"
+    },
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:OPeace.xcodeproj",
+        "identifier" : "D846BAB7A4553FDE0C61B023",
+        "name" : "OPeaceTests"
+      }
+    }
+  ],
+  "version" : 1
+}

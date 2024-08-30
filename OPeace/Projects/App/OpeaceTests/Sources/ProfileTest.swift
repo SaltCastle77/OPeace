@@ -24,12 +24,35 @@ struct ProfileTest {
         $0.authUseCase = AuthUseCase(repository: repository)
     }
 
-    @Test func testUserinfo_유저정보_조회테스트() async throws {
-        // Send the action to trigger the effect
+    @Test("유저 정보 조회")
+    func testUserInfo_유저정보_조회() async throws {
+        var mockUpdateUserInfo = UpdateUserInfoModel.mockModel
+        
+        await store.send(.async(.fetchUserProfileResponse(.success(mockUpdateUserInfo)))) { state in
+            state.profileUserModel = mockUpdateUserInfo
+        }
+        
         await store.send(.async(.fetchUser))
         
-        await store.finish()
+        store.assert { state in
+            state.profileUserModel = mockUpdateUserInfo
+        }
         
+        await store.finish()
          store.exhaustivity = .off
+    }
+    
+    @Test("유저 정보 업데이트")
+    func testUserInfo_유저정보_업데이트() async throws {
+        let testEditStore = TestStore(initialState: EditProfile.State()) {
+            EditProfile()
+        } withDependencies: {
+            let repository = AuthRepository()
+            $0.authUseCase = AuthUseCase(repository: repository)
+            let signupRepository = SingUpRepository()
+            $0.signUpUseCase = SignUpUseCase(repository: signupRepository)
+        }
+        
+        await testEditStore.send(.async(.updateUserInfo(nickName: "로이", year: 1998, job: "개발", generation: "Z 세대")))
     }
 }

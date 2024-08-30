@@ -140,6 +140,10 @@ extension QuestionService: BaseTargetType {
         }
     }
     
+    public var validationType: ValidationType {
+        return .successCodes
+    }
+    
     public var headers: [String : String]? {
         switch self {      
         default:

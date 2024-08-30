@@ -61,7 +61,8 @@ public extension Project {
             bundleId: "\(bundleId).\(name)Tests",
             deploymentTargets: deploymentTarget,
             infoPlist: .default,
-            sources: ["\(name)Tests/Sources/**", "\(name)Tests/Sources/OpeaceTestPlan.xctestplan"],
+            sources: ["\(name)Tests/Sources/**"],
+            resources: ["\(name)Tests/Sources/OpeaceTestPlan.xctestplan"],
             dependencies: [
                 .target(name:name),
                 .sdk(name: "Testing", type: .framework),

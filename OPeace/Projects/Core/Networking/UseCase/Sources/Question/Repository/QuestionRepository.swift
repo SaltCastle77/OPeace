@@ -16,7 +16,7 @@ import Moya
 
 @Observable
 public class QuestionRepository: QuestionRepositoryProtocol {
-    private let provider = MoyaProvider<QuestionService>()
+    private let provider = MoyaProvider<QuestionService>(session: Session(interceptor: AuthInterceptor.shared), plugins: [MoyaLoggingPlugin()])
     
     public init() {
         

@@ -9,8 +9,6 @@ import Foundation
 import ProjectDescription
 
 let config = Config(
-//    compatibleXcodeVersions: ["15.2"],
-//    cloud: .cloud(projectId: "", url: "https://cloud.tuist.io/suhwj81/projects"),
     fullHandle:  "suhwj81/Opeace",
     swiftVersion: "5.10.0",
     plugins: [

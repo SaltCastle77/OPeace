@@ -17,9 +17,8 @@ extension MoyaProvider {
     public func requestAsync<T: Decodable>(_ target: Target, decodeTo type: T.Type) async throws -> T {
         return try await withCheckedThrowingContinuation { continuation in
             // async/await API의 일부로, 비동기 작업을 동기식으로 변환할 때 사용됩니다. 여기서 continuation은 비동기 작업이 완료되면 값을 반환하거나 오류를 던지기 위해 사용
-            let provider = MoyaProvider<Target>(plugins: [MoyaLoggingPlugin()])
             var cancellable: AnyCancellable?
-            cancellable = provider.requestPublisher(target)
+            cancellable = self.requestPublisher(target)
                 .tryMap { response -> Data in
                     guard let httpResponse = response.response else {
                         throw DataError.noData
@@ -28,7 +27,7 @@ extension MoyaProvider {
                     case 200, 201, 204, 401:
                         return response.data
                     case 400:
-                        throw DataError.badRequest
+                        throw MoyaError.statusCode(response)
                     case 404:
                         let errorResponse = try response.data.decoded(as: ErrorResponse.self)
                         throw DataError.customError(errorResponse)
@@ -46,15 +45,24 @@ extension MoyaProvider {
                     }
                     return try data.decoded(as: T.self)
                 }
-                .mapError { error in
+                .mapError { error -> MoyaError in
                     if let moyaError = error as? MoyaError {
-                        return DataError.moyaError(moyaError)
+                        Log.error("MoyaError occurred: \(moyaError.localizedDescription)")
+                        if case .statusCode(let response) = moyaError, response.statusCode == 400{
+                            Log.error("400 토큰 인증실패: triggering retry logic")
+                            return moyaError
+                        }
+                        return moyaError
                     } else if let decodingError = error as? DecodingError {
-                        return DataError.decodingError(decodingError)
+                        Log.error("DecodingError occurred: \(decodingError.localizedDescription)")
+                        return MoyaError.underlying(decodingError, nil)
                     } else if let dataError = error as? DataError {
-                        return dataError
+                        Log.error("DataError occurred: \(dataError.localizedDescription)")
+                        return MoyaError.underlying(dataError, nil)
                     } else {
-                        return DataError.unknownError
+                        let unknownError = NSError(domain: "Unknown Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "An unknown error occurred."])
+                        Log.error("Unknown error occurred")
+                        return MoyaError.underlying(unknownError, nil)
                     }
                 }
                 .sink(receiveCompletion: { completion in
@@ -216,7 +224,7 @@ extension MoyaProvider {
                 }
             }
         }
-    }
+}
 
-    
+
 

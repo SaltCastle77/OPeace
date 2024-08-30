@@ -20,6 +20,20 @@ public struct APIHeader {
     public static var accessTokenKeyChain: String {
         return UserDefaults.standard.string(forKey: "ACCESS_TOKEN") ?? ""
     }
+    
+    public static var accessTokenKey: String {
+        get { accessTokenKeyChain }
+        set { UserDefaults.standard.set(newValue, forKey: "ACCESS_TOKEN") }
+    }
+    
+    public static var refreshTokenKeyChain: String {
+        return UserDefaults.standard.string(forKey: "REFRESH_TOKEN") ?? ""
+    }
+    
+    public static var refreshTokenKey: String {
+        get { refreshTokenKeyChain }
+        set { UserDefaults.standard.set(newValue, forKey: "REFRESH_TOKEN") }
+    }
 }
 
 extension APIHeader {

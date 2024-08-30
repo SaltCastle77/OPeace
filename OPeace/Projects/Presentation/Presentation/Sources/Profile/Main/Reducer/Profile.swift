@@ -29,7 +29,7 @@ public struct Profile {
         var profileGenerationTextColor: Color = Color.gray600
         var profileGenerationText: String = ""
         
-        var profileUserModel: UpdateUserInfoModel? = nil
+        public var profileUserModel: UpdateUserInfoModel? = nil
         var userLogoutModel: UserLogOutModel? = nil
         var userDeleteModel: DeleteUserModel? = nil
         var myQuestionListModel: QuestionModel?  = nil
