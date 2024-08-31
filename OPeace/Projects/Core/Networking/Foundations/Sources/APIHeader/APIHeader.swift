@@ -18,7 +18,7 @@ public struct APIHeader {
     public init() {}
 
     public static var accessTokenKeyChain: String {
-        return (try? Keychain().get("ACCESS_TOKEN")) ?? ""
+        return UserDefaults.standard.string(forKey: "ACCESS_TOKEN") ?? ""
     }
 }
 

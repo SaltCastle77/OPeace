@@ -30,12 +30,8 @@ public struct Root {
         static var refreshTokenModel: RefreshModel? = nil
         
         
-        
         public init() {
-            
-            //            self = .auth(.init())
-            
-            if let token = try? Keychain().get("ACCESS_TOKEN"), let refreshToken = try? Keychain().get("REFRESH_TOKEN") , !refreshToken.isEmpty && !token.isEmpty {
+            if let token = UserDefaults.standard.string(forKey: "ACCESS_TOKEN") , let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN") , !refreshToken.isEmpty && !token.isEmpty {
                 Log.debug(token, "refresh : \(refreshToken)")
                 self = .homeRoot(.init())
             } else {
@@ -131,22 +127,21 @@ public struct Root {
             case .async(let AsyncAction):
                 switch AsyncAction {
                 case .autoLogin:
-                    guard let socailType = try? Keychain().get("socialType") else { return .none }
+                    @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
                     return .run { @MainActor send in
-                        print(socailType)
-                        switch socailType {
-                        case "kakao":
+                        switch loginSocialType {
+                        case .kakao:
                             //                            try await clock.sleep(for: .seconds(1))
-                            if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                            if let refreshToken =  UserDefaults.standard.string(forKey: "REFRESH_TOKEN") {
                                 if !refreshToken.isEmpty {
                                     send(.async(.checkUserVerfiy))
                                     send(.async(.loginWIthKakao))
                                 }
                             }
                             
-                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
+                            if let accessToken = UserDefaults.standard.string(forKey: "ACCESS_TOKEN") {
                                 if Root.State.checkUserVerifyModel?.data?.status == false {
-                                    if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                                    if let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN")  {
                                         //                                        send(.async(.handleRefreshToken(refreshToken)))
                                     } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
                                         send(.view(.auth(.login(.async(.kakaoLogin)))))
@@ -167,14 +162,14 @@ public struct Root {
                                 }
                             }
                             
-                        case "apple":
-                            if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
+                        case .apple:
+                            if let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN")  {
                                 if !refreshToken.isEmpty {
                                     send(.async(.checkUserVerfiy))
                                 }
                             }
                             
-                            if let accessToken = try? Keychain().get("ACCESS_TOKEN") {
+                            if let accessToken = UserDefaults.standard.string(forKey: "ACCESS_TOKEN") {
                                 if Root.State.checkUserVerifyModel?.data?.status == false || Root.State.checkUserVerifyModel?.code == "token_not_valid" {
                                     if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
                                         send(.async(.handleRefreshToken(refreshToken)))
@@ -197,7 +192,7 @@ public struct Root {
                                 }
                             }
                             
-                        case "google":
+                        case .google:
                             break
                         default:
                             break
@@ -205,14 +200,14 @@ public struct Root {
                     }
                     
                 case let .handleRefreshToken(refreshToken):
-                    guard let socailType = try? Keychain().get("socialType") else { return .none }
+                    @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
                     return .run { @MainActor  send in
                         send(.async(.refreshTokenRequest(refreshToken: refreshToken )))
                         try await self.clock.sleep(for: .seconds(0.3))
-                        switch socailType {
-                        case "kakao":
+                        switch loginSocialType {
+                        case .kakao:
                             send(.async(.loginWIthKakao))
-                        case "apple":
+                        case .apple:
                             send(.async(.appleLogin))
                             
                         default:
@@ -309,9 +304,8 @@ public struct Root {
                         Root.State.refreshTokenModel = refreshTokenData
                         Log.network("리프레쉬 토큰 발급", refreshTokenData)
                         Log.network("refershToken", refreshTokenData)
-                        try? Keychain().set(Root.State.refreshTokenModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
-                        try? Keychain().set(Root.State.refreshTokenModel?.data?.accessToken ?? "", key: "ACCESS_TOKEN")
-                        
+                        UserDefaults.standard.set(Root.State.refreshTokenModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
+                        UserDefaults.standard.set(Root.State.refreshTokenModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN") 
                     case .failure(let error):
                         Log.network("리프레쉬 토큰 발급 에러", error.localizedDescription)
                     }

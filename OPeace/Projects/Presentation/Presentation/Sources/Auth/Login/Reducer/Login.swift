@@ -15,7 +15,6 @@ import UseCase
 import Utills
 import Model
 import AuthenticationServices
-import KeychainAccess
 
 
 @Reducer
@@ -43,6 +42,8 @@ public struct Login {
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
+        @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
     }
     
     public enum Action: ViewAction ,FeatureAction {
@@ -108,7 +109,7 @@ public struct Login {
                         do {
                             let result = try await authUseCase.handleAppleLogin(authData)
                             send(.async(.fetchAppleRespose(.success(result))))
-                            try await clock.sleep(for: .seconds(1))
+                            try await clock.sleep(for: .seconds(0.8))
                             send(.async(.loginWithApple(token: appleAccessToken)))
                         } catch {
                             print("Error handling Apple login: \(error)")
@@ -156,24 +157,24 @@ public struct Login {
                     switch result {
                     case .success(let ResponseData):
                         state.userLoginModel = ResponseData
-                        try? Keychain().remove("ACCESS_TOKEN")
-                        try? Keychain().remove("REFRESH_TOKEN")
-                        try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                        UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
+                        UserDefaults.standard.removeObject(forKey: "REFRESH_TOKEN")
+                        UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
+                        state.loginSocialType = .apple
                         state.socialType = .apple
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
-                        try? Keychain().set(socialTypeValue, key: "socialType")
                         if state.userLoginModel?.data?.accessToken != "" {
-                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                             state.isLogOut = false
                             state.isLookAround = false
                             
                             state.isDeleteUser = false
                             state.isChangeProfile = false 
                         } else {
-                            try? Keychain().remove("ACCESS_TOKEN")
-                            try? Keychain().remove("REFRESH_TOKEN")
-                            try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
-                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
+                            UserDefaults.standard.removeObject(forKey: "REFRESH_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                             state.isLogOut = false
                             state.isLookAround = false
                             state.isDeleteUser = false
@@ -182,8 +183,7 @@ public struct Login {
                     case .failure(let error):
                         Log.network("애플 로그인 에러", error.localizedDescription)
                         state.socialType = .apple
-                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
-                        try? Keychain().set(socialTypeValue, key: "socialType")
+                        state.loginSocialType = .apple
                     }
                     return .none
                     
@@ -204,7 +204,7 @@ public struct Login {
                         case .success(let (accessToken, idToken)):
                             send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
                             
-                            try await clock.sleep(for: .seconds(1))
+                            try await clock.sleep(for: .seconds(0.8))
                             send(.async(.loginWIthKakao))
                             
                         case let .failure(error):
@@ -247,20 +247,20 @@ public struct Login {
                     switch data {
                     case .success(let ResponseData):
                         state.userLoginModel = ResponseData
-
-                        try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
+                        UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
                         state.socialType = .kakao
-                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
-                        try? Keychain().set(socialTypeValue, key: "socialType")
+                        state.loginSocialType = .kakao
                         if state.userLoginModel?.data?.accessToken != "" {
-                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
                             state.isLogOut = false
                             state.isLookAround = false
                             state.isDeleteUser = false
                             state.isChangeProfile = false
                         } else {
-                            try? Keychain().set(state.userLoginModel?.data?.accessToken ?? "",  key: "ACCESS_TOKEN")
-                            try? Keychain().set(state.userLoginModel?.data?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
+
                             state.isLogOut = false
                             state.isLookAround = false
                             state.isDeleteUser = false
@@ -269,8 +269,7 @@ public struct Login {
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
                         state.socialType = .kakao
-                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
-                        try? Keychain().set(socialTypeValue, key: "socialType")
+                        state.loginSocialType = .kakao
                     }
                     return .none
                     
@@ -331,8 +330,8 @@ public struct Login {
                         state.refreshTokenModel = refreshTokenData
                         Log.network("리프레쉬 토큰 발급", refreshTokenData)
                         Log.network("refershToken", refreshTokenData)
-                        try? Keychain().remove("ACCESS_TOKEN")
-                        try? Keychain().set(state.refreshTokenModel?.data?.accessToken ?? "", key: "ACCESS_TOKEN")
+                        UserDefaults.standard.set(state.refreshTokenModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
+                        UserDefaults.standard.set(state.refreshTokenModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
                         
                     case .failure(let error):
                         Log.network("리프레쉬 토큰 발급 에러", error.localizedDescription)
@@ -355,6 +354,7 @@ public struct Login {
                     
                 case .presntLookAround:
                     state.isLookAround = true
+                    state.lastViewedPage = 0
                     return .none
                 }
             }

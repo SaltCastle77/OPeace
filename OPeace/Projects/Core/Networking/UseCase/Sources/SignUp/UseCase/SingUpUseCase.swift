@@ -42,6 +42,11 @@ public struct SignUpUseCase : SignUpUseCaseProtocol{
     ) async throws -> UpdateUserInfoModel? {
         try await repository.updateUserInfo(nickname: nickname, year: year, job: job, generation: generation)
     }
+    
+    //MARK: - 년도 입력시 세대 확인
+    public func checkGeneration(year: Int) async throws -> CheckGeneraionModel? {
+        try await repository.checkGeneration(year: year)
+    }
 }
 
 

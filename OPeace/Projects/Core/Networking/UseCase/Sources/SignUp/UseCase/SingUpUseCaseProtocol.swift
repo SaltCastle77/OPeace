@@ -18,4 +18,6 @@ public protocol SignUpUseCaseProtocol {
         job: String,
         generation: String
     ) async throws -> UpdateUserInfoModel?
+    func checkGeneration(year: Int) async throws -> CheckGeneraionModel?
+    
 }

@@ -37,7 +37,7 @@ import Model
                 if let tokenData = appleIDCredential.identityToken,
                    let acessToken = String(data: tokenData, encoding: .utf8) {
                     do {
-                        try? Keychain().set(acessToken, key: "APPLE_ACCESS_TOKEN")
+                        UserDefaults.standard.set(acessToken, forKey: "APPLE_ACCESS_TOKEN")
                         _ = try await appleLogin()
                     } catch {
                         throw error
@@ -59,8 +59,8 @@ import Model
     
     //MARK: - 애플로그인 API
     public func appleLogin() async throws -> UserLoginModel? {
-        guard let appleToken = try? Keychain().get("APPLE_ACCESS_TOKEN") else { return .none }
-        return try await provider.requestAsync(.appleLogin(accessToken: appleToken), decodeTo: UserLoginModel.self)
+        let appleAcessToken = UserDefaults.standard.string(forKey: "APPLE_ACCESS_TOKEN") ?? ""
+        return try await provider.requestAsync(.appleLogin(accessToken: appleAcessToken), decodeTo: UserLoginModel.self)
     }
    
     
@@ -84,16 +84,15 @@ import Model
                                     }
 
                                     Log.debug("access token", oauthToken?.accessToken ?? "")
-                                    guard let accessToken =  try? Keychain().get("ACCESS_TOKEN") else { return }
                                     
                                     if accessToken != "" {
-                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
-                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
-                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "KAKAO_ACCESS_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                                        UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                                     } else {
-                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
-                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
-                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "KAKAO_ACCESS_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                                        UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                                     }
                                     
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
@@ -115,13 +114,13 @@ import Model
                                     
                                     Log.debug("access token", accessToken)
                                     if accessToken != "" {
-                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
-                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
-                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "KAKAO_ACCESS_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                                        UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                                     } else {
-                                        try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
-                                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
-                                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "KAKAO_ACCESS_TOKEN")
+                                        UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                                        UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                                     }
                                     Log.debug("access token", oauthToken?.accessToken ?? "")
                                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
@@ -142,11 +141,13 @@ import Model
                                 }
                                 _ = oauthToken
                                 if accessToken != "" {
-                                    try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
-                                    try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                    UserDefaults.standard.set(accessToken, forKey: "KAKAO_ACCESS_TOKEN")
+                                    UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                                    UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                                 } else {
-                                    try? Keychain().set(accessToken, key: "KAKAO_ACCESS_TOKEN")
-                                    try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                                    UserDefaults.standard.set(accessToken, forKey: "KAKAO_ACCESS_TOKEN")
+                                    UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                                    UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                                 }
                                 Log.debug("access token", oauthToken?.accessToken ?? "")
                                 continuation.resume(returning: (accessToken, oauthToken?.idToken))
@@ -170,11 +171,12 @@ import Model
                     _ = oauthToken
                     Log.debug("access token", oauthToken?.idToken ?? "")
                     if accessToken != "" {
-                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
-                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                        UserDefaults.standard.set(accessToken, forKey: "KAKAO_ACCESS_TOKEN")
+                        UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                        UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                     } else {
-                        try? Keychain().set(accessToken, key: "ACCESS_TOKEN")
-                        try? Keychain().set(oauthToken?.refreshToken ?? "", key: "REFRESH_TOKEN")
+                        UserDefaults.standard.set(accessToken, forKey: "ACCESS_TOKEN")
+                        UserDefaults.standard.set(oauthToken?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                     }
                     continuation.resume(returning: (accessToken, oauthToken?.idToken))
                 }
@@ -185,7 +187,7 @@ import Model
     
     //MARK: - 카카오 로그인 API
     public func reauestKakaoLogin() async throws -> UserLoginModel? {
-        let kakaoAcessToken = (try? Keychain().get("KAKAO_ACCESS_TOKEN") ?? "")
+        let kakaoAcessToken = UserDefaults.standard.string(forKey: "KAKAO_ACCESS_TOKEN")
         return try await provider.requestAsync(.kakaoLogin(accessToken: kakaoAcessToken ?? ""), decodeTo: UserLoginModel.self)
     }
     
@@ -201,7 +203,7 @@ import Model
     
     //MARK: - 유저 로그아웃 API
     public func logoutUser(refreshToken: String) async throws -> UserLogOutModel? {
-        guard let refreshToken  = try? Keychain().get("REFRESH_TOKEN") else { return .none }
+         let refreshToken  =  UserDefaults.standard.string(forKey: "REFRESH_TOKEN") ?? ""
         return try await provider.requestAsync(
             .logoutUser(refreshToken: refreshToken),
             decodeTo: UserLogOutModel.self)

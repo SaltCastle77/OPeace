@@ -51,6 +51,7 @@ public struct Profile {
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
         @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
+        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
         
         public init() {}
     }
@@ -234,19 +235,22 @@ public struct Profile {
                     return .none
                     
                 case .socilalLogOutUser:
-                    guard let socialType = try? Keychain().get("socialType") else {return .none}
+                    var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
-                        switch socialType {
-                        case "kakao":
-                            UserApi.shared.logout {(error) in
+                        switch loginSocialType {
+                        case .kakao:
+                            UserApi.shared.logout { error in
                                 if let error = error {
                                     Log.debug("카카오 로그아웃 오류", error.localizedDescription)
-                                }
-                                else {
-                                    send(.async(.logoutUser))
+                                } else {
+                                    Task {
+                                        try await self.clock.sleep(for: .seconds(1))
+                                         send(.async(.logoutUser))
+                                    }
                                 }
                             }
-                        case "apple":
+
+                        case .apple:
                             send(.async(.logoutUser))
                         default:
                             break
@@ -266,6 +270,7 @@ public struct Profile {
                     return .none
                     
                 case .logoutUser:
+                    var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
                         let userLogOutData = await Result {
                             try await authUseCase.logoutUser(refreshToken: "")
@@ -275,9 +280,8 @@ public struct Profile {
                         case .success(let userLogOutData):
                             if let userLogOutData = userLogOutData {
                                 send(.async(.logoutUseResponse(.success(userLogOutData))))
-                                
-                                try? Keychain().remove("REFRESH_TOKEN")
-                                try? Keychain().remove("socialType")
+                                UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
+                                loginSocialType = nil
                                 send(.view(.closePopUp))
                                 try await self.clock.sleep(for: .seconds(0.4))
                                 send(.navigation(.presntLogout))

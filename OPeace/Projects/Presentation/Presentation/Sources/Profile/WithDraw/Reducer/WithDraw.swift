@@ -33,6 +33,7 @@ public struct WithDraw {
         
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
+        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
         public init() {}
     }
     
@@ -129,10 +130,10 @@ public struct WithDraw {
                     return .none
                     
                 case .deletUserSocialType(let reason):
-                    guard let socialType = try? Keychain().get("socialType") else {return .none}
+                    var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
-                        switch socialType {
-                        case "kakao":
+                        switch loginSocialType {
+                        case  .kakao:
                             UserApi.shared.unlink {(error) in
                                 if let error = error {
                                     Log.error("카카오 회원 탈퇴 에러", error.localizedDescription)
@@ -141,7 +142,7 @@ public struct WithDraw {
                                     send(.async(.deleteUser(reason: reason)))
                                 }
                             }
-                        case "apple":
+                        case .apple:
                             send(.async(.deleteUser(reason: reason)))
                         default:
                             break

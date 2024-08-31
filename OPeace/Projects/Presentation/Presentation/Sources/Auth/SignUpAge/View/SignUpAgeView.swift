@@ -63,10 +63,16 @@ public struct SignUpAgeView: View {
                 store.send(.view(.apperName))
             }
             .onChange(of: store.signUpAgeDisplay, { oldValue, newValue in
-                let (generation, color, textColor) = CheckRegister.getGeneration(year: Int(newValue) ?? .zero, color: store.signUpAgeDisplayColor, textColor: store.checkGenerationTextColor)
-                store.checkGenerationText = generation
-                store.signUpAgeDisplayColor = color
-                store.checkGenerationTextColor = textColor
+                store.send(.async(.checkGeneration(year: Int(newValue) ?? .zero)))
+                
+//                let (color, textColor) = CheckRegister.getGenerationSignUp(
+//                    generation: store.checkGenerationText,
+//                    color: store.signUpAgeDisplayColor,
+//                    textColor: store.checkGenerationTextColor)
+////                        store.checkGenerationText = generation
+//                store.signUpAgeDisplayColor = color
+//                store.checkGenerationTextColor = textColor
+
             })
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -130,6 +136,7 @@ extension SignUpAgeView {
                         store.signUpAgeDisplay = String(newValue.prefix(4))
                     }
                     store.signUpAgeDisplay = store.signUpAgeDisplay.filter { $0.isNumber }
+                    store.send(.async(.checkGeneration(year: Int(newValue) ?? .zero)))
                 }
                 .onSubmit {
                     // Check if the input is exactly 4 digits and can be converted to an integer
@@ -141,14 +148,15 @@ extension SignUpAgeView {
                     } else {
                         // No error, so proceed with generation check
                         store.isErrorGenerationText = ""
-                        let (generation, color, textColor) = CheckRegister.getGeneration(
-                            year: Int(store.signUpAgeDisplay) ?? .zero,
-                            color: store.signUpAgeDisplayColor,
-                            textColor: store.checkGenerationTextColor
-                        )
-                        store.checkGenerationText = generation
-                        store.signUpAgeDisplayColor = color
-                        store.checkGenerationTextColor = textColor
+                        store.send(.async(.checkGeneration(year: Int(store.signUpAgeDisplay) ?? .zero)))
+                        
+//                        let (color, textColor) = CheckRegister.getGenerationSignUp(
+//                            generation: store.checkGenerationText,
+//                            color: store.signUpAgeDisplayColor,
+//                            textColor: store.checkGenerationTextColor)
+////                        store.checkGenerationText = generation
+//                        store.signUpAgeDisplayColor = color
+//                        store.checkGenerationTextColor = textColor
                     }
                 }
 

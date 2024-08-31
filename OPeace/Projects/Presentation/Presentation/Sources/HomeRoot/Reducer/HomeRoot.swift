@@ -32,7 +32,7 @@ public struct HomeRoot {
         @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
         @Shared(.inMemory("isReportQuestion")) var isReportQuestion: Bool = false
         @Shared(.inMemory("questionID")) var questionID: Int = 0
-        @Shared(.inMemory("isRealseBlockUser")) var isRealseBlockUser: Bool = false
+        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
     }
     
     public enum Action : ViewAction, FeatureAction {
@@ -104,7 +104,8 @@ public struct HomeRoot {
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
                         isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        loginSocialType: state.loginSocialType
+                    )))
                     
                 case .element(id: _, action: .login(.navigation(.presnetAgreement))):
                     state.path.append(.agreeMent(.init()))
@@ -118,7 +119,8 @@ public struct HomeRoot {
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
                         isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        loginSocialType: state.loginSocialType
+                    )))
                     
                     
                     //MARK: - Agree
@@ -147,7 +149,7 @@ public struct HomeRoot {
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
                         isReportQuestion: state.isReportQuestion,
-                        isRealseBlockUser: state.isRealseBlockUser)))
+                        loginSocialType: state.loginSocialType)))
                     
                     //MARK: - OnBoarding
                 case .element(id: _, action: .onBoardingPagging(.navigation(.presntMainHome))):
@@ -158,7 +160,8 @@ public struct HomeRoot {
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
-                        isReportQuestion: state.isReportQuestion)))
+                        isReportQuestion: state.isReportQuestion,
+                        loginSocialType: state.loginSocialType)))
                     
                     //MARK: - home
                 case .element(id: _, action: .home(.navigation(.presntProfile))):
@@ -184,7 +187,8 @@ public struct HomeRoot {
                         isChangeProfile: state.isChangeProfile,
                         isCreateQuestion: state.isCreateQuestion,
                         isDeleteQuestion: state.isDeleteQuestion,
-                        isReportQuestion: state.isReportQuestion)))
+                        isReportQuestion: state.isReportQuestion,
+                        loginSocialType: state.loginSocialType)))
                     state.path.removeFirst()
                     
                 case .element(id: _, action: .profile(.navigation(.presntEditProfile))):
@@ -250,15 +254,7 @@ public struct HomeRoot {
                     }
                     
                     //MARK: - Block
-                case .element(id: _, action: .blockUser(.navigation(.presntMainHome))):
-                    state.path.removeAll { path in
-                        switch path {
-                        case .editProfile, .profile, .withDraw, .writeAnswer, .writeQuestion, .blockUser:
-                            return true
-                        default:
-                            return false
-                        }
-                    }
+              
                     
                 default:
                     return .none

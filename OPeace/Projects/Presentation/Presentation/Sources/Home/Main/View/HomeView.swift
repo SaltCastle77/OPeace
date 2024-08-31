@@ -12,6 +12,7 @@ import ComposableArchitecture
 import SwiftUIIntrospect
 import PopupView
 import KeychainAccess
+import DesignSystem
 
 public struct HomeView: View {
     @Bindable var store: StoreOf<Home>
@@ -36,6 +37,7 @@ public struct HomeView: View {
                 store.send(.async(.fetchQuestionList))
             }
             .onAppear {
+                print("socialType:", store.loginSocialType ?? .apple)
                 store.send(.async(.fetchQuestionList))
                 store.send(.async(.fetchUserProfile))
                 startRefreshData()
@@ -51,12 +53,11 @@ public struct HomeView: View {
                     Spacer()
                     
                     writeQuestionButton()
-                        .padding(.bottom, 40)
+                        .padding(.bottom, 10)
                 }
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
-        
         .sheet(item: $store.scope(state: \.destination?.editQuestion, action: \.destination.editQuestion)) { editQuestionStore in
             EditQuestionView(store: editQuestionStore) {
                 guard let edititem =  editQuestionStore.editQuestionitem else {return}
@@ -238,12 +239,6 @@ extension HomeView {
             store.floatingImage = .warning
             store.send(.view(.timeToCloseFloatingPopUp))
             store.isReportQuestion = false
-        } else if store.isRealseBlockUser == true {
-            store.send(.view(.presntFloatintPopUp))
-            store.floatingText = "신고가 차단이 해제 되었어요"
-            store.floatingImage = .succesLogout
-            store.send(.view(.timeToCloseFloatingPopUp))
-            store.isRealseBlockUser = false
         } else {
             store.floatingText = "로그인 하시겠어요?"
         }
@@ -298,63 +293,48 @@ extension HomeView {
     @ViewBuilder
     private func qustionCardView() -> some View {
         if let resultData = store.questionModel?.data?.results {
-            FlippableCardView(data: resultData) { item in
+            FlippableCardView(data: resultData) {
+                store.send(.async(.fetchQuestionList))
+            } content: { item in
                 CardItemView(
+                    resultData: item,
                     isProfile: false,
-                    id: item.userInfo?.userID ?? "",
-                    userID: store.profileUserModel?.data?.socialID ?? "",
-                    nickName: item.userInfo?.userNickname ?? "",
-                    job: item.userInfo?.userJob ?? "",
-                    generation: item.userInfo?.userGeneration ?? "",
+                    userLoginID: store.profileUserModel?.data?.socialID ?? "",
                     generationColor: store.cardGenerationColor,
-                    emoji: item.emoji ?? "",
-                    title: item.title ?? "",
-                    choiceA: item.choiceA ?? "",
-                    choiceB: item.choiceB ?? "",
-                    responseCount: item.answerCount ?? .zero,
-                    likeCount: item.likeCount ?? .zero,
-                    isLikedTap: store.isLikeTap,
-                    answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
-                    isRotated: store.isRoatinCard,
                     isTapAVote: $store.isTapAVote,
                     isTapBVote: $store.isTapBVote,
-                    isLogOut: store.isLogOut,  // Replace with the actual condition from your store
-                    isLookAround: store.isLookAround,  // Replace with the actual condition from your store
+                    isLogOut: store.isLogOut,
+                    isLookAround: store.isLookAround,
                     isDeleteUser: store.isDeleteUser,
+                    answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
                     editTapAction: {
-                        store.userID = item.userInfo?.userID ?? ""
-                        store.reportQuestionID = item.id ?? .zero
-                        store.questionID = item.id ?? .zero
-                        store.send(.view(.presntEditQuestion))
+                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                            store.send(.view(.prsentCustomPopUp))
+                        } else {
+                            store.userID = item.userInfo?.userID ?? ""
+                            store.reportQuestionID = item.id ?? .zero
+                            store.questionID = item.id ?? .zero
+                            store.send(.view(.presntEditQuestion))
+                        }
                     },
-                    likeTapAction: { userid in
+                    likeTapAction: { userID in
                         if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
-                            store.isRoatinCard = false
                             store.send(.view(.prsentCustomPopUp))
                         } else {
-                            store.send(.async(.isVoteQuestionLike(questioniD: item.id ?? .zero)))
+                            store.send(.async(.isVoteQuestionLike(questioniD: Int(userID) ?? .zero)))
+                            store.send(.async(.fetchQuestionList))
                         }
-                    }, choiceTapAction: {
-                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
-                            store.isRoatinCard = false
-                            store.isTapAVote = false
-                            store.isTapBVote = false
-                            store.send(.view(.prsentCustomPopUp))
+                    },choiceTapAction: {
+                        if store.isTapAVote == true  {
+                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+                            store.send(.async(.fetchQuestionList))
+                        } else if store.isTapBVote == true {
+                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                            store.send(.async(.fetchQuestionList))
                         } else {
-                            if store.isTapAVote == true  {
-                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
-                            } else if store.isTapBVote == true {
-                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
-                            }
+                            store.send(.view(.prsentCustomPopUp))
                         }
-                    }
-                )
-                .onAppear {
-                    if item == store.questionModel?.data?.results?.last {
-                        store.send(.async(.fetchQuestionList))
-                    }
-                }
-                
+                    })
             }
         }
     }

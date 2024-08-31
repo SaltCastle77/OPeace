@@ -209,37 +209,19 @@ extension ProfileView {
             if let resultData = store.myQuestionListModel?.data?.results {
                 FlippableCardView(data: resultData) { item in
                     CardItemView(
+                        resultData: item,
                         isProfile: true,
-                        id: item.userInfo?.userID ?? "",
-                        userID: store.profileUserModel?.data?.socialID ?? "",
-                        nickName: item.userInfo?.userNickname ?? "",
-                        job: item.userInfo?.userJob ?? "",
-                        generation: item.userInfo?.userGeneration ?? "",
+                        userLoginID: store.profileUserModel?.data?.socialID ?? "",
                         generationColor: store.cardGenerationColor,
-                        emoji: item.emoji ?? "",
-                        title: item.title ?? "",
-                        choiceA: item.choiceA ?? "",
-                        choiceB: item.choiceB ?? "",
-                        responseCount: item.answerCount ?? .zero,
-                        likeCount: item.likeCount ?? .zero,
-                        isLikedTap: false,
-                        answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
-                        isRotated: false,
                         isTapAVote: .constant(false),
                         isTapBVote: .constant(false),
                         isLogOut: false,
-                        isLookAround: false,  
+                        isLookAround: false,
                         isDeleteUser: false,
-                        editTapAction: {
-                            store.deleteQuestionId = item.id ?? .zero
-                            store.isDeleteQuestionPopUp = true
-                            store.popUpText = "고민을 삭제하시겠어요?"
-                            store.send(.view(.presntPopUp))
-                        },
-                        likeTapAction: { _  in },
-                        choiceTapAction: { }
-                    )
-                    
+                        answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+                        editTapAction: {},
+                        likeTapAction: { _ in },
+                        choiceTapAction: {})
                 }
             }
         }

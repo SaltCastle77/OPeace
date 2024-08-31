@@ -22,25 +22,32 @@ public struct BlockUser {
     @ObservableState
     public struct State: Equatable {
         public init() {}
-        var generationColor: Color = .red
         var userBlockListModel: UserBlockListModel?  = nil
         var realseUserBlocModel: UserBlockModel?  = nil
         
-        @Shared(.inMemory("isRealseBlockUser")) var isRealseBlockUser: Bool = false
+        @Presents var destination: Destination.State?
     }
     
     public enum Action: ViewAction, BindableAction, FeatureAction {
         case binding(BindingAction<State>)
+        case destination(PresentationAction<Destination.Action>)
         case view(View)
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
     }
     
+    @Reducer(state: .equatable)
+    public enum Destination {
+        case floatingPopUP(FloatingPopUp)
+    }
+    
     //MARK: - ViewAction
     @CasePathable
     public enum View {
-        
+        case presntFloatintPopUp
+        case closePopUp
+        case timeToCloseFloatingPopUp
     }
     
     //MARK: - AsyncAction 비동기 처리 액션
@@ -72,10 +79,24 @@ public struct BlockUser {
             case .binding(_):
                 return .none
                 
+            case .destination(_):
+                return .none
                 
             case .view(let View):
                 switch View {
+                case .presntFloatintPopUp:
+                    state.destination = .floatingPopUP(.init())
+                    return .none
                     
+                case .closePopUp:
+                    state.destination = nil
+                    return .none
+                    
+                case .timeToCloseFloatingPopUp:
+                    return .run { send in
+                        try await clock.sleep(for: .seconds(1.5))
+                        await send(.view(.closePopUp))
+                    }
                 }
                 
             case .async(let AsyncAction):
@@ -118,8 +139,10 @@ public struct BlockUser {
                             if let realseUserBlockResultData = realseUserBlockResultData {
                                 send(.async(.realseUserBlockResponse(.success(realseUserBlockResultData))))
                                 
-                                try await clock.sleep(for: .seconds(0.5))
-                                send(.navigation(.presntMainHome))
+                                try await clock.sleep(for: .seconds(0.3))
+                                send(.view(.presntFloatintPopUp))
+                                
+                                send(.async(.fetchUserBlockList))
                             }
                         case .failure(let error):
                             send(.async(.realseUserBlockResponse(.failure(CustomError.userError(error.localizedDescription)))))
@@ -130,7 +153,6 @@ public struct BlockUser {
                     switch result {
                     case .success(let realseUserBlockResult):
                         state.realseUserBlocModel = realseUserBlockResult
-                        state.isRealseBlockUser = true
                     case .failure(let error):
                         Log.error("유저 차단 해제 에러", error.localizedDescription)
                     }
@@ -147,6 +169,13 @@ public struct BlockUser {
                 case .presntMainHome:
                     return .none
                 }
+            }
+        }
+        .ifLet(\.$destination, action: \.destination)
+        .onChange(of: \.userBlockListModel) { oldValue, newValue in
+            Reduce { state, action in
+                state.userBlockListModel = newValue
+                return .none
             }
         }
     }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 import ComposableArchitecture
+import PopupView
 
 import DesignSystem
 
@@ -45,6 +46,19 @@ public struct BlockUserView: View {
             }
             .onAppear {
                 store.send(.async(.fetchUserBlockList))
+            }
+            .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
+                FloatingPopUpView(store: floatingPopUpStore, title: "차단이 해제되었어요", image: .succesLogout)
+                    .onAppear{
+                        store.send(.view(.timeToCloseFloatingPopUp))
+                    }
+            }  customize: { popup in
+                popup
+                    .type(.floater(verticalPadding: UIScreen.screenHeight * 0.02))
+                    .position(.bottom)
+                    .animation(.spring)
+                    .closeOnTap(true)
+                    .closeOnTapOutside(true)
             }
         }
     }
@@ -86,12 +100,11 @@ extension BlockUserView {
                 .frame(height: 16)
             
             if let userBlockData = store.userBlockListModel?.data {
-                ForEach(userBlockData, id: \.id) { item in
+                ForEach(userBlockData, id: \.blockID) { item in
                     blockUserListItem(
-                        nickName: "엠제이엠제이",
-                        job: "개발",
-                        generation: "Z 세대",
-                        generationColor: store.generationColor,
+                        nickName: item.nickname ?? "",
+                        job: item.job ?? "",
+                        generation: item.generation ?? "",
                         completion: {
                             store.send(.async(.realseUserBlock(blockUserID: item.blockedUserID ?? "")))
                         })
@@ -147,7 +160,6 @@ extension BlockUserView {
         nickName: String,
         job: String,
         generation: String,
-        generationColor: Color,
         completion: @escaping () -> Void
     ) -> some View {
         RoundedRectangle(cornerRadius: 16)
@@ -184,11 +196,9 @@ extension BlockUserView {
                         Spacer()
                             .frame(width: 8)
                         
-                        let (generation, color) = CheckRegister.generatuionTextColor(generation: generation, color: generationColor)
-                        
                         Text(generation)
                             .pretendardFont(family: .Medium, size: 14)
-                            .foregroundStyle(color)
+                            .foregroundStyle(Color.gray200)
                         
                         Spacer()
                         
