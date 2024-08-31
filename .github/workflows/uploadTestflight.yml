@@ -33,8 +33,11 @@ jobs:
           # mise doctor
 
       # Install a specific version of Tuist using Mise
-      - name: Install Specific Tuist Version
-        run: mise install tuist@4.20.0
+      - name: Verify Tuist Installation
+        run: |
+          echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
+          export PATH="$HOME/.tuist/bin:$PATH" # Immediately update the PATH for this session
+          tuist --version
 
       # Use the installed Tuist version globally
       - name: Use Specific Tuist Version Globally
