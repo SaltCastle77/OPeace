@@ -8,44 +8,45 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+      # Checkout the code from the repository
       - uses: actions/checkout@v2
 
+      # Setup the specific Xcode version required
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: 16.1-beta
 
-  
- # uses: actions/checkout@v3
-    #     with:
-    #        key: ${{ secrets.MASTER_KEY }}
+      # Install Mise tool (make sure it's properly set up)
       - name: Install Mise
         run: curl https://mise.run | sh
         working-directory: ./OPeace
-      # Corrected indentation for the "Install Tuist" step
+
+      # Install Tuist using the new installation method
       - name: Install Tuist
         run: curl -Ls https://install.tuist.io | bash
-      
-      - name: Install Tuist
+
+      # Use Mise to install a specific version of Tuist
+      - name: Install Specific Tuist Version
         run: mise install tuist@4.25.0
         working-directory: ./OPeace
 
-      - name : mise Use Tuist
-        run : mise use -g tuist@4.25.0
-       
+      # Use the installed Tuist version globally
+      - name: Use Specific Tuist Version Globally
+        run: mise use -g tuist@4.25.0
 
-
-      # Corrected indentation for the "Install Fastlane" step
+      # Install Fastlane using Homebrew
       - name: Install Fastlane
         run: brew install fastlane
         working-directory: ./OPeace
 
+      # Setup Ruby environment with the specified version
       - uses: ruby/setup-ruby@v1
         with:
-         ruby-version: '3.3' # Not needed with a .ruby-version file
-         bundler-cache: true #
+          ruby-version: '3.3'
+          bundler-cache: true
 
-
+      # Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
         run: |
           tuist clean
@@ -53,11 +54,13 @@ jobs:
           TUIST_ROOT_DIR=${PWD} tuist generate
         working-directory: ./OPeace
 
-      - run: fastlane QA
+      # Run Fastlane with the specified environment variables for deployment
+      - name: Run Fastlane QA
+        run: fastlane QA
         working-directory: ./OPeace
         env:
           TEAM_ID: ${{ secrets.TEAM_ID }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
-          SLACK_URL_UPLOAD: ${{ secrets.SLACK_URL_UPLOA }}
+          SLACK_URL_UPLOAD: ${{ secrets.SLACK_URL_UPLOAD }}
