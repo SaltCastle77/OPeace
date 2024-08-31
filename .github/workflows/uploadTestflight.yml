@@ -59,6 +59,8 @@ jobs:
         run: fastlane QA
         working-directory: ./OPeace
         env:
+          APP_NAME: "OPeace"
+          SCHEME: "OPeace-QA"
           TEAM_ID: ${{ secrets.TEAM_ID }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
