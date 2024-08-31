@@ -17,10 +17,13 @@ jobs:
         with:
           xcode-version: 16.0-beta
 
+      # Add SSH Key for accessing private repositories or servers
       - uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.SSH_KEY }}
-
+          key: ${{ secrets.SSH_KEY }} # Your SSH private key stored in GitHub Secrets
+          name: id_rsa
+          known_hosts: github.com # Ensures secure SSH connection to GitHub
+          if_key_exists: replace
 
       # Uninstall the deprecated Tuist version
       - name: Uninstall Deprecated Tuist
@@ -107,4 +110,3 @@ jobs:
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
           SLACK_URL_UPLOAD: ${{ secrets.SLACK_URL_UPLOAD }}
-
