@@ -44,8 +44,6 @@ jobs:
           bundler-cache: true
 
       # Verify available schemes in the workspace
-      - name: List Available Schemes
-        run: xcodebuild -list -workspace OPeace.xcworkspace
 
       - name: Execute Tuist tasks
         run: |
