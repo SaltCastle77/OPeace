@@ -27,27 +27,35 @@ jobs:
           curl https://mise.run | sh
           # Add Mise shims directory to PATH
           echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> $GITHUB_ENV
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Immediately update the PATH
           # Activate Mise in the current session
-          # eval "$(/Users/runner/.local/bin/mise activate bash)"
+          eval "$(/Users/runner/.local/bin/mise activate bash)"
           # Check Mise installation status
-          # mise doctor
+          mise doctor
 
       # Install a specific version of Tuist using Mise
-      - name: Verify Tuist Installation
-        run: |
-          echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
-          export PATH="$HOME/.tuist/bin:$PATH" # Immediately update the PATH for this session
-          tuist --version
+      - name: Install Specific Tuist Version
+        run: mise install tuist@4.20.0
 
       # Use the installed Tuist version globally
       - name: Use Specific Tuist Version Globally
-        run: mise use -g tuist@4.25.0
+        run: mise use -g tuist@4.20.0
 
       # Verify Tuist installation and add Tuist to PATH
-      # - name: Verify Tuist Installation
-      #   run: |
-      #     echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
-      #     tuist --version
+      - name: Verify Tuist Installation
+        run: |
+          # Debugging: Check where Tuist is installed
+          ls -al $HOME/.tuist/bin
+          echo 'Current PATH:'
+          echo $PATH
+          
+          # Update the PATH for this session and add it to the environment for future steps
+          export PATH="$HOME/.tuist/bin:$PATH"
+          echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
+          
+          # Check if Tuist is available and verify the version
+          which tuist
+          tuist --version
 
       # Install Fastlane using Homebrew
       - name: Install Fastlane
@@ -62,14 +70,17 @@ jobs:
       # Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
         run: |
-          # tuist clean
+          export PATH="$HOME/.tuist/bin:$PATH" # Ensure PATH is updated in each step
+          tuist clean
           tuist install
           tuist generate
         working-directory: ./OPeace
 
       # Run Fastlane with the specified environment variables for deployment
       - name: Run Fastlane QA
-        run: bundle exec fastlane QA
+        run: |
+          export PATH="$HOME/.tuist/bin:$PATH" # Ensure PATH is updated in each step
+          bundle exec fastlane QA
         working-directory: ./OPeace
         env:
           APP_NAME: "OPeace"
