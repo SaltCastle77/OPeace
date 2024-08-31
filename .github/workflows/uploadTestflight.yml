@@ -35,11 +35,11 @@ jobs:
 
       # Install a specific version of Tuist using Mise
       - name: Install Specific Tuist Version
-        run: mise install tuist@4.20.0
+        run: mise install tuist@4.50.0
 
       # Use the installed Tuist version globally
       - name: Use Specific Tuist Version Globally
-        run: mise use -g tuist@4.20.0
+        run: mise use -g tuist@4.25.0
 
       # Verify Tuist installation and add Tuist to PATH
       - name: Verify Tuist Installation
@@ -61,7 +61,7 @@ jobs:
           
           # Check if Tuist is available and verify the version
           which tuist
-          tuist --version
+         tuist version
 
 
       # Install Fastlane using Homebrew
