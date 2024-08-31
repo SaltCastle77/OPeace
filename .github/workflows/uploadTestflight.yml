@@ -25,6 +25,8 @@ jobs:
       - name: Install and Activate Mise
         run: |
           curl https://mise.run | sh
+          # Ensure Mise executable has correct permissions
+          chmod +x ~/.local/bin/mise
           # Add Mise shims directory to PATH
           echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> $GITHUB_ENV
           export PATH="$HOME/.local/share/mise/shims:$PATH" # Immediately update the PATH
@@ -35,7 +37,7 @@ jobs:
 
       # Install a specific version of Tuist using Mise
       - name: Install Specific Tuist Version
-        run: mise install tuist@4.50.0
+        run: mise install tuist@4.25.0
 
       # Use the installed Tuist version globally
       - name: Use Specific Tuist Version Globally
@@ -63,7 +65,6 @@ jobs:
           which tuist
           tuist version
 
-
       # Install Fastlane using Homebrew
       - name: Install Fastlane
         run: brew install fastlane
@@ -77,7 +78,7 @@ jobs:
       # Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
         run: |
-          export PATH="$HOME/.tuist/bin:$PATH" # Ensure PATH is updated in each step
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
           tuist clean
           tuist install
           tuist generate
@@ -86,7 +87,7 @@ jobs:
       # Run Fastlane with the specified environment variables for deployment
       - name: Run Fastlane QA
         run: |
-          export PATH="$HOME/.tuist/bin:$PATH" # Ensure PATH is updated in each step
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
           bundle exec fastlane QA
         working-directory: ./OPeace
         env:
