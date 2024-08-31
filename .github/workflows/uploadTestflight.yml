@@ -44,18 +44,25 @@ jobs:
       # Verify Tuist installation and add Tuist to PATH
       - name: Verify Tuist Installation
         run: |
-          # Debugging: Check where Tuist is installed
-          ls -al $HOME/.tuist/bin
-          echo 'Current PATH:'
-          echo $PATH
+          # Debugging: Check common installation paths for Tuist
+          echo "Checking common Tuist installation directories..."
+          ls -al $HOME/.local/share/mise/shims
+          ls -al /usr/local/bin
+          ls -al $HOME/.local/bin
+
+          # Attempt to find the Tuist executable
+          echo "Searching for Tuist..."
+          find $HOME -name tuist 2>/dev/null
+          find /usr/local -name tuist 2>/dev/null
           
           # Update the PATH for this session and add it to the environment for future steps
-          export PATH="$HOME/.tuist/bin:$PATH"
-          echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
+          export PATH="$HOME/.local/share/mise/shims:$PATH"
+          echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> $GITHUB_ENV
           
           # Check if Tuist is available and verify the version
           which tuist
           tuist --version
+
 
       # Install Fastlane using Homebrew
       - name: Install Fastlane
