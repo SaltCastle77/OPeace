@@ -340,7 +340,7 @@ public struct Home {
                     case .success(let blockUserResult):
                         state.userBlockModel = blockUserResult
                         state.floatingText = "차단이 완료 되었어요!"
-                        state.floatingImage = .warning
+                        state.floatingImage = .succesLogout
                     case .failure(let error):
                         Log.error("유저 차단 에러", error.localizedDescription)
                     }

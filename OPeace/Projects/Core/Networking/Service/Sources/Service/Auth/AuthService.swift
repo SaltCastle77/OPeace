@@ -179,7 +179,6 @@ extension AuthService: BaseTargetType {
             ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
-        
     }
     
     public var headers: [String : String]? {

@@ -31,7 +31,7 @@ public extension String {
       if title.count <= 2 {
         return baseWidth
       } else if title.count == 4 {
-        return baseWidth + 30
+        return baseWidth + 25
       } else if title.count == 5 {
         return baseWidth + 30
       }

@@ -78,6 +78,7 @@ public struct EditProfileView: View {
             }
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                checkChangeProfileName()
             }
         }
     }
@@ -96,22 +97,7 @@ extension EditProfileView {
                 .multilineTextAlignment(.center)
                 .submitLabel(.done)
                 .onSubmit {
-                    if CheckRegister.isValidNickName(store.editProfileName) {
-                        store.checkNickNameMessage = "사용 가능한 닉네임이에요"
-                        store.enableButton = true
-                        store.send(.async(.checkNickName(nickName: store.editProfileName)))
-                    } else if CheckRegister.containsInvalidCharacters(store.editProfileName) {
-                        store.checkNickNameMessage = "띄어쓰기와 특수문자는 사용할 수 없어요"
-                        store.enableButton = false
-                    } else if store.editProfileName.isEmpty {
-                        store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
-                        store.enableButton = false
-                    }  else if CheckRegister.containsInvalidCharacters(store.editProfileName) {
-                        store.enableButton = false
-                    } else {
-                        store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
-                        store.enableButton = false
-                    }
+                    checkChangeProfileName()
                 }
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -121,10 +107,7 @@ extension EditProfileView {
                 .frame(height: 12)
             
             UnderlineView(text: store.editProfileName.isEmpty ? store.profileName : store.editProfileName)
-            
-            
-            
-                 
+
         }
     }
     
@@ -133,7 +116,7 @@ extension EditProfileView {
     private func erorNIckCheckText() -> some View {
         VStack {
             Spacer()
-                .frame(height: 20)
+                .frame(height: 16)
             
             if store.editProfileName.isEmpty {
                 Text(store.checkNickNameMessage)
@@ -146,7 +129,6 @@ extension EditProfileView {
             }
         }
     }
-    
     
     @ViewBuilder
     private func signUpJobSelect() -> some View {
@@ -206,4 +188,22 @@ extension EditProfileView {
             }
     }
     
+    private func checkChangeProfileName() {
+        if CheckRegister.isValidNickName(store.editProfileName) {
+            store.checkNickNameMessage = "사용 가능한 닉네임이에요"
+            store.enableButton = true
+            store.send(.async(.checkNickName(nickName: store.editProfileName)))
+        } else if CheckRegister.containsInvalidCharacters(store.editProfileName) {
+            store.checkNickNameMessage = "띄어쓰기와 특수문자는 사용할 수 없어요"
+            store.enableButton = false
+        } else if store.editProfileName.isEmpty {
+            store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
+            store.enableButton = false
+        }  else if CheckRegister.containsInvalidCharacters(store.editProfileName) {
+            store.enableButton = false
+        } else {
+            store.checkNickNameMessage = "닉네임은 5글자 이하까지 입력 가능해요"
+            store.enableButton = false
+        }
+    }
 }

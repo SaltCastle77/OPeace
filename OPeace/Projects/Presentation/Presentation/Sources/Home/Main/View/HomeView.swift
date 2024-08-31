@@ -53,7 +53,7 @@ public struct HomeView: View {
                     Spacer()
                     
                     writeQuestionButton()
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 32)
                 }
                 .edgesIgnoringSafeArea(.bottom)
             }

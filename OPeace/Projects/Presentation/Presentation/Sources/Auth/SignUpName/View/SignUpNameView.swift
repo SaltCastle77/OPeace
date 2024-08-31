@@ -28,7 +28,7 @@ public struct SignUpNameView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                ScrollView(.vertical, showsIndicators: false) {
+//                ScrollView(.vertical, showsIndicators: false) {
                     signUpNameTitle()
                       
                     checkNickNameTextField()
@@ -49,8 +49,8 @@ public struct SignUpNameView: View {
                     
                     Spacer()
                         .frame(height: 16)
-                }
-                .bounce(false)
+//                }
+//                .bounce(false)
                  
             }
             

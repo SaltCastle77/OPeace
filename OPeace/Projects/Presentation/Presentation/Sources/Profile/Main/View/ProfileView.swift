@@ -138,9 +138,12 @@ extension ProfileView {
                     .frame(width:  job.calculateWidthProfile(for: job), height: 24)
                     .background(Color.gray600)
                     .overlay(alignment: .center) {
-                        Text(job)
-                            .pretendardFont(family: .Regular, size: 12)
-                            .foregroundStyle(Color.basicWhite)
+                        HStack {
+                            Text(job)
+                                .pretendardFont(family: .SemiBold, size: 12)
+                                .foregroundStyle(Color.basicWhite)
+                        }
+                        .padding(.horizontal, 12)
                     }
                 
                 Spacer()
@@ -151,7 +154,7 @@ extension ProfileView {
                     .frame(width: generation.calculateWidthProfileGeneration(for: generation), height: 24)
                     .overlay(alignment: .center) {
                         Text(generation)
-                            .pretendardFont(family: .Regular, size: 12)
+                            .pretendardFont(family: .SemiBold, size: 12)
                             .foregroundStyle(store.profileGenerationTextColor)
                     }
                 

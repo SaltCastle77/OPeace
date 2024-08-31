@@ -9,7 +9,9 @@ import Foundation
 import Moya
 import API
 
-public protocol BaseTargetType: TargetType {}
+public protocol BaseTargetType: TargetType {
+//    var parameters: [String: Any]? { get }
+}
 
 extension BaseTargetType {
     public var baseURL: URL {
@@ -19,5 +21,21 @@ extension BaseTargetType {
     public var headers: [String : String]? {
         return APIHeader.notAccessTokenHeader
     }
+    
+//    public var task: Moya.Task {
+//        if let parameters = parameters {
+//            switch method {
+//            case .get:
+//                return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+//            case .post:
+//                return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+//            case .delete:
+//                return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+//            default:
+//                return .requestPlain
+//            }
+//        }
+//        return .requestPlain
+//    }
     
 }

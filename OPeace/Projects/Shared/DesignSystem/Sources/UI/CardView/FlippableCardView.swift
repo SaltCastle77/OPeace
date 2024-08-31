@@ -45,15 +45,15 @@ public struct FlippableCardView<Content: View, T>: View {
                                 }
                             
                             Spacer()
-                                .frame(height: index == data.indices.last ? UIScreen.main.bounds.height * 0.25 : 5)
+                                .frame(height: index == data.indices.last ? UIScreen.main.bounds.height * 0.25 : 16)
                         }
                     }
                     .gesture(DragGesture()
                         .updating($dragOffset) { value, state, _ in
-                            state = value.translation.height * 0.2 // Dampen the drag effect
+                            state = value.translation.height * 0.2
                         }
                         .onEnded { value in
-                            // Determine the nearest index based on drag velocity and position
+                          
                             let velocity = value.predictedEndLocation.y - value.startLocation.y
                             let nearestIndex = calculateNearestIndex(
                                 geometry: geometry,
@@ -61,7 +61,7 @@ public struct FlippableCardView<Content: View, T>: View {
                                 velocity: velocity
                             )
                             currentPage = nearestIndex
-                            lastViewedPage = nearestIndex // Save the current page as the last viewed page
+                            lastViewedPage = nearestIndex
                             scrollToCenter(scrollViewProxy: scrollViewProxy, index: nearestIndex)
                         })
                 }
@@ -94,7 +94,7 @@ public struct FlippableCardView<Content: View, T>: View {
         currentPage: Int,
         velocity: CGFloat
     ) -> Int {
-        let threshold: CGFloat = 30 // Minimum velocity needed to trigger a scroll change
+        let threshold: CGFloat = 30
         if velocity > threshold {
             return max(currentPage - 1, 0)
         } else if velocity < -threshold {
