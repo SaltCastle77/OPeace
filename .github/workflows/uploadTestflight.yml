@@ -45,8 +45,6 @@ jobs:
 
       - name: Execute Tuist tasks
         run: |
-          # tuist clean
-          tuist install
           TUIST_ROOT_DIR=${PWD} tuist generate
         working-directory: ./OPeace
 
