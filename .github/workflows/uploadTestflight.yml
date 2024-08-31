@@ -47,12 +47,12 @@ jobs:
           bundler-cache: true
 
       # Execute Tuist commands: clean, install dependencies, and generate the project
-      - name: Execute Tuist tasks
-        run: |
-          tuist clean
-          tuist install
-          TUIST_ROOT_DIR=${PWD} tuist generate
-        working-directory: ./OPeace
+      # - name: Execute Tuist tasks
+      #   run: |
+      #     tuist clean
+      #     tuist install
+      #     TUIST_ROOT_DIR=${PWD} tuist generate
+      #   working-directory: ./OPeace
 
       # Run Fastlane with the specified environment variables for deployment
       - name: Run Fastlane QA
