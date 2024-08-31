@@ -122,7 +122,7 @@ extension WriteQuestionView {
                                         store.isInuputEmoji = true
                                         isFocused = true
                                     }
-                                    .offset(x: -70)
+                                    .offset(x: -75)
                             }
                         }
                         
@@ -130,7 +130,18 @@ extension WriteQuestionView {
                     Spacer()
                 }
                 
-                UnderlineView(text: store.selectEmojiText.isEmpty ? "😀" : store.selectEmojiText)
+                Spacer()
+                    .frame(height: 15)
+                
+              HStack {
+                    Spacer()
+                  
+                  Divider()
+                      .frame(width: 80, height: 1)
+                      .background(Color.gray200)
+                  
+                  Spacer()
+                }
 
             } else if let emojiImage = store.emojiImage {
                 emojiImage
