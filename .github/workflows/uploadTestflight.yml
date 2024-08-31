@@ -21,12 +21,12 @@ jobs:
       - name: Install Mise
         run: curl https://mise.run | sh
 
-      - name: Uninstall Deprecated Tuist
-        run: curl -Ls https://uninstall.tuist.io | bash
+      # - name: Uninstall Deprecated Tuist
+      #   run: curl -Ls https://uninstall.tuist.io | bash
 
-      # Install Tuist using the new installation method
-      - name: Install Tuist
-        run: curl -Ls https://install.tuist.io | bash
+      # # Install Tuist using the new installation method
+      # - name: Install Tuist
+      #   run: curl -Ls https://install.tuist.io | bash
 
       # Use Mise to install a specific version of Tuist
       - name: Install Specific Tuist Version
