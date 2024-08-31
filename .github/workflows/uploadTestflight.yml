@@ -24,6 +24,9 @@ jobs:
         working-directory: ./OPeace
       # Corrected indentation for the "Install Tuist" step
       - name: Install Tuist
+        run: curl -Ls https://install.tuist.io | bash
+      
+      - name: Install Tuist
         run: mise install tuist@4.25.0
         working-directory: ./OPeace
 
