@@ -17,10 +17,9 @@ jobs:
         with:
           xcode-version: 16.0-beta
 
-      # Install Mise tool (make sure it's properly set up)
+      # Install Mise tool (ensure it's properly set up)
       - name: Install Mise
         run: curl https://mise.run | sh
-        working-directory: ./OPeace
 
       # Install Tuist using the new installation method
       - name: Install Tuist
@@ -29,7 +28,6 @@ jobs:
       # Use Mise to install a specific version of Tuist
       - name: Install Specific Tuist Version
         run: mise install tuist@4.25.0
-        working-directory: ./OPeace
 
       # Use the installed Tuist version globally
       - name: Use Specific Tuist Version Globally
@@ -38,7 +36,6 @@ jobs:
       # Install Fastlane using Homebrew
       - name: Install Fastlane
         run: brew install fastlane
-        working-directory: ./OPeace
 
       # Setup Ruby environment with the specified version
       - uses: ruby/setup-ruby@v1
@@ -46,21 +43,25 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
 
+      # Verify available schemes in the workspace
+      - name: List Available Schemes
+        run: xcodebuild -list -workspace OPeace.xcworkspace
+
       # Execute Tuist commands: clean, install dependencies, and generate the project
       # - name: Execute Tuist tasks
       #   run: |
       #     tuist clean
       #     tuist install
-      #     TUIST_ROOT_DIR=${PWD} tuist generate
+      #     tuist generate
       #   working-directory: ./OPeace
 
       # Run Fastlane with the specified environment variables for deployment
       - name: Run Fastlane QA
-        run: fastlane QA
+        run: bundle exec fastlane QA # Use bundle exec to ensure correct Ruby environment
         working-directory: ./OPeace
         env:
           APP_NAME: "OPeace"
-          SCHEME: "OPeace-QA"
+          SCHEME: "OPeace-QA" # Explicitly specify the scheme as an environment variable
           TEAM_ID: ${{ secrets.TEAM_ID }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
