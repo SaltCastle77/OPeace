@@ -27,7 +27,7 @@ jobs:
         
       - name: Install Mise
         run: |
-          curl https://mise.jdx.dev/mise-latest-macos-arm64 > ~/bin/mise
+          curl https://mise.run | sh
           chmod +x ~/bin/mise
           mise install tuist@4.25.0
           mise use tuist@4.25.0
