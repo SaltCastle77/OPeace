@@ -28,7 +28,8 @@ jobs:
       - name: Install Mise
         run: |
           curl https://mise.run | sh
-          chmod +x ~/bin/mise
+          echo "eval \"\$(/Users/runner/.local/bin/mise activate bash)\"" >> ~/.bashrc
+          mise doctor
           mise install tuist@4.25.0
           mise use tuist@4.25.0
 
