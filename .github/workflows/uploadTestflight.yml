@@ -61,7 +61,7 @@ jobs:
           
           # Check if Tuist is available and verify the version
           which tuist
-         tuist version
+          tuist version
 
 
       # Install Fastlane using Homebrew
