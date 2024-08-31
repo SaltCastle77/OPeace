@@ -42,6 +42,7 @@ public struct HomeFilter  {
     
     //MARK: - AsyncAction 비동기 처리 액션
     public enum AsyncAction: Equatable {
+        case fetchListByFilterEnum(HomeFilterEnum)
         case fetchJobList
         case fetchJobResponse(Result<SignUpJobModel, CustomError>)
     }
@@ -70,6 +71,27 @@ public struct HomeFilter  {
                 return .none
             case .async(let asyncAction):
                 switch asyncAction {
+                case .fetchListByFilterEnum(let homeFilterType):
+                    switch homeFilterType {
+                    case .job:
+                        return .run { @MainActor  send in
+                            let result = await Result {
+                                try await self.signUpUseCase.fetchJobList()
+                            }
+                            
+                            switch result  {
+                            case .success(let data):
+                                if let data  = data {
+                                    send(.async(.fetchJobResponse(.success(data))))
+                                }
+                            case .failure(let error):
+                                send(.async(.fetchJobResponse(.failure(CustomError.map(error)))))
+                            }
+                        }
+                    default:
+                        return .none
+                    }
+                    
                 case .fetchJobList:
                     return .run { @MainActor  send in
                         let result = await Result {

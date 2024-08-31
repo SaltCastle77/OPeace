@@ -154,19 +154,50 @@ extension HomeView {
                     store.send(.view(.firstFilterTapped))
                 }, title: "계열")
                 .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
-                    HomeFilterView(store: homeFilterStore)
-                        .presentationDetents([.fraction(0.7)])
-                        .presentationDragIndicator(.visible)
-                        .presentationCornerRadius(20)
+                    HomeFilterView(
+                        store: homeFilterStore,
+                        filterType: .job
+                    ) { jobString in
+                        store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
+                        store.send(.view(.closeFilterModal))
+                    }
+                    .presentationDetents([.fraction(0.7)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
                 }
                 
                 RightImageButton(action: {
                     
                 }, title: "세대")
+                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+                    HomeFilterView(
+                        store: homeFilterStore,
+                        filterType: .generation
+                    ) { jobString in
+                        store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
+                        store.send(.view(.closeFilterModal))
+                    }
+                    .presentationDetents([.fraction(0.7)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
+                }
+                
                 
                 RightImageButton(action: {
                     
                 }, title: "최신순")
+                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+                    HomeFilterView(
+                        store: homeFilterStore,
+                        filterType: .sorted(.recent)
+                    ) { jobString in
+                        store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
+                        store.send(.view(.closeFilterModal))
+                    }
+                    .presentationDetents([.fraction(0.7)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
+                }
 
                 if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                     Circle()

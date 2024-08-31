@@ -119,6 +119,7 @@ public struct Home {
         case timeToCloseFloatingPopUp
         case switchModalAction(EditQuestionType)
         case firstFilterTapped
+        case closeFilterModal
         
     }
     
@@ -160,7 +161,7 @@ public struct Home {
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
-        Reduce { state, action in
+        Reduce<State, Action> { state, action in
             switch action {
             case .binding(_):
                 return .none
@@ -180,8 +181,10 @@ public struct Home {
                 case .closePopUp:
                     state.destination = nil
                     return .none
-                    
-                    
+                case .closeFilterModal:
+                    state.destination = nil
+                    return .none
+
                 case .presntFloatintPopUp:
                     state.destination = .floatingPopUP(.init())
                     return .none
