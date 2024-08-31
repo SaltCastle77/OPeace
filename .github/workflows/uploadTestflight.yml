@@ -50,6 +50,7 @@ jobs:
       - name: Execute Tuist tasks
         run: |
           curl -Ls https://install.tuist.io | bash
+          curl -Ls https://uninstall.tuist.io | bash
           tuist clean
           tuist install
           tuist generate
