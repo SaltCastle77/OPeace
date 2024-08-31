@@ -26,6 +26,7 @@ public struct WriteQuestion {
         var emojiImage: Image? = nil
         var presntNextViewButtonTitle: String = "다음"
         var enableButton: Bool = false
+        var isActiveEmoji: Bool = false
 
         
         @Presents var destination: Destination.State?
@@ -86,7 +87,10 @@ public struct WriteQuestion {
             case .binding(\.selectEmojiText):
                 return .none
                 
-            case  .binding(\.isWriteTextEditor):
+            case .binding(\.isWriteTextEditor):
+                return .none
+                
+            case .binding(\.isActiveEmoji):
                 return .none
                 
             case .destination(_):

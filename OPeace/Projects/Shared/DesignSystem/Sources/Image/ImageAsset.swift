@@ -47,6 +47,7 @@ public enum ImageAsset: String {
     case resultRespond
     case resultLike
     case isTapResultLike
+    case activeEmojiI
     
     case empty
 }

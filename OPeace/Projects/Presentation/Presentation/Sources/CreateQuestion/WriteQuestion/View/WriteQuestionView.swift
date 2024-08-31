@@ -96,8 +96,8 @@ extension WriteQuestionView {
                     EmojiTextField(
                         text: $store.selectEmojiText,
                         emojiImage: $store.emojiImage,
-                        isInputEmoji: $store.isInuputEmoji )
-//                    TextField("", text: $store.selectEmojiText)
+                        isInputEmoji: $store.isInuputEmoji,
+                        isEmojiActive: $store.isActiveEmoji )
                         .pretendardFont(family: .SemiBold, size: 48)
                         .onChange(of: store.selectEmojiText) { oldValue, newValue in
                             if newValue.count == 1, newValue.unicodeScalars.allSatisfy({ $0.properties.isEmoji }) {
@@ -114,7 +114,19 @@ extension WriteQuestionView {
                 
                 UnderlineView(text: store.selectEmojiText.isEmpty ? "😀" : store.selectEmojiText)
                 
-            } else if let emojiImage = store.emojiImage {
+            }
+            else if store.isActiveEmoji {
+                Circle()
+                    .fill(Color.gray500)
+                    .frame(width: 80, height: 80)
+                    .overlay(alignment: .center) {
+                        Image(asset: .activeEmojiI)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                        
+            }
+            else if let emojiImage = store.emojiImage {
                 emojiImage
                     .resizable()
                     .frame(width: 80, height: 80)

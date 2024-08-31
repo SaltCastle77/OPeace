@@ -13,16 +13,19 @@ public struct EmojiTextField: UIViewRepresentable {
     @Binding var text: String
     @Binding var emojiImage: Image?
     @Binding var isInputEmoji: Bool
+    @Binding var isEmojiActive: Bool
     public var placeholder: String = ""
     
     public init(
         text: Binding<String>,
         emojiImage: Binding<Image?>,
         isInputEmoji: Binding<Bool>,
+        isEmojiActive: Binding<Bool>,
         placeholder: String = "") {
             self._text = text
             self._emojiImage = emojiImage
             self._isInputEmoji = isInputEmoji
+            self._isEmojiActive = isEmojiActive
             self.placeholder = placeholder
         }
     
@@ -62,12 +65,15 @@ public struct EmojiTextField: UIViewRepresentable {
                     self.parent.text = newValue
                     self.parent.emojiImage = Image.emojiToImage(emoji: newValue)
                     self.parent.isInputEmoji = false
+                    self.parent.isEmojiActive = true
                 } else if newValue.isEmpty {
                     self.parent.text = ""
                     self.parent.emojiImage = nil
                     self.parent.isInputEmoji = true
+                    self.parent.isEmojiActive = false
                 } else {
                     self.parent.text = newValue
+                    self.parent.isEmojiActive = true
                 }
             }
         }

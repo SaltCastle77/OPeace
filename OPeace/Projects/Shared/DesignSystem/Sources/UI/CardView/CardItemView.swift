@@ -76,7 +76,7 @@ extension CardItemView {
     @ViewBuilder
     private func profileCardView() -> some View {
         VStack {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 30)
                 .fill(Color.gray500)
                 .frame(height: 520)
                 .padding(.horizontal, 20)
@@ -108,7 +108,7 @@ extension CardItemView {
     @ViewBuilder
     private func votingCardView() -> some View {
         VStack {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 30)
                 .fill(Color.gray500)
                 .frame(height: 520)
                 .padding(.horizontal, 20)
@@ -363,7 +363,7 @@ extension CardItemView {
                 Spacer()
                     .frame(width: 4)
                 
-                Text("웅답")
+                Text("응답")
                     .pretendardFont(family: .Bold, size: 16)
                     .foregroundStyle(Color.gray200)
                 
@@ -418,18 +418,14 @@ extension CardItemView {
                         }
                     }
                     .onTapGesture {
-                        // Check if user interactions are restricted
                         if !isUserInteractionDisabled {
-                            // Only toggle and perform action if the user is not the owner
                             if userLoginID != resultData.userInfo?.userID {
                                 isLikedTap.toggle()
                                 likeTapAction(String(resultData.id ?? 0))
                             }
                         } else if userLoginID == resultData.userInfo?.userID {
-                            // Ensure no action or toggle occurs if the user is the owner
                             isLikedTap = false
                         } else if isUserInteractionDisabled {
-                            // Perform the like action when the interaction is restricted and the user is not the owner
                             likeTapAction("")
                         }
                     }
@@ -465,18 +461,14 @@ extension CardItemView {
                         }
                     }
                     .onTapGesture {
-                        // Check if user interactions are restricted
                         if !isUserInteractionDisabled {
-                            // Only toggle and perform action if the user is not the owner
                             if userLoginID != resultData.userInfo?.userID {
                                 isLikedTap.toggle()
                                 likeTapAction(String(resultData.id ?? 0))
                             }
                         } else if userLoginID == resultData.userInfo?.userID {
-                            // Ensure no action or toggle occurs if the user is the owner
                             isLikedTap = false
                         } else if isUserInteractionDisabled {
-                            // Perform the like action when the interaction is restricted and the user is not the owner
                             likeTapAction("")
                         }
                     }
