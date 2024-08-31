@@ -44,10 +44,10 @@ jobs:
         run: mise use -g tuist@4.25.0
 
       # Verify Tuist installation and add Tuist to PATH
-      - name: Verify Tuist Installation
-        run: |
-          echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
-          tuist --version
+      # - name: Verify Tuist Installation
+      #   run: |
+      #     echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
+      #     tuist --version
 
       # Install Fastlane using Homebrew
       - name: Install Fastlane
@@ -62,7 +62,7 @@ jobs:
       # Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
         run: |
-          tuist clean
+          # tuist clean
           tuist install
           tuist generate
         working-directory: ./OPeace
