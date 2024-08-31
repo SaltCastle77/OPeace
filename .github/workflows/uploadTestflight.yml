@@ -21,7 +21,6 @@ jobs:
       - uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_KEY }} # Your SSH private key stored in GitHub Secrets
-          name: id_rsa
           known_hosts: github.com # Ensures secure SSH connection to GitHub
           if_key_exists: replace
 
