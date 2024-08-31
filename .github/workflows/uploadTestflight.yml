@@ -17,15 +17,25 @@ jobs:
         with:
           xcode-version: 16.0-beta
 
-      # Install Mise tool (ensure it's properly set up)
-      - name: Install Mise
-        run: curl https://mise.run | sh
+      # Uninstall the deprecated Tuist version
+      - name: Uninstall Deprecated Tuist
+        run: curl -Ls https://uninstall.tuist.io | bash
 
-      # Install Tuist using the new installation method
-      - name: Install Tuist
-        run: curl -Ls https://install.tuist.io | bash
+      # Install and activate Mise
+      - name: Install and Activate Mise
+        run: |
+          curl https://mise.run | sh
+          # Ensure Mise executable has correct permissions
+          chmod +x ~/.local/bin/mise
+          # Add Mise shims directory to PATH
+          echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> $GITHUB_ENV
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Immediately update the PATH
+          # Activate Mise in the current session
+          eval "$(/Users/runner/.local/bin/mise activate bash)"
+          # Check Mise installation status
+          mise doctor
 
-      # Use Mise to install a specific version of Tuist
+      # Install a specific version of Tuist using Mise
       - name: Install Specific Tuist Version
         run: mise install tuist@4.25.0
 
@@ -33,23 +43,44 @@ jobs:
       - name: Use Specific Tuist Version Globally
         run: mise use -g tuist@4.25.0
 
-      # Install Fastlane using Homebrew
-      - name: Install Fastlane
-        run: brew install fastlane
+      # Verify Tuist installation and add Tuist to PATH
+      - name: Verify Tuist Installation
+        run: |
+          # Debugging: Check common installation paths for Tuist
+          echo "Checking common Tuist installation directories..."
+          ls -al $HOME/.local/share/mise/shims
+          ls -al /usr/local/bin
+          ls -al $HOME/.local/bin
+          # Attempt to find the Tuist executable
+          echo "Searching for Tuist..."
+          find $HOME -name tuist 2>/dev/null
+          find /usr/local -name tuist 2>/dev/null
+          
+          # Update the PATH for this session and add it to the environment for future steps
+          export PATH="$HOME/.local/share/mise/shims:$PATH"
+          echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> $GITHUB_ENV
+          
+          # Check if Tuist is available and verify the version
+          which tuist
+          tuist version
 
       # Setup Ruby environment with the specified version
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
-          bundler-cache: true
+          bundler-cache: true # Enable caching to speed up subsequent runs
 
-      # Verify available schemes in the workspace
-      - name: List Available Schemes
-        run: xcodebuild -list -workspace OPeace.xcworkspace
+      # Install Fastlane and other dependencies using Bundler
+      - name: Install Dependencies
+        run: |
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
+          bundle install --jobs 4 --retry 3 # Install all required gems including Fastlane
+        working-directory: ./OPeace
 
-      Execute Tuist commands: clean, install dependencies, and generate the project
+      # Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
         run: |
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
           tuist clean
           tuist install
           tuist generate
@@ -57,13 +88,18 @@ jobs:
 
       # Run Fastlane with the specified environment variables for deployment
       - name: Run Fastlane QA
-        run: bundle exec fastlane QA # Use bundle exec to ensure correct Ruby environment
+        run: |
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
+          fastlane match development --readonly
+          fastlane match appstore --readonly
+          bundle exec fastlane QA
         working-directory: ./OPeace
         env:
           APP_NAME: "OPeace"
-          SCHEME: "OPeace-QA" # Explicitly specify the scheme as an environment variable
+          SCHEME: "OPeace-QA"
           TEAM_ID: ${{ secrets.TEAM_ID }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
           SLACK_URL_UPLOAD: ${{ secrets.SLACK_URL_UPLOAD }}
+
