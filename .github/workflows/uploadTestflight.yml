@@ -13,7 +13,7 @@ jobs:
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 16.0-beta
+          xcode-version: 16.0-beta_6
 
   
  # uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
 
       - name: Execute Tuist tasks
         run: |
-          tuist clean
+          # tuist clean
           tuist install
           TUIST_ROOT_DIR=${PWD} tuist generate
         working-directory: ./OPeace
