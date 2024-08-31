@@ -17,36 +17,34 @@ jobs:
         with:
           xcode-version: 16.0-beta
 
-      # # Install Mise tool (ensure it's properly set up)
-      # - name: Install Mise
-      #   run: curl https://mise.run | sh
-
-      # # Install Tuist using the new installation method
-      - name: Install Tuist
+      # Uninstall the deprecated Tuist version
+      - name: Uninstall Deprecated Tuist
         run: curl -Ls https://uninstall.tuist.io | bash
-        
-    # Install Mise and activate it properly
+
+      # Install and activate Mise
       - name: Install and Activate Mise
         run: |
           curl https://mise.run | sh
+          # Add Mise shims directory to PATH
+          echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> $GITHUB_ENV
+          # Activate Mise in the current session
+          # eval "$(/Users/runner/.local/bin/mise activate bash)"
+          # Check Mise installation status
+          # mise doctor
 
-      # Install Tuist using Mise
+      # Install a specific version of Tuist using Mise
       - name: Install Specific Tuist Version
         run: mise install tuist@4.20.0
 
-      # Use the installed Tuist version
-      - name: Use Specific Tuist Version
-        run: mise use -g tuist@4.20.0
+      # Use the installed Tuist version globally
+      - name: Use Specific Tuist Version Globally
+        run: mise use -g tuist@4.25.0
 
-          
-
-      # Use Mise to install a specific version of Tuist
-      # - name: Install Specific Tuist Version
-      #   run: mise install tuist@4.25.0
-
-      # # Use the installed Tuist version globally
-      # - name: Use Specific Tuist Version Globally
-      #   run: mise use -g tuist@4.25.0
+      # Verify Tuist installation and add Tuist to PATH
+      - name: Verify Tuist Installation
+        run: |
+          echo 'export PATH="$HOME/.tuist/bin:$PATH"' >> $GITHUB_ENV
+          tuist --version
 
       # Install Fastlane using Homebrew
       - name: Install Fastlane
@@ -58,10 +56,7 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
 
-      # Verify available schemes in the workspace
-      # - name: Uninstall Deprecated Tuist
-      #   run: curl -Ls https://uninstall.tuist.io | bash
-
+      # Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
         run: |
           tuist clean
@@ -71,11 +66,11 @@ jobs:
 
       # Run Fastlane with the specified environment variables for deployment
       - name: Run Fastlane QA
-        run: bundle exec fastlane QA # Use bundle exec to ensure correct Ruby environment
+        run: bundle exec fastlane QA
         working-directory: ./OPeace
         env:
           APP_NAME: "OPeace"
-          SCHEME: "OPeace-QA" # Explicitly specify the scheme as an environment variable
+          SCHEME: "OPeace-QA"
           TEAM_ID: ${{ secrets.TEAM_ID }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
