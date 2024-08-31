@@ -144,9 +144,7 @@ public struct Profile {
                     
                 case .tapPresntSettingModal:
                     state.destination = .setting(.init())
-                    return .run { @MainActor send in
-                        send(.destination(.presented(.setting(.test))))
-                    }
+                    return .none
                     
                 case .closeModal:
                     state.destination = nil
@@ -206,7 +204,7 @@ public struct Profile {
             case .async(let AsyncAction):
                 switch AsyncAction {
                 case .fetchUser:
-                    return .run { @MainActor  send in
+                    return .run { send in
                         let fetchUserData = await Result {
                             try await authUseCase.fetchUserInfo()
                         }
@@ -214,11 +212,11 @@ public struct Profile {
                         switch fetchUserData {
                         case .success(let fetchUserResult):
                             if let fetchUserResult = fetchUserResult {
-                                send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
-                                send(.view(.updateGenerationInfo))
+                                await send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
+                                await send(.view(.updateGenerationInfo))
                             }
                         case .failure(let error):
-                            send(.async(.fetchUserProfileResponse(.failure(CustomError.map(error)))))
+                            await send(.async(.fetchUserProfileResponse(.failure(CustomError.map(error)))))
                             
                         }
                     }
@@ -236,7 +234,7 @@ public struct Profile {
                     
                 case .socilalLogOutUser:
                     var loginSocialType = state.loginSocialType
-                    return .run { @MainActor send in
+                    return .run {  send in
                         switch loginSocialType {
                         case .kakao:
                             UserApi.shared.logout { error in
@@ -245,13 +243,13 @@ public struct Profile {
                                 } else {
                                     Task {
                                         try await self.clock.sleep(for: .seconds(1))
-                                         send(.async(.logoutUser))
+                                        await send(.async(.logoutUser))
                                     }
                                 }
                             }
 
                         case .apple:
-                            send(.async(.logoutUser))
+                            await send(.async(.logoutUser))
                         default:
                             break
                         }
@@ -271,7 +269,7 @@ public struct Profile {
                     
                 case .logoutUser:
                     var loginSocialType = state.loginSocialType
-                    return .run { @MainActor send in
+                    return .run {  send in
                         let userLogOutData = await Result {
                             try await authUseCase.logoutUser(refreshToken: "")
                         }
@@ -279,22 +277,22 @@ public struct Profile {
                         switch userLogOutData {
                         case .success(let userLogOutData):
                             if let userLogOutData = userLogOutData {
-                                send(.async(.logoutUseResponse(.success(userLogOutData))))
+                                await send(.async(.logoutUseResponse(.success(userLogOutData))))
                                 UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
                                 loginSocialType = nil
-                                send(.view(.closePopUp))
+                                await  send(.view(.closePopUp))
                                 try await self.clock.sleep(for: .seconds(0.4))
-                                send(.navigation(.presntLogout))
+                                await  send(.navigation(.presntLogout))
                             }
                             
                         case .failure(let error):
-                            send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
+                            await send(.async(.logoutUseResponse(.failure(CustomError.map(error)))))
                         }
                     }
 
                         
                 case .fetchQuestion:
-                    return .run { @MainActor send in
+                    return .run {  send in
                         let questionResult = await Result {
                             try await questionUseCase.myQuestionList(page: 1, pageSize: 20)
                         }
@@ -302,10 +300,11 @@ public struct Profile {
                         switch questionResult {
                         case .success(let questionResult):
                             if let questionData = questionResult {
-                                send(.async(.fetchQuestionResponse(.success(questionData))))
+                                await  send(.async(.fetchQuestionResponse(.success(questionData))))
                             }
                         case .failure(let error):
-                            send(.async(.logoutUseResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                            await send(.async(.logoutUseResponse(.failure(
+                                CustomError.encodingError(error.localizedDescription)))))
                         }
                     }
                     
@@ -320,7 +319,7 @@ public struct Profile {
                     return .none
                     
                 case .deleteQuestion(let questionID):
-                    return .run { @MainActor send in
+                    return .run { send in
                         let deleteQuestionResult = await Result {
                             try await questionUseCase.deleteQuestion(questionID: questionID)
                         }
@@ -328,13 +327,13 @@ public struct Profile {
                         switch deleteQuestionResult {
                         case .success(let deleteQuestionResult):
                             if let deleteQuestionResult = deleteQuestionResult {
-                                send(.async(.deleteQuestionResponse(.success(deleteQuestionResult))))
+                                await send(.async(.deleteQuestionResponse(.success(deleteQuestionResult))))
                                 
                                 try await self.clock.sleep(for: .seconds(1))
-                                send(.navigation(.presntDeleteQuestion))
+                                await  send(.navigation(.presntDeleteQuestion))
                             }
                         case .failure(let error):
-                            send(.async(.deleteQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                            await send(.async(.deleteQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
                         }
                     }
                 

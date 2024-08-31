@@ -168,8 +168,8 @@ public struct Home {
             case .view(let View):
                 switch View {
                 case .appaerProfiluserData:
-                    return .run { @MainActor send in
-                        send(.profile(.scopeFetchUser))
+                    return .run { send in
+                        await send(.profile(.scopeFetchUser))
                     }
                            
                 case .prsentCustomPopUp:
@@ -200,7 +200,7 @@ public struct Home {
                     return .none
                     
                 case .switchModalAction(let editQuestion):
-                    var editQuestion = editQuestion
+                    nonisolated(unsafe) var editQuestion = editQuestion
                     switch editQuestion {
                     case .reportUser:
                         Log.debug("신고하기")
@@ -228,8 +228,8 @@ public struct Home {
             case .async(let AsyncAction):
                 switch AsyncAction {
                 case .fetchQuestionList:
-                    var isLikeTap = state.isLikeTap
-                    var pageSize = state.pageSize
+                    nonisolated(unsafe) var isLikeTap = state.isLikeTap
+                    nonisolated(unsafe) var pageSize = state.pageSize
                     return .run {  send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(
@@ -253,8 +253,8 @@ public struct Home {
                     
                 
                 case .filterQuestionList(let job, let generation, let sortBy):
-                    var pageSize = state.pageSize
-                    return .run {  @MainActor send in
+                    nonisolated(unsafe) var pageSize = state.pageSize
+                    return .run {  send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(
                                 page: 1,
@@ -267,10 +267,10 @@ public struct Home {
                         switch questionResult {
                         case .success(let questionModel):
                             if let questionModel = questionModel {
-                                 send(.async(.qusetsionListResponse(.success(questionModel))))
+                                await send(.async(.qusetsionListResponse(.success(questionModel))))
                             }
                         case .failure(let error):
-                             send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+                            await  send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
                         }
                         
                     }
@@ -287,7 +287,7 @@ public struct Home {
                     return .none
                     
                 case .isVoteQuestionLike(questioniD: let questioniD):
-                    return .run { @MainActor send in
+                    return .run { send in
                         let voteQuestionLikeResult = await Result {
                             try await questionUseCase.isVoteQuestionLike(questionID: questioniD)
                         }
@@ -295,13 +295,13 @@ public struct Home {
                         switch voteQuestionLikeResult {
                         case .success(let voteQuestionLikeResult):
                             if let voteQuestionLikeResult  = voteQuestionLikeResult {
-                                send(.async(.isVoteQuestionLikeResponse(
+                                await  send(.async(.isVoteQuestionLikeResponse(
                                     .success(voteQuestionLikeResult))))
                                 
-                                send(.async(.fetchQuestionList))
+                                await send(.async(.fetchQuestionList))
                             }
                         case .failure(let error):
-                            send(.async(.isVoteQuestionLikeResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+                            await send(.async(.isVoteQuestionLikeResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
                         }
                     }
                     
@@ -316,22 +316,22 @@ public struct Home {
                     return .none
                     
                 case .blockUser(let qusetionID, let userID):
-                    return .run { @MainActor send in
+                    return .run { send in
                         let blockUserResult = await Result {
                             try await authUseCase.userBlock(questioniD: qusetionID, userID: userID)
                         }
                         switch blockUserResult {
                         case .success(let blockUserResult):
                             if let blockUserResult = blockUserResult {
-                                send(.async(.blockUserResponse(.success(blockUserResult))))
+                                await  send(.async(.blockUserResponse(.success(blockUserResult))))
                                 
                                 try await clock.sleep(for: .seconds(0.4))
-                                send(.view(.presntFloatintPopUp))
+                                await  send(.view(.presntFloatintPopUp))
                                 
-                                send(.view(.timeToCloseFloatingPopUp))
+                                await send(.view(.timeToCloseFloatingPopUp))
                             }
                         case .failure(let error):
-                            send(.async(.blockUserResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+                            await  send(.async(.blockUserResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
                         }
                     }
                     
@@ -347,7 +347,7 @@ public struct Home {
                     return .none
                     
                 case .isVoteQuestionAnswer(let questionID, let choiceAnswer):
-                    return .run { @MainActor send in
+                    return .run { send in
                         let voteQuestionAnswerResult = await Result {
                             try await questionUseCase.isVoteQuestionAnswer(questionID: questionID, choicAnswer: choiceAnswer)
                         }
@@ -355,12 +355,13 @@ public struct Home {
                         switch voteQuestionAnswerResult {
                         case .success(let voteQuestionResult):
                             if let voteQuestionResult  = voteQuestionResult {
-                                send(.async(.isVoteQuestionAnsweResponse(
+                                await send(.async(.isVoteQuestionAnsweResponse(
                                     .success(voteQuestionResult))))
                                 
                             }
                         case .failure(let error):
-                            send(.async(.isVoteQuestionAnsweResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+                            await send(.async(.isVoteQuestionAnsweResponse(.failure(
+                                CustomError.createQuestionError(error.localizedDescription)))))
                         }
                     }
                     
@@ -376,7 +377,7 @@ public struct Home {
                     
                     
                 case .fetchUserProfile:
-                    return .run { @MainActor  send in
+                    return .run {  send in
                         let fetchUserData = await Result {
                             try await authUseCase.fetchUserInfo()
                         }
@@ -384,10 +385,11 @@ public struct Home {
                         switch fetchUserData {
                         case .success(let fetchUserResult):
                             if let fetchUserResult = fetchUserResult {
-                                send(.async(.userProfileResponse(.success(fetchUserResult))))
+                                await send(.async(.userProfileResponse(.success(fetchUserResult))))
                             }
                         case .failure(let error):
-                            send(.async(.userProfileResponse(.failure(CustomError.userError(error.localizedDescription)))))
+                            await send(.async(.userProfileResponse(.failure(
+                                CustomError.userError(error.localizedDescription)))))
                             
                         }
                     }
@@ -410,8 +412,8 @@ public struct Home {
             case .navigation(let NavigationAction):
                 switch NavigationAction {
                 case .presntProfile:
-                    return .run { @MainActor send in
-                        send(.profile(.scopeFetchUser))
+                    return .run {  send in
+                        await send(.profile(.scopeFetchUser))
                     }
                     
                 case .presntLogin:
