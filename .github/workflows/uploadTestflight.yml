@@ -23,7 +23,16 @@ jobs:
 
       # # Install Tuist using the new installation method
       - name: Install Tuist
-        run: curl -Ls https://install.tuist.io | bash
+        run: curl -Ls https://uninstall.tuist.io | bash
+        
+      - name: Install Mise
+        run: |
+          curl https://mise.jdx.dev/mise-latest-macos-arm64 > ~/bin/mise
+          chmod +x ~/bin/mise
+          mise install tuist@4.25.0
+          mise use tuist@4.25.0
+
+          
 
       # Use Mise to install a specific version of Tuist
       # - name: Install Specific Tuist Version
