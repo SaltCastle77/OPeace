@@ -17,21 +17,21 @@ jobs:
         with:
           xcode-version: 16.0-beta
 
-      # Install Mise tool (ensure it's properly set up)
-      - name: Install Mise
-        run: curl https://mise.run | sh
+      # # Install Mise tool (ensure it's properly set up)
+      # - name: Install Mise
+      #   run: curl https://mise.run | sh
 
       # # Install Tuist using the new installation method
-      # - name: Install Tuist
-      #   run: curl -Ls https://install.tuist.io | bash
+      - name: Install Tuist
+        run: curl -Ls https://install.tuist.io | bash
 
       # Use Mise to install a specific version of Tuist
-      - name: Install Specific Tuist Version
-        run: mise install tuist@4.25.0
+      # - name: Install Specific Tuist Version
+      #   run: mise install tuist@4.25.0
 
-      # Use the installed Tuist version globally
-      - name: Use Specific Tuist Version Globally
-        run: mise use -g tuist@4.25.0
+      # # Use the installed Tuist version globally
+      # - name: Use Specific Tuist Version Globally
+      #   run: mise use -g tuist@4.25.0
 
       # Install Fastlane using Homebrew
       - name: Install Fastlane
@@ -49,8 +49,6 @@ jobs:
 
       - name: Execute Tuist tasks
         run: |
-          curl -Ls https://install.tuist.io | bash
-          curl -Ls https://uninstall.tuist.io | bash
           tuist clean
           tuist install
           tuist generate
