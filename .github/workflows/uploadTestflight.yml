@@ -47,7 +47,6 @@ jobs:
       - name: List Available Schemes
         run: xcodebuild -list -workspace OPeace.xcworkspace
 
-      Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
         run: |
           tuist clean
