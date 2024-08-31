@@ -1,0 +1,53 @@
+name: uploadTestFlight
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15.2.0
+
+  
+ # uses: actions/checkout@v3
+    #     with:
+    #        key: ${{ secrets.MASTER_KEY }}
+
+      # Corrected indentation for the "Install Tuist" step
+      - name: Install Tuist
+        run: curl -Ls https://install.tuist.io | bash
+        working-directory: ./BeatMaster
+
+      # Corrected indentation for the "Install Fastlane" step
+      - name: Install Fastlane
+        run: brew install fastlane
+        working-directory: ./OPeace
+
+      - uses: ruby/setup-ruby@v1
+        with:
+         ruby-version: '3.3' # Not needed with a .ruby-version file
+         bundler-cache: true #
+
+
+      - name: Execute Tuist tasks
+        run: |
+          tuist clean
+          tuist install
+          TUIST_ROOT_DIR=${PWD} tuist generate
+        working-directory: ./OPeace
+
+      - run: fastlane QA
+        working-directory: ./OPeace
+        env:
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          SLACK_URL_UPLOAD: ${{ secrets.SLACK_URL_UPLOA }}
