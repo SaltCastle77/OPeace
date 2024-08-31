@@ -15,7 +15,7 @@ jobs:
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 16.1-beta
+          xcode-version: 16.0-beta
 
       # Install Mise tool (make sure it's properly set up)
       - name: Install Mise
