@@ -47,13 +47,13 @@ jobs:
       - name: List Available Schemes
         run: xcodebuild -list -workspace OPeace.xcworkspace
 
-      # Execute Tuist commands: clean, install dependencies, and generate the project
-      # - name: Execute Tuist tasks
-      #   run: |
-      #     tuist clean
-      #     tuist install
-      #     tuist generate
-      #   working-directory: ./OPeace
+      Execute Tuist commands: clean, install dependencies, and generate the project
+      - name: Execute Tuist tasks
+        run: |
+          tuist clean
+          tuist install
+          tuist generate
+        working-directory: ./OPeace
 
       # Run Fastlane with the specified environment variables for deployment
       - name: Run Fastlane QA
