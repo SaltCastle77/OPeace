@@ -29,20 +29,14 @@ jobs:
       - name: Install and Activate Mise
         run: |
           curl https://mise.run | sh
-          # Add Mise shims directory to PATH for immediate access
-          echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> $GITHUB_ENV
-          # Activate Mise in the current shell session
-          eval "$(/Users/runner/.local/bin/mise activate bash)"
-          # Check Mise installation status
-          mise doctor
 
       # Install Tuist using Mise
       - name: Install Specific Tuist Version
-        run: mise install tuist@4.25.0
+        run: mise install tuist@4.20.0
 
       # Use the installed Tuist version
       - name: Use Specific Tuist Version
-        run: mise use -g tuist@4.25.0
+        run: mise use -g tuist@4.20.0
 
           
 
