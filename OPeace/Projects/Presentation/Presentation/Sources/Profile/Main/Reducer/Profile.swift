@@ -173,7 +173,7 @@ public struct Profile {
                     return .none
                     
                 case .switchModalAction(let settingprofile):
-                    var settingProfile = settingprofile
+                    nonisolated(unsafe) var settingProfile = settingprofile
                     switch settingProfile {
                     case .editProfile:
                         Log.debug("프로필 수정")
@@ -235,7 +235,7 @@ public struct Profile {
                     return .none
                     
                 case .socilalLogOutUser:
-                    var loginSocialType = state.loginSocialType
+                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
                         switch loginSocialType {
                         case .kakao:
@@ -270,7 +270,7 @@ public struct Profile {
                     return .none
                     
                 case .logoutUser:
-                    var loginSocialType = state.loginSocialType
+                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
                         let userLogOutData = await Result {
                             try await authUseCase.logoutUser(refreshToken: "")

@@ -206,7 +206,7 @@ public struct Home {
                     return .none
                     
                 case .switchModalAction(let editQuestion):
-                    var editQuestion = editQuestion
+                    nonisolated(unsafe) var editQuestion = editQuestion
                     switch editQuestion {
                     case .reportUser:
                         Log.debug("신고하기")
@@ -234,8 +234,8 @@ public struct Home {
             case .async(let AsyncAction):
                 switch AsyncAction {
                 case .fetchQuestionList:
-                    var isLikeTap = state.isLikeTap
-                    var pageSize = state.pageSize
+                    nonisolated(unsafe) var isLikeTap = state.isLikeTap
+                    nonisolated(unsafe) var pageSize = state.pageSize
                     return .run {  send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(
@@ -259,7 +259,7 @@ public struct Home {
                     
                 
                 case .filterQuestionList(let job, let generation, let sortBy):
-                    var pageSize = state.pageSize
+                    nonisolated(unsafe) var pageSize = state.pageSize
                     return .run {  @MainActor send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(
