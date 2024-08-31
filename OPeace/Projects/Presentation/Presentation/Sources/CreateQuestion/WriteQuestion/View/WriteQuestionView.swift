@@ -87,12 +87,12 @@ extension WriteQuestionView {
         VStack {
             Spacer()
                 .frame(height: 16)
-            
+
             if store.isInuputEmoji {
                 HStack {
                     Spacer()
-                        .frame(width: UIScreen.screenWidth * 0.4)
-                        
+                        .frame(width: UIScreen.main.bounds.width * 0.4)
+
                     EmojiTextField(
                         text: $store.selectEmojiText,
                         emojiImage: $store.emojiImage,
@@ -103,30 +103,36 @@ extension WriteQuestionView {
                             if newValue.count == 1, newValue.unicodeScalars.allSatisfy({ $0.properties.isEmoji }) {
                                 self.store.emojiImage = Image.emojiToImage(emoji: newValue)
                                 store.isInuputEmoji = false
+                                store.isActiveEmoji = false
                             } else {
                                 store.selectEmojiText = ""
                             }
                         }
                         .focused($isFocused)
+                        .opacity(store.isActiveEmoji ? 0.1 : 0)
+                        .overlay {
+                            if store.isActiveEmoji {
+                                Image(asset: .activeEmojiI)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 80, height: 80)
+                                    .onTapGesture {
+                                        // Return to text field view
+                                        store.isActiveEmoji = false
+                                        store.isInuputEmoji = true
+                                        isFocused = true
+                                    }
+                                    .offset(x: -70)
+                            }
+                        }
+                        
                         
                     Spacer()
                 }
                 
                 UnderlineView(text: store.selectEmojiText.isEmpty ? "😀" : store.selectEmojiText)
-                
-            }
-            else if store.isActiveEmoji {
-                Circle()
-                    .fill(Color.gray500)
-                    .frame(width: 80, height: 80)
-                    .overlay(alignment: .center) {
-                        Image(asset: .activeEmojiI)
-                            .resizable()
-                            .scaledToFit()
-                    }
-                        
-            }
-            else if let emojiImage = store.emojiImage {
+
+            } else if let emojiImage = store.emojiImage {
                 emojiImage
                     .resizable()
                     .frame(width: 80, height: 80)
@@ -135,6 +141,7 @@ extension WriteQuestionView {
                         UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
                         store.isInuputEmoji.toggle()
                         store.selectEmojiText = ""
+                        store.isActiveEmoji.toggle()
                         isFocused.toggle()
                     }
                     .offset(x: 10)
@@ -150,6 +157,7 @@ extension WriteQuestionView {
                             .onTapGesture {
                                 store.isInuputEmoji.toggle()
                                 isFocused.toggle()
+                                store.isActiveEmoji.toggle()
                                 UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
                             }
                     }
@@ -157,7 +165,7 @@ extension WriteQuestionView {
         }
         .padding()
     }
-    
+
     
     @ViewBuilder
     private func wittingQustionView() -> some View {

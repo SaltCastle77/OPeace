@@ -31,7 +31,7 @@ public struct CustomButton: View {
             .frame(height: config.frameHeight)
             .overlay {
                 Text(title)
-                    .pretendardFont(family: .Regular, size: 20)
+                    .pretendardFont(family: .SemiBold, size: 20)
                     .foregroundColor(isEnable ? config.enableFontColor : config.disableFontColor)
             }
             .onTapGesture {

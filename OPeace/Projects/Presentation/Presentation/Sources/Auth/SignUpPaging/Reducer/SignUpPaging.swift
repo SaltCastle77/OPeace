@@ -143,7 +143,7 @@ public struct SignUpPaging {
                 switch AsyncAction {
                     
                 case .updateUserInfo(let nickname, let year, let job, let generation):
-                    return .run { @MainActor send in
+                    return .run {  send in
                         let userInfoResult = await Result {
                             try await signUpUseCase.updateUserInfo(nickname: nickname, year: year, job: job, generation: generation)
                         }
@@ -151,20 +151,20 @@ public struct SignUpPaging {
                         switch userInfoResult {
                         case .success(let updateUserInfoData):
                             if let updateUserInfoData = updateUserInfoData {
-                                send(.async(.updateUserInfoResponse(.success(updateUserInfoData))))
+                                await send(.async(.updateUserInfoResponse(.success(updateUserInfoData))))
                                 
-                                send(.view(.closePopUp))
+                                await  send(.view(.closePopUp))
                              
                                 try await clock.sleep(for: .seconds(1))
                                 if updateUserInfoData.data?.isFirstLogin == false {
-                                    send(.navigation(.presntOnboarding))
+                                    await send(.navigation(.presntOnboarding))
                                 } else {
-                                    send(.navigation(.presntMainHome))
+                                    await send(.navigation(.presntMainHome))
                                 }
                             }
                             
                         case .failure(let error):
-                            send(.async(.updateUserInfoResponse(.failure(CustomError.map(error)))))
+                            await send(.async(.updateUserInfoResponse(.failure(CustomError.map(error)))))
                         }
                     }
                     

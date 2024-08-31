@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUI
 import UIKit
 
 public struct EmojiTextField: UIViewRepresentable {
@@ -15,7 +14,7 @@ public struct EmojiTextField: UIViewRepresentable {
     @Binding var isInputEmoji: Bool
     @Binding var isEmojiActive: Bool
     public var placeholder: String = ""
-    
+
     public init(
         text: Binding<String>,
         emojiImage: Binding<Image?>,
@@ -44,14 +43,14 @@ public struct EmojiTextField: UIViewRepresentable {
             uiView.text = text
         }
     }
-    
+
     public func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
     }
-    
+
     public class Coordinator: NSObject, UITextFieldDelegate {
         var parent: EmojiTextField
-        
+
         init(parent: EmojiTextField) {
             self.parent = parent
         }
@@ -65,19 +64,19 @@ public struct EmojiTextField: UIViewRepresentable {
                     self.parent.text = newValue
                     self.parent.emojiImage = Image.emojiToImage(emoji: newValue)
                     self.parent.isInputEmoji = false
-                    self.parent.isEmojiActive = true
+                    self.parent.isEmojiActive = false
                 } else if newValue.isEmpty {
                     self.parent.text = ""
                     self.parent.emojiImage = nil
                     self.parent.isInputEmoji = true
-                    self.parent.isEmojiActive = false
+                    self.parent.isEmojiActive = true // Return to input mode
                 } else {
                     self.parent.text = newValue
-                    self.parent.isEmojiActive = true
+                    self.parent.isEmojiActive = false // Stay in input mode for non-emoji
                 }
             }
         }
-        
+
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             textField.resignFirstResponder()
             return true

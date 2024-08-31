@@ -104,7 +104,7 @@ extension EditProfileView {
                 }
             
             Spacer()
-                .frame(height: 12)
+                .frame(height: 8)
             
             UnderlineView(text: store.editProfileName.isEmpty ? store.profileName : store.editProfileName)
 
@@ -116,7 +116,7 @@ extension EditProfileView {
     private func erorNIckCheckText() -> some View {
         VStack {
             Spacer()
-                .frame(height: 16)
+                .frame(height: 12)
             
             if store.editProfileName.isEmpty {
                 Text(store.checkNickNameMessage)

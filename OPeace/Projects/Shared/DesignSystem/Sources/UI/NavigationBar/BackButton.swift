@@ -18,6 +18,9 @@ public struct NavigationBackButton: View {
     
     public var body: some View {
         HStack {
+            Spacer()
+                .frame(width: 19)
+            
             Image(asset: .arrowLeft)
                 .resizable()
                 .scaledToFit()
@@ -30,6 +33,5 @@ public struct NavigationBackButton: View {
             Spacer()
             
         }
-        .padding(.horizontal, 20)
     }
 }

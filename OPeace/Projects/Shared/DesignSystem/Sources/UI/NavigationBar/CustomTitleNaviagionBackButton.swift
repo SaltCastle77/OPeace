@@ -21,6 +21,9 @@ public struct CustomTitleNaviagionBackButton: View {
     
     public var body: some View {
         HStack {
+            Spacer()
+                .frame(width: 19)
+            
             Image(asset: .arrowLeft)
                 .resizable()
                 .scaledToFit()
@@ -35,10 +38,11 @@ public struct CustomTitleNaviagionBackButton: View {
             Text(title)
                 .pretendardFont(family: .SemiBold, size: 20)
                 .foregroundStyle(Color.gray200)
+                .offset(x: -10)
             
             Spacer()
+
             
         }
-        .padding(.horizontal, 20)
     }
 }
