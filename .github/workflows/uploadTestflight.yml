@@ -51,7 +51,6 @@ jobs:
           ls -al $HOME/.local/share/mise/shims
           ls -al /usr/local/bin
           ls -al $HOME/.local/bin
-
           # Attempt to find the Tuist executable
           echo "Searching for Tuist..."
           find $HOME -name tuist 2>/dev/null
@@ -65,15 +64,18 @@ jobs:
           which tuist
           tuist version
 
-      # Install Fastlane using Homebrew
-      - name: Install Fastlane
-        run: brew install fastlane
-
       # Setup Ruby environment with the specified version
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
-          bundler-cache: true
+          bundler-cache: true # Enable caching to speed up subsequent runs
+
+      # Install Fastlane and other dependencies using Bundler
+      - name: Install Dependencies
+        run: |
+          export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
+          bundle install --jobs 4 --retry 3 # Install all required gems including Fastlane
+        working-directory: ./OPeace
 
       # Execute Tuist commands: clean, install dependencies, and generate the project
       - name: Execute Tuist tasks
@@ -98,3 +100,4 @@ jobs:
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
           SLACK_URL_UPLOAD: ${{ secrets.SLACK_URL_UPLOAD }}
+
