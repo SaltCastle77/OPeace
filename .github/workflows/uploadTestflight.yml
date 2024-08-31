@@ -17,6 +17,11 @@ jobs:
         with:
           xcode-version: 16.0-beta
 
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+
+
       # Uninstall the deprecated Tuist version
       - name: Uninstall Deprecated Tuist
         run: curl -Ls https://uninstall.tuist.io | bash
