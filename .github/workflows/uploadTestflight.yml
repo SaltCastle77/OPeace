@@ -90,7 +90,6 @@ jobs:
           export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
           tuist clean
           tuist install
-           tuist auth
           tuist generate
         working-directory: ./OPeace
 
