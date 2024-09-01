@@ -31,6 +31,14 @@ Description of what the lane does
 
 Install Profiles and Build My App
 
+### ios build_ipa_Git
+
+```sh
+[bundle exec] fastlane ios build_ipa_Git
+```
+
+Install Profiles and Build My App
+
 ### ios QA
 
 ```sh
@@ -46,6 +54,14 @@ Push to TestFlight
 ```
 
 
+
+### ios QA_GIT
+
+```sh
+[bundle exec] fastlane ios QA_GIT
+```
+
+Push to TestFlight
 
 ----
 
