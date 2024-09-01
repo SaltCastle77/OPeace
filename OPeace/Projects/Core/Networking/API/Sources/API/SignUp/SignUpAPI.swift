@@ -27,7 +27,7 @@ public enum SignUpAPI : String{
         case .checkGeneration:
             return "/users/generation/"
         case .getGenerations:
-            return "/users/generations"
+            return "/users/generations/"
         }
     }
 }

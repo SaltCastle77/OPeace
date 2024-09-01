@@ -12,6 +12,7 @@ public protocol SignUpRepositoryProtocol {
     func checkNickName(_ nickName: String) async throws -> CheckNickNameModel?
     
     func fetchJobList()  async throws -> SignUpJobModel?
+    func fetchGenerationList() async throws -> GenerationListResponse?
     
     func updateUserInfo(
         nickname: String,
@@ -21,6 +22,7 @@ public protocol SignUpRepositoryProtocol {
     ) async throws -> UpdateUserInfoModel?
     
     func checkGeneration(year: Int) async throws -> CheckGeneraionModel?
+
     
     
 }

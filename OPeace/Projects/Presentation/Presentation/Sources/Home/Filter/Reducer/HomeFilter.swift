@@ -21,6 +21,7 @@ public struct HomeFilter  {
     public struct State : Equatable {
         
         var jsobListModel: SignUpJobModel? = nil
+        var generationListModel: GenerationListResponse? = nil
         
         public init() {}
     }
@@ -45,6 +46,7 @@ public struct HomeFilter  {
         case fetchListByFilterEnum(HomeFilterEnum)
         case fetchJobList
         case fetchJobResponse(Result<SignUpJobModel, CustomError>)
+        case fetchGenerationResponse(Result<GenerationListResponse, CustomError>)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -88,6 +90,21 @@ public struct HomeFilter  {
                                 send(.async(.fetchJobResponse(.failure(CustomError.map(error)))))
                             }
                         }
+                    case .generation:
+                        return .run { @MainActor send in
+                            let result = await Result {
+                                try await self.signUpUseCase.fetchGenerationList()
+                            }
+                            
+                            switch result {
+                            case .success(let data):
+                                if let data = data {
+                                    send(.async(.fetchGenerationResponse(.success(data))))
+                                }
+                            case .failure(let error):
+                                send(.async(.fetchGenerationResponse(.failure(CustomError.map(error)))))
+                            }
+                        }
                     default:
                         return .none
                     }
@@ -114,6 +131,15 @@ public struct HomeFilter  {
                         state.jsobListModel  = data
                     case .failure(let error):
                         Log.network("JobList 에러", error.localizedDescription)
+                    }
+                    
+                    return .none
+                case .fetchGenerationResponse(let result):
+                    switch result {
+                    case .success(let data):
+                        state.generationListModel = data
+                    case .failure(let error):
+                        Log.network("generationList 에러", error.localizedDescription)
                     }
                     
                     return .none

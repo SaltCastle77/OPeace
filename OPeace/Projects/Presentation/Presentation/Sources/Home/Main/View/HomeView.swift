@@ -151,14 +151,13 @@ extension HomeView {
                 Spacer()
                 
                 RightImageButton(action: {
-                    store.send(.view(.firstFilterTapped))
+                    store.send(.view(.filterViewTappd(.job)))
                 }, title: "계열")
                 .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
                     HomeFilterView(
-                        store: homeFilterStore,
-                        filterType: .job
+                        store: homeFilterStore
                     ) { jobString in
-                        store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
+                        store.send(.async(.jobFilterSelected(job: jobString)))
                         store.send(.view(.closeFilterModal))
                     }
                     .presentationDetents([.fraction(0.7)])
@@ -167,14 +166,13 @@ extension HomeView {
                 }
                 
                 RightImageButton(action: {
-                    
+                    store.send(.view(.filterViewTappd(.generation)))
                 }, title: "세대")
                 .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
                     HomeFilterView(
-                        store: homeFilterStore,
-                        filterType: .generation
-                    ) { jobString in
-                        store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
+                        store: homeFilterStore
+                    ) { generation in
+                        store.send(.async(.generationFilterSelected(generation: generation)))
                         store.send(.view(.closeFilterModal))
                     }
                     .presentationDetents([.fraction(0.7)])
@@ -188,8 +186,7 @@ extension HomeView {
                 }, title: "최신순")
                 .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
                     HomeFilterView(
-                        store: homeFilterStore,
-                        filterType: .sorted(.recent)
+                        store: homeFilterStore
                     ) { jobString in
                         store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
                         store.send(.view(.closeFilterModal))

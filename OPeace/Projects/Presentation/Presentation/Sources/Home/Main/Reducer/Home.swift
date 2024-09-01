@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 import ComposableArchitecture
+import Model
 
 @Reducer
 public struct Home {
@@ -50,6 +51,9 @@ public struct Home {
         var isShowSelectEditModal: Bool = false
         var isBlockQuestionPopUp: Bool = false
         var isReportQuestionPopUp: Bool = false
+        
+        var selectedJob: String = ""
+        var selectedGeneration: String = ""
         
         @Shared var isLogOut: Bool
         @Shared var isDeleteUser: Bool
@@ -118,7 +122,7 @@ public struct Home {
         case closePopUp
         case timeToCloseFloatingPopUp
         case switchModalAction(EditQuestionType)
-        case firstFilterTapped
+        case filterViewTappd(HomeFilterEnum)
         case closeFilterModal
         
     }
@@ -137,8 +141,9 @@ public struct Home {
         case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
         case fetchUserProfile
         case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+        case jobFilterSelected(job: String)
+        case generationFilterSelected(generation: String)
         case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
-        
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -194,12 +199,12 @@ public struct Home {
                         try await clock.sleep(for: .seconds(1.5))
                         await send(.view(.closePopUp))
                     }
-                    
-                case .firstFilterTapped:
+                case .filterViewTappd(let filterEnum):
                     state.destination = .homeFilter(.init())
                     return .run { @MainActor send in
-                        send(.destination(.presented(.homeFilter(.test))))
+                        send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
                     }
+                
                 case .presntEditQuestion:
                     state.destination = .editQuestion(.init())
                     return .none
@@ -260,9 +265,16 @@ public struct Home {
                         
                     }
                     
-                
+                case .jobFilterSelected(let job):
+                    nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
+                    return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: .empty)))
+                case .generationFilterSelected(let generation):
+                    nonisolated(unsafe) let currentSelectedJob = state.selectedJob
+                    return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: .empty)))
                 case .filterQuestionList(let job, let generation, let sortBy):
-                    nonisolated(unsafe) var pageSize = state.pageSize
+                    nonisolated(unsafe) let pageSize = state.pageSize
+                    state.selectedJob = job
+                    state.selectedGeneration = generation
                     return .run {  @MainActor send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(
