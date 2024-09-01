@@ -91,6 +91,7 @@ jobs:
           tuist clean
           tuist install
           tuist generate
+          tuist auth
         working-directory: ./OPeace
 
       # Run Fastlane with the specified environment variables for deployment
