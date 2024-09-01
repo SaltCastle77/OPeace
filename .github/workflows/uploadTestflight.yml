@@ -90,6 +90,7 @@ jobs:
           export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
           tuist clean
           tuist install
+           tuist auth
           tuist generate
         working-directory: ./OPeace
 
@@ -99,9 +100,7 @@ jobs:
         run: |
           export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
           # Specify the username directly in the Fastlane match commands
-          bundle exec fastlane match development --readonly --username "shuwj81@daum.net"
-          bundle exec fastlane match appstore --readonly --username "shuwj81@daum.net"
-          bundle exec fastlane QA
+          bundle exec fastlane QA_GIT
         working-directory: ./OPeace
         env:
           APP_NAME: "OPeace"
