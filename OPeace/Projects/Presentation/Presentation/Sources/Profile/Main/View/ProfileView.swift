@@ -222,7 +222,12 @@ extension ProfileView {
                         isLookAround: false,
                         isDeleteUser: false,
                         answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
-                        editTapAction: {},
+                        editTapAction: {
+                            store.send(.view(.presntPopUp))
+                            store.isDeleteQuestionPopUp = true
+                            store.deleteQuestionId = item.id ?? .zero
+                            store.popUpText = "고민을 삭제하시겠어요?"
+                        },
                         likeTapAction: { _ in },
                         choiceTapAction: {})
                 }

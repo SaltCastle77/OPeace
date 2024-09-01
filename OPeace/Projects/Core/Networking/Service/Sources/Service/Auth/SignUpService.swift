@@ -45,7 +45,7 @@ extension SignUpService: BaseTargetType {
     }
     
     
-     public var method: Moya.Method {
+    public var method: Moya.Method {
         switch self {
         case .nickNameCheck:
             return .get
@@ -61,31 +61,50 @@ extension SignUpService: BaseTargetType {
         }
     }
     
-    public var task: Moya.Task {
+    public var parameters: [String : Any]? {
         switch self {
         case .nickNameCheck(let nickname):
             let parameters: [String: Any] = [
                 "nickname": nickname
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
-            
+            return parameters
         case .signUpJob:
-            return .requestPlain
-            
-        case .updateUserInfo(let nickname , let year, let job,  let generation):
+            return .none
+        case .updateUserInfo(
+            let nickname,
+            let year,
+            let job,
+            let generation):
             let parameters: [String: Any] = [
                 "nickname": nickname,
                 "year": year,
                 "job": job,
                 "generation": generation
             ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
-            
+            return parameters
         case .checkGeneration(let year):
             let parameters: [String: Any] = [
                 "year": year
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            return parameters
+        }
+    }
+    
+    public var shouldUseJSONEncodingForGet: Bool {
+        switch self {
+        case .updateUserInfo:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    public var shouldUseQueryStringEncodingForGet: Bool {
+        switch self {
+        case .nickNameCheck, .checkGeneration:
+            return true
+        default:
+            return false
         }
     }
     

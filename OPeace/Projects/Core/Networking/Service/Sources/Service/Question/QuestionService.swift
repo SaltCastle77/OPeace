@@ -81,7 +81,7 @@ extension QuestionService: BaseTargetType {
         }
     }
     
-    public var task: Moya.Task {
+    public var parameters: [String : Any]? {
         switch self {
         case .fetchQuestionList(let page, let pageSize, let job, let generation, let sortBy):
             let parameters: [String: Any] = [
@@ -91,54 +91,64 @@ extension QuestionService: BaseTargetType {
                 "generation": generation,
                 "sort_by": sortBy
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
-            
+            return parameters
         case .myQuestionList(let page, let pageSize):
             let parameters: [String: Any] = [
                 "page": page,
                 "page_size": pageSize
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
-            
-        case .createQuestion(let emoji, let title,  let choiceA, let choiceB):
+            return parameters
+        case .createQuestion(let emoji, let title, let choiceA, let choiceB):
             let parameters: [String: Any] = [
                 "emoji": emoji,
                 "title": title,
                 "choice_a": choiceA,
                 "choice_b": choiceB
             ]
-            
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
-            
-        case .isVoteQustionLike(id: let id):
-            let parmeters: [String: Any] = [
+            return parameters
+        case .isVoteQustionLike(let id):
+            let parameters: [String: Any] = [
                 "id": id
-            ]
-            return .requestParameters(parameters: parmeters, encoding: JSONEncoding.default)
-            
-        case .isVoteQuestionAnswer(let id,  let userChoice):
+                ]
+            return parameters
+        case .isVoteQuestionAnswer(let id, let userChoice):
             let parmeters: [String: Any] = [
                 "id": id,
                 "user_choice": userChoice
             ]
-            return .requestParameters(parameters: parmeters, encoding: JSONEncoding.default)
-            
-            
+            return parmeters
         case .deleteQuestion(let id):
             let parameters: [String: Any] = [
                 "id": id
                 ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
-            
+            return parameters
         case .reportQuestion(let id, let reason):
             let parameters: [String: Any] = [
                 "id": id,
                 "reason": reason
                 ]
-            
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            return parameters
         }
     }
+    
+    public var shouldUseJSONEncodingForGet: Bool {
+            switch self {
+            case .isVoteQustionLike, .isVoteQuestionAnswer, .deleteQuestion, .reportQuestion, .createQuestion:
+                return true
+            default:
+                return false
+            }
+        }
+
+    public var shouldUseQueryStringEncodingForGet: Bool {
+            switch self {
+            case .fetchQuestionList, .myQuestionList:
+                return true 
+            default:
+                return false
+            }
+        }
+    
     
     public var validationType: ValidationType {
         return .successCodes

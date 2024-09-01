@@ -14,7 +14,7 @@ public struct CardItemView: View {
     @Binding var isTapAVote: Bool
     @Binding var isTapBVote: Bool
     @State private var answerRatio: (A: Int, B: Int)
-
+    
     private var resultData: ResultData
     private var userLoginID: String
     private var isProfile: Bool
@@ -26,7 +26,7 @@ public struct CardItemView: View {
     private var editTapAction: () -> Void = { }
     private var likeTapAction: (String) -> Void = { _ in }
     private var choiceTapAction: () -> Void = { }
-
+    
     public init(
         resultData: ResultData,
         isProfile: Bool,
@@ -57,11 +57,11 @@ public struct CardItemView: View {
         _answerRatio = State(initialValue: (Int(resultData.answerRatio?.a ?? .zero), Int(resultData.answerRatio?.b ?? .zero)))
         _isLikedTap = State(initialValue: isLikedTap)
     }
-
+    
     private var isUserInteractionDisabled: Bool {
         return isLogOut || isLookAround || isDeleteUser
     }
-
+    
     public var body: some View {
         if isProfile {
             profileCardView()
@@ -72,7 +72,7 @@ public struct CardItemView: View {
 }
 
 extension CardItemView {
-
+    
     @ViewBuilder
     private func profileCardView() -> some View {
         VStack {
@@ -104,7 +104,7 @@ extension CardItemView {
                 }
         }
     }
-
+    
     @ViewBuilder
     private func votingCardView() -> some View {
         VStack {
@@ -202,6 +202,9 @@ extension CardItemView {
                         } else if isUserInteractionDisabled {
                             editTapAction()
                         }
+                        else if isProfile == true {
+                           editTapAction()
+                       }
                     }
             }
             
@@ -396,7 +399,7 @@ extension CardItemView {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 18, height: 18)
-                            
+                        
                         Spacer()
                             .frame(width: 4)
                         
@@ -429,7 +432,7 @@ extension CardItemView {
                             likeTapAction("")
                         }
                     }
-
+                    
                     .onAppear {
                         isLikedTap = true
                     }
@@ -439,7 +442,7 @@ extension CardItemView {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 18, height: 18)
-                            
+                        
                         Spacer()
                             .frame(width: 4)
                         
@@ -472,7 +475,7 @@ extension CardItemView {
                             likeTapAction("")
                         }
                     }
-
+                    
                 }
                 
                 Spacer()
@@ -518,7 +521,7 @@ extension CardItemView {
             }
         }
     }
-
+    
     private func handleVote(for choice: String) {
         if !isUserInteractionDisabled {
             if choice == "A" {
@@ -555,7 +558,7 @@ extension CardItemView {
             choiceTapAction()
         }
     }
-
+    
 }
 
 
