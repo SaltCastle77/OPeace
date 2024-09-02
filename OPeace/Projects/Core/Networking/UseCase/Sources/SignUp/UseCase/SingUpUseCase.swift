@@ -47,6 +47,10 @@ public struct SignUpUseCase : SignUpUseCaseProtocol{
     public func checkGeneration(year: Int) async throws -> CheckGeneraionModel? {
         try await repository.checkGeneration(year: year)
     }
+    
+    public func fetchGenerationList() async throws -> GenerationListResponse? {
+        try await repository.fetchGenerationList()
+    }
 }
 
 

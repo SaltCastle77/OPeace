@@ -174,7 +174,7 @@ public struct Profile {
                     return .none
                     
                 case .switchModalAction(let settingprofile):
-                    var settingProfile = settingprofile
+                    nonisolated(unsafe) var settingProfile = settingprofile
                     switch settingProfile {
                     case .editProfile:
                         Log.debug("프로필 수정")

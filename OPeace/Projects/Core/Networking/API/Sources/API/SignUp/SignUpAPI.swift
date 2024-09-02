@@ -12,7 +12,7 @@ public enum SignUpAPI : String{
     case signUpJob
     case updateProfile
     case checkGeneration
-    
+    case getGenerations
     
     public  var signUpAPIDesc: String {
         switch self {
@@ -24,9 +24,10 @@ public enum SignUpAPI : String{
             
         case .updateProfile:
             return "/users/"
-            
         case .checkGeneration:
             return "/users/generation/"
+        case .getGenerations:
+            return "/users/generations/"
         }
     }
 }

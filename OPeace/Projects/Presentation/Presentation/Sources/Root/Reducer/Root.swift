@@ -128,8 +128,9 @@ public struct Root {
                 switch AsyncAction {
                 case .autoLogin:
                     @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
+                    nonisolated(unsafe) let copyLoginSocialType = loginSocialType
                     return .run { @MainActor send in
-                        switch loginSocialType {
+                        switch copyLoginSocialType {
                         case .kakao:
                             //                            try await clock.sleep(for: .seconds(1))
                             if let refreshToken =  UserDefaults.standard.string(forKey: "REFRESH_TOKEN") {
@@ -201,10 +202,12 @@ public struct Root {
                     
                 case let .handleRefreshToken(refreshToken):
                     @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
+                    nonisolated(unsafe) let copyLoginSocialType = loginSocialType
+                    
                     return .run { @MainActor  send in
-                        send(.async(.refreshTokenRequest(refreshToken: refreshToken )))
+                        send(.async(.refreshTokenRequest(refreshToken: refreshToken)))
                         try await self.clock.sleep(for: .seconds(0.3))
-                        switch loginSocialType {
+                        switch copyLoginSocialType {
                         case .kakao:
                             send(.async(.loginWIthKakao))
                         case .apple:
