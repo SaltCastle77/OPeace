@@ -42,11 +42,11 @@ public struct QuestionStatusResponseModel: Codable, Equatable {
 
 // MARK: - OverallRatio
 public struct OverallRatio: Codable, Equatable {
-    public let a, b: Int?
+    public let a, b: Double?
     
     public init(
-        a: Int?,
-        b: Int?
+        a: Double?,
+        b: Double?
     ) {
         self.a = a
         self.b = b

@@ -210,7 +210,13 @@ extension ProfileView {
                 .frame(height: 16)
             
             if let resultData = store.myQuestionListModel?.data?.results {
-                FlippableCardView(data: resultData) { item in
+                
+                FlippableCardView(data: resultData,
+                                  onItemAppear: { item in
+                    if let resultItem = item as? ResultData {
+                        store.send(.async(.statusQuestion(id:  resultItem.id ?? 0)))
+                    }
+                }) { item in
                     CardItemView(
                         resultData: item,
                         statsData: store.statusQuestionModel?.data,

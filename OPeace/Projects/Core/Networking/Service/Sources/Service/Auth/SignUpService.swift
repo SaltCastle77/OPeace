@@ -23,6 +23,7 @@ public enum SignUpService {
         generation: String
     )
     case checkGeneration(year: Int)
+    case getGenerationList
 }
 
 
@@ -41,6 +42,9 @@ extension SignUpService: BaseTargetType {
             
         case .checkGeneration:
             return SignUpAPI.checkGeneration.signUpAPIDesc
+            
+        case .getGenerationList:
+            return SignUpAPI.getGenerations.signUpAPIDesc
         }
     }
     
@@ -57,6 +61,9 @@ extension SignUpService: BaseTargetType {
             return .patch
             
         case .checkGeneration:
+            return .get
+            
+        case .getGenerationList:
             return .get
         }
     }
@@ -87,6 +94,9 @@ extension SignUpService: BaseTargetType {
                 "year": year
             ]
             return parameters
+        
+        case .getGenerationList:
+            return .none
         }
     }
     

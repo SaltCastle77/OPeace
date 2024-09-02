@@ -30,26 +30,40 @@ public struct HomeFilterView: View {
         VStack {
             ScrollView {
                 VStack(spacing: 12) {
+                    Spacer()
+                        .frame(height: 32)
+                    
                     if let jobCategories = store.jsobListModel?.data?.data {
                         ForEach(jobCategories, id: \.self) { jobCategory in
-                            Text(jobCategory)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .pretendardFont(family: .Regular, size: 20)
-                                .padding(.horizontal, 15)
-                                .onTapGesture {
-                                    self.closeModalAction(jobCategory)
-                                }
+                            HStack {
+                                Text(jobCategory)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .pretendardFont(family: .Regular, size: 20)
+                                    .padding(.horizontal, 32)
+                                
+                                Spacer()
+                            }
+                            .frame(height: 48)
+                            .onTapGesture {
+                                self.closeModalAction(jobCategory)
+                            }
+                            
                         }
                     }
                     if let generations = store.generationListModel?.data?.data {
                         ForEach(generations, id: \.self) { generation in
-                            Text(generation)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .pretendardFont(family: .Regular, size: 20)
-                                .padding(.horizontal, 15)
-                                .onTapGesture {
-                                    self.closeModalAction(generation)
-                                }
+                            HStack {
+                                Text(generation)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .pretendardFont(family: .Regular, size: 20)
+                                    .padding(.horizontal, 32)
+                                
+                                Spacer()
+                            }
+                            .frame(height: 48)
+                            .onTapGesture {
+                                self.closeModalAction(generation)
+                            }
                         }
                     }
                 }

@@ -16,6 +16,7 @@ public struct CardItemView: View {
     @Binding var isTapBVote: Bool
     @State private var answerRatio: (A: Int, B: Int)
     @State  var currentOffset: CGFloat = 0
+    @State private var statsUpdated: Bool = false
     
     private var statsData: QuestionStatusResponseModel?
     private var resultData: ResultData
@@ -110,6 +111,7 @@ extension CardItemView {
                     }
                     .padding(.horizontal, 24)
                 }
+            
         }
     }
     
@@ -166,6 +168,7 @@ extension CardItemView {
                         isTapBVote = false
                     } else {
                         isRotated.toggle()
+                        updateStatusOnFlip()
                     }
                 }
         }
@@ -261,6 +264,13 @@ extension CardItemView {
         }
     }
     
+    private func updateStatusOnFlip() {
+        if !isUserInteractionDisabled {
+            appearStatusAction()
+            statsUpdated = false
+        }
+    }
+    
     @ViewBuilder
     private func cardWriteAndAnswerView(
         title: String,
@@ -286,8 +296,8 @@ extension CardItemView {
                     choiceAnswerRoundViewProfile(
                         choiceTitleA: choiceA,
                         choiceTitleB: choiceB,
-                        percentageA: statsData?.overallRatio?.a ?? .zero,
-                        percentageB: statsData?.overallRatio?.b ?? .zero,
+                        percentageA: Int(statsData?.overallRatio?.a ?? .zero),
+                        percentageB: Int(statsData?.overallRatio?.b ?? .zero),
                         stats: stats
                     )
                 }
@@ -296,8 +306,8 @@ extension CardItemView {
                     choiceAnswerRoundViewProfile(
                         choiceTitleA: choiceA,
                         choiceTitleB: choiceB,
-                        percentageA: statsData?.overallRatio?.a ?? .zero,
-                        percentageB: statsData?.overallRatio?.b ?? .zero,
+                        percentageA: Int(statsData?.overallRatio?.a ?? .zero),
+                        percentageB: Int(statsData?.overallRatio?.b ?? .zero),
                         stats: stats
                     )
                 }
@@ -306,13 +316,10 @@ extension CardItemView {
             }
         }
         .onAppear {
-            if !isUserInteractionDisabled {
-                if userLoginID == resultData.userInfo?.userID {
-                    appearStatusAction()
-                } else {
-                    appearStatusAction()
-                }
-            }
+            updateStatusOnFlip()
+        }
+        .onDisappear {
+            statsUpdated = false
         }
     }
     
@@ -334,7 +341,8 @@ extension CardItemView {
         ]
         
         VStack {
-            Spacer().frame(height: 16)
+            Spacer()
+                .frame(height: 16)
             
             if (stats.a?.isEmpty ?? true) && (stats.b?.isEmpty ?? true) {
                 makeDefaultRoundedView(
@@ -342,7 +350,8 @@ extension CardItemView {
                     title: choiceTitleA,
                     percentageLabel: String(percentageA)
                 )
-                Spacer().frame(height: 8)
+                Spacer()
+                    .frame(height: 8)
                 makeDefaultRoundedView(
                     label: "B",
                     title: choiceTitleB,
@@ -358,7 +367,8 @@ extension CardItemView {
                         colorMapping: colorMapping
                     )
                 }
-                Spacer().frame(height: 8)
+                Spacer()
+                    .frame(height: 8)
                 
                 if let percentagesB = stats.b {
                     renderSegmentedView(
@@ -372,6 +382,7 @@ extension CardItemView {
             }
         }
         .padding(.horizontal, 24)
+
     }
 
     @ViewBuilder
@@ -429,14 +440,12 @@ extension CardItemView {
                 
                 let totalWidth = geometry.size.width
                 let orderedDict = sortedOrderedDictionary(from: percentages)
-                
                 let combinedSegments = combineSegments(orderedDict: orderedDict, totalWidth: totalWidth)
                 
                 ForEach(combinedSegments.indices, id: \.self) { index in
                     let segment = combinedSegments[index]
                     let key = segment.key
                     var width = segment.width
-                    
                     let offset = combinedSegments.prefix(index).reduce(0) { $0 + $1.width }
                     
                     
@@ -450,20 +459,18 @@ extension CardItemView {
                         }
                     }()
                     
-                    Rectangle()
-                        .fill(colorMapping[key] ?? .gray400)
-                        .frame(width: width, height: 48)
-                        .offset(x: offset)
-                        .clipShape(RoundedCornersShape(corners: corners, radius: 20))
-                        .onAppear {
-                            withAnimation {
-                                width = segment.width
-                            }
-                        }
+                    AnimatedRectangle(
+                        key: key,
+                        color: colorMapping[key] ?? .gray400,
+                        targetWidth: width,
+                        offset: offset,
+                        corners: corners
+                    )
                 }
                 
                 HStack {
-                    Spacer().frame(width: 16)
+                    Spacer()
+                        .frame(width: 16)
                     
                     Text(choiceLabel)
                         .pretendardFont(family: .SemiBold, size: 16)
@@ -825,5 +832,7 @@ extension CardItemView {
     }
     
 }
+
+
 
 
