@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Model
+import Collections
 
 public struct CardItemView: View {
     @State private var isRotated: Bool = false
@@ -14,7 +15,9 @@ public struct CardItemView: View {
     @Binding var isTapAVote: Bool
     @Binding var isTapBVote: Bool
     @State private var answerRatio: (A: Int, B: Int)
+    @State  var currentOffset: CGFloat = 0
     
+    private var statsData: QuestionStatusResponseModel?
     private var resultData: ResultData
     private var userLoginID: String
     private var isProfile: Bool
@@ -24,11 +27,13 @@ public struct CardItemView: View {
     private var generationColor: Color
     
     private var editTapAction: () -> Void = { }
+    private var appearStatusAction: () -> Void = { }
     private var likeTapAction: (String) -> Void = { _ in }
     private var choiceTapAction: () -> Void = { }
     
     public init(
         resultData: ResultData,
+        statsData:QuestionStatusResponseModel?,
         isProfile: Bool,
         userLoginID: String,
         generationColor: Color,
@@ -40,9 +45,11 @@ public struct CardItemView: View {
         answerRatio: (A: Int, B: Int),
         editTapAction: @escaping () -> Void,
         likeTapAction: @escaping (String) -> Void,
+        appearStatusAction: @escaping () -> Void,
         choiceTapAction: @escaping () -> Void
     ) {
         self.resultData = resultData
+        self.statsData = statsData
         self.isProfile = isProfile
         self.userLoginID = userLoginID
         self.generationColor = generationColor
@@ -54,6 +61,7 @@ public struct CardItemView: View {
         self.editTapAction = editTapAction
         self.likeTapAction = likeTapAction
         self.choiceTapAction = choiceTapAction
+        self.appearStatusAction = appearStatusAction
         _answerRatio = State(initialValue: (Int(resultData.answerRatio?.a ?? .zero), Int(resultData.answerRatio?.b ?? .zero)))
         _isLikedTap = State(initialValue: isLikedTap)
     }
@@ -203,8 +211,8 @@ extension CardItemView {
                             editTapAction()
                         }
                         else if isProfile == true {
-                           editTapAction()
-                       }
+                            editTapAction()
+                        }
                     }
             }
             
@@ -273,9 +281,270 @@ extension CardItemView {
             Spacer()
                 .frame(height: 16)
             
-            choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
+            if isRoated {
+                if let stats = statsData?.stats {
+                    choiceAnswerRoundViewProfile(
+                        choiceTitleA: choiceA,
+                        choiceTitleB: choiceB,
+                        percentageA: statsData?.overallRatio?.a ?? .zero,
+                        percentageB: statsData?.overallRatio?.b ?? .zero,
+                        stats: stats
+                    )
+                }
+            } else if isProfile {
+                if let stats = statsData?.stats {
+                    choiceAnswerRoundViewProfile(
+                        choiceTitleA: choiceA,
+                        choiceTitleB: choiceB,
+                        percentageA: statsData?.overallRatio?.a ?? .zero,
+                        percentageB: statsData?.overallRatio?.b ?? .zero,
+                        stats: stats
+                    )
+                }
+            } else {
+                choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
+            }
+        }
+        .onAppear {
+            if !isUserInteractionDisabled {
+                if userLoginID == resultData.userInfo?.userID {
+                    appearStatusAction()
+                } else {
+                    appearStatusAction()
+                }
+            }
         }
     }
+    
+    
+    @ViewBuilder
+    private func choiceAnswerRoundViewProfile(
+        choiceTitleA: String,
+        choiceTitleB: String,
+        percentageA: Int,
+        percentageB: Int,
+        stats: Stats
+    ) -> some View {
+        let colorMapping: [String: Color] = [
+            "Z세대": .basicPrimary,
+            "M세대": .basicYellow,
+            "X세대": .basicLightBlue,
+            "베이비붐세대": .basicPurple,
+            "기타세대": .gray600
+        ]
+        
+        VStack {
+            Spacer().frame(height: 16)
+            
+            if (stats.a?.isEmpty ?? true) && (stats.b?.isEmpty ?? true) {
+                makeDefaultRoundedView(
+                    label: "A",
+                    title: choiceTitleA,
+                    percentageLabel: String(percentageA)
+                )
+                Spacer().frame(height: 8)
+                makeDefaultRoundedView(
+                    label: "B",
+                    title: choiceTitleB,
+                    percentageLabel: String(percentageB)
+                )
+            } else {
+                if let percentagesA = stats.a {
+                    renderSegmentedView(
+                        choiceLabel: "A",
+                        choiceTitle: choiceTitleA,
+                        percentageLabel: String(percentageA),
+                        percentages: percentagesA,
+                        colorMapping: colorMapping
+                    )
+                }
+                Spacer().frame(height: 8)
+                
+                if let percentagesB = stats.b {
+                    renderSegmentedView(
+                        choiceLabel: "B",
+                        choiceTitle: choiceTitleB,
+                        percentageLabel: String(percentageB),
+                        percentages: percentagesB,
+                        colorMapping: colorMapping
+                    )
+                }
+            }
+        }
+        .padding(.horizontal, 24)
+    }
+
+    @ViewBuilder
+    private func makeDefaultRoundedView(
+        label: String,
+        title: String,
+        percentageLabel: String
+    ) -> some View {
+        RoundedRectangle(cornerRadius: 20)
+            .fill(Color.gray400)
+            .frame(height: 48)
+            .overlay {
+                HStack {
+                    Spacer().frame(width: 16)
+                    
+                    Text(label)
+                        .pretendardFont(family: .SemiBold, size: 16)
+                        .foregroundStyle(label == "A" ? Color.gray600 : Color.gray200)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    Spacer()
+                    
+                    Text(title)
+                        .pretendardFont(family: .SemiBold, size: 16)
+                        .foregroundStyle(label == "A" ? Color.gray600 : Color.gray200)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    Spacer()
+                    
+                    Text("\(percentageLabel)%")
+                        .pretendardFont(family: .SemiBold, size: 16)
+                        .foregroundStyle(label == "A" ? Color.gray600 : Color.gray200)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    Spacer()
+                        .frame(width: 12)
+                }
+            }
+            .clipShape(Capsule())
+    }
+
+    @ViewBuilder
+    private func renderSegmentedView(
+        choiceLabel: String,
+        choiceTitle: String,
+        percentageLabel: String,
+        percentages: [String: Double],
+        colorMapping: [String: Color]
+    ) -> some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.gray400)
+                    .frame(height: 48)
+                
+                let totalWidth = geometry.size.width
+                let orderedDict = sortedOrderedDictionary(from: percentages)
+                
+                let combinedSegments = combineSegments(orderedDict: orderedDict, totalWidth: totalWidth)
+                
+                ForEach(combinedSegments.indices, id: \.self) { index in
+                    let segment = combinedSegments[index]
+                    let key = segment.key
+                    var width = segment.width
+                    
+                    let offset = combinedSegments.prefix(index).reduce(0) { $0 + $1.width }
+                    
+                    
+                    let corners: UIRectCorner = {
+                        if index == 0 {
+                            return [.topLeft, .bottomLeft]
+                        } else if index == combinedSegments.count - 1 {
+                            return [.topRight, .bottomRight]
+                        } else {
+                            return []
+                        }
+                    }()
+                    
+                    Rectangle()
+                        .fill(colorMapping[key] ?? .gray400)
+                        .frame(width: width, height: 48)
+                        .offset(x: offset)
+                        .clipShape(RoundedCornersShape(corners: corners, radius: 20))
+                        .onAppear {
+                            withAnimation {
+                                width = segment.width
+                            }
+                        }
+                }
+                
+                HStack {
+                    Spacer().frame(width: 16)
+                    
+                    Text(choiceLabel)
+                        .pretendardFont(family: .SemiBold, size: 16)
+                        .foregroundStyle(choiceLabel == "A" ? Color.basicWhite : Color.gray200)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Spacer()
+                    
+                    Text(choiceTitle)
+                        .pretendardFont(family: .SemiBold, size: 16)
+                        .foregroundStyle(choiceLabel == "A" ? Color.basicWhite : Color.gray200)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    Spacer()
+                    
+                    Text("\(percentageLabel)%")
+                        .pretendardFont(family: .SemiBold, size: 16)
+                        .foregroundStyle(choiceLabel == "A" ? Color.basicWhite : Color.gray200)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    Spacer().frame(width: 12)
+                }
+            }
+        }
+        .frame(height: 48)
+        .clipShape(Capsule())
+    }
+
+    private func sortedOrderedDictionary(from percentages: [String: Double]) -> OrderedDictionary<String, Double> {
+        let desiredOrder = ["Z세대", "M세대", "X세대", "베이비붐세대", "기타세대"]
+        
+        var completeDict: [String: Double] = [:]
+        for key in desiredOrder {
+            completeDict[key] = percentages[key] ?? 0.0
+        }
+        
+        let orderedDict = OrderedDictionary(uniqueKeysWithValues: completeDict)
+        
+        let sortedElements = orderedDict.elements.sorted { first, second in
+            let firstIndex = desiredOrder.firstIndex(of: first.key) ?? Int.max
+            let secondIndex = desiredOrder.firstIndex(of: second.key) ?? Int.max
+            return firstIndex < secondIndex
+        }
+        
+        return OrderedDictionary(uniqueKeysWithValues: sortedElements)
+    }
+
+    private func combineSegments(
+        orderedDict: OrderedDictionary<String, Double>,
+        totalWidth: CGFloat) -> [(key: String, width: CGFloat)] {
+        var combinedSegments: [(key: String, width: CGFloat)] = []
+        var currentSegment: (key: String, width: CGFloat)? = nil
+        
+        for element in orderedDict.elements {
+            let key = element.key
+            let value = element.value
+            let width = totalWidth * CGFloat(value / 100.0)
+            
+            if width == 0 {
+                continue
+            }
+            
+            if currentSegment == nil {
+                currentSegment = (key, width)
+            } else if currentSegment!.key == "기타세대" || key == "기타세대" {
+                currentSegment!.width += width
+            } else {
+                combinedSegments.append(currentSegment!)
+                currentSegment = (key, width)
+            }
+        }
+        
+        if let segment = currentSegment {
+            combinedSegments.append(segment)
+        }
+        
+        return combinedSegments
+    }
+
+    
+    
     
     @ViewBuilder
     private func choiceAnswerRoundView(
@@ -297,11 +566,7 @@ extension CardItemView {
                         Text("A")
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
-                            .onTapGesture {
-                                if !isUserInteractionDisabled {
-                                    handleVote(for: "A")
-                                }
-                            }
+                        
                         
                         Spacer()
                         
@@ -312,6 +577,8 @@ extension CardItemView {
                         Spacer()
                     }
                 }
+                .clipShape(Capsule())
+            
             
             Spacer()
                 .frame(height: 8)
@@ -327,11 +594,7 @@ extension CardItemView {
                         Text("B")
                             .pretendardFont(family: .Bold, size: 16)
                             .foregroundStyle(Color.gray200)
-                            .onTapGesture {
-                                if !isUserInteractionDisabled {
-                                    handleVote(for: "B")
-                                }
-                            }
+                        
                         
                         Spacer()
                         
@@ -342,6 +605,7 @@ extension CardItemView {
                         Spacer()
                     }
                 }
+                .clipShape(Capsule())
         }
         .padding(.horizontal, 24)
     }
@@ -549,6 +813,7 @@ extension CardItemView {
                     isRotated.toggle()
                 }
             } else if userLoginID == resultData.userInfo?.userID {
+                choiceTapAction()
                 isRotated.toggle()
             } else {
                 isRotated = false

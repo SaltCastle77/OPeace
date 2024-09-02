@@ -34,6 +34,7 @@ public struct Profile {
         var userDeleteModel: DeleteUserModel? = nil
         var myQuestionListModel: QuestionModel?  = nil
         var deleteQuestionModel: DeleteQuestionModel? = nil
+        var statusQuestionModel: StatusQuestionModel? = nil
         
         var profileGenerationYear: Int? = .zero
         var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
@@ -98,6 +99,8 @@ public struct Profile {
         case fetchQuestion
         case deleteQuestion(questionID: Int)
         case deleteQuestionResponse(Result<DeleteQuestionModel, CustomError>)
+        case statusQuestion(id: Int)
+        case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
         
     }
     
@@ -345,6 +348,31 @@ public struct Profile {
                         
                     case .failure(let error):
                         Log.debug("질문 삭제 에러", error.localizedDescription)
+                    }
+                    return .none
+                    
+                case .statusQuestion(id: let id):
+                    return .run { send in
+                        let questionResult = await Result {
+                            try await questionUseCase.statusQuestion(questionID: id)
+                        }
+                        
+                        switch questionResult {
+                        case .success(let questionStatusData):
+                        if let questionStatusData = questionStatusData {
+                                await send(.async(.statusQuestionResponse(.success(questionStatusData))))
+                            }
+                        case .failure(let error):
+                            await send(.async(.statusQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                case .statusQuestionResponse(let result):
+                    switch result {
+                    case .success(let statusQuestionData):
+                        state.statusQuestionModel = statusQuestionData
+                    case .failure(let error):
+                        Log.error("질문 에대한 결과 보여주기 실패", error.localizedDescription)
                     }
                     return .none
                 }

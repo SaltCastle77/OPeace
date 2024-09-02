@@ -10,6 +10,8 @@ import SwiftUI
 import Combine
 
 import ComposableArchitecture
+import Model
+import UseCase
 
 @Reducer
 public struct Home {
@@ -30,6 +32,7 @@ public struct Home {
         var userBlockModel: UserBlockModel? = nil
         var isVoteAnswerQuestionModel: QuestionVoteModel? = nil
         var profileUserModel: UpdateUserInfoModel? = nil
+        var statusQuestionModel: StatusQuestionModel? = nil
         
         var cardGenerationColor: Color = .basicBlack
         var isLikeTap: Bool = false
@@ -136,6 +139,8 @@ public struct Home {
         case fetchUserProfile
         case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
         case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
+        case statusQuestion(id: Int)
+        case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
         
     }
     
@@ -402,6 +407,31 @@ public struct Home {
                         Log.network("프로필 오류", error.localizedDescription)
                     }
                     return .none
+                    
+                case .statusQuestion(id: let id):
+                    return .run { send in
+                        let questionResult = await Result {
+                            try await questionUseCase.statusQuestion(questionID: id)
+                        }
+                        
+                        switch questionResult {
+                        case .success(let questionStatusData):
+                        if let questionStatusData = questionStatusData {
+                                await send(.async(.statusQuestionResponse(.success(questionStatusData))))
+                            }
+                        case .failure(let error):
+                            await send(.async(.statusQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                case .statusQuestionResponse(let result):
+                    switch result {
+                    case .success(let statusQuestionData):
+                        state.statusQuestionModel = statusQuestionData
+                    case .failure(let error):
+                        Log.error("질문 에대한 결과 보여주기 실패", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):
@@ -437,6 +467,12 @@ public struct Home {
         .onChange(of: \.questionModel) { oldValue, newValue in
             Reduce { state, action in
                 state.questionModel = newValue
+                return .none
+            }
+        }
+        .onChange(of: \.statusQuestionModel) { oldValue, newValue in
+            Reduce { state, action in
+                state.statusQuestionModel = newValue
                 return .none
             }
         }

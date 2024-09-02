@@ -213,6 +213,7 @@ extension ProfileView {
                 FlippableCardView(data: resultData) { item in
                     CardItemView(
                         resultData: item,
+                        statsData: store.statusQuestionModel?.data,
                         isProfile: true,
                         userLoginID: store.profileUserModel?.data?.socialID ?? "",
                         generationColor: store.cardGenerationColor,
@@ -229,7 +230,16 @@ extension ProfileView {
                             store.popUpText = "고민을 삭제하시겠어요?"
                         },
                         likeTapAction: { _ in },
+                        appearStatusAction: {
+                            store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
+                        },
                         choiceTapAction: {})
+                    .onAppear {
+                        store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+                    }
+                    .onChange(of: item.id ?? .zero) { oldValue, newValue in
+                        store.send(.async(.statusQuestion(id:  newValue)))
+                    }
                 }
             }
         }

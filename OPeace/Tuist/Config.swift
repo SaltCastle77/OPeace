@@ -9,7 +9,7 @@ import Foundation
 import ProjectDescription
 
 let config = Config(
-    fullHandle:  "suhwj81/Opeace",
+//    fullHandle:  "suhwj81/Opeace",
     swiftVersion: "5.10.0",
     plugins: [
         .local(path: .relativeToRoot("Plugins/ProjectTemplatePlugin")),

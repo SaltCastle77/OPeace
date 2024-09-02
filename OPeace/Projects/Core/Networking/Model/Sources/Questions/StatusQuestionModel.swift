@@ -1,0 +1,67 @@
+//
+//  StatusQuestionModel.swift
+//  Model
+//
+//  Created by 서원지 on 8/31/24.
+//
+
+import Foundation
+
+// MARK: - Welcome
+public struct StatusQuestionModel: Codable, Equatable {
+    public let data: QuestionStatusResponseModel?
+    
+    public init(
+        data: QuestionStatusResponseModel?
+    ) {
+        self.data = data
+    }
+}
+
+// MARK: - DataClass
+public struct QuestionStatusResponseModel: Codable, Equatable {
+    public  let id: Int?
+    public let stats: Stats?
+    public let overallRatio: OverallRatio?
+
+    public enum CodingKeys: String, CodingKey {
+        case id, stats
+        case overallRatio = "overall_ratio"
+    }
+    
+    public init(
+        id: Int?,
+        stats: Stats?,
+        overallRatio: OverallRatio?
+    ) {
+        self.id = id
+        self.stats = stats
+        self.overallRatio = overallRatio
+    }
+}
+
+// MARK: - OverallRatio
+public struct OverallRatio: Codable, Equatable {
+    public let a, b: Int?
+    
+    public init(
+        a: Int?,
+        b: Int?
+    ) {
+        self.a = a
+        self.b = b
+    }
+}
+
+// MARK: - Stats
+public struct Stats: Codable, Equatable {
+    public let a, b: [String: Double]?
+    
+    public init(
+        a: [String : Double]?,
+        b: [String : Double]?
+    ) {
+        self.a = a
+        self.b = b
+    }
+}

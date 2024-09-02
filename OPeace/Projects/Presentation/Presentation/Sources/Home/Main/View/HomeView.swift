@@ -280,6 +280,7 @@ extension HomeView {
             } content: { item in
                 CardItemView(
                     resultData: item,
+                    statsData: store.statusQuestionModel?.data,
                     isProfile: false,
                     userLoginID: store.profileUserModel?.data?.socialID ?? "",
                     generationColor: store.cardGenerationColor,
@@ -306,17 +307,38 @@ extension HomeView {
                             store.send(.async(.isVoteQuestionLike(questioniD: Int(userID) ?? .zero)))
                             store.send(.async(.fetchQuestionList))
                         }
-                    },choiceTapAction: {
+                    }, appearStatusAction: {
+                        store.questionID = item.id
+                        store.send(.async(.statusQuestion(id:  store.questionID ?? .zero)))
+                    },
+                    choiceTapAction: {
                         if store.isTapAVote == true  {
-                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
-                            store.send(.async(.fetchQuestionList))
+                            if item.metadata?.voted  == true {
+                                store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
+                            } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
+                                store.questionID = item.id ?? .zero
+                                store.send(.async(.statusQuestion(id:  store.questionID ?? .zero)))
+                            } else {
+                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+                                store.send(.async(.fetchQuestionList))
+                            }
                         } else if store.isTapBVote == true {
-                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
-                            store.send(.async(.fetchQuestionList))
+                            if item.metadata?.voted == true  {
+                                store.reportQuestionID = item.id ?? .zero
+//                                store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
+                            } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
+//                                store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
+                            } else {
+                                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                                store.send(.async(.fetchQuestionList))
+                            }
                         } else {
                             store.send(.view(.prsentCustomPopUp))
                         }
                     })
+                .onChange(of:  store.questionID ?? .zero) { oldValue, newValue in
+                    store.send(.async(.statusQuestion(id:  newValue)))
+                }
             }
         }
     }

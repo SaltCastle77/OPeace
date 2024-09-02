@@ -26,6 +26,7 @@ public enum QuestionService {
     case isVoteQuestionAnswer(id: Int, userChoice: String)
     case deleteQuestion(id: Int)
     case reportQuestion(id: Int, reason: String)
+    case statusQuestion(id: Int)
     
     
 }
@@ -53,6 +54,9 @@ extension QuestionService: BaseTargetType {
             
         case .reportQuestion(let id, _):
             return QuestionAPI.quetionReport(id: id).questionAPIDesc
+            
+        case .statusQuestion(let id):
+            return QuestionAPI.questionStatus(id: id).questionAPIDesc
         }
     }
     
@@ -78,6 +82,9 @@ extension QuestionService: BaseTargetType {
             
         case .reportQuestion:
             return .post
+            
+        case .statusQuestion:
+            return .get
         }
     }
     
@@ -128,6 +135,12 @@ extension QuestionService: BaseTargetType {
                 "reason": reason
                 ]
             return parameters
+            
+        case .statusQuestion(let id):
+            let parameters: [String: Any] = [
+                "id": id
+            ]
+            return parameters
         }
     }
     
@@ -151,11 +164,16 @@ extension QuestionService: BaseTargetType {
     
     
     public var validationType: ValidationType {
-        return .successCodes
+        switch self {
+        case .isVoteQustionLike, .isVoteQuestionAnswer, .statusQuestion:
+            return .none
+        default:
+            return .successCodes
+        }
     }
     
     public var headers: [String : String]? {
-        switch self {      
+        switch self {
         default:
             return APIHeader.baseHeader
         }
