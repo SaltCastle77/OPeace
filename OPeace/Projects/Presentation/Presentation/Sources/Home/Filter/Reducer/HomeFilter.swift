@@ -22,6 +22,7 @@ public struct HomeFilter  {
         
         var jsobListModel: SignUpJobModel? = nil
         var generationListModel: GenerationListResponse? = nil
+        var homeFilterTypeState: HomeFilterEnum? = nil
         
         public init() {}
     }
@@ -74,6 +75,7 @@ public struct HomeFilter  {
             case .async(let asyncAction):
                 switch asyncAction {
                 case .fetchListByFilterEnum(let homeFilterType):
+                    state.homeFilterTypeState = homeFilterType
                     switch homeFilterType {
                     case .job:
                         return .run { @MainActor  send in

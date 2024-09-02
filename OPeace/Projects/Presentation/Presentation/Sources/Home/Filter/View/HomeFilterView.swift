@@ -30,28 +30,29 @@ public struct HomeFilterView: View {
         VStack {
             ScrollView {
                 VStack(spacing: 12) {
-                    if let jobCategories = store.jsobListModel?.data?.data {
-                        ForEach(jobCategories, id: \.self) { jobCategory in
-                            Text(jobCategory)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .pretendardFont(family: .Regular, size: 20)
-                                .padding(.horizontal, 15)
-                                .onTapGesture {
-                                    self.closeModalAction(jobCategory)
+                    switch store.homeFilterTypeState {
+                    case .job:
+                        if let jobCategories = store.jsobListModel?.data?.data {
+                            ForEach(jobCategories, id: \.self) { jobCategory in
+                                  filterListItem(title: jobCategory) {
+                                    closeModalAction(jobCategory)
                                 }
+                            }
                         }
-                    }
-                    if let generations = store.generationListModel?.data?.data {
-                        ForEach(generations, id: \.self) { generation in
-                            Text(generation)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .pretendardFont(family: .Regular, size: 20)
-                                .padding(.horizontal, 15)
-                                .onTapGesture {
-                                    self.closeModalAction(generation)
+                    case .generation:
+                        if let generations = store.generationListModel?.data?.data {
+                            ForEach(generations, id: \.self) { generation in
+                                filterListItem(title: generation) {
+                                    closeModalAction(generation)
                                 }
+                            }
                         }
+                    case .sorted:
+                        Text("")
+                    case .none:
+                        Text("")
                     }
+                    
                 }
                 .padding(.top, 20)
             }
@@ -62,4 +63,19 @@ public struct HomeFilterView: View {
 //            store.send(.async(.fetchListByFilterEnum(self.filterType)))
         }
     }
+    
+    @ViewBuilder
+    private func filterListItem(
+        title: String,
+        completion: @escaping () -> Void
+    ) -> some View {
+        Text(title)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .pretendardFont(family: .Regular, size: 20)
+            .padding(.horizontal, 15)
+            .onTapGesture {
+                completion()
+            }
+    }
+    
 }
