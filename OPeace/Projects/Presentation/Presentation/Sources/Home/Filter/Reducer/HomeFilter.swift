@@ -22,8 +22,11 @@ public struct HomeFilter  {
         
         var jsobListModel: SignUpJobModel? = nil
         var generationListModel: GenerationListResponse? = nil
+        public var homeFilterTypeState: HomeFilterEnum? = nil
         
-        public init() {}
+        public init(homeFilterEnum: HomeFilterEnum) {
+            homeFilterTypeState = homeFilterEnum
+        }
     }
     
     public enum Action: ViewAction, BindableAction, FeatureAction {
@@ -74,6 +77,7 @@ public struct HomeFilter  {
             case .async(let asyncAction):
                 switch asyncAction {
                 case .fetchListByFilterEnum(let homeFilterType):
+                    state.homeFilterTypeState = homeFilterType
                     switch homeFilterType {
                     case .job:
                         return .run { @MainActor  send in

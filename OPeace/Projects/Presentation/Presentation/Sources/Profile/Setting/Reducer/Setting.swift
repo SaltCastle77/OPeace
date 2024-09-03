@@ -61,6 +61,7 @@ public struct Setting {
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
+        
         Reduce { state, action in
             switch action {
             case .binding(_):

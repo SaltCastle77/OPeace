@@ -89,7 +89,7 @@ extension SettingView {
             
         }
         .padding(.vertical, 14)
-        
+            
         Spacer()
             .frame(height: 4)
     }

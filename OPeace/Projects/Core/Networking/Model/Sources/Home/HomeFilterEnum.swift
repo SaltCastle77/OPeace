@@ -7,11 +7,18 @@
 
 import Foundation
 
-public enum HomeFilterEnum: Equatable {
+public enum HomeFilterEnum: Equatable, Hashable {
     case job
     case generation
     case sorted(SortedEnum)
 }
+
+extension HomeFilterEnum: CaseIterable {
+    public static var allCases: [HomeFilterEnum] {
+           return [.job, .generation, .sorted(.recent), .sorted(.popular)]
+       }
+}
+
 
 extension HomeFilterEnum {
     public var titleText: String {
@@ -31,7 +38,7 @@ extension HomeFilterEnum {
     }
 }
 
-public enum SortedEnum {
+public enum SortedEnum: Equatable, CaseIterable, Hashable {
     case recent
     case popular
 }
