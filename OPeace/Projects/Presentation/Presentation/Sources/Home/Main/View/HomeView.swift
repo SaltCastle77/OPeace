@@ -322,7 +322,7 @@ extension HomeView {
                 store.send(.async(.fetchQuestionList))
             } onItemAppear: { item in
                 if let resultItem = item as? ResultData, resultItem.id != store.questionID {
-//                    store.questionID = resultItem.id ?? 0
+                    store.questionID = resultItem.id ?? 0
                 }
             } content: { item in
                 CardItemView(

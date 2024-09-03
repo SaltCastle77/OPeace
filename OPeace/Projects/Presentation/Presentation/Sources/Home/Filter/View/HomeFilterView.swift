@@ -44,7 +44,7 @@ public struct HomeFilterView: View {
                     case .generation:
                         if let generations = store.generationListModel?.data?.data {
                             ForEach(generations, id: \.self) { generation in
-                                filterListItem(title: "\(generation) 세대 ") {
+                                filterListItem(title: generation) {
                                     closeModalAction(generation)
                                 }
                             }
