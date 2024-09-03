@@ -131,8 +131,14 @@ extension ProfileView {
                     .foregroundStyle(Color.basicWhite)
                 
                 Spacer()
-                    .frame(width: 4)
                 
+            }
+            .padding(.horizontal, 20)
+            
+            Spacer()
+                .frame(height: 16)
+            
+            HStack {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(Color.gray400, style: .init(lineWidth: 1.13))
                     .frame(width:  job.calculateWidthProfile(for: job), height: 24)
@@ -171,9 +177,9 @@ extension ProfileView {
                     }
                 
                 Spacer()
-                
             }
             .padding(.horizontal, 20)
+            
         }
     }
     
