@@ -29,7 +29,9 @@ public struct HomeFilterView: View {
     public var body: some View {
         VStack {
             ScrollView {
-                VStack(spacing: 12) {
+                VStack(spacing: 4) {
+                    Spacer()
+                        .frame(height: 22)
                     switch store.homeFilterTypeState {
                     case .job:
                         if let jobCategories = store.jsobListModel?.data?.data {
@@ -42,10 +44,13 @@ public struct HomeFilterView: View {
                     case .generation:
                         if let generations = store.generationListModel?.data?.data {
                             ForEach(generations, id: \.self) { generation in
-                                filterListItem(title: generation) {
+                                filterListItem(title: "\(generation) 세대 ") {
                                     closeModalAction(generation)
                                 }
                             }
+                            
+                            Spacer()
+                                .frame(height: 32)
                         }
                     case .sorted:
                         Text("")
@@ -57,10 +62,15 @@ public struct HomeFilterView: View {
                 .padding(.top, 20)
             }
             .scrollIndicators(.hidden)
+            .onAppear {
+                UIScrollView.appearance().bounces = false
+                
+            }
         }
         .background(Color.gray500)
+
         .onAppear {
-//            store.send(.async(.fetchListByFilterEnum(self.filterType)))
+            store.send(.view(.tapSettintitem(store.homeFilterTypeState ?? .job)))
         }
     }
     
@@ -69,13 +79,17 @@ public struct HomeFilterView: View {
         title: String,
         completion: @escaping () -> Void
     ) -> some View {
-        Text(title)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .pretendardFont(family: .Regular, size: 20)
-            .padding(.horizontal, 15)
-            .onTapGesture {
-                completion()
-            }
+        HStack {
+            Text(title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .pretendardFont(family: .Regular, size: 20)
+                .foregroundStyle(Color.basicWhite)
+                .onTapGesture {
+                    completion()
+                }
+        }
+        .frame(height: 48)
+        .padding(.horizontal , 32)
     }
     
 }

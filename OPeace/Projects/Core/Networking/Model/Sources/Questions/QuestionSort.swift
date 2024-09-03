@@ -8,15 +8,15 @@
 import Foundation
 
 public enum QuestionSort: String, CaseIterable {
-    case latest
-    case oldest
+    case recent
+    case popular
     case empty
     
     public var questionSortDesc: String {
         switch self {
-        case .latest:
+        case .recent:
             return "latest"
-        case .oldest:
+        case .popular:
             return "oldest"
         case .empty:
             return ""

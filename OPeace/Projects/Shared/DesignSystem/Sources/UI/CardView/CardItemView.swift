@@ -337,7 +337,7 @@ extension CardItemView {
             "M세대": .basicYellow,
             "X세대": .basicLightBlue,
             "베이비붐세대": .basicPurple,
-            "기타세대": .gray600
+            "기타세대": .gray300
         ]
         
         VStack {
@@ -474,21 +474,21 @@ extension CardItemView {
                     
                     Text(choiceLabel)
                         .pretendardFont(family: .SemiBold, size: 16)
-                        .foregroundStyle(choiceLabel == "A" ? Color.basicWhite : Color.gray200)
+                        .foregroundStyle(choiceLabel == "A" ? Color.gray600 : Color.gray200)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Spacer()
                     
                     Text(choiceTitle)
                         .pretendardFont(family: .SemiBold, size: 16)
-                        .foregroundStyle(choiceLabel == "A" ? Color.basicWhite : Color.gray200)
+                        .foregroundStyle(choiceLabel == "A" ? Color.gray600 : Color.gray200)
                         .frame(maxWidth: .infinity, alignment: .center)
                     
                     Spacer()
                     
                     Text("\(percentageLabel)%")
                         .pretendardFont(family: .SemiBold, size: 16)
-                        .foregroundStyle(choiceLabel == "A" ? Color.basicWhite : Color.gray200)
+                        .foregroundStyle(choiceLabel == "A" ? Color.gray600 : Color.gray200)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                     
                     Spacer().frame(width: 12)

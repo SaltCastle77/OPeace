@@ -41,7 +41,7 @@ public struct HomeFilter  {
     //MARK: - ViewAction
     @CasePathable
     public enum View {
-        case tapSettintitem(SettingProfile)
+        case tapSettintitem(HomeFilterEnum)
     }
     
     //MARK: - AsyncAction 비동기 처리 액션
@@ -72,7 +72,12 @@ public struct HomeFilter  {
             switch action {
             case .binding(_):
                 return .none
-            case .view(_):
+            case .view(let ViewAction):
+                switch ViewAction {
+                case .tapSettintitem(let homefilter):
+                    state.homeFilterTypeState = homefilter
+                    return .none
+                }
                 return .none
             case .async(let asyncAction):
                 switch asyncAction {

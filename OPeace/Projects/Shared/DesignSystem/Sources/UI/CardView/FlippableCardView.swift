@@ -73,7 +73,8 @@ public struct FlippableCardView<Content: View, T>: View {
                             updateCurrentPage(nearestIndex, with: scrollViewProxy)
                         })
                 }
-                .scrollTargetBehavior(.viewAligned)
+//                .scrollTargetBehavior(.viewAligned)
+                
                 .scrollIndicators(.hidden)
                 .onAppear {
                     currentPage = min(lastViewedPage, data.count - 1)

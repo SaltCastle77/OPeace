@@ -69,6 +69,29 @@ public struct HomeView: View {
             .presentationDragIndicator(.hidden)
         }
         
+        .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+            HomeFilterView(store: homeFilterStore, closeModalAction: { data in
+                guard let homeFilter = homeFilterStore.homeFilterTypeState else { return }
+                switch homeFilter {
+                case .job:
+                    store.selectedJob = data
+                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation:"" ,sortBy: .empty)))
+                    store.send(.view(.closeFilterModal))
+                case .generation:
+                    store.selectedGeneration = data
+                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: .empty)))
+                    store.send(.view(.closeFilterModal))
+                case .sorted(let sortedEnum):
+                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration, sortBy: sortedEnum)))
+                    store.send(.view(.closeFilterModal))
+                }
+                
+            })
+            .presentationDetents([.fraction(homeFilterStore.homeFilterTypeState == .job ? 0.7 : homeFilterStore.homeFilterTypeState == .generation ? 0.42: 0.2 )])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(20)
+        }
+        
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
             if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                 CustomBasicPopUpView(
@@ -152,51 +175,21 @@ extension HomeView {
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.job)))
                 }, title: "계열")
-                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
-                    HomeFilterView(
-                        store: homeFilterStore
-                    ) { jobString in
-                        store.send(.async(.jobFilterSelected(job: jobString)))
-                        store.send(.view(.closeFilterModal))
-                    }
-                    .presentationDetents([.fraction(0.7)])
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(20)
-                }
+                
                 Spacer()
                     .frame(width: 8)
                 
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.generation)))
                 }, title: "세대")
-//                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
-//                    HomeFilterView(
-//                        store: homeFilterStore
-//                    ) { generation in
-//                        store.send(.async(.generationFilterSelected(generation: generation)))
-//                        store.send(.view(.closeFilterModal))
-//                    }
-//                    .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
-//                    .presentationDragIndicator(.visible)
-//                    .presentationCornerRadius(20)
-//                }
+
                 Spacer()
                     .frame(width: 8)
                 
                 RightImageButton(action: {
-                    
+                    store.send(.view(.filterViewTappd(.sorted(.popular))))
                 }, title: "최신순")
-                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
-                    HomeFilterView(
-                        store: homeFilterStore
-                    ) { jobString in
-                        store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
-                        store.send(.view(.closeFilterModal))
-                    }
-                    .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(20)
-                }
+                
                 Spacer()
                     .frame(width: 8)
                 
@@ -329,7 +322,7 @@ extension HomeView {
                 store.send(.async(.fetchQuestionList))
             } onItemAppear: { item in
                 if let resultItem = item as? ResultData, resultItem.id != store.questionID {
-                    store.questionID = resultItem.id ?? 0
+//                    store.questionID = resultItem.id ?? 0
                 }
             } content: { item in
                 CardItemView(

@@ -10,7 +10,7 @@ import Foundation
 public enum HomeFilterEnum: Equatable, Hashable {
     case job
     case generation
-    case sorted(SortedEnum)
+    case sorted(QuestionSort)
 }
 
 extension HomeFilterEnum: CaseIterable {
@@ -33,6 +33,8 @@ extension HomeFilterEnum {
                 return "최신순"
             case .popular:
                 return "인기순"
+            case .empty:
+                return ""
             }
         }
     }
