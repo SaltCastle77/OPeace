@@ -169,17 +169,17 @@ extension HomeView {
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.generation)))
                 }, title: "세대")
-                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
-                    HomeFilterView(
-                        store: homeFilterStore
-                    ) { generation in
-                        store.send(.async(.generationFilterSelected(generation: generation)))
-                        store.send(.view(.closeFilterModal))
-                    }
-                    .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(20)
-                }
+//                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+//                    HomeFilterView(
+//                        store: homeFilterStore
+//                    ) { generation in
+//                        store.send(.async(.generationFilterSelected(generation: generation)))
+//                        store.send(.view(.closeFilterModal))
+//                    }
+//                    .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
+//                    .presentationDragIndicator(.visible)
+//                    .presentationCornerRadius(20)
+//                }
                 Spacer()
                     .frame(width: 8)
                 
