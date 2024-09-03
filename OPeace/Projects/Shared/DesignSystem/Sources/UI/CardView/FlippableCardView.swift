@@ -95,7 +95,7 @@ public struct FlippableCardView<Content: View, T>: View {
     }
     
     private func handleItemAppear(index: Int, item: T) {
-        guard index == currentPage else { return } // Only update if this is the current page
+        guard index == currentPage else { return }
         onItemAppear?(item)
     }
     
@@ -124,26 +124,5 @@ public struct FlippableCardView<Content: View, T>: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.3)) {
             scrollViewProxy.scrollTo(index, anchor: .center)
         }
-    }
-}
-
-
-
-
-struct ScrollEffectModifier: ViewModifier {
-    let index: Int
-    let currentPage: Int
-    let dragOffset: CGFloat
-    
-    func body(content: Content) -> some View {
-        content
-            .offset(y: calculateOffset())
-    }
-    
-    private func calculateOffset() -> CGFloat {
-        if index == currentPage - 1 && dragOffset > 0 {
-            return min(dragOffset / 5, 30)
-        }
-        return 0
     }
 }
