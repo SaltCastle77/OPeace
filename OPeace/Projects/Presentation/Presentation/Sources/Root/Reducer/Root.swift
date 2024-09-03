@@ -145,13 +145,13 @@ public struct Root {
                                     if let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN")  {
                                         //                                        send(.async(.handleRefreshToken(refreshToken)))
                                     } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-                                        send(.view(.auth(.login(.async(.kakaoLogin)))))
+//                                        send(.view(.auth(.login(.async(.kakaoLogin)))))
                                     }
                                 }
                                 print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
                                 
                                 if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
+//                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
                                 }
                                 
                                 if Root.State.userModel?.data?.accessToken == accessToken {

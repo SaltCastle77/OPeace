@@ -194,7 +194,7 @@ public struct Login {
                      var socialType = state.socialType
                     #endif
                     
-                    return .run { @MainActor send in
+                    return .run { send in
                         let requset = await Result {
                             try await  authUseCase.requestKakaoTokenAsync()
                         }
@@ -202,13 +202,13 @@ public struct Login {
                         switch requset {
                            
                         case .success(let (accessToken, idToken)):
-                            send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
+                            await send(.async(.kakaoLoginResponse(.success((accessToken, idToken)))))
                             
                             try await clock.sleep(for: .seconds(0.8))
-                            send(.async(.loginWIthKakao))
+                            await send(.async(.loginWIthKakao))
                             
                         case let .failure(error):
-                            send(.async(.kakaoLoginResponse(.failure(CustomError.map(error)))))
+                            await send(.async(.kakaoLoginResponse(.failure(CustomError.map(error)))))
                         }
                     }
                     
@@ -274,7 +274,7 @@ public struct Login {
                     return .none
                     
                 case .fetchUser:
-                    return .run { @MainActor send in
+                    return .run {  send in
                         let fetchUserData = await Result {
                             try await authUseCase.fetchUserInfo()
                         }
@@ -282,18 +282,18 @@ public struct Login {
                         switch fetchUserData {
                         case .success(let fetchUserResult):
                             if let fetchUserResult = fetchUserResult {
-                                send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
+                                await send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
                                 UserDefaults.standard.set(true, forKey: "isFirstTimeUser")
                                 
                                 if fetchUserResult.data?.nickname != nil && fetchUserResult.data?.year != nil && fetchUserResult.data?.job != nil {
-                                    send(.navigation(.presentMain))
+                                    await send(.navigation(.presentMain))
                                 } else {
-                                    send(.navigation(.presnetAgreement))
+                                    await send(.navigation(.presnetAgreement))
                                 }
                                 
                             }
                         case .failure(let error):
-                            send(.async(.fetchUserProfileResponse(.failure(CustomError.map(error)))))
+                            await send(.async(.fetchUserProfileResponse(.failure(CustomError.map(error)))))
                             
                         }
                     }
