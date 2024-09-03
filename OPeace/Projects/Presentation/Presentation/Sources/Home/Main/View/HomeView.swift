@@ -330,7 +330,6 @@ extension HomeView {
             } onItemAppear: { item in
                 if let resultItem = item as? ResultData, resultItem.id != store.questionID {
                     store.questionID = resultItem.id ?? 0
-                store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
                 }
             } content: { item in
                 CardItemView(
@@ -359,9 +358,8 @@ extension HomeView {
                     }
                 )
                 .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
-                    if store.questionID == newValue {
-                        store.send(.async(.statusQuestion(id: newValue)))
-                    }
+                    guard let id = item.id, id == newValue else { return }
+                    store.send(.async(.statusQuestion(id: newValue)))
                 }
             }
         }
@@ -418,7 +416,7 @@ extension HomeView {
     private func appearStatusActionIfNeeded(item: ResultData) {
         if store.questionID != item.id {
             store.questionID = item.id ?? .zero
-            store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
+//            store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
         }
     }
     

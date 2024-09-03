@@ -43,6 +43,7 @@ public struct Home {
         var userID: String?
         var isSelectAnswerA: String = "a"
         var isSelectAnswerB: String = "b"
+        var questionDetailId: Int? = nil
         var isTapAVote: Bool = false
         var isTapBVote: Bool = false
         
@@ -175,8 +176,13 @@ public struct Home {
             switch action {
             case .binding(_):
                 return .none
+                
             case .destination(.presented(.homeFilter(.test))):
                 return .none
+                
+            case .binding(\.questionID):
+                return .none
+                
             case .view(let View):
                 switch View {
                 case .appaerProfiluserData:

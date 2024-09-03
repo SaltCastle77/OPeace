@@ -17,6 +17,7 @@ public struct FlippableCardView<Content: View, T>: View {
     @AppStorage("lastViewedPage") private var lastViewedPage: Int = 0
     @State private var currentPage: Int = 0
     @GestureState private var dragOffset: CGFloat = 0
+    @State private var isScrolling: Bool = false
     
     public init(
         data: [T],
@@ -42,8 +43,9 @@ public struct FlippableCardView<Content: View, T>: View {
                                 .scrollTargetLayout()
                                 .id(index)
                                 .onAppear {
-                                    handleAppear(index: index)
-                                    updateQuestionIDAndStatus(for: data[index])
+                                    if !isScrolling {
+                                        handleItemAppear(index: index, item: data[index])
+                                    }
                                     if index == data.indices.last {
                                         onAppearLastItem?()
                                     }
@@ -57,33 +59,31 @@ public struct FlippableCardView<Content: View, T>: View {
                         .updating($dragOffset) { value, state, _ in
                             state = value.translation.height * 0.2
                         }
+                        .onChanged { _ in
+                            isScrolling = true
+                        }
                         .onEnded { value in
+                            isScrolling = false
                             let velocity = value.predictedEndLocation.y - value.startLocation.y
                             let nearestIndex = calculateNearestIndex(
                                 geometry: geometry,
                                 currentPage: currentPage,
                                 velocity: velocity
                             )
-                            currentPage = nearestIndex
-                            lastViewedPage = nearestIndex
-                            scrollToCenter(scrollViewProxy: scrollViewProxy, index: nearestIndex)
-                            updateQuestionIDAndStatus(for: data[nearestIndex]) // Update on scroll end
+                            updateCurrentPage(nearestIndex, with: scrollViewProxy)
                         })
                 }
                 .scrollTargetBehavior(.viewAligned)
                 .scrollIndicators(.hidden)
                 .onAppear {
                     currentPage = min(lastViewedPage, data.count - 1)
-                    scrollToCenter(scrollViewProxy: scrollViewProxy, index: currentPage)
-                    updateQuestionIDAndStatus(for: data[currentPage]) // Initial update
+                    updateCurrentPage(currentPage, with: scrollViewProxy)
                 }
-                .onChange(of: scenePhase) { oldValue, newValue in
+                .onChange(of: scenePhase) { newValue in
                     switch newValue {
                     case .active:
                         lastViewedPage = lastViewedPage
-                    case .background:
-                        lastViewedPage = 0
-                    case .inactive:
+                    case .background, .inactive:
                         lastViewedPage = 0
                     @unknown default:
                         lastViewedPage = 0
@@ -94,14 +94,16 @@ public struct FlippableCardView<Content: View, T>: View {
         .edgesIgnoringSafeArea(.all)
     }
     
-    private func handleAppear(index: Int) {
-        if index == currentPage {
-            onAppearLastItem?()
-        }
+    private func handleItemAppear(index: Int, item: T) {
+        guard index == currentPage else { return } // Only update if this is the current page
+        onItemAppear?(item)
     }
     
-    private func updateQuestionIDAndStatus(for item: T) {
-        onItemAppear?(item)
+    private func updateCurrentPage(_ index: Int, with scrollViewProxy: ScrollViewProxy) {
+        currentPage = index
+        lastViewedPage = index
+        scrollToCenter(scrollViewProxy: scrollViewProxy, index: index)
+        handleItemAppear(index: index, item: data[index])
     }
     
     private func calculateNearestIndex(
@@ -124,6 +126,7 @@ public struct FlippableCardView<Content: View, T>: View {
         }
     }
 }
+
 
 
 
