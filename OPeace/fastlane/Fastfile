@@ -84,7 +84,7 @@ upload_to_testflight(
        beta_app_description:" OPeace",
        ipa:"./fastlane/output/OPeace.ipa",
        changelog:"변경사항",
-       groups: ["Opeace"],
+       groups: ["Opeace", "OpenOpeaceTest"],
        skip_waiting_for_build_processing: true)
 
       send_slack
@@ -114,17 +114,16 @@ lane :send_slack do
    end
 end
 
-  desc "Push to TestFlight"
-  lane :QA_GIT do |options|
-app_store_connect_api_key(is_key_content_base64: true, in_house: false)
-
-:build_ipa_Git
-upload_to_testflight(
+desc "Push to TestFlight"
+lane :QA_GIT do |options|
+  app_store_connect_api_key(is_key_content_base64: true, in_house: false)
+   build_ipa_Git
+    upload_to_testflight(
        demo_account_required: true,
        beta_app_description:" OPeace",
        ipa:"./fastlane/output/OPeace.ipa",
        changelog:"변경사항",
-       groups: ["Opeace"],
+       groups: ["Opeace", "OpenOpeaceTest"],
        skip_waiting_for_build_processing: true)
 
       send_slack

@@ -210,13 +210,11 @@ extension ProfileView {
                 .frame(height: 16)
             
             if let resultData = store.myQuestionListModel?.data?.results {
-                
-                FlippableCardView(data: resultData,
-                                  onItemAppear: { item in
+                FlippableCardView(data: resultData, onItemAppear: { item in
                     if let resultItem = item as? ResultData {
-                        store.send(.async(.statusQuestion(id:  resultItem.id ?? 0)))
+                        store.deleteQuestionId = resultItem.id ?? .zero
                     }
-                }) { item in
+                } , content: { item in
                     CardItemView(
                         resultData: item,
                         statsData: store.statusQuestionModel?.data,
@@ -240,13 +238,10 @@ extension ProfileView {
                             store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
                         },
                         choiceTapAction: {})
-                    .onAppear {
-                        store.send(.async(.statusQuestion(id: item.id ?? .zero)))
-                    }
-                    .onChange(of: item.id ?? .zero) { oldValue, newValue in
+                    .onChange(of:  store.deleteQuestionId ?? .zero) { oldValue, newValue in
                         store.send(.async(.statusQuestion(id:  newValue)))
                     }
-                }
+                })
             }
         }
     }
