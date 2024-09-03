@@ -75,22 +75,18 @@ public struct FlippableCardView<Content: View, T>: View {
                 }
                 .scrollIndicators(.hidden)
                 .onAppear {
-                    // Restore the last viewed page when the view appears
                     currentPage = min(lastViewedPage, data.count - 1)
                     updateCurrentPage(currentPage, with: scrollViewProxy)
                 }
                 .onDisappear {
-                    // Save the current page when the view disappears
                     lastViewedPage = currentPage
                 }
                 .onChange(of: scenePhase) { newValue in
                     switch newValue {
                     case .active:
-                        // Restore the current page when returning to active
                         currentPage = min(lastViewedPage, data.count - 1)
                         updateCurrentPage(currentPage, with: scrollViewProxy)
                     case .background, .inactive:
-                        // Save the current page when going to background or inactive
                         lastViewedPage = currentPage
                     @unknown default:
                         lastViewedPage = 0
