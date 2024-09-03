@@ -104,7 +104,7 @@ public struct Login {
                 switch AsyncAction {
                     
                 case .appleLogin(let authData):
-                    var appleAccessToken = state.appleAccessToken
+                    nonisolated(unsafe) var appleAccessToken = state.appleAccessToken
                     return .run { @MainActor send in
                         do {
                             let result = try await authUseCase.handleAppleLogin(authData)

@@ -10,6 +10,8 @@ import SwiftUI
 import Combine
 
 import ComposableArchitecture
+import Model
+import UseCase
 
 @Reducer
 public struct Home {
@@ -30,6 +32,7 @@ public struct Home {
         var userBlockModel: UserBlockModel? = nil
         var isVoteAnswerQuestionModel: QuestionVoteModel? = nil
         var profileUserModel: UpdateUserInfoModel? = nil
+        var statusQuestionModel: StatusQuestionModel? = nil
         
         var cardGenerationColor: Color = .basicBlack
         var isLikeTap: Bool = false
@@ -40,6 +43,7 @@ public struct Home {
         var userID: String?
         var isSelectAnswerA: String = "a"
         var isSelectAnswerB: String = "b"
+        var questionDetailId: Int? = nil
         var isTapAVote: Bool = false
         var isTapBVote: Bool = false
         
@@ -50,6 +54,9 @@ public struct Home {
         var isShowSelectEditModal: Bool = false
         var isBlockQuestionPopUp: Bool = false
         var isReportQuestionPopUp: Bool = false
+        
+        var selectedJob: String = ""
+        var selectedGeneration: String = ""
         
         @Shared var isLogOut: Bool
         @Shared var isDeleteUser: Bool
@@ -101,6 +108,7 @@ public struct Home {
     
     @Reducer(state: .equatable)
     public enum Destination {
+        case homeFilter(HomeFilter)
         case customPopUp(CustomPopUp)
         case floatingPopUP(FloatingPopUp)
         case editQuestion(EditQuestion)
@@ -117,7 +125,8 @@ public struct Home {
         case closePopUp
         case timeToCloseFloatingPopUp
         case switchModalAction(EditQuestionType)
-        
+        case filterViewTappd(HomeFilterEnum)
+        case closeFilterModal
         
     }
     
@@ -135,7 +144,11 @@ public struct Home {
         case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
         case fetchUserProfile
         case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+        case jobFilterSelected(job: String)
+        case generationFilterSelected(generation: String)
         case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
+        case statusQuestion(id: Int)
+        case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
         
     }
     
@@ -163,8 +176,13 @@ public struct Home {
             switch action {
             case .binding(_):
                 return .none
-               
-            
+                
+            case .destination(.presented(.homeFilter(.test))):
+                return .none
+                
+            case .binding(\.questionID):
+                return .none
+                
             case .view(let View):
                 switch View {
                 case .appaerProfiluserData:
@@ -179,8 +197,10 @@ public struct Home {
                 case .closePopUp:
                     state.destination = nil
                     return .none
-                    
-                    
+                case .closeFilterModal:
+                    state.destination = nil
+                    return .none
+
                 case .presntFloatintPopUp:
                     state.destination = .floatingPopUP(.init())
                     return .none
@@ -190,7 +210,12 @@ public struct Home {
                         try await clock.sleep(for: .seconds(1.5))
                         await send(.view(.closePopUp))
                     }
-                    
+                case .filterViewTappd(let filterEnum):
+                    state.destination = .homeFilter(.init())
+                    return .run { @MainActor send in
+                        send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
+                    }
+                
                 case .presntEditQuestion:
                     state.destination = .editQuestion(.init())
                     return .none
@@ -251,7 +276,12 @@ public struct Home {
                         
                     }
                     
-                
+                case .jobFilterSelected(let job):
+                    nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
+                    return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: .empty)))
+                case .generationFilterSelected(let generation):
+                    nonisolated(unsafe) let currentSelectedJob = state.selectedJob
+                    return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: .empty)))
                 case .filterQuestionList(let job, let generation, let sortBy):
                     nonisolated(unsafe) var pageSize = state.pageSize
                     return .run {  send in
@@ -402,6 +432,31 @@ public struct Home {
                         Log.network("프로필 오류", error.localizedDescription)
                     }
                     return .none
+                    
+                case .statusQuestion(id: let id):
+                    return .run { send in
+                        let questionResult = await Result {
+                            try await questionUseCase.statusQuestion(questionID: id)
+                        }
+                        
+                        switch questionResult {
+                        case .success(let questionStatusData):
+                        if let questionStatusData = questionStatusData {
+                                await send(.async(.statusQuestionResponse(.success(questionStatusData))))
+                            }
+                        case .failure(let error):
+                            await send(.async(.statusQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                case .statusQuestionResponse(let result):
+                    switch result {
+                    case .success(let statusQuestionData):
+                        state.statusQuestionModel = statusQuestionData
+                    case .failure(let error):
+                        Log.error("질문 에대한 결과 보여주기 실패", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
             case .inner(let InnerAction):
@@ -437,6 +492,12 @@ public struct Home {
         .onChange(of: \.questionModel) { oldValue, newValue in
             Reduce { state, action in
                 state.questionModel = newValue
+                return .none
+            }
+        }
+        .onChange(of: \.statusQuestionModel) { oldValue, newValue in
+            Reduce { state, action in
+                state.statusQuestionModel = newValue
                 return .none
             }
         }

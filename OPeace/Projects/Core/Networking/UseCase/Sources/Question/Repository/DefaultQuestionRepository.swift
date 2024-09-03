@@ -60,4 +60,10 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
     ) async throws -> ReportQuestionModel? {
         return nil
     }
+    
+    public func statusQuestion(
+        questionID: Int
+    ) async throws -> StatusQuestionModel? {
+        return nil
+    }
 }

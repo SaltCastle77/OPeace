@@ -26,6 +26,7 @@ public protocol QuestionRepositoryProtocol {
     func isVoteQuestionAnswer(questionID: Int, choicAnswer: String) async throws -> QuestionVoteModel?
     func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel?
     func reportQuestion(questionID: Int, reason: String) async throws -> ReportQuestionModel?
+    func statusQuestion(questionID: Int) async throws -> StatusQuestionModel?
 
 }
 

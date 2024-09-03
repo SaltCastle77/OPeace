@@ -10,6 +10,10 @@ import Foundation
 import Model
 
 public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
+    public func fetchGenerationList() async throws -> Model.GenerationListResponse? {
+        nil
+    }
+    
     
     public init() {
         

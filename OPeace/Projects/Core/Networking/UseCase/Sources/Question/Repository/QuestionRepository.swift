@@ -95,4 +95,12 @@ public class QuestionRepository: QuestionRepositoryProtocol {
             reason: reason
         ), decodeTo: ReportQuestionModel.self)
     }
+    
+    //MARK: - 유저 투표 결과 API
+    public func statusQuestion(
+        questionID: Int
+    ) async throws -> StatusQuestionModel? {
+        return try await provider.requestAsync(.statusQuestion(
+            id: questionID), decodeTo: StatusQuestionModel.self)
+    }
 }

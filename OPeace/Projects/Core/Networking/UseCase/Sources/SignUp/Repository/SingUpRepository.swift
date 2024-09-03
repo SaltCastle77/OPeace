@@ -32,6 +32,10 @@ import Moya
         return  try await provider.requestAsync(.signUpJob, decodeTo: SignUpJobModel.self)
     }
     
+    public func fetchGenerationList() async throws -> GenerationListResponse? {
+        return try await provider.requestAsync(.getGenerationList, decodeTo: GenerationListResponse.self)
+    }
+    
     //MARK: - 유저 정보 업데이트
     public func updateUserInfo(
         nickname: String,

@@ -37,7 +37,6 @@ public struct HomeView: View {
                 store.send(.async(.fetchQuestionList))
             }
             .onAppear {
-                print("socialType:", store.loginSocialType ?? .apple)
                 store.send(.async(.fetchQuestionList))
                 store.send(.async(.fetchUserProfile))
                 startRefreshData()
@@ -147,8 +146,59 @@ extension HomeView {
             Spacer()
                 .frame(height: 22)
             
-            HStack {
+            HStack(spacing: .zero) {
                 Spacer()
+                
+                RightImageButton(action: {
+                    store.send(.view(.filterViewTappd(.job)))
+                }, title: "계열")
+                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+                    HomeFilterView(
+                        store: homeFilterStore
+                    ) { jobString in
+                        store.send(.async(.jobFilterSelected(job: jobString)))
+                        store.send(.view(.closeFilterModal))
+                    }
+                    .presentationDetents([.fraction(0.7)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
+                }
+                Spacer()
+                    .frame(width: 8)
+                
+                RightImageButton(action: {
+                    store.send(.view(.filterViewTappd(.generation)))
+                }, title: "세대")
+                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+                    HomeFilterView(
+                        store: homeFilterStore
+                    ) { generation in
+                        store.send(.async(.generationFilterSelected(generation: generation)))
+                        store.send(.view(.closeFilterModal))
+                    }
+                    .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
+                }
+                Spacer()
+                    .frame(width: 8)
+                
+                RightImageButton(action: {
+                    
+                }, title: "최신순")
+                .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
+                    HomeFilterView(
+                        store: homeFilterStore
+                    ) { jobString in
+                        store.send(.async(.filterQuestionList(job: jobString, generation: "", sortBy: .empty)))
+                        store.send(.view(.closeFilterModal))
+                    }
+                    .presentationDetents([.height(UIScreen.screenHeight * 0.2)])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
+                }
+                Spacer()
+                    .frame(width: 8)
                 
                 if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                     Circle()
@@ -277,9 +327,14 @@ extension HomeView {
         if let resultData = store.questionModel?.data?.results {
             FlippableCardView(data: resultData) {
                 store.send(.async(.fetchQuestionList))
+            } onItemAppear: { item in
+                if let resultItem = item as? ResultData, resultItem.id != store.questionID {
+                    store.questionID = resultItem.id ?? 0
+                }
             } content: { item in
                 CardItemView(
                     resultData: item,
+                    statsData: store.statusQuestionModel?.data,
                     isProfile: false,
                     userLoginID: store.profileUserModel?.data?.socialID ?? "",
                     generationColor: store.cardGenerationColor,
@@ -290,34 +345,78 @@ extension HomeView {
                     isDeleteUser: store.isDeleteUser,
                     answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
                     editTapAction: {
-                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
-                            store.send(.view(.prsentCustomPopUp))
-                        } else {
-                            store.userID = item.userInfo?.userID ?? ""
-                            store.reportQuestionID = item.id ?? .zero
-                            store.questionID = item.id ?? .zero
-                            store.send(.view(.presntEditQuestion))
-                        }
+                        handleEditTap(item: item)
                     },
                     likeTapAction: { userID in
-                        if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
-                            store.send(.view(.prsentCustomPopUp))
-                        } else {
-                            store.send(.async(.isVoteQuestionLike(questioniD: Int(userID) ?? .zero)))
-                            store.send(.async(.fetchQuestionList))
-                        }
-                    },choiceTapAction: {
-                        if store.isTapAVote == true  {
-                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
-                            store.send(.async(.fetchQuestionList))
-                        } else if store.isTapBVote == true {
-                            store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
-                            store.send(.async(.fetchQuestionList))
-                        } else {
-                            store.send(.view(.prsentCustomPopUp))
-                        }
-                    })
+                        handleLikeTap(userID: userID)
+                    },
+                    appearStatusAction: {
+//                        appearStatusActionIfNeeded(item: item)
+                    },
+                    choiceTapAction: {
+                        handleChoiceTap(item: item)
+                    }
+                )
+                .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
+                    guard let id = item.id, id == newValue else { return }
+                    store.send(.async(.statusQuestion(id: newValue)))
+                }
             }
+        }
+    }
+
+
+
+    private func handleChoiceTap(item: ResultData) {
+        if store.isTapAVote {
+            if item.metadata?.voted == true {
+                store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+            } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
+                store.questionID = item.id ?? .zero
+                store.send(.async(.statusQuestion(id:  store.questionID ?? .zero)))
+            } else {
+                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+                store.send(.async(.fetchQuestionList))
+            }
+        } else if store.isTapBVote {
+            if item.metadata?.voted == true {
+                store.reportQuestionID = item.id ?? .zero
+            } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
+                store.questionID = item.id ?? .zero
+                store.send(.async(.statusQuestion(id:  store.questionID ?? .zero)))
+            } else {
+                store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+                store.send(.async(.fetchQuestionList))
+            }
+        } else {
+            store.send(.view(.prsentCustomPopUp))
+        }
+    }
+    
+    private func handleEditTap(item: ResultData) {
+        if store.isLogOut || store.isLookAround || store.isDeleteUser {
+            store.send(.view(.prsentCustomPopUp))
+        } else {
+            store.userID = item.userInfo?.userID ?? ""
+            store.reportQuestionID = item.id ?? .zero
+            store.questionID = item.id ?? .zero
+            store.send(.view(.presntEditQuestion))
+        }
+    }
+    
+    private func handleLikeTap(userID: String) {
+        if store.isLogOut || store.isLookAround || store.isDeleteUser {
+            store.send(.view(.prsentCustomPopUp))
+        } else {
+            store.send(.async(.isVoteQuestionLike(questioniD: Int(userID) ?? .zero)))
+            store.send(.async(.fetchQuestionList))
+        }
+    }
+    
+    private func appearStatusActionIfNeeded(item: ResultData) {
+        if store.questionID != item.id {
+            store.questionID = item.id ?? .zero
+//            store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
         }
     }
     

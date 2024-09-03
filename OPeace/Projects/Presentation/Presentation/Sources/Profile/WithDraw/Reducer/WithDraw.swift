@@ -130,7 +130,7 @@ public struct WithDraw {
                     return .none
                     
                 case .deletUserSocialType(let reason):
-                    var loginSocialType = state.loginSocialType
+                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
                     return .run { @MainActor send in
                         switch loginSocialType {
                         case  .kakao:

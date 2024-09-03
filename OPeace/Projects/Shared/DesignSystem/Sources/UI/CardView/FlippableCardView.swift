@@ -12,19 +12,23 @@ public struct FlippableCardView<Content: View, T>: View {
     var data: [T]
     let content: (T) -> Content
     let onAppearLastItem: (() -> Void)?
+    let onItemAppear: ((T) -> Void)?
     
     @AppStorage("lastViewedPage") private var lastViewedPage: Int = 0
     @State private var currentPage: Int = 0
     @GestureState private var dragOffset: CGFloat = 0
+    @State private var isScrolling: Bool = false
     
     public init(
         data: [T],
         onAppearLastItem: (() -> Void)? = nil,
+        onItemAppear: ((T) -> Void)? = nil,
         content: @escaping (T) -> Content
     ) {
         self.data = data
         self.content = content
         self.onAppearLastItem = onAppearLastItem
+        self.onItemAppear = onItemAppear
     }
     
     public var body: some View {
@@ -39,6 +43,9 @@ public struct FlippableCardView<Content: View, T>: View {
                                 .scrollTargetLayout()
                                 .id(index)
                                 .onAppear {
+                                    if !isScrolling {
+                                        handleItemAppear(index: index, item: data[index])
+                                    }
                                     if index == data.indices.last {
                                         onAppearLastItem?()
                                     }
@@ -52,32 +59,31 @@ public struct FlippableCardView<Content: View, T>: View {
                         .updating($dragOffset) { value, state, _ in
                             state = value.translation.height * 0.2
                         }
+                        .onChanged { _ in
+                            isScrolling = true
+                        }
                         .onEnded { value in
-                          
+                            isScrolling = false
                             let velocity = value.predictedEndLocation.y - value.startLocation.y
                             let nearestIndex = calculateNearestIndex(
                                 geometry: geometry,
                                 currentPage: currentPage,
                                 velocity: velocity
                             )
-                            currentPage = nearestIndex
-                            lastViewedPage = nearestIndex
-                            scrollToCenter(scrollViewProxy: scrollViewProxy, index: nearestIndex)
+                            updateCurrentPage(nearestIndex, with: scrollViewProxy)
                         })
                 }
                 .scrollTargetBehavior(.viewAligned)
                 .scrollIndicators(.hidden)
                 .onAppear {
                     currentPage = min(lastViewedPage, data.count - 1)
-                    scrollToCenter(scrollViewProxy: scrollViewProxy, index: currentPage)
+                    updateCurrentPage(currentPage, with: scrollViewProxy)
                 }
-                .onChange(of: scenePhase) { oldValue, newValue in
+                .onChange(of: scenePhase) { newValue in
                     switch newValue {
                     case .active:
                         lastViewedPage = lastViewedPage
-                    case .background:
-                        lastViewedPage = 0
-                    case .inactive:
+                    case .background, .inactive:
                         lastViewedPage = 0
                     @unknown default:
                         lastViewedPage = 0
@@ -88,6 +94,17 @@ public struct FlippableCardView<Content: View, T>: View {
         .edgesIgnoringSafeArea(.all)
     }
     
+    private func handleItemAppear(index: Int, item: T) {
+        guard index == currentPage else { return }
+        onItemAppear?(item)
+    }
+    
+    private func updateCurrentPage(_ index: Int, with scrollViewProxy: ScrollViewProxy) {
+        currentPage = index
+        lastViewedPage = index
+        scrollToCenter(scrollViewProxy: scrollViewProxy, index: index)
+        handleItemAppear(index: index, item: data[index])
+    }
     
     private func calculateNearestIndex(
         geometry: GeometryProxy,
@@ -103,30 +120,9 @@ public struct FlippableCardView<Content: View, T>: View {
         return currentPage
     }
     
-    
     private func scrollToCenter(scrollViewProxy: ScrollViewProxy, index: Int) {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.3)) {
             scrollViewProxy.scrollTo(index, anchor: .center)
         }
-    }
-}
-
-
-
-struct ScrollEffectModifier: ViewModifier {
-    let index: Int
-    let currentPage: Int
-    let dragOffset: CGFloat
-    
-    func body(content: Content) -> some View {
-        content
-            .offset(y: calculateOffset())
-    }
-    
-    private func calculateOffset() -> CGFloat {
-        if index == currentPage - 1 && dragOffset > 0 {
-            return min(dragOffset / 5, 30)
-        }
-        return 0
     }
 }

@@ -89,6 +89,11 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
             reason: reason
         )
     }
+    
+    //MARK: - 투표 결과
+    public func statusQuestion(questionID: Int) async throws -> StatusQuestionModel? {
+        try await repository.statusQuestion(questionID: questionID)
+    }
 }
 
 extension QuestionUseCase : DependencyKey {

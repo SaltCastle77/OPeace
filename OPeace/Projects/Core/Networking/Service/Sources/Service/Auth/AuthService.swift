@@ -120,66 +120,81 @@ extension AuthService: BaseTargetType {
         }
     }
     
-    public var task: Moya.Task {
+    public var parameters: [String : Any]? {
         switch self {
         case .appleLogin(let accessToken):
             let parameters: [String: Any] = [
                 "access_token": accessToken
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            return parameters
             
         case .kakaoLogin(let accessToken):
             let parameters: [String: Any] = [
                 "access_token": accessToken
             ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
-            
+            return parameters
         case .refreshToken(let refreshToken):
             let parameters: [String: Any] = [
                 "refresh_token": refreshToken
             ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            return parameters
             
         case .fetchUserInfo:
-            return .requestPlain
-            
+            return .none
         case .logoutUser(let refreshToken):
             let parameters: [String: Any] = [
                 "refresh_token" : refreshToken
                 ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
-            
+            return parameters
         case .autoLogin:
             let parameters: [String: Any] = [:]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            return parameters
             
         case .deleteUser(let reason):
             let parameters: [String: Any] = [
                 "reason" : reason
             ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            return parameters
             
         case .userVerify:
             let parameters: [String: Any] = [ : ]
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
+            return parameters
             
         case .userBlock(let questioniD, let userID):
             let parameters: [String: Any] = [
                 "question_id" : questioniD,
                 "blocked_user_id" : userID
             ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            return parameters
             
         case .fectchUserBlock:
-            return .requestPlain
-            
+            return .none
         case .realseUserBlock(let userID):
             let parameters: [String: Any] = [
                 "blocked_user_id" : userID
             ]
-            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            return parameters
         }
     }
+    
+    public var shouldUseJSONEncodingForGet: Bool {
+            switch self {
+            case .userBlock, .deleteUser, .refreshToken, .logoutUser, .realseUserBlock, .logoutUser:
+                return true
+            default:
+                return false
+            }
+        }
+
+    public var shouldUseQueryStringEncodingForGet: Bool {
+            switch self {
+            case .appleLogin, .kakaoLogin, .autoLogin, .userVerify:
+                return true
+            default:
+                return false
+            }
+        }
+    
     
     public var headers: [String : String]? {
         switch self {

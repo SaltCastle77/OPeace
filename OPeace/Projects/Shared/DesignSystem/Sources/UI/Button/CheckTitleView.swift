@@ -46,13 +46,13 @@ public struct CheckTitleView: View {
                     .padding(.init(top: 0, leading: 30, bottom: 0, trailing: 0))
                 
                 if isEssentialAgree {
-                    Text("(필수)\(text)")
+                    Text("(필수) \(text)")
                         .pretendardFont(family: .Regular, size: 16)
                         .foregroundStyle(Color.basicWhite)
                     
                 } else if isActiveUnderline {
-                    HStack {
-                        Text("(필수)")
+                    HStack (spacing: .zero){
+                        Text("(필수) ")
                             .pretendardFont(family: .Regular, size: 16)
                             .foregroundStyle(Color.basicWhite)
                         

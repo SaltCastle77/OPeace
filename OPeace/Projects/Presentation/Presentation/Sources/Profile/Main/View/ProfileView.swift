@@ -210,9 +210,16 @@ extension ProfileView {
                 .frame(height: 16)
             
             if let resultData = store.myQuestionListModel?.data?.results {
-                FlippableCardView(data: resultData) { item in
+                
+                FlippableCardView(data: resultData,
+                                  onItemAppear: { item in
+                    if let resultItem = item as? ResultData {
+                        store.send(.async(.statusQuestion(id:  resultItem.id ?? 0)))
+                    }
+                }) { item in
                     CardItemView(
                         resultData: item,
+                        statsData: store.statusQuestionModel?.data,
                         isProfile: true,
                         userLoginID: store.profileUserModel?.data?.socialID ?? "",
                         generationColor: store.cardGenerationColor,
@@ -222,9 +229,23 @@ extension ProfileView {
                         isLookAround: false,
                         isDeleteUser: false,
                         answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
-                        editTapAction: {},
+                        editTapAction: {
+                            store.send(.view(.presntPopUp))
+                            store.isDeleteQuestionPopUp = true
+                            store.deleteQuestionId = item.id ?? .zero
+                            store.popUpText = "고민을 삭제하시겠어요?"
+                        },
                         likeTapAction: { _ in },
+                        appearStatusAction: {
+                            store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
+                        },
                         choiceTapAction: {})
+                    .onAppear {
+                        store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+                    }
+                    .onChange(of: item.id ?? .zero) { oldValue, newValue in
+                        store.send(.async(.statusQuestion(id:  newValue)))
+                    }
                 }
             }
         }
