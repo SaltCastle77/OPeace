@@ -65,14 +65,6 @@ public struct SignUpAgeView: View {
             .onChange(of: store.signUpAgeDisplay, { oldValue, newValue in
                 store.send(.async(.checkGeneration(year: Int(newValue) ?? .zero)))
                 
-//                let (color, textColor) = CheckRegister.getGenerationSignUp(
-//                    generation: store.checkGenerationText,
-//                    color: store.signUpAgeDisplayColor,
-//                    textColor: store.checkGenerationTextColor)
-////                        store.checkGenerationText = generation
-//                store.signUpAgeDisplayColor = color
-//                store.checkGenerationTextColor = textColor
-
             })
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -146,17 +138,8 @@ extension SignUpAgeView {
                         store.isErrorGenerationText = "연도는 1900년 이상이어야 합니다"
                         store.enableButton = false
                     } else {
-                        // No error, so proceed with generation check
                         store.isErrorGenerationText = ""
                         store.send(.async(.checkGeneration(year: Int(store.signUpAgeDisplay) ?? .zero)))
-                        
-//                        let (color, textColor) = CheckRegister.getGenerationSignUp(
-//                            generation: store.checkGenerationText,
-//                            color: store.signUpAgeDisplayColor,
-//                            textColor: store.checkGenerationTextColor)
-////                        store.checkGenerationText = generation
-//                        store.signUpAgeDisplayColor = color
-//                        store.checkGenerationTextColor = textColor
                     }
                 }
 

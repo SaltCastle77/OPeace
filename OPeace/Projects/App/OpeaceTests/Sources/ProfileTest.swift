@@ -13,6 +13,7 @@ import ComposableArchitecture
 import XCTest
 import UseCase
 import Model
+import Utills
 
 
 @MainActor
@@ -37,6 +38,15 @@ struct ProfileTest {
         store.assert { state in
             state.profileUserModel = mockUpdateUserInfo
         }
+        
+        let mockError = CustomError.unknownError("Failed to fetch user info")
+        
+      
+        await store.send(.async(.fetchUserProfileResponse(.failure(mockError)))) {
+            XCTAssertNil($0.profileUserModel)
+        }
+        
+
         
         await store.finish()
          store.exhaustivity = .off

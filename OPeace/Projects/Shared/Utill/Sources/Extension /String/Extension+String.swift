@@ -57,15 +57,15 @@ public extension String {
     }
     
     func calculateWidthAge(for title: String) -> CGFloat {
-      let baseWidth: CGFloat = 70
+      let baseWidth: CGFloat = 60
       let extraWidthPerCharacter: CGFloat = 10
       
       if title.count <= 2 {
         return baseWidth
       } else if title.count == 4 {
-        return baseWidth + 30
+        return baseWidth + 20
       } else if title.count == 5 {
-        return baseWidth + 40
+        return baseWidth + 30
       }
       else {
         return baseWidth + extraWidthPerCharacter * CGFloat(title.count - 2)

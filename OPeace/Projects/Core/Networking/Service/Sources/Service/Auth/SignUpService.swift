@@ -111,7 +111,7 @@ extension SignUpService: BaseTargetType {
     
     public var shouldUseQueryStringEncodingForGet: Bool {
         switch self {
-        case .nickNameCheck, .checkGeneration:
+        case .checkGeneration:
             return true
         default:
             return false

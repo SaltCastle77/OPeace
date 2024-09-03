@@ -351,7 +351,7 @@ extension HomeView {
                         handleLikeTap(userID: userID)
                     },
                     appearStatusAction: {
-//                        appearStatusActionIfNeeded(item: item)
+
                     },
                     choiceTapAction: {
                         handleChoiceTap(item: item)

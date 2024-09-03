@@ -28,9 +28,9 @@ public struct SignUpNameView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-//                ScrollView(.vertical, showsIndicators: false) {
+                ScrollView(.vertical, showsIndicators: false) {
                     signUpNameTitle()
-                      
+                    
                     checkNickNameTextField()
                     
                     erorNIckCheckText()
@@ -38,22 +38,21 @@ public struct SignUpNameView: View {
                     Spacer()
                         .frame(height: UIScreen.screenHeight * 0.4)
                     
-                    CustomButton(
-                        action: {
-                            store.send(.switchSettingTab)
-                        }, title: store.presntNextViewButtonTitle,
-                        config: CustomButtonConfig.create()
-                        ,isEnable: store.enableButton
-                    )
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
-                        .frame(height: 16)
-//                }
-//                .bounce(false)
-                 
+                }
+                .bounce(false)
+                
+                CustomButton(
+                    action: {
+                        store.send(.switchSettingTab)
+                    }, title: store.presntNextViewButtonTitle,
+                    config: CustomButtonConfig.create()
+                    ,isEnable: store.enableButton
+                )
+                .padding(.horizontal, 20)
+                
+                Spacer()
+                    .frame(height: 16)
             }
-            
         }
     }
     
@@ -78,7 +77,7 @@ extension SignUpNameView {
                 .pretendardFont(family: .Regular, size: 16)
                 .foregroundStyle(Color.gray300)
             
-           
+            
         }
     }
     
@@ -109,12 +108,12 @@ extension SignUpNameView {
                         store.enableButton = false
                     }
                 }
-                
+            
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
             
-                 
+            
         }
     }
     
@@ -136,5 +135,5 @@ extension SignUpNameView {
         }
     }
     
-
+    
 }
