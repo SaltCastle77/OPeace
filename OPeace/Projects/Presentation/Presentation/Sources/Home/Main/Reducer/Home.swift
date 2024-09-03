@@ -200,7 +200,7 @@ public struct Home {
                         await send(.view(.closePopUp))
                     }
                 case .filterViewTappd(let filterEnum):
-                    state.destination = .homeFilter(.init())
+                    state.destination = .homeFilter(.init(homeFilterEnum: filterEnum))
                     return .run { @MainActor send in
                         send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
                     }

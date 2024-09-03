@@ -56,29 +56,9 @@ extension SettingView {
                 settingListitem(title: item.desc) {
                     store.send(.view(.tapSettingitem(item)))
                     if item == store.settingtitem {
-                        switch store.settingtitem {
-                        case .editProfile:
-                            closeModalAction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                action()
-                            }
-                        case .blackManagement:
-                            closeModalAction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                action()
-                            }
-                        case .logout:
-                            closeModalAction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                action()
-                            }
-                        case .withDraw:
-                            closeModalAction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                action()
-                            }
-                        case .none:
-                            print(item.desc)
+                        closeModalAction()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            action()
                         }
                     }
                 }
@@ -109,7 +89,7 @@ extension SettingView {
             
         }
         .padding(.vertical, 14)
-        
+            
         Spacer()
             .frame(height: 4)
     }
