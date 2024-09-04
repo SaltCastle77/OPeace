@@ -106,8 +106,6 @@ public struct SignUpJob {
                 
             case .appearName(let name):
                 state.signUpName = name
-                
-                print(name)
                 return .none
 
                 

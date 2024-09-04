@@ -32,7 +32,7 @@ public struct RootView: View {
                     HomeRootView(store: store)
                         .onAppear {
                             lastViewedPage = .zero
-                            store.send(.home(.async(.fetchQuestionList)))
+//                            store.send(.home(.async(.fetchQuestionList)))
                         }
                 }
          

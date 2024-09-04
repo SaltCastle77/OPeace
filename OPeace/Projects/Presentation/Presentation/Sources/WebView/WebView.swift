@@ -45,7 +45,6 @@ public struct WebView: UIViewRepresentable {
             }
             
         }
-        print("\(webView)")
         return webView
     }
     

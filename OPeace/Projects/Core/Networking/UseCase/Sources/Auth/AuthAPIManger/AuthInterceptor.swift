@@ -55,8 +55,8 @@ final class AuthInterceptor: RequestInterceptor {
         Log.debug("HTTP Status Code: \(response.statusCode)")
         
         switch response.statusCode {
-        case 400, 401:
-            Log.debug("401 Unauthorized detected, attempting to refresh token...")
+        case 400:
+            Log.debug("400 Unauthorized detected, attempting to refresh token...")
             Task {
                 let retryResult = await AuthAPIManger.shared.getRefeshToken()
                 completion(retryResult)
