@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 import DesignSystem
+import Utills
 
 public struct EditQuestionView: View {
     @Bindable var store: StoreOf<EditQuestion>
@@ -56,19 +57,17 @@ extension EditQuestionView {
                     if item == store.editQuestionitem {
                         switch store.editQuestionitem {
                         case .reportUser:
-                            print(item.editQuestionDesc)
                             closeModalAction()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 action()
                             }
                         case .blockUser:
-                            print(item.editQuestionDesc)
                             closeModalAction()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 action()
                             }
                         case .none:
-                            print(item.editQuestionDesc)
+                            Log.debug(item.editQuestionDesc)
                             
                         }
                     }

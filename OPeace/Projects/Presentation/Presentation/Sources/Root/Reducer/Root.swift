@@ -129,29 +129,30 @@ public struct Root {
                 case .autoLogin:
                     @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
                     nonisolated(unsafe) let copyLoginSocialType = loginSocialType
-                    return .run { @MainActor send in
+                    return .run {  send in
                         switch copyLoginSocialType {
                         case .kakao:
-                            //                            try await clock.sleep(for: .seconds(1))
+                           try await clock.sleep(for: .seconds(1))
+                            
                             if let refreshToken =  UserDefaults.standard.string(forKey: "REFRESH_TOKEN") {
                                 if !refreshToken.isEmpty {
-                                    send(.async(.checkUserVerfiy))
-                                    send(.async(.loginWIthKakao))
+                                    await send(.async(.checkUserVerfiy))
+                                    await  send(.async(.loginWIthKakao))
                                 }
                             }
                             
                             if let accessToken = UserDefaults.standard.string(forKey: "ACCESS_TOKEN") {
                                 if Root.State.checkUserVerifyModel?.data?.status == false {
                                     if let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN")  {
-                                        //                                        send(.async(.handleRefreshToken(refreshToken)))
+                                        await  send(.async(.handleRefreshToken(refreshToken)))
                                     } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-//                                        send(.view(.auth(.login(.async(.kakaoLogin)))))
+                                        await send(.async(.loginWIthKakao))
                                     }
                                 }
                                 print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
                                 
                                 if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-//                                    send(.view(.auth(.login(.async(.kakaoLogin)))))
+                                    send(.view(.changeScene(.auth(.init()))))
                                 }
                                 
                                 if Root.State.userModel?.data?.accessToken == accessToken {
@@ -175,13 +176,13 @@ public struct Root {
                                     if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
                                         send(.async(.handleRefreshToken(refreshToken)))
                                     } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-                                        //                                        send(.view(.auth(.login(.async(.appleLogin)))))
+                                        
+                                        //  send(.view(.auth(.login(.async(.appleLogin)))))
                                     }
                                 }
-                                print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
                                 
                                 if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-                                    //                                    send(.view(.auth(.login(.async(.appleLogin)))))
+//                                    send(.view(.changeScene(.homeRoot(.init()))))
                                 }
                                 
                                 if Root.State.userModel?.data?.accessToken == accessToken {
@@ -237,7 +238,7 @@ public struct Root {
                     return .none
                     
                 case .loginWIthKakao:
-                    return .run { @MainActor send in
+                    return .run { send in
                         let kakaoRequest = await Result {
                             try await authUseCase.reauestKakaoLogin()
                         }
@@ -245,21 +246,21 @@ public struct Root {
                         switch kakaoRequest {
                         case .success(let resopnse):
                             if let responseData = resopnse {
-                                send(.async(.kakaoLoginApiResponse(.success(responseData))))
+                                await send(.async(.kakaoLoginApiResponse(.success(responseData))))
                                 
                                 if responseData.data?.isExpires == true && responseData.data?.isRefreshTokenExpires == true {
-                                    send(.async(.refreshTokenRequest(refreshToken: responseData.data?.refreshToken ?? "")))
+                                    await send(.async(.refreshTokenRequest(refreshToken: responseData.data?.refreshToken ?? "")))
                                     
                                 }
                             }
                             
                         case .failure(let error):
-                            send(.async(.kakaoLoginApiResponse(.failure(CustomError.map(error)))))
+                            await send(.async(.kakaoLoginApiResponse(.failure(CustomError.map(error)))))
                         }
                     }
                     
                 case .checkUserVerfiy:
-                    return .run { @MainActor send in
+                    return .run { send in
                         let checkUserVerifyResult = await Result {
                             try await authUseCase.checkUserVerify()
                         }
@@ -267,10 +268,10 @@ public struct Root {
                         switch checkUserVerifyResult {
                         case .success(let checkUserVerifyResult):
                             if let responseData = checkUserVerifyResult {
-                                send(.async(.checkUserVerfiyResponse(.success(responseData))))
+                                await send(.async(.checkUserVerfiyResponse(.success(responseData))))
                             }
                         case .failure(let error):
-                            send(.async(.checkUserVerfiyResponse(.failure(CustomError.tokenError(error.localizedDescription)))))
+                            await send(.async(.checkUserVerfiyResponse(.failure(CustomError.tokenError(error.localizedDescription)))))
                         }
                     }
                     
@@ -315,7 +316,7 @@ public struct Root {
                     return .none
                     
                 case .appleLogin:
-                    return .run { @MainActor send in
+                    return .run {  send in
                         let appleLoginResult = await Result {
                             try await authUseCase.appleLogin()
                         }
@@ -323,10 +324,10 @@ public struct Root {
                         switch appleLoginResult {
                         case .success(let appleLoginResult):
                             if let appleLoginResult = appleLoginResult {
-                                send(.async(.appleLoginResponse(.success(appleLoginResult))))
+                                await  send(.async(.appleLoginResponse(.success(appleLoginResult))))
                             }
                         case .failure(let error):
-                            send(.async(.appleLoginResponse(.failure(CustomError.unAuthorized))))
+                            await send(.async(.appleLoginResponse(.failure(CustomError.unAuthorized))))
                         }
                     }
                     

@@ -228,11 +228,12 @@ import Model
     //MARK: - 유저 차단 API
     public func userBlock(
         questioniD: Int,
-        userID: String) async throws -> UserBlockModel? {
-            return try await authProvider.requestAsync(.userBlock(
-                questioniD: questioniD,
-                userID: userID), decodeTo: UserBlockModel.self)
-        }
+        userID: String
+    ) async throws -> UserBlockModel? {
+        return try await authProvider.requestAsync(.userBlock(
+            questioniD: questioniD,
+            userID: userID), decodeTo: UserBlockModel.self)
+    }
     
     //MARK: - 유저 차단 리스트 조회 API
     public func fetchUserBlockList() async throws -> UserBlockListModel? {
