@@ -127,7 +127,6 @@ public struct Home {
         case switchModalAction(EditQuestionType)
         case filterViewTappd(HomeFilterEnum)
         case closeFilterModal
-        
     }
     
   
