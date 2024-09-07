@@ -8,8 +8,15 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
-      # Checkout the code from the repository
       - uses: actions/checkout@v2
+
+      - name: Execute Tuist tasks
+        run: |
+          make clean
+          make fetch
+          # tuist signing decrypt
+          TUIST_ROOT_DIR=${PWD} make generate
+        working-directory: ./OPeace
 
     
       - name: Run Fastlane QA
