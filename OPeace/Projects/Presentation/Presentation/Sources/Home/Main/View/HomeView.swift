@@ -350,6 +350,10 @@ extension HomeView {
                         handleChoiceTap(item: item)
                     }
                 )
+                .onAppear {
+                    store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+                }
+                
                 .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
                     guard let id = item.id, id == newValue else { return }
                     store.send(.async(.statusQuestion(id: newValue)))
@@ -363,20 +367,20 @@ extension HomeView {
     private func handleChoiceTap(item: ResultData) {
         if store.isTapAVote {
             if item.metadata?.voted == true {
+                store.questionID = item.id ?? .zero
                 store.send(.async(.statusQuestion(id: item.id ?? .zero)))
             } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
-                store.send(.async(.statusQuestion(id:  store.questionID ?? .zero)))
             } else {
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
                 store.send(.async(.fetchQuestionList))
             }
         } else if store.isTapBVote {
             if item.metadata?.voted == true {
-                store.reportQuestionID = item.id ?? .zero
+                store.questionID = item.id ?? .zero
+                store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
             } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
-                store.send(.async(.statusQuestion(id:  store.questionID ?? .zero)))
             } else {
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
                 store.send(.async(.fetchQuestionList))

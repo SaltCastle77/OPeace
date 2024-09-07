@@ -87,7 +87,7 @@ extension CardItemView {
         VStack {
             RoundedRectangle(cornerRadius: 30)
                 .fill(Color.gray500)
-                .frame(height: 520)
+                .frame(height: calculateVotingCardHeight())
                 .padding(.horizontal, 20)
                 .overlay {
                     VStack {
@@ -112,6 +112,8 @@ extension CardItemView {
                     .padding(.horizontal, 24)
                 }
             
+            Spacer()
+                .frame(height: 16)
         }
     }
     
@@ -120,7 +122,7 @@ extension CardItemView {
         VStack {
             RoundedRectangle(cornerRadius: 30)
                 .fill(Color.gray500)
-                .frame(height: 520)
+                .frame(height: calculateVotingCardHeight())
                 .padding(.horizontal, 20)
                 .overlay {
                     VStack {
@@ -171,6 +173,9 @@ extension CardItemView {
                         updateStatusOnFlip()
                     }
                 }
+            
+            Spacer()
+                .frame(height: 16)
         }
         .rotation3DEffect(
             .degrees((isRotated ) ? 180 : 0),
@@ -178,6 +183,33 @@ extension CardItemView {
             perspective: 0.5
         )
         .animation(.easeInOut(duration: 0.5), value: isRotated)
+    }
+    
+    private func calculateVotingCardHeight() -> CGFloat {
+        let titleHeight = calculateTextHeight(text: resultData.title ?? "", width: UIScreen.main.bounds.width - 88)
+        
+        if resultData.title?.count ?? 0 < 12 {
+            return 520
+        } else if resultData.title?.count ?? 0 > 50 {
+            let baseHeight: CGFloat = 440
+            return baseHeight + titleHeight
+        } else if  resultData.title?.count ?? 0 > 12 {
+            let baseHeight: CGFloat = 450
+            return baseHeight + titleHeight
+        }
+        else {
+            return 520
+        }
+    }
+
+    private func calculateTextHeight(text: String, width: CGFloat) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        let attributes: [NSAttributedString.Key: Any] = [.font: font]
+        let attributedText = NSAttributedString(string: text, attributes: attributes)
+        let constraintBox = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = attributedText.boundingRect(with: constraintBox, options: .usesLineFragmentOrigin, context: nil)
+        
+        return ceil(boundingBox.height) + 20
     }
     
     @ViewBuilder
@@ -475,7 +507,7 @@ extension CardItemView {
                     Text(choiceLabel)
                         .pretendardFont(family: .SemiBold, size: 16)
                         .foregroundStyle(choiceLabel == "A" ? Color.gray600 : Color.gray200)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(alignment: .leading)
                     
                     Spacer()
                     
@@ -489,7 +521,7 @@ extension CardItemView {
                     Text("\(percentageLabel)%")
                         .pretendardFont(family: .SemiBold, size: 16)
                         .foregroundStyle(choiceLabel == "A" ? Color.gray600 : Color.gray200)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .frame(alignment: .trailing)
                     
                     Spacer().frame(width: 12)
                 }

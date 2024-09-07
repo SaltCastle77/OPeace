@@ -52,7 +52,7 @@ extension Settings {
                 .setDebugInformationFormat("non-global")
                 .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
                 .setSkipInstall(false)
-            )
+            ),
         ], defaultSettings: .recommended
     )
     
