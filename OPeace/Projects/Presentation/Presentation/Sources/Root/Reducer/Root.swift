@@ -145,15 +145,10 @@ public struct Root {
                                 if Root.State.checkUserVerifyModel?.data?.status == false {
                                     if let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN")  {
                                         await  send(.async(.handleRefreshToken(refreshToken)))
-                                    } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-                                        await send(.async(.loginWIthKakao))
                                     }
                                 }
                                 print("isRefreshTokenExpires \(Root.State.userModel?.data?.isRefreshTokenExpires)")
                                 
-                                if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-                                    await send(.view(.changeScene(.auth(.init()))))
-                                }
                                 
                                 if Root.State.userModel?.data?.accessToken == accessToken {
                                     if ((Root.State.userModel?.data?.accessToken?.isEmpty) != nil && Root.State.userModel?.data?.isExpires != true) {
@@ -175,15 +170,9 @@ public struct Root {
                                 if Root.State.checkUserVerifyModel?.data?.status == false || Root.State.checkUserVerifyModel?.code == "token_not_valid" {
                                     if let refreshToken = try? Keychain().get("REFRESH_TOKEN") {
                                         await send(.async(.handleRefreshToken(refreshToken)))
-                                    } else if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-                                        
-                                        //  send(.view(.auth(.login(.async(.appleLogin)))))
                                     }
                                 }
                                 
-                                if Root.State.userModel?.data?.isRefreshTokenExpires == true {
-//                                    send(.view(.changeScene(.homeRoot(.init()))))
-                                }
                                 
                                 if Root.State.userModel?.data?.accessToken == accessToken {
                                     if ((Root.State.userModel?.data?.accessToken?.isEmpty) != nil && Root.State.userModel?.data?.isExpires != true) {

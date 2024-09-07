@@ -57,6 +57,7 @@ public struct Home {
         
         var selectedJob: String = ""
         var selectedGeneration: String = ""
+        var isFilterQuestion: Bool = false
         
         @Shared var isLogOut: Bool
         @Shared var isDeleteUser: Bool

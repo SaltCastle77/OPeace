@@ -72,6 +72,7 @@ public struct HomeView: View {
         .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
             HomeFilterView(store: homeFilterStore, closeModalAction: { data in
                 guard let homeFilter = homeFilterStore.homeFilterTypeState else { return }
+                store.isFilterQuestion = true
                 switch homeFilter {
                 case .job:
                     store.selectedJob = data
@@ -154,8 +155,10 @@ public struct HomeView: View {
     private func startRefreshData() {
         refreshTimer?.invalidate()
         
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
-            store.send(.async(.fetchQuestionList))
+        if !store.isFilterQuestion {
+            refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
+                store.send(.async(.fetchQuestionList))
+            }
         }
     }
 }
@@ -350,9 +353,9 @@ extension HomeView {
                         handleChoiceTap(item: item)
                     }
                 )
-                .onAppear {
-                    store.send(.async(.statusQuestion(id: item.id ?? .zero)))
-                }
+//                .onAppear {
+//                    store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+//                }
                 
                 .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
                     guard let id = item.id, id == newValue else { return }
@@ -371,9 +374,11 @@ extension HomeView {
                 store.send(.async(.statusQuestion(id: item.id ?? .zero)))
             } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
-            } else {
+            } else if store.profileUserModel?.data?.socialID != item.userInfo?.userID {
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
                 store.send(.async(.fetchQuestionList))
+                store.questionID = item.id ?? .zero
+                store.send(.async(.statusQuestion(id: item.id ?? .zero)))
             }
         } else if store.isTapBVote {
             if item.metadata?.voted == true {
@@ -381,9 +386,11 @@ extension HomeView {
                 store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
             } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
-            } else {
+            } else if store.profileUserModel?.data?.socialID != item.userInfo?.userID{
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
                 store.send(.async(.fetchQuestionList))
+                store.questionID = item.id ?? .zero
+                store.send(.async(.statusQuestion(id: item.id ?? .zero)))
             }
         } else {
             store.send(.view(.prsentCustomPopUp))

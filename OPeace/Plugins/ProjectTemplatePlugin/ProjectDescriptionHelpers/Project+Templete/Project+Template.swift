@@ -65,7 +65,7 @@ public extension Project {
             resources: ["\(name)Tests/Sources/OpeaceTestPlan.xctestplan"],
             dependencies: [
                 .target(name:name),
-                .sdk(name: "Testing", type: .framework),
+                .sdk(name: "Testing", type: .framework, status: isXcodeVersion16OrAbove() ? .required : .optional),
             ]
         )
         
@@ -79,6 +79,17 @@ public extension Project {
             schemes: schemes
         )
     }
+    
+    static func isXcodeVersion16OrAbove() -> Bool {
+        #if swift(>=6.0)
+        // Assuming Swift 5.7 is available with Xcode 14 and above,
+        // adjust if more accurate version checking is needed
+        return true
+        #else
+        return false
+        #endif
+    }
+
     
     static func makeModule(
         name: String = Environment.appName,

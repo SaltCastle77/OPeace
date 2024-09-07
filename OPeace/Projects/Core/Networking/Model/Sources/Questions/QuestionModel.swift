@@ -19,16 +19,19 @@ public struct QuestionModel: Codable, Equatable {
 
 // MARK: - DataClass
 public struct QuestionResponseModel: Codable, Equatable {
+    public let error: String?
     public let count: Int?
     public let next, previous: String?
     public let results: [ResultData]?
     
     public init(
+        error: String?,
         count: Int?,
         next: String?,
         previous: String?,
         results: [ResultData]?
     ) {
+        self.error = error
         self.count = count
         self.next = next
         self.previous = previous
@@ -36,7 +39,7 @@ public struct QuestionResponseModel: Codable, Equatable {
     }
     
     public enum CodingKeys: String, CodingKey {
-        case count, next, previous
+        case count, next, previous, error
         case results = "results"
     }
     

@@ -218,7 +218,7 @@ extension ProfileView {
             if let resultData = store.myQuestionListModel?.data?.results {
                 FlippableCardView(data: resultData, onItemAppear: { item in
                     if let resultItem = item as? ResultData {
-                        store.deleteQuestionId = resultItem.id ?? .zero
+                        store.questionId = resultItem.id ?? .zero
                     }
                 } , content: { item in
                     CardItemView(
@@ -241,10 +241,10 @@ extension ProfileView {
                         },
                         likeTapAction: { _ in },
                         appearStatusAction: {
-                            store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
+//                            store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
                         },
                         choiceTapAction: {})
-                    .onChange(of:  store.deleteQuestionId ?? .zero) { oldValue, newValue in
+                    .onChange(of:  store.questionId ?? .zero) { oldValue, newValue in
                         store.send(.async(.statusQuestion(id:  newValue)))
                     }
                 })

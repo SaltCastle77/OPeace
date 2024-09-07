@@ -164,14 +164,7 @@ extension CardItemView {
                     .padding(.horizontal, 24)
                 }
                 .onTapGesture {
-                    if !isUserInteractionDisabled {
-                        isRotated.toggle()
-                        isTapAVote = false
-                        isTapBVote = false
-                    } else {
-                        isRotated.toggle()
-                        updateStatusOnFlip()
-                    }
+                    updateStatusOnFlip()
                 }
             
             Spacer()
@@ -190,7 +183,7 @@ extension CardItemView {
         
         if resultData.title?.count ?? 0 < 12 {
             return 520
-        } else if resultData.title?.count ?? 0 > 50 {
+        } else if resultData.title?.count ?? 0 > 40 {
             let baseHeight: CGFloat = 440
             return baseHeight + titleHeight
         } else if  resultData.title?.count ?? 0 > 12 {

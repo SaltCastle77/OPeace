@@ -46,6 +46,7 @@ public struct Profile {
         
         var cardGenerationColor: Color = .basicBlack
         var deleteQuestionId: Int = .zero
+        var questionId: Int = .zero
         
         @Presents var destination: Destination.State?
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
@@ -410,5 +411,17 @@ public struct Profile {
             
         }
         .ifLet(\.$destination, action: \.destination)
+        .onChange(of: \.myQuestionListModel) { oldValue, newValue in
+            Reduce { state, action in
+                state.myQuestionListModel = newValue
+                return .none
+            }
+        }
+        .onChange(of: \.statusQuestionModel) { oldValue, newValue in
+            Reduce { state, action in
+                state.statusQuestionModel = newValue
+                return .none
+            }
+        }
     }
 }
