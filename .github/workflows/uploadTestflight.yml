@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: self-hosted
     steps:
       # Checkout the code from the repository
       - uses: actions/checkout@v2
