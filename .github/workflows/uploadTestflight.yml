@@ -13,7 +13,7 @@ jobs:
       - name: Execute Tuist tasks
         run: |
           make clean
-          make fetch
+          make install
           # tuist signing decrypt
           TUIST_ROOT_DIR=${PWD} make generate
         working-directory: ./OPeace
