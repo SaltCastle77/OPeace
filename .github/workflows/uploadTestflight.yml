@@ -85,13 +85,13 @@ jobs:
         working-directory: ./OPeace
 
       # Execute Tuist commands: clean, install dependencies, and generate the project
-      - name: Execute Tuist tasks
-        run: |
-          export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
-          tuist clean
-          tuist install
-          tuist generate
-        working-directory: ./OPeace
+      # - name: Execute Tuist tasks
+      #   run: |
+      #     export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
+      #     tuist clean
+      #     tuist install
+      #     tuist generate
+      #   working-directory: ./OPeace
 
       # Run Fastlane with the specified environment variables for deployment
            # Run Fastlane with the specified environment variables for deployment
