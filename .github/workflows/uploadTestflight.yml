@@ -95,11 +95,11 @@ jobs:
 
       # Run Fastlane with the specified environment variables for deployment
            # Run Fastlane with the specified environment variables for deployment
-      - name: Run Fastlane QA_GIT
+      - name: Run Fastlane QA
         run: |
           export PATH="$HOME/.local/share/mise/shims:$PATH" # Ensure PATH is updated in each step
           # Specify the username directly in the Fastlane match commands
-          bundle exec fastlane QA_GIT
+          bundle exec fastlane QA
         working-directory: ./OPeace
         env:
           APP_NAME: "OPeace"

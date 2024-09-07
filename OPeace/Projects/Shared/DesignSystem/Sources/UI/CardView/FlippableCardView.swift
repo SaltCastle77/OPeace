@@ -38,7 +38,7 @@ public struct FlippableCardView<Content: View, T>: View {
                     LazyVStack(spacing: 0) {
                         ForEach(data.indices, id: \.self) { index in
                             content(data[index])
-                                .frame(width: geometry.size.width, height: 520)
+                                .frame(width: geometry.size.width)
                                 .background(Color.clear)
                                 .scrollTargetLayout()
                                 .id(index)
@@ -52,7 +52,7 @@ public struct FlippableCardView<Content: View, T>: View {
                                 }
                             
                             Spacer()
-                                .frame(height: index == data.indices.last ? UIScreen.main.bounds.height * 0.25 : 16)
+                                .frame(height: index == data.indices.last ? UIScreen.main.bounds.height * 0.27 : 0)
                         }
                     }
                     .gesture(DragGesture()
@@ -104,7 +104,7 @@ public struct FlippableCardView<Content: View, T>: View {
     
     private func updateCurrentPage(_ index: Int, with scrollViewProxy: ScrollViewProxy) {
         currentPage = index
-        lastViewedPage = index // Update last viewed page
+        lastViewedPage = index
         scrollToCenter(scrollViewProxy: scrollViewProxy, index: index)
         handleItemAppear(index: index, item: data[index])
     }
@@ -129,3 +129,4 @@ public struct FlippableCardView<Content: View, T>: View {
         }
     }
 }
+
