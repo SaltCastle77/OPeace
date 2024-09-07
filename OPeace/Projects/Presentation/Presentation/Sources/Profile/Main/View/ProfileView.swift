@@ -241,7 +241,7 @@ extension ProfileView {
                         },
                         likeTapAction: { _ in },
                         appearStatusAction: {
-//                            store.send(.async(.statusQuestion(id:  item.id ?? .zero)))
+                            store.questionId = item.id ?? .zero
                         },
                         choiceTapAction: {})
                     .onChange(of:  store.questionId ?? .zero) { oldValue, newValue in

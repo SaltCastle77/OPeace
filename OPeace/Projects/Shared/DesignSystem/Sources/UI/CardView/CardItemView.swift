@@ -830,7 +830,7 @@ extension CardItemView {
                     choiceTapAction()
                     isTapBVote = false
                 } else if userLoginID == resultData.userInfo?.userID {
-                    isRotated.toggle()
+//                    isRotated.toggle()
                 }
             } else if choice == "B" {
                 if userLoginID != resultData.userInfo?.userID {
@@ -842,11 +842,11 @@ extension CardItemView {
                     choiceTapAction()
                     isTapAVote = false
                 } else if userLoginID == resultData.userInfo?.userID {
-                    isRotated.toggle()
+//                    isRotated.toggle()
                 }
             } else if userLoginID == resultData.userInfo?.userID {
                 choiceTapAction()
-                isRotated.toggle()
+//                isRotated.toggle()
             } else {
                 isRotated = false
                 choiceTapAction()

@@ -23,6 +23,7 @@ public struct HomeFilter  {
         var jsobListModel: SignUpJobModel? = nil
         var generationListModel: GenerationListResponse? = nil
         public var homeFilterTypeState: HomeFilterEnum? = nil
+        public var selectedItem: String? = nil
         
         public init(homeFilterEnum: HomeFilterEnum) {
             homeFilterTypeState = homeFilterEnum
@@ -70,6 +71,8 @@ public struct HomeFilter  {
         
         Reduce<State, Action> { state, action  in
             switch action {
+            case .binding(\.selectedItem):
+                return .none
             case .binding(_):
                 return .none
             case .view(let ViewAction):
@@ -154,6 +157,12 @@ public struct HomeFilter  {
                     return .none
                 }
             case .test:
+                return .none
+            }
+        }
+        .onChange(of: \.selectedItem) { oldValue, newValue in
+            Reduce { state, action in
+                state.selectedItem = newValue
                 return .none
             }
         }

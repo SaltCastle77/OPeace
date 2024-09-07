@@ -70,25 +70,45 @@ public struct HomeView: View {
         }
         
         .sheet(item: $store.scope(state: \.destination?.homeFilter, action: \.destination.homeFilter)) { homeFilterStore in
-            HomeFilterView(store: homeFilterStore, closeModalAction: { data in
+            HomeFilterView(
+                store: homeFilterStore,
+                           selectItem: $store.selectedItem,
+                           closeModalAction: { data in
                 guard let homeFilter = homeFilterStore.homeFilterTypeState else { return }
                 store.isFilterQuestion = true
+                store.selectedItem = data
                 switch homeFilter {
                 case .job:
                     store.selectedJob = data
                     store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: store.selectedSorted)))
                     store.send(.view(.closeFilterModal))
+                    store.selectedItem = data
+                    store.selectedItem = homeFilterStore.selectedItem
                 case .generation:
                     store.selectedGeneration = data
                     store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: store.selectedSorted)))
                     store.send(.view(.closeFilterModal))
+                    store.selectedItem = data
+                    store.selectedItem = homeFilterStore.selectedItem
                 case .sorted(let sortedEnum):
-                    store.selectedSorted = sortedEnum
-                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration, sortBy: sortedEnum)))
+                    store.selectedSortDesc = data
+                    if let matchedSort = QuestionSort.allCases.first(where: { $0.questionSortDesc == store.selectedSortDesc }) {
+                        if matchedSort == sortedEnum {
+                            store.selectedSorted = matchedSort
+                        } else {
+                            store.selectedSorted = matchedSort
+                        }
+                    }
+                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration, sortBy: store.selectedSorted)))
                     store.send(.view(.closeFilterModal))
+                    store.selectedItem = data
+                    store.selectedItem = homeFilterStore.selectedItem
                 }
                 
             })
+            .onAppear {
+                    store.selectedItem = homeFilterStore.selectedItem
+                }
             .presentationDetents([.fraction(homeFilterStore.homeFilterTypeState == .job ? 0.7 : homeFilterStore.homeFilterTypeState == .generation ? 0.42: 0.2 )])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(20)
@@ -375,6 +395,7 @@ extension HomeView {
                 store.send(.async(.statusQuestion(id: item.id ?? .zero)))
             } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
+                store.isTapAVote = false
             } else if store.profileUserModel?.data?.socialID != item.userInfo?.userID {
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
                 store.send(.async(.fetchQuestionList))
@@ -387,6 +408,7 @@ extension HomeView {
                 store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
             } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
+                store.isTapBVote = false
             } else if store.profileUserModel?.data?.socialID != item.userInfo?.userID{
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
                 store.send(.async(.fetchQuestionList))
