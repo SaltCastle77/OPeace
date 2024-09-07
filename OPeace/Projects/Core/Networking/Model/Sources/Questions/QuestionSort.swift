@@ -22,4 +22,15 @@ public enum QuestionSort: String, CaseIterable {
             return ""
         }
     }
+    
+    public var sortedKoreanString: String {
+        switch self {
+        case .recent:
+            return "최신순"
+        case .popular:
+            return "인기순"
+        case .empty:
+            return ""
+        }
+    }
 }

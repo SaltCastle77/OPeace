@@ -76,13 +76,14 @@ public struct HomeView: View {
                 switch homeFilter {
                 case .job:
                     store.selectedJob = data
-                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation:"" ,sortBy: .empty)))
+                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: store.selectedSorted)))
                     store.send(.view(.closeFilterModal))
                 case .generation:
                     store.selectedGeneration = data
-                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: .empty)))
+                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: store.selectedSorted)))
                     store.send(.view(.closeFilterModal))
                 case .sorted(let sortedEnum):
+                    store.selectedSorted = sortedEnum
                     store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration, sortBy: sortedEnum)))
                     store.send(.view(.closeFilterModal))
                 }

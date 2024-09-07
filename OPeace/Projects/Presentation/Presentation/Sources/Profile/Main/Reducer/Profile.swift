@@ -237,7 +237,7 @@ public struct Profile {
                     return .none
                     
                 case .socilalLogOutUser:
-                    var loginSocialType = state.loginSocialType
+                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
                     return .run {  send in
                         switch loginSocialType {
                         case .kakao:
@@ -272,7 +272,7 @@ public struct Profile {
                     return .none
                     
                 case .logoutUser:
-                    var loginSocialType = state.loginSocialType
+                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
                     return .run {  send in
                         let userLogOutData = await Result {
                             try await authUseCase.logoutUser(refreshToken: "")

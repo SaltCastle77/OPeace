@@ -313,7 +313,7 @@ public struct Root {
                         switch appleLoginResult {
                         case .success(let appleLoginResult):
                             if let appleLoginResult = appleLoginResult {
-                                await  send(.async(.appleLoginResponse(.success(appleLoginResult))))
+                                await send(.async(.appleLoginResponse(.success(appleLoginResult))))
                             }
                         case .failure(let error):
                             await send(.async(.appleLoginResponse(.failure(CustomError.unAuthorized))))

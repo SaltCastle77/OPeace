@@ -57,6 +57,7 @@ public struct Home {
         
         var selectedJob: String = ""
         var selectedGeneration: String = ""
+        var selectedSorted: QuestionSort = .recent
         var isFilterQuestion: Bool = false
         
         @Shared var isLogOut: Bool
@@ -128,7 +129,6 @@ public struct Home {
         case switchModalAction(EditQuestionType)
         case filterViewTappd(HomeFilterEnum)
         case closeFilterModal
-        
     }
     
   

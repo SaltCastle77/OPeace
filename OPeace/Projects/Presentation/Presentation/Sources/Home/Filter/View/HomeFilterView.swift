@@ -53,7 +53,11 @@ public struct HomeFilterView: View {
                                 .frame(height: 32)
                         }
                     case .sorted:
-                        Text("")
+                        ForEach([QuestionSort.recent, QuestionSort.popular], id: \.self) { sorted in
+                            filterListItem(title: sorted.sortedKoreanString) {
+                                closeModalAction(sorted.sortedKoreanString)
+                            }
+                        }
                     case .none:
                         Text("")
                     }
