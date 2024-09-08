@@ -16,6 +16,7 @@ import Utill
 
 public struct ProfileView: View {
     @Bindable var store: StoreOf<Profile>
+    @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
     
     var backAction: () -> Void = {}
     
@@ -52,7 +53,11 @@ public struct ProfileView: View {
                 Spacer()
             }
             .onAppear {
+                lastViewedPage = .zero
                 store.send(.async(.fetchQuestion))
+            }
+            .onDisappear {
+                lastViewedPage = .zero
             }
             .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
                 navigationController.interactivePopGestureRecognizer?.isEnabled = true
@@ -241,7 +246,7 @@ extension ProfileView {
                         },
                         likeTapAction: { _ in },
                         appearStatusAction: {
-                            store.questionId = item.id ?? .zero
+                            
                         },
                         choiceTapAction: {})
                     .onChange(of:  store.questionId ?? .zero) { oldValue, newValue in

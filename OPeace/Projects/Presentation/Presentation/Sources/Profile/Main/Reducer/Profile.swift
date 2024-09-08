@@ -54,6 +54,7 @@ public struct Profile {
         @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
         @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
         @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
+        @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
         
         public init() {}
     }
