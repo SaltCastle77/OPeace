@@ -11,7 +11,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Execute Tuist tasks
-        run: make generate
+        run: |
+          make clean
+          make install
+          make generate
         working-directory: ./OPeace
 
       - name: Run Fastlane QA
