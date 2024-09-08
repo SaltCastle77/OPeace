@@ -10,6 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Execute Tuist tasks
+        run: make generate
+        working-directory: ./OPeace
+
       - name: Run Fastlane QA
         run: fastlane QA
         working-directory: ./OPeace
