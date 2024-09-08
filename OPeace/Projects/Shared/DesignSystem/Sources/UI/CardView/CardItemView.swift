@@ -179,20 +179,41 @@ extension CardItemView {
     }
     
     private func calculateVotingCardHeight() -> CGFloat {
-        let titleHeight = calculateTextHeight(text: resultData.title ?? "", width: UIScreen.main.bounds.width - 88)
+        let cleanedTitle = shouldCleanLineBreaks(resultData.title ?? "") ? cleanExcessiveLineBreaks(in: resultData.title ?? "") : resultData.title ?? ""
         
-        if resultData.title?.count ?? 0 < 12 {
+        
+        let titleHeight = calculateTextHeight(text: cleanedTitle, width: UIScreen.main.bounds.width - 88)
+        
+        if let title = resultData.title {
+            let titleCount = cleanedTitle.count
+            let lineBreakCount = title.components(separatedBy: "\n").count - 1
+            if lineBreakCount >= 8 {
+                let baseHeight: CGFloat = 500
+                return baseHeight + titleHeight
+            } else if titleCount < 12 {
+                return 520
+            } else if titleCount > 40 {
+                let baseHeight: CGFloat = 440
+                return baseHeight + titleHeight
+            } else if titleCount > 12 {
+                let baseHeight: CGFloat = 450
+                return baseHeight + titleHeight
+            } else {
+                return 520
+            }
+        } else {
             return 520
-        } else if resultData.title?.count ?? 0 > 40 {
-            let baseHeight: CGFloat = 440
-            return baseHeight + titleHeight
-        } else if  resultData.title?.count ?? 0 > 12 {
-            let baseHeight: CGFloat = 450
-            return baseHeight + titleHeight
         }
-        else {
-            return 520
-        }
+    }
+
+    private func shouldCleanLineBreaks(_ text: String) -> Bool {
+        let lineBreakCount = text.components(separatedBy: "\n").count - 1
+        return lineBreakCount >= 8
+    }
+
+    private func cleanExcessiveLineBreaks(in text: String) -> String {
+        let cleanedText = text.replacingOccurrences(of: "\\s*\\n+\\s*", with: " ", options: .regularExpression)
+        return cleanedText.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func calculateTextHeight(text: String, width: CGFloat) -> CGFloat {
@@ -204,6 +225,8 @@ extension CardItemView {
         
         return ceil(boundingBox.height) + 20
     }
+
+
     
     @ViewBuilder
     private func cardHeaderView(
@@ -307,7 +330,10 @@ extension CardItemView {
             Spacer()
                 .frame(height: 16)
             
-            Text(title)
+            // Check for excessive line breaks and clean up if needed
+            let processedTitle = handleExcessiveLineBreaks(in: title)
+            
+            Text(processedTitle)
                 .pretendardFont(family: .Bold, size: 28)
                 .foregroundStyle(Color.basicWhite)
                 .multilineTextAlignment(.center)
@@ -347,7 +373,16 @@ extension CardItemView {
             statsUpdated = false
         }
     }
-    
+
+    private func handleExcessiveLineBreaks(in text: String) -> String {
+        let lineBreaks = text.components(separatedBy: "\n").count - 1
+        if lineBreaks > 10 {
+            return text.replacingOccurrences(of: "\\s*\\n+\\s*", with: " ", options: .regularExpression)
+        }
+        return text
+    }
+
+
     
     @ViewBuilder
     private func choiceAnswerRoundViewProfile(
