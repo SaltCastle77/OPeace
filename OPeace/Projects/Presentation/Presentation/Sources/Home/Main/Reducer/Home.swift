@@ -55,8 +55,11 @@ public struct Home {
         var isBlockQuestionPopUp: Bool = false
         var isReportQuestionPopUp: Bool = false
         
+        var selectedJobButtonTitle: String = "계열"
         var selectedJob: String = ""
+        var selectedGenerationButtonTitle: String = "세대"
         var selectedGeneration: String = ""
+        var selectedSortedButtonTitle: QuestionSort = .recent
         var selectedSorted: QuestionSort = .recent
         var selectedSortDesc: String = ""
         var isFilterQuestion: Bool = false
@@ -149,6 +152,7 @@ public struct Home {
         case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
         case jobFilterSelected(job: String)
         case generationFilterSelected(generation: String)
+        case sortedFilterSelected(sortedEnum:QuestionSort)
         case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
         case statusQuestion(id: Int)
         case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
@@ -281,14 +285,22 @@ public struct Home {
                     
                 case .jobFilterSelected(let job):
                     nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
-                    return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: .empty)))
-                    
+                    nonisolated(unsafe) let currentSortBy = state.selectedSorted
+                    state.selectedJob = job
+                    return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
                 case .generationFilterSelected(let generation):
                     nonisolated(unsafe) let currentSelectedJob = state.selectedJob
-                    return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: .empty)))
-                    
+                    nonisolated(unsafe) let currentSortBy = state.selectedSorted
+                    state.selectedGeneration = generation
+                    return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))
+                case .sortedFilterSelected(let sorted):
+                    nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
+                    nonisolated(unsafe) let currentSelectedJob = state.selectedJob
+                    state.selectedSorted = sorted
+                    return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: sorted)))
                 case .filterQuestionList(let job, let generation, let sortBy):
                     nonisolated(unsafe) var pageSize = state.pageSize
+                    
                     return .run {  send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(

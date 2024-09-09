@@ -76,14 +76,12 @@ public struct HomeView: View {
                 store.selectedItem = data
                 switch homeFilter {
                 case .job:
-                    store.selectedJob = data
-                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: store.selectedSorted)))
+                    store.send(.async(.jobFilterSelected(job: data)))
                     store.send(.view(.closeFilterModal))
                     store.selectedItem = data
                     store.selectedItem = homeFilterStore.selectedItem
                 case .generation:
-                    store.selectedGeneration = data
-                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration ,sortBy: store.selectedSorted)))
+                    store.send(.async(.generationFilterSelected(generation:data)))
                     store.send(.view(.closeFilterModal))
                     store.selectedItem = data
                     store.selectedItem = homeFilterStore.selectedItem
@@ -96,7 +94,7 @@ public struct HomeView: View {
                             store.selectedSorted = matchedSort
                         }
                     }
-                    store.send(.async(.filterQuestionList(job: store.selectedJob, generation: store.selectedGeneration, sortBy: store.selectedSorted)))
+                    store.send(.async(.sortedFilterSelected(sortedEnum: sortedEnum)))
                     store.send(.view(.closeFilterModal))
                     store.selectedItem = data
                     store.selectedItem = homeFilterStore.selectedItem
@@ -195,21 +193,21 @@ extension HomeView {
                 
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.job)))
-                }, title: "계열")
+                }, title: store.selectedJobButtonTitle)
                 
                 Spacer()
                     .frame(width: 8)
                 
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.generation)))
-                }, title: "세대")
+                }, title: store.selectedGenerationButtonTitle)
 
                 Spacer()
                     .frame(width: 8)
                 
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.sorted(.popular))))
-                }, title: "최신순")
+                }, title: store.selectedSortedButtonTitle.sortedKoreanString)
                 
                 Spacer()
                     .frame(width: 8)
