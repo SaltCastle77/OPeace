@@ -33,9 +33,6 @@ public struct HomeView: View {
                 
                 questionLIstView()
             }
-            .task{
-                store.send(.async(.fetchQuestionList))
-            }
             .onAppear {
                 store.send(.async(.fetchQuestionList))
                 store.send(.async(.fetchUserProfile))
@@ -343,7 +340,9 @@ extension HomeView {
     private func qustionCardView() -> some View {
         if let resultData = store.questionModel?.data?.results {
             FlippableCardView(data: resultData) {
-                store.send(.async(.fetchQuestionList))
+                if !store.isFilterQuestion {
+                    store.send(.async(.fetchQuestionList))
+                }
             } onItemAppear: { item in
                 if let resultItem = item as? ResultData, resultItem.id != store.questionID {
                     store.questionID = resultItem.id ?? 0

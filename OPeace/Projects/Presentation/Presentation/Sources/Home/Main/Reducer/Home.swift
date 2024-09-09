@@ -282,9 +282,11 @@ public struct Home {
                 case .jobFilterSelected(let job):
                     nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
                     return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: .empty)))
+                    
                 case .generationFilterSelected(let generation):
                     nonisolated(unsafe) let currentSelectedJob = state.selectedJob
                     return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: .empty)))
+                    
                 case .filterQuestionList(let job, let generation, let sortBy):
                     nonisolated(unsafe) var pageSize = state.pageSize
                     return .run {  send in

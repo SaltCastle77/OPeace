@@ -249,7 +249,7 @@ extension ProfileView {
                             
                         },
                         choiceTapAction: {})
-                    .onChange(of:  store.questionId ?? .zero) { oldValue, newValue in
+                    .onChange(of:  store.questionId) { oldValue, newValue in
                         store.send(.async(.statusQuestion(id:  newValue)))
                     }
                 })
