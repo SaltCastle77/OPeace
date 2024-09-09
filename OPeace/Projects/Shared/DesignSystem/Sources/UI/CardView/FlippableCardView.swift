@@ -13,22 +13,27 @@ public struct FlippableCardView<Content: View, T>: View {
     let content: (T) -> Content
     let onAppearLastItem: (() -> Void)?
     let onItemAppear: ((T) -> Void)?
-    
+    let shouldSaveState: Bool // Parameter to control if the state should be saved
+
     @AppStorage("lastViewedPage") private var lastViewedPage: Int = 0
-    @State private var currentPage: Int = 0
     @GestureState private var dragOffset: CGFloat = 0
+    @State private var currentPage: Int = 0
     @State private var isScrolling: Bool = false
+    @State private var dataCount: Int = 0
     
     public init(
         data: [T],
+        shouldSaveState: Bool = true,
         onAppearLastItem: (() -> Void)? = nil,
         onItemAppear: ((T) -> Void)? = nil,
         content: @escaping (T) -> Content
     ) {
         self.data = data
+        self.shouldSaveState = shouldSaveState
         self.content = content
         self.onAppearLastItem = onAppearLastItem
         self.onItemAppear = onItemAppear
+        self._dataCount = State(initialValue: data.count)
     }
     
     public var body: some View {
@@ -75,21 +80,43 @@ public struct FlippableCardView<Content: View, T>: View {
                 }
                 .scrollIndicators(.hidden)
                 .onAppear {
-                    currentPage = min(lastViewedPage, data.count - 1)
+                    if shouldSaveState {
+                        currentPage = min(lastViewedPage, data.count - 1)
+                    } else {
+                        currentPage = 0
+                    }
                     updateCurrentPage(currentPage, with: scrollViewProxy)
                 }
                 .onDisappear {
-                    lastViewedPage = currentPage
+                    if shouldSaveState {
+                        lastViewedPage = currentPage
+                    }
                 }
                 .onChange(of: scenePhase) { newValue in
                     switch newValue {
                     case .active:
-                        currentPage = min(lastViewedPage, data.count - 1)
+                        if shouldSaveState {
+                            currentPage = min(lastViewedPage, data.count - 1)
+                        } else {
+                            currentPage = 0
+                        }
                         updateCurrentPage(currentPage, with: scrollViewProxy)
                     case .background, .inactive:
-                        lastViewedPage = currentPage
+                        if shouldSaveState {
+                            lastViewedPage = currentPage
+                        }
                     @unknown default:
                         lastViewedPage = 0
+                    }
+                }
+                .onChange(of: data.count) { newCount in
+                    if newCount != dataCount {
+                        currentPage = 0
+                        if shouldSaveState {
+                            lastViewedPage = 0
+                        }
+                        updateCurrentPage(currentPage, with: scrollViewProxy)
+                        dataCount = newCount
                     }
                 }
             }
@@ -98,13 +125,16 @@ public struct FlippableCardView<Content: View, T>: View {
     }
     
     private func handleItemAppear(index: Int, item: T) {
-        guard index == currentPage else { return }
+        guard index >= 0, index < data.count, index == currentPage else { return }
         onItemAppear?(item)
     }
     
     private func updateCurrentPage(_ index: Int, with scrollViewProxy: ScrollViewProxy) {
+        guard index >= 0, index < data.count else { return }
         currentPage = index
-        lastViewedPage = index
+        if shouldSaveState {
+            lastViewedPage = index
+        }
         scrollToCenter(scrollViewProxy: scrollViewProxy, index: index)
         handleItemAppear(index: index, item: data[index])
     }
@@ -124,6 +154,7 @@ public struct FlippableCardView<Content: View, T>: View {
     }
     
     private func scrollToCenter(scrollViewProxy: ScrollViewProxy, index: Int) {
+        guard index >= 0, index < data.count else { return }
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.3)) {
             scrollViewProxy.scrollTo(index, anchor: .center)
         }

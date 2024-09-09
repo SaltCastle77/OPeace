@@ -339,7 +339,9 @@ extension HomeView {
     @ViewBuilder
     private func qustionCardView() -> some View {
         if let resultData = store.questionModel?.data?.results {
-            FlippableCardView(data: resultData) {
+            FlippableCardView(
+                data: resultData,
+                shouldSaveState: true) {
                 if !store.isFilterQuestion {
                     store.send(.async(.fetchQuestionList))
                 }

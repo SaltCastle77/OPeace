@@ -53,7 +53,7 @@ public struct ProfileView: View {
                 Spacer()
             }
             .onAppear {
-                lastViewedPage = .zero
+//                lastViewedPage = .zero
                 store.send(.async(.fetchQuestion))
             }
             .onDisappear {
@@ -221,7 +221,10 @@ extension ProfileView {
                 .frame(height: 16)
             
             if let resultData = store.myQuestionListModel?.data?.results {
-                FlippableCardView(data: resultData, onItemAppear: { item in
+                FlippableCardView(
+                    data: resultData,
+                    shouldSaveState: false,
+                    onItemAppear: { item in
                     if let resultItem = item as? ResultData {
                         store.questionId = resultItem.id ?? .zero
                     }
