@@ -86,15 +86,8 @@ public struct HomeView: View {
                     store.selectedItem = data
                     store.selectedItem = homeFilterStore.selectedItem
                 case .sorted(let sortedEnum):
-                    store.selectedSortDesc = data
-                    if let matchedSort = QuestionSort.allCases.first(where: { $0.questionSortDesc == store.selectedSortDesc }) {
-                        if matchedSort == sortedEnum {
-                            store.selectedSorted = matchedSort
-                        } else {
-                            store.selectedSorted = matchedSort
-                        }
-                    }
-                    store.send(.async(.sortedFilterSelected(sortedEnum: sortedEnum)))
+                    let sortedEnumFromData = QuestionSort.fromKoreanString(data)
+                    store.send(.async(.sortedFilterSelected(sortedEnum: sortedEnumFromData)))
                     store.send(.view(.closeFilterModal))
                     store.selectedItem = data
                     store.selectedItem = homeFilterStore.selectedItem
@@ -188,30 +181,24 @@ extension HomeView {
             Spacer()
                 .frame(height: 22)
             
-            HStack(spacing: .zero) {
+            HStack(spacing: 8) {
                 Spacer()
                 
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.job)))
                 }, title: store.selectedJobButtonTitle)
-                
-                Spacer()
-                    .frame(width: 8)
+                .frame(maxHeight: .infinity)
                 
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.generation)))
                 }, title: store.selectedGenerationButtonTitle)
-
-                Spacer()
-                    .frame(width: 8)
+                .frame(maxHeight: .infinity)
                 
                 RightImageButton(action: {
                     store.send(.view(.filterViewTappd(.sorted(.popular))))
                 }, title: store.selectedSortedButtonTitle.sortedKoreanString)
-                
-                Spacer()
-                    .frame(width: 8)
-                
+                .frame(maxHeight: .infinity)
+                                
                 if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
                     Circle()
                         .fill(Color.gray500)
@@ -248,6 +235,7 @@ extension HomeView {
                 }
             }
             .padding(.horizontal, 16)
+            .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         }
     }
     

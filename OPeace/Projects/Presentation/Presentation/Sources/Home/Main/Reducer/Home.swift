@@ -179,7 +179,7 @@ public struct Home {
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
-        Reduce { state, action in
+        Reduce<State, Action> { state, action in
             switch action {
             case .binding(_):
                 return .none
@@ -286,18 +286,37 @@ public struct Home {
                 case .jobFilterSelected(let job):
                     nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
                     nonisolated(unsafe) let currentSortBy = state.selectedSorted
-                    state.selectedJob = job
-                    return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
+                    if state.selectedJob == job {
+                        state.selectedJobButtonTitle = "계열"
+                        return .send(.async(.filterQuestionList(job: "", generation: currentSelectedGeneration, sortBy: currentSortBy)))
+                    } else {
+                        state.selectedJobButtonTitle = job
+                        state.selectedJob = job
+                        return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
+                    }
                 case .generationFilterSelected(let generation):
                     nonisolated(unsafe) let currentSelectedJob = state.selectedJob
                     nonisolated(unsafe) let currentSortBy = state.selectedSorted
-                    state.selectedGeneration = generation
-                    return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))
+                    if state.selectedGeneration == generation {
+                        state.selectedGenerationButtonTitle = "세대"
+                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: "", sortBy: currentSortBy)))
+                    } else {
+                        state.selectedGenerationButtonTitle = generation
+                        state.selectedGeneration = generation
+                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))
+                    }
                 case .sortedFilterSelected(let sorted):
                     nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
                     nonisolated(unsafe) let currentSelectedJob = state.selectedJob
-                    state.selectedSorted = sorted
-                    return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: sorted)))
+
+                    
+                    if state.selectedSorted == sorted {
+                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: .empty)))
+                    } else {
+                        state.selectedSorted = sorted
+                        state.selectedSortedButtonTitle = sorted
+                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: sorted)))
+                    }
                 case .filterQuestionList(let job, let generation, let sortBy):
                     nonisolated(unsafe) var pageSize = state.pageSize
                     
