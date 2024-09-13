@@ -288,6 +288,7 @@ public struct Home {
                     nonisolated(unsafe) let currentSortBy = state.selectedSorted
                     if state.selectedJob == job {
                         state.selectedJobButtonTitle = "계열"
+                        state.selectedJob = ""
                         return .send(.async(.filterQuestionList(job: "", generation: currentSelectedGeneration, sortBy: currentSortBy)))
                     } else {
                         state.selectedJobButtonTitle = job
@@ -299,6 +300,7 @@ public struct Home {
                     nonisolated(unsafe) let currentSortBy = state.selectedSorted
                     if state.selectedGeneration == generation {
                         state.selectedGenerationButtonTitle = "세대"
+                        state.selectedGeneration = ""
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: "", sortBy: currentSortBy)))
                     } else {
                         state.selectedGenerationButtonTitle = generation
@@ -311,6 +313,7 @@ public struct Home {
 
                     
                     if state.selectedSorted == sorted {
+                        state.selectedSorted = .empty
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: .empty)))
                     } else {
                         state.selectedSorted = sorted

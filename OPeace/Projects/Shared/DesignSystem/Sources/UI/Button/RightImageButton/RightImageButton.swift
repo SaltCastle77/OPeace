@@ -37,11 +37,11 @@ public struct RightImageButton: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(
+            .background(Color.gray500)
+            .clipShape(RoundedRectangle(cornerRadius: 20.0))
+            .overlay(
                 RoundedRectangle(cornerRadius: 20.0)
                     .stroke(Color.gray400, lineWidth: 1.0)
-                    .background(Color.gray500) // Ensure background color is filled properly
-                    .clipShape(Capsule())
             )
         }
     }
