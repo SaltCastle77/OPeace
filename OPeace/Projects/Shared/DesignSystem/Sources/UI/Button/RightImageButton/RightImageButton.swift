@@ -26,7 +26,8 @@ public struct RightImageButton: View {
                 Text(title.isEmpty ? " " : title) // Provide a space if title is empty to maintain structure
                     .pretendardFont(family: .Regular, size: 16)
                     .foregroundStyle(Color.gray200)
-                    .fixedSize(horizontal: true, vertical: false) // Expand text horizontally without truncating
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                 
                 Image(asset: .arrowLeft)
                     .resizable()
@@ -36,12 +37,11 @@ public struct RightImageButton: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(
+            .background(Color.gray500)
+            .clipShape(RoundedRectangle(cornerRadius: 20.0))
+            .overlay(
                 RoundedRectangle(cornerRadius: 20.0)
                     .stroke(Color.gray400, lineWidth: 1.0)
-                    .background(Color.gray500) // Ensure background color is filled properly
-                    .clipShape(Capsule())
-                    .frame(minWidth: 40, maxWidth: max(78, CGFloat(title.count) * 10), maxHeight: 40)
             )
         }
     }
