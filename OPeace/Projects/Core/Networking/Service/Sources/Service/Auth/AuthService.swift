@@ -104,7 +104,7 @@ extension AuthService: BaseTargetType {
         case .fetchUserInfo:
             return .successCodes
         case .autoLogin:
-            return .successCodes
+            return .none
         case .deleteUser:
             return .successCodes
         case .userVerify:
@@ -203,8 +203,7 @@ extension AuthService: BaseTargetType {
             
         case .appleLogin:
             return APIHeader.notAccessTokenHeader
-            
-            
+                        
         default:
             return APIHeader.baseHeader
         }

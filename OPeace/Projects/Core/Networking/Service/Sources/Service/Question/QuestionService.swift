@@ -165,7 +165,7 @@ extension QuestionService: BaseTargetType {
     
     public var validationType: ValidationType {
         switch self {
-        case .isVoteQustionLike, .isVoteQuestionAnswer, .statusQuestion:
+        case .isVoteQustionLike, .isVoteQuestionAnswer, .statusQuestion, .fetchQuestionList, .myQuestionList:
             return .none
         default:
             return .successCodes

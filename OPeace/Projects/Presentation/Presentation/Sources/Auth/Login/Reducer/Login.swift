@@ -109,7 +109,7 @@ public struct Login {
                         do {
                             let result = try await authUseCase.handleAppleLogin(authData)
                             send(.async(.fetchAppleRespose(.success(result))))
-                            try await clock.sleep(for: .seconds(0.8))
+                            try await clock.sleep(for: .seconds(1))
                             send(.async(.loginWithApple(token: appleAccessToken)))
                         } catch {
                             print("Error handling Apple login: \(error)")
@@ -146,6 +146,7 @@ public struct Login {
                         case .success(let appleLoginResult):
                             if let appleLoginResult = appleLoginResult {
                                 send(.async(.loginWithAppleResponse(.success(appleLoginResult))))
+                                try await clock.sleep(for: .seconds(0.8))
                                 send(.async(.fetchUser))
                             }
                         case .failure(let error):
@@ -165,6 +166,7 @@ public struct Login {
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
                         if state.userLoginModel?.data?.accessToken != "" {
                             UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
+                            UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
                             state.isLogOut = false
                             state.isLookAround = false
                             

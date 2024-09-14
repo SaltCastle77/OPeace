@@ -27,7 +27,6 @@ public struct ProfileView: View {
     ) {
         self.store = store
         self.backAction = backAction
-        store.send(.async(.fetchUser))
     }
     
     public var body: some View {
@@ -53,7 +52,7 @@ public struct ProfileView: View {
                 Spacer()
             }
             .onAppear {
-//                lastViewedPage = .zero
+                store.send(.async(.fetchUser))
                 store.send(.async(.fetchQuestion))
             }
             .onDisappear {
