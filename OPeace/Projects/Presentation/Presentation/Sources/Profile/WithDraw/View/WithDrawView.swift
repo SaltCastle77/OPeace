@@ -45,7 +45,7 @@ public struct WithDrawView: View {
                     
                     CustomButton(
                         action: {
-                            store.send(.async(.deleteUser(reason: store.withDrawTitle)))
+                            store.send(.async(.deletUserSocialType(reason: store.withDrawTitle)))
                         }, title: store.withDrawButtonComplete,
                         config: CustomButtonConfig.create()
                         ,isEnable: !store.withDrawTitle.isEmpty

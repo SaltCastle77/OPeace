@@ -28,6 +28,7 @@ public struct WithDraw {
         var withDrawButtonComplete: String = "완료"
         
         var userDeleteModel: DeleteUserModel? = nil
+        var revokeAppleResponseModel: AppleTokenResponse? = nil
         
         @Presents var destination: Destination.State?
         
@@ -63,6 +64,8 @@ public struct WithDraw {
         case deleteUserResponse(Result<DeleteUserModel, CustomError>)
         case deleteUser(reason: String)
         case deletUserSocialType(reason: String)
+        case appleRevoke
+        case appleRevokeResponse(Result<AppleTokenResponse, CustomError>)
     }
     
     //MARK: - 앱내에서 사용하는 액션
@@ -121,7 +124,8 @@ public struct WithDraw {
                     switch result {
                     case .success(let userDeleteData):
                         state.userDeleteModel = userDeleteData
-                        try? Keychain().removeAll()
+                        UserDefaults.standard.removeObject(forKey: "REFRESH_TOKEN")
+                        UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
                         state.isDeleteUser = true
                         state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser))
                     case .failure(let error):
@@ -131,23 +135,54 @@ public struct WithDraw {
                     
                 case .deletUserSocialType(let reason):
                     nonisolated(unsafe) var loginSocialType = state.loginSocialType
-                    return .run { @MainActor send in
-                        switch loginSocialType {
-                        case  .kakao:
+                    var socialType = UserDefaults.standard.string(forKey: "LoginSocialType")
+                    return .run { send in
+                        switch socialType {
+                        case  "kakao":
                             UserApi.shared.unlink {(error) in
                                 if let error = error {
                                     Log.error("카카오 회원 탈퇴 에러", error.localizedDescription)
                                 }
                                 else {
-                                    send(.async(.deleteUser(reason: reason)))
+                                    Task {
+                                        await send(.async(.deleteUser(reason: reason)))
+                                    }
                                 }
                             }
-                        case .apple:
-                            send(.async(.deleteUser(reason: reason)))
+                        case "apple":
+                            await send(.async(.appleRevoke))
+                            try await clock.sleep(for: .seconds(0.3))
+                            await send(.async(.deleteUser(reason: reason)))
+                            
                         default:
                             break
                         }
                     }
+                case .appleRevoke:
+                    return .run { send in
+                        let appleRevokeResult = await Result {
+                            try await authUseCase.revokeAppleToken()
+                        }
+                        
+                        switch appleRevokeResult {
+                        case .success(let appleRevokeResultData):
+                            if let appleRevokeResultData = appleRevokeResultData {
+                                await send(.async(.appleRevokeResponse(.success(appleRevokeResultData))))
+                            }
+                            case .failure(let error):
+                            await send(.async(.appleRevokeResponse(.failure(CustomError.tokenError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                    
+                case .appleRevokeResponse(let result):
+                    switch result {
+                    case .success(let appleTokenResponseData):
+                        state.revokeAppleResponseModel = appleTokenResponseData
+                    case .failure(let error):
+                        Log.error("애플 탈퇴 실패", error.localizedDescription)
+                    }
+                    return .none
                 }
                 
                 

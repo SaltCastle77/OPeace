@@ -9,11 +9,15 @@ import Foundation
 
 public enum BaseAPI: String {
     case base
+    case appleLoginURL
     
     public var apiDesc: String {
         switch self {
         case .base:
             return "https://opeace.site"
+            
+        case .appleLoginURL:
+            return "https://appleid.apple.com"
         }
     }
 }

@@ -15,7 +15,6 @@ public extension TargetDependency.SPM {
     static let sdwebImage = TargetDependency.external(name: "SDWebImageSwiftUI", condition: .none)
     static let keychainAccess = TargetDependency.external(name: "KeychainAccess", condition: .none)
     static let collections = TargetDependency.external(name: "Collections", condition: .none)
-    static let googleSignIn = TargetDependency.external(name: "GoogleSignIn", condition: .none)
     static let kakaoSDKAuth = TargetDependency.external(name: "KakaoSDKAuth", condition: .none)
     static let kakaoSDKUser = TargetDependency.external(name: "KakaoSDKUser", condition: .none)
     static let kakaoSDKCommon = TargetDependency.external(name: "KakaoSDKCommon", condition: .none)
@@ -27,6 +26,7 @@ public extension TargetDependency.SPM {
     static let firebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics", condition: .none)
     static let swiftUIIntrospect = TargetDependency.external(name: "SwiftUIIntrospect", condition: .none)
     static let isEmojiView = TargetDependency.external(name: "ISEmojiView", condition: .none)
+    static let swiftJWT = TargetDependency.external(name: "SwiftJWT", condition: .none)
 }
   
 

@@ -34,10 +34,13 @@ public struct Login {
         var error: String = ""
         var accessToken: String?
         var idToken: String?
+        
         var userLoginModel : UserLoginModel? = nil
         var socialType: SocialType? = nil
         var profileUserModel: UpdateUserInfoModel? = nil
         var refreshTokenModel: RefreshModel?
+        var appleRefreshTokenMode: AppleTokenResponse? = nil
+        
         @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
@@ -66,6 +69,8 @@ public struct Login {
         case appleLogin(Result<ASAuthorization, Error>)
         case loginWithApple(token: String)
         case loginWithAppleResponse(Result<UserLoginModel, CustomError>)
+        case appleGetRefreshToken
+        case appleResponseRefreshToken(Result<AppleTokenResponse, CustomError>)
         case kakaoLogin
         case kakaoLoginResponse(Result<(String?, String?), CustomError>)
         case loginWIthKakao
@@ -105,14 +110,13 @@ public struct Login {
                     
                 case .appleLogin(let authData):
                     nonisolated(unsafe) var appleAccessToken = state.appleAccessToken
-                    return .run { @MainActor send in
+                    return .run { send in
                         do {
                             let result = try await authUseCase.handleAppleLogin(authData)
-                            send(.async(.fetchAppleRespose(.success(result))))
-                            try await clock.sleep(for: .seconds(1))
-                            send(.async(.loginWithApple(token: appleAccessToken)))
+                            await send(.async(.fetchAppleRespose(.success(result))))
+                            await send(.async(.loginWithApple(token: appleAccessToken)))
                         } catch {
-                            print("Error handling Apple login: \(error)")
+                            Log.debug("애플 로그인 에러", error.localizedDescription)
                         }
                     }
                     
@@ -127,7 +131,7 @@ public struct Login {
                                 return .none
                             }
                             state.appleAccessToken = identityToken
-                            
+                            state.socialType = .apple
                         default:
                             break
                         }
@@ -146,8 +150,9 @@ public struct Login {
                         case .success(let appleLoginResult):
                             if let appleLoginResult = appleLoginResult {
                                 send(.async(.loginWithAppleResponse(.success(appleLoginResult))))
-                                try await clock.sleep(for: .seconds(0.8))
+                                try await clock.sleep(for: .seconds(0.1))
                                 send(.async(.fetchUser))
+                                send(.async(.appleGetRefreshToken))
                             }
                         case .failure(let error):
                             send(.async(.loginWithAppleResponse(.failure(CustomError.kakaoTokenError(error.localizedDescription)))))
@@ -164,6 +169,7 @@ public struct Login {
                         state.loginSocialType = .apple
                         state.socialType = .apple
                         let socialTypeValue =  state.socialType?.rawValue ?? SocialType.apple.rawValue
+                        UserDefaults.standard.set(socialTypeValue, forKey: "LoginSocialType")
                         if state.userLoginModel?.data?.accessToken != "" {
                             UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                             UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
@@ -186,6 +192,34 @@ public struct Login {
                         Log.network("애플 로그인 에러", error.localizedDescription)
                         state.socialType = .apple
                         state.loginSocialType = .apple
+                    }
+                    return .none
+                    
+                case .appleGetRefreshToken:
+                 var appleToken  = UserDefaults.standard.string(forKey: "APPLE_ACCESS_CODE") ?? ""
+                    return .run { send in
+                        let appleGetRefreshTokenResult = await Result {
+                            try await authUseCase.getAppleRefreshToken(code: appleToken)
+                        }
+                        
+                        switch appleGetRefreshTokenResult {
+                            
+                        case .success(let appleGetRefreshTokenData):
+                            if let appleGetRefreshTokenData = appleGetRefreshTokenData {
+                                await send(.async(.appleResponseRefreshToken(.success(appleGetRefreshTokenData))))
+                            }
+                        case .failure(let error):
+                            await send(.async(.appleResponseRefreshToken(.failure(CustomError.tokenError(error.localizedDescription)))))
+                        }
+                    }
+                    
+                case .appleResponseRefreshToken(let result):
+                    switch result {
+                    case .success(let appleResponseData):
+                        state.appleRefreshTokenMode = appleResponseData
+                        UserDefaults.standard.set(appleResponseData.refresh_token ?? "", forKey: "APPLE_REFRESH_TOKEN")
+                    case .failure(let error):
+                        Log.error("애플 토큰 발급 실패", error.localizedDescription)
                     }
                     return .none
                     
@@ -252,6 +286,8 @@ public struct Login {
                         UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
                         state.socialType = .kakao
                         state.loginSocialType = .kakao
+                        let socialTypeValue =  state.socialType?.rawValue ?? SocialType.kakao.rawValue
+                        UserDefaults.standard.set(socialTypeValue, forKey: "LoginSocialType")
                         if state.userLoginModel?.data?.accessToken != "" {
                             UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                             UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
@@ -339,6 +375,7 @@ public struct Login {
                         Log.network("리프레쉬 토큰 발급 에러", error.localizedDescription)
                     }
                     return .none
+               
                 }
                 
             case .inner(let InnerAction):

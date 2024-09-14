@@ -35,13 +35,9 @@ extension MoyaProvider {
                         throw DataError.unhandledStatusCode(httpResponse.statusCode)
                     }
                 }
-                .tryCompactMap { data in
+                .tryCompactMap { data -> T? in
                     if data.isEmpty {
-                        if T.self == Void.self {
-                            return () as? T
-                        } else if let optionalType = T.self as? ExpressibleByNilLiteral.Type {
-                            return optionalType.init(nilLiteral: ()) as? T
-                        }
+                        return nil
                     }
                     return try data.decoded(as: T.self)
                 }

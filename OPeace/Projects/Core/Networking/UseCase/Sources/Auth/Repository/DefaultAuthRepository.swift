@@ -78,4 +78,16 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
         return nil
     }
+    
+    public func makeJWT() async throws -> String {
+        return ""
+    }
+    
+    public func getAppleRefreshToken(code: String) async throws -> AppleTokenResponse? {
+        return nil
+    }
+    
+    public func revokeAppleToken() async throws -> AppleTokenResponse? {
+        return nil
+    }
 }

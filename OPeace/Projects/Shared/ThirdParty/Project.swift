@@ -12,7 +12,6 @@ let project = Project.makeModule(
     dependencies: [
         .SPM.composableArchitecture,
         .SPM.concurrencyExtras,
-        .SPM.sdwebImage,
         .SPM.collections,
         .SPM.kakaoSDKAuth,
         .SPM.kakaoSDKUser,
@@ -20,8 +19,8 @@ let project = Project.makeModule(
         .SPM.popupView,
         .SPM.firebaseAnalytics,
         .SPM.firebaseCrashlytics,
-        .SPM.swiftUIIntrospect,
-        .SPM.isEmojiView
+        .SPM.swiftUIIntrospect
+        
     ],
     sources: ["Sources/**"]
 )

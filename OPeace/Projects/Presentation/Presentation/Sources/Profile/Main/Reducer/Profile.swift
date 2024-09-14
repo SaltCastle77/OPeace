@@ -239,12 +239,13 @@ public struct Profile {
                     
                 case .socilalLogOutUser:
                     nonisolated(unsafe) var loginSocialType = state.loginSocialType
+                    nonisolated(unsafe) var socialType = UserDefaults.standard.string(forKey: "LoginSocialType") ?? ""
                     return .run {  send in
-                        switch loginSocialType {
-                        case .kakao:
+                        switch socialType {
+                        case "kakao":
                             await send(.async(.logoutUser))
 
-                        case .apple:
+                        case "apple":
                             await send(.async(.logoutUser))
                         default:
                             break

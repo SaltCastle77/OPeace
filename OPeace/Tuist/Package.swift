@@ -29,7 +29,7 @@ import ProjectDescription
 #endif
 
 let package = Package(
-    name: "AuraTarot",
+    name: "OPeace",
     dependencies: [
         .package(url: "http://github.com/pointfreeco/swift-composable-architecture", exact: "1.14.0"),
         .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
@@ -37,12 +37,10 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
         .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", from: "4.2.2"),
         .package(url: "https://github.com/exyte/PopupView.git", from: "2.10.4"),
-        .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI.git", from: "2.0.0"),
-        .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "7.1.0"),
         .package(url: "https://github.com/kakao/kakao-ios-sdk", from: "2.21.0"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
         .package(url: "https://github.com/siteline/swiftui-introspect.git", from: "1.3.0"),
-        .package(url: "https://github.com/isaced/ISEmojiView.git", from: "0.3.4")
+        .package(url: "https://github.com/Kitura/Swift-JWT.git", from: "4.0.0"),
         
     ]
 )

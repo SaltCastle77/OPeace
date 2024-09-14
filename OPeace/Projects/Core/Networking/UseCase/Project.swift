@@ -14,6 +14,7 @@ let project = Project.makeModule(
         .Networking(implements: .Service),
         .Networking(implements: .Model),
         .SPM.composableArchitecture,
+        .SPM.swiftJWT
     ],
     sources: ["Sources/**"]
 )

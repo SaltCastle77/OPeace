@@ -12,6 +12,7 @@ import DiContainer
 import Utills
 import Model
 
+
 public struct AuthUseCase: AuthUseCaseProtocol {
     private let repository: AuthRepositoryProtocol
     
@@ -33,6 +34,23 @@ public struct AuthUseCase: AuthUseCaseProtocol {
     //MARK: - 애플 로그인
     public func appleLogin() async throws -> UserLoginModel? {
         try await repository.appleLogin()
+    }
+    
+    //MARK: - 애플 JWT 만들기
+    public func makeJWT() async throws -> String {
+        try await repository.makeJWT()
+    }
+    
+    //MARK: - 애플 토큰 발급
+    public func getAppleRefreshToken(
+        code: String
+    ) async throws -> AppleTokenResponse? {
+        try await repository.getAppleRefreshToken(code: code)
+    }
+    
+    //MARK: - 애플 회원 탈퇴
+    public func revokeAppleToken() async throws -> AppleTokenResponse? {
+        try await repository.revokeAppleToken()
     }
     
     //MARK: - 카카오 로그인 토근

@@ -24,4 +24,7 @@ public protocol AuthUseCaseProtocol {
     func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel?
     func fetchUserBlockList() async throws -> UserBlockListModel?
     func realseUserBlock(userID: String) async throws -> UserBlockModel?
+    func makeJWT() async throws -> String
+    func getAppleRefreshToken(code: String) async throws -> AppleTokenResponse?
+    func revokeAppleToken() async throws -> AppleTokenResponse?
 }

@@ -56,7 +56,13 @@ extension APIHeader {
     public static var notAccessTokenHeader: [String: String] {
         [
             contentType : APIHeaderManger.shared.contentType,
-            // accessToken : "Bearer \(accessTokenKeyChain)",  // 여기는 필요에 따라 사용
+            accept: APIHeaderManger.shared.contentType
+        ]
+    }
+    
+    public static var appleLoginHeader: [String: String] {
+        [
+            contentType : APIHeaderManger.shared.contentAppleType,
             accept: APIHeaderManger.shared.contentType
         ]
     }
