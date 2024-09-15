@@ -7,17 +7,21 @@
 
 import Foundation
 import SwiftUI
+import ComposableArchitecture
 
 public struct RightImageButton: View {
     let action: () -> Void
     let title: String
+    @Binding var isActive: Bool
     
     public init(
+        isActive: Binding<Bool>,
         action: @escaping () -> Void,
         title: String
     ) {
         self.title = title
         self.action = action
+        self._isActive = isActive
     }
     
     public var body: some View {
@@ -41,7 +45,7 @@ public struct RightImageButton: View {
             .clipShape(RoundedRectangle(cornerRadius: 20.0))
             .overlay(
                 RoundedRectangle(cornerRadius: 20.0)
-                    .stroke(Color.gray400, lineWidth: 1.0)
+                    .stroke(isActive ? Color.basicGreen : Color.gray400, lineWidth: 1.0)
             )
         }
     }
