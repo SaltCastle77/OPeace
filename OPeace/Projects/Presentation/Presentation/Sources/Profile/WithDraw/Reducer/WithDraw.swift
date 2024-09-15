@@ -135,7 +135,7 @@ public struct WithDraw {
                     
                 case .deletUserSocialType(let reason):
                     nonisolated(unsafe) var loginSocialType = state.loginSocialType
-                    var socialType = UserDefaults.standard.string(forKey: "LoginSocialType")
+                    nonisolated(unsafe) var socialType = UserDefaults.standard.string(forKey: "LoginSocialType")
                     return .run { send in
                         switch socialType {
                         case  "kakao":

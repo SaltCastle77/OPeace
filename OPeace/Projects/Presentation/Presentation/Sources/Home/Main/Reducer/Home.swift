@@ -57,10 +57,16 @@ public struct Home {
         
         var selectedJobButtonTitle: String = "계열"
         var selectedJob: String = ""
+        var isActivateJobButton: Bool = false
+        
         var selectedGenerationButtonTitle: String = "세대"
         var selectedGeneration: String = ""
+        var isActivateGenerationButton: Bool = false
+        
         var selectedSortedButtonTitle: QuestionSort = .recent
         var selectedSorted: QuestionSort = .recent
+        var isActivateSortedButton: Bool = true
+        
         var selectedSortDesc: String = ""
         var isFilterQuestion: Bool = false
         var selectedItem: String? = ""
@@ -289,10 +295,12 @@ public struct Home {
                     if state.selectedJob == job {
                         state.selectedJobButtonTitle = "계열"
                         state.selectedJob = ""
+                        state.isActivateJobButton = false
                         return .send(.async(.filterQuestionList(job: "", generation: currentSelectedGeneration, sortBy: currentSortBy)))
                     } else {
                         state.selectedJobButtonTitle = job
                         state.selectedJob = job
+                        state.isActivateJobButton = true
                         return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
                     }
                 case .generationFilterSelected(let generation):
@@ -301,8 +309,10 @@ public struct Home {
                     if state.selectedGeneration == generation {
                         state.selectedGenerationButtonTitle = "세대"
                         state.selectedGeneration = ""
+                        state.isActivateGenerationButton = false
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: "", sortBy: currentSortBy)))
                     } else {
+                        state.isActivateGenerationButton = true
                         state.selectedGenerationButtonTitle = generation
                         state.selectedGeneration = generation
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))

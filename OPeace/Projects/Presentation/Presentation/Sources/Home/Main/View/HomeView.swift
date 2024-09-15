@@ -184,17 +184,17 @@ extension HomeView {
             HStack(spacing: 8) {
                 Spacer()
                 
-                RightImageButton(action: {
+                RightImageButton(isActive: $store.isActivateJobButton, action: {
                     store.send(.view(.filterViewTappd(.job)))
                 }, title: store.selectedJobButtonTitle)
                 .frame(maxHeight: .infinity)
                 
-                RightImageButton(action: {
+                RightImageButton(isActive: $store.isActivateGenerationButton, action: {
                     store.send(.view(.filterViewTappd(.generation)))
                 }, title: store.selectedGenerationButtonTitle)
                 .frame(maxHeight: .infinity)
                 
-                RightImageButton(action: {
+                RightImageButton(isActive: $store.isActivateSortedButton, action: {
                     store.send(.view(.filterViewTappd(.sorted(.popular))))
                 }, title: store.selectedSortedButtonTitle.sortedKoreanString)
                 .frame(maxHeight: .infinity)

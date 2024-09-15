@@ -196,7 +196,7 @@ public struct Login {
                     return .none
                     
                 case .appleGetRefreshToken:
-                 var appleToken  = UserDefaults.standard.string(forKey: "APPLE_ACCESS_CODE") ?? ""
+                    nonisolated(unsafe) var appleToken  = UserDefaults.standard.string(forKey: "APPLE_ACCESS_CODE") ?? ""
                     return .run { send in
                         let appleGetRefreshTokenResult = await Result {
                             try await authUseCase.getAppleRefreshToken(code: appleToken)
