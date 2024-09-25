@@ -78,17 +78,17 @@ public struct HomeFilterView: View {
         }
         .background(Color.gray500)
         .onAppear {
-            // Only set selectItem if it is nil or empty, preventing unwanted resets
-            if selectItem == nil || selectItem?.isEmpty == true {
-                selectItem = store.selectedItem
-            }
+//            // Only set selectItem if it is nil or empty, preventing unwanted resets
+//            if selectItem == nil || selectItem?.isEmpty == true {
+//                selectItem = store.selectedItem
+//            }
             // Send the action without resetting selectItem
             store.send(.view(.tapSettintitem(store.homeFilterTypeState ?? .job)))
         }
-        .onChange(of: store.selectedItem) { newValue in
-            // Update selectItem when store.selectedItem changes, ensuring consistency
-            selectItem = newValue
-        }
+//        .onChange(of: store.selectedItem) { newValue in
+//            // Update selectItem when store.selectedItem changes, ensuring consistency
+//            selectItem = newValue
+//        }
     }
 
     @ViewBuilder

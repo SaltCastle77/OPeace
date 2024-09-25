@@ -225,6 +225,14 @@ public struct Home {
                     }
                 case .filterViewTappd(let filterEnum):
                     state.destination = .homeFilter(.init(homeFilterEnum: filterEnum))
+                    switch filterEnum {
+                    case .job:
+                        state.selectedItem = state.selectedJob
+                    case .generation:
+                        state.selectedItem = state.selectedGeneration
+                    case .sorted(let sortedOrderEnum):
+                        state.selectedItem = state.selectedSorted.sortedKoreanString
+                    }
                     return .run { @MainActor send in
                         send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
                     }
@@ -295,11 +303,13 @@ public struct Home {
                     if state.selectedJob == job {
                         state.selectedJobButtonTitle = "계열"
                         state.selectedJob = ""
+                        state.selectedItem = ""
                         state.isActivateJobButton = false
                         return .send(.async(.filterQuestionList(job: "", generation: currentSelectedGeneration, sortBy: currentSortBy)))
                     } else {
                         state.selectedJobButtonTitle = job
                         state.selectedJob = job
+                        state.selectedItem = ""
                         state.isActivateJobButton = true
                         return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
                     }
@@ -309,11 +319,13 @@ public struct Home {
                     if state.selectedGeneration == generation {
                         state.selectedGenerationButtonTitle = "세대"
                         state.selectedGeneration = ""
+                        state.selectedItem = ""
                         state.isActivateGenerationButton = false
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: "", sortBy: currentSortBy)))
                     } else {
                         state.isActivateGenerationButton = true
                         state.selectedGenerationButtonTitle = generation
+                        state.selectedItem = generation
                         state.selectedGeneration = generation
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))
                     }
@@ -332,7 +344,7 @@ public struct Home {
                     }
                 case .filterQuestionList(let job, let generation, let sortBy):
                     nonisolated(unsafe) var pageSize = state.pageSize
-                    
+                     
                     return .run {  send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(

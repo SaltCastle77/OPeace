@@ -73,30 +73,22 @@ public struct HomeView: View {
                            closeModalAction: { data in
                 guard let homeFilter = homeFilterStore.homeFilterTypeState else { return }
                 store.isFilterQuestion = true
-                store.selectedItem = data
                 switch homeFilter {
                 case .job:
                     store.send(.async(.jobFilterSelected(job: data)))
                     store.send(.view(.closeFilterModal))
-                    store.selectedItem = data
-                    store.selectedItem = homeFilterStore.selectedItem
                 case .generation:
                     store.send(.async(.generationFilterSelected(generation:data)))
                     store.send(.view(.closeFilterModal))
-                    store.selectedItem = data
-                    store.selectedItem = homeFilterStore.selectedItem
                 case .sorted(let sortedEnum):
                     let sortedEnumFromData = QuestionSort.fromKoreanString(data)
                     store.send(.async(.sortedFilterSelected(sortedEnum: sortedEnumFromData)))
                     store.send(.view(.closeFilterModal))
-                    store.selectedItem = data
-                    store.selectedItem = homeFilterStore.selectedItem
                 }
                 
             })
             .onAppear {
-                    store.selectedItem = homeFilterStore.selectedItem
-                }
+            }
             .presentationDetents([.fraction(homeFilterStore.homeFilterTypeState == .job ? 0.7 : homeFilterStore.homeFilterTypeState == .generation ? 0.42: 0.2 )])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(20)
