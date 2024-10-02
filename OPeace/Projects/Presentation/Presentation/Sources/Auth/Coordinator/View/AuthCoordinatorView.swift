@@ -1,19 +1,18 @@
 //
-//  AuthView.swift
+//  AuthCoordinatorView.swift
 //  Presentation
 //
 //  Created by 서원지 on 7/22/24.
 //
 
 import SwiftUI
+
 import ComposableArchitecture
-
-import DesignSystem
-import KakaoSDKAuth
-import SwiftUIIntrospect
 import TCACoordinators
+import SwiftUIIntrospect
 
-public struct AuthView: View {
+
+public struct AuthCoordinatorView: View {
     @Bindable var store: StoreOf<AuthCoordinator>
     
     public init(
@@ -55,7 +54,7 @@ public struct AuthView: View {
             }
         }
         .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-            navigationController.interactivePopGestureRecognizer?.isEnabled = false
+            navigationController.interactivePopGestureRecognizer?.isEnabled = true
         }
     }
 }

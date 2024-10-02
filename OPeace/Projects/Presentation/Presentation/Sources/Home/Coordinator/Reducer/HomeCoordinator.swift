@@ -24,6 +24,7 @@ public struct HomeCoordinator {
         var home = Home.State()
         var profile = Profile.State()
         var report = Report.State()
+        var createQuestion = CreateQuestionCoordinator.State()
         
         @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = nil
         @Shared(.inMemory("questionID")) var questionID: Int = 0
@@ -44,6 +45,7 @@ public struct HomeCoordinator {
         case navigation(NavigationAction)
         case home(Home.Action)
         case profile(Profile.Action)
+        case createQuestion(CreateQuestionCoordinator.Action)
         case report(Report.Action)
     }
     
@@ -122,6 +124,9 @@ public struct HomeCoordinator {
         Scope(state: \.profile, action: \.profile) {
             Profile()
         }
+        Scope(state: \.createQuestion, action: \.createQuestion) {
+            CreateQuestionCoordinator()
+        }
         Scope(state: \.report, action: \.report) {
             Report()
         }
@@ -183,9 +188,8 @@ public struct HomeCoordinator {
             
             //MARK: - 내가 작성한 글 삭제
         case .routeAction(id: _, action: .profile(.navigation(.presntDeleteQuestion))):
-            return .routeWithDelaysIfUnsupported(state.routes, action: \.router) {
-                $0.goBackTo(\.home)
-            }
+            state.routes.goBackTo(\.home)
+            return .none
             
             //MARK: - 작성한 글이 없을때
         case .routeAction(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
@@ -193,9 +197,8 @@ public struct HomeCoordinator {
             return .none
             
         case .routeAction(id: _, action: .createQuestion(.navigation(.presntHome))):
-            return .routeWithDelaysIfUnsupported(state.routes, action: \.router) {
-                $0.goBackTo(\.home)
-            }
+            state.routes.goBackTo(\.home)
+            return .none
             
         default:
             return .none

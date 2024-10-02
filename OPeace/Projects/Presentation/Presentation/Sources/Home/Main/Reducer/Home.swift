@@ -142,6 +142,7 @@ public struct Home {
         case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
         case statusQuestion(id: Int)
         case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
+        case clearFilter
         
     }
     
@@ -323,6 +324,7 @@ public struct Home {
                         state.selectedSortedButtonTitle = sorted
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: sorted)))
                     }
+                    
                 case .filterQuestionList(let job, let generation, let sortBy):
                     let pageSize = state.pageSize
                      
@@ -344,8 +346,18 @@ public struct Home {
                         case .failure(let error):
                             await  send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
                         }
-                        
                     }
+                    
+                case .clearFilter:
+                    state.selectedJobButtonTitle = "계열"
+                    state.selectedJob = ""
+                    state.selectedItem = ""
+                    state.isActivateJobButton = false
+                    state.selectedGenerationButtonTitle = "세대"
+                    state.selectedGeneration = ""
+                    state.isActivateGenerationButton = false
+                    state.selectedSorted = .recent
+                    return .none
                     
                 case .qusetsionListResponse(let result):
                     switch result {

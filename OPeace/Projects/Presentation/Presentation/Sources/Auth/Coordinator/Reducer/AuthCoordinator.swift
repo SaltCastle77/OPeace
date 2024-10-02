@@ -29,19 +29,6 @@ public struct AuthCoordinator {
         
         var routes: [Route<AuthScreen.State>]
         
-        
-        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
-        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
-        @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
-        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
-        @Shared(.inMemory("createQuestionEmoji")) var emojiText: String = ""
-        @Shared(.inMemory("createQuestionTitle")) var createQuestionTitle: String = ""
-        @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
-        @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
-        @Shared(.inMemory("isReportQuestion")) var isReportQuestion: Bool = false
-        @Shared(.inMemory("questionID")) var questionID: Int = 0
-        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
-        
         public init() {
             self.routes = [.root(.login(.init()), embedInNavigationView: true)]
         }

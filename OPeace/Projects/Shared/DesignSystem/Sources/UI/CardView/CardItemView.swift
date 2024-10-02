@@ -96,7 +96,8 @@ extension CardItemView {
                             job: resultData.userInfo?.userJob ?? "",
                             generation: resultData.userInfo?.userGeneration ?? ""
                         )
-                        cardEmojiView(emoji: resultData.emoji ?? "")
+                        cardEmojiView(emoji: resultData.emoji ?? "u1FAE0")
+                        
                         cardWriteAndAnswerView(
                             title: resultData.title ?? "",
                             choiceA: resultData.choiceA ?? "",

@@ -24,7 +24,7 @@ public struct AppView: View {
                 
             case .auth:
                 if let store = store.scope(state: \.auth, action: \.view.auth) {
-                    AuthView(store: store)
+                    AuthCoordinatorView(store: store)
                 }
                     
                 

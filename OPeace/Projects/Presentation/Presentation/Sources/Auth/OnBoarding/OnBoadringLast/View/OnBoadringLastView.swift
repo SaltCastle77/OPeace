@@ -66,10 +66,10 @@ extension OnBoadringLastView {
                 .fill(Color.gray500)
                 .frame(width: 240, height: 210)
                 .overlay {
-//                    Image(asset: .onBoardingSecond)
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 240, height: 210)
+                    Image(asset: .onBoardingSecond)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 240, height: 210)
                 }
             
         }

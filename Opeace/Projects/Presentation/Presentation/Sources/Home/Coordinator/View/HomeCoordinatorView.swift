@@ -66,7 +66,7 @@ public struct HomeCoordinatorView: View {
             }
         }
         .introspect(.navigationStack, on: .iOS(.v17, .v18)) { navigationController in
-            navigationController.interactivePopGestureRecognizer?.isEnabled = false
+            navigationController.interactivePopGestureRecognizer?.isEnabled = true
         }
     }
 }

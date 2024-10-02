@@ -40,9 +40,11 @@ public struct HomeView: View {
                 appearFloatingPopUp()
             }
             .onDisappear {
+                store.send(.async(.clearFilter))
                 refreshTimer?.invalidate()
             }
-            if store.questionModel?.data?.results == []  || ((store.questionModel?.data?.results?.isEmpty) == nil)  {
+            if store.questionModel?.data?.results == []  ||
+                ((store.questionModel?.data?.results?.isEmpty) == nil)  {
                 
             } else {
                 VStack {
