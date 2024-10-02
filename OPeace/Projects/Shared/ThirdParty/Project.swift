@@ -19,7 +19,8 @@ let project = Project.makeModule(
         .SPM.popupView,
         .SPM.firebaseAnalytics,
         .SPM.firebaseCrashlytics,
-        .SPM.swiftUIIntrospect
+        .SPM.swiftUIIntrospect,
+        .SPM.tcaCoordinator
         
     ],
     sources: ["Sources/**"]

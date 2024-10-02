@@ -41,6 +41,7 @@ let package = Package(
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
         .package(url: "https://github.com/siteline/swiftui-introspect.git", from: "1.3.0"),
         .package(url: "https://github.com/Kitura/Swift-JWT.git", from: "4.0.0"),
+        .package(url: "https://github.com/johnpatrickmorgan/TCACoordinators.git", from: "0.10.0")
         
     ]
 )
