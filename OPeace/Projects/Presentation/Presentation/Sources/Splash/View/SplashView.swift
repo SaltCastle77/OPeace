@@ -33,6 +33,9 @@ public struct SplashView: View {
                 .frame(height: 48)
             
         }
+        .onAppear {
+            store.send(.async(.checkUserVerfiy))
+        }
     }
 }
 

@@ -20,14 +20,18 @@ public struct AppView: View {
                 if let store = store.scope(state: \.splash, action: \.view.splash) {
                     SplashView(store: store)
                 }
+                
+            case .auth:
+                if let store = store.scope(state: \.auth, action: \.view.auth) {
+                    AuthView(store: store)
+                }
                     
                 
-            case .root:
-                if let store = store.scope(state: \.root, action: \.view.root) {
-                    RootView(store: store)
+            case .main:
+                if let store = store.scope(state: \.main, action: \.view.main) {
+                    HomeCoordinatorView(store: store)
                 }
             }
-               
         }
         .onAppear {
             store.send(.view(.presntView))

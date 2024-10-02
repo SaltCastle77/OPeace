@@ -19,7 +19,8 @@ public struct AppReducer {
     @ObservableState
     public enum State {
         case splash(Splash.State)
-        case root(Root.State)
+        case auth(AuthCoordinator.State)
+        case main(HomeCoordinator.State)
         
         
         public init() {
@@ -42,8 +43,10 @@ public struct AppReducer {
     public enum View {
         case presntView
         case presentRootView
+        case presntAuthView
         case splash(Splash.Action)
-        case root(Root.Action)
+        case auth(AuthCoordinator.Action)
+        case main(HomeCoordinator.Action)
     }
     
     //MARK: - 앱내에서 사용하는 액선
@@ -70,15 +73,47 @@ public struct AppReducer {
                 switch View {
                  
                 case .presntView:
-                    return .run { @MainActor send in
-                        try await self.clock.sleep(for: .seconds(4))
-                         send(.view(.splash(.presentRootView)), animation: .easeOut(duration: 1))
-                        send(.view(.presentRootView))
+                    return .run { send in
+                        await send(.view(.splash(.async(.checkUserVerfiy))))
                     }
                     
+                case .splash(.navigation(.presntMain)):
+                    return .run { send in
+                        try await self.clock.sleep(for: .seconds(4))
+                        await send(.view(.presentRootView))
+                    }
+                    
+                case .splash(.navigation(.presntLogin)):
+                    return .run { send in
+                        try await self.clock.sleep(for: .seconds(4))
+                        await send(.view(.presntAuthView))
+                    }
+                    
+                case .auth(.navigation(.presntMainHome)):
+                    return .send(.view(.presentRootView))
+     
+                case .main(.navigation(.presntAuth)):
+                    return .send(.view(.presntAuthView))
+                    
+                case .auth(.login(.navigation(.presentMain))):
+                    return .send(.view(.presentRootView))
+                    
+                case .auth(.login(.navigation(.presntLookAround))):
+                    return .send(.view(.presentRootView))
+                    
+                case .auth(.completeSignUp(.navigation(.presntMainHome))):
+                    return .send(.view(.presentRootView))
+                    
+                case .auth(.onBoarding(.navigation(.presntMainHome))):
+                    return .send(.view(.presentRootView))
+
+                    
                 case .presentRootView:
-                    state = .root(.init())
-//                    state = .root(.init())
+                    state = .main(.init())
+                    return .none
+                    
+                case .presntAuthView:
+                    state = .auth(.init())
                     return .none
                     
                 default:
@@ -105,8 +140,11 @@ public struct AppReducer {
         .ifCaseLet(\.splash, action: \.view.splash) {
             Splash()
         }
-        .ifCaseLet(\.root, action: \.view.root) {
-            Root()
+        .ifCaseLet(\.auth, action: \.view.auth){
+            AuthCoordinator()
+        }
+        .ifCaseLet(\.main, action: \.view.main) {
+            HomeCoordinator()
         }
     }
 }
