@@ -92,7 +92,7 @@ extension CardItemView {
                 .overlay {
                     VStack {
                         cardHeaderView(
-                            nickName: resultData.userInfo?.userNickname ?? "",
+                            nickName: resultData.userInfo?.userNickname ?? "탈퇴 한 유저",
                             job: resultData.userInfo?.userJob ?? "",
                             generation: resultData.userInfo?.userGeneration ?? ""
                         )

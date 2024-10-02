@@ -11,7 +11,7 @@ let project = Project.makeModule(
     settings:  .settings(),
     dependencies: [
         .Shared(implements: .Utill),
-        .Shared(implements: .ThirdParty)
+        .Shared(implements: .ThirdParty),
 //        .SPM.composableArchitecture
     ],
     sources: ["Sources/**"],
