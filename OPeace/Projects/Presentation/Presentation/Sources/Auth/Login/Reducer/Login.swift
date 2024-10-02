@@ -41,6 +41,7 @@ public struct Login {
         var refreshTokenModel: RefreshModel?
         var appleRefreshTokenMode: AppleTokenResponse? = nil
         
+        @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = .init()
         @Shared(.inMemory("isLookAround")) var isLookAround: Bool = false
         @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
         @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
@@ -173,20 +174,20 @@ public struct Login {
                         if state.userLoginModel?.data?.accessToken != "" {
                             UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                             UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
-                            state.isLogOut = false
-                            state.isLookAround = false
+                            state.userInfoModel?.isLogOut = false
+                            state.userInfoModel?.isLookAround = false
                             
-                            state.isDeleteUser = false
-                            state.isChangeProfile = false 
+                            state.userInfoModel?.isDeleteUser = false
+                            state.userInfoModel?.isChangeProfile = false
                         } else {
                             UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
                             UserDefaults.standard.removeObject(forKey: "REFRESH_TOKEN")
                             UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
                             UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
-                            state.isLogOut = false
-                            state.isLookAround = false
-                            state.isDeleteUser = false
-                            state.isChangeProfile = false
+                            state.userInfoModel?.isLogOut = false
+                            state.userInfoModel?.isLookAround = false
+                            state.userInfoModel?.isDeleteUser = false
+                            state.userInfoModel?.isChangeProfile = false
                         }
                     case .failure(let error):
                         Log.network("애플 로그인 에러", error.localizedDescription)
@@ -291,18 +292,18 @@ public struct Login {
                         if state.userLoginModel?.data?.accessToken != "" {
                             UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                             UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
-                            state.isLogOut = false
-                            state.isLookAround = false
-                            state.isDeleteUser = false
-                            state.isChangeProfile = false
+                            state.userInfoModel?.isLogOut = false
+                            state.userInfoModel?.isLookAround = false
+                            state.userInfoModel?.isDeleteUser = false
+                            state.userInfoModel?.isChangeProfile = false
                         } else {
                             UserDefaults.standard.set(state.userLoginModel?.data?.refreshToken ?? "", forKey: "REFRESH_TOKEN")
                             UserDefaults.standard.set(state.userLoginModel?.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
 
-                            state.isLogOut = false
-                            state.isLookAround = false
-                            state.isDeleteUser = false
-                            state.isChangeProfile = false
+                            state.userInfoModel?.isLogOut = false
+                            state.userInfoModel?.isLookAround = false
+                            state.userInfoModel?.isDeleteUser = false
+                            state.userInfoModel?.isChangeProfile = false
                         }
                     case .failure(let error):
                         Log.network("카카오 로그인 에러", error.localizedDescription)
@@ -392,7 +393,8 @@ public struct Login {
                     return .none
                     
                 case .presntLookAround:
-                    state.isLookAround = true
+                    state.userInfoModel?.isLogOut = false
+                    state.userInfoModel?.isLookAround = true
                     state.lastViewedPage = 0
                     return .none
                 }

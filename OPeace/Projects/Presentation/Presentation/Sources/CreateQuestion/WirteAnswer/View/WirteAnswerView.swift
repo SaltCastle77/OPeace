@@ -48,16 +48,16 @@ public struct WriteAnswerView: View {
                     CustomButton(
                         action: {
                             store.send(.async(.createQuestion(
-                                emoji: store.createQuestionEmoji.convertEmojiToUnicode(store.createQuestionEmoji),
-                                title: store.createQuestionTitle,
+                                emoji: store.createQuestionUserModel.createQuestionEmoji.convertEmojiToUnicode(store.createQuestionUserModel.createQuestionEmoji),
+                                title: store.createQuestionUserModel.createQuestionTitle ,
                                 choiceA: store.choiceAtext,
                                 choiceB: store.choiceBtext)))
-                            store.isCreateQuestion = true
+                            store.userInfoModel?.isCreateQuestion = true
                             
                             
                         }, title: store.presntWriteUploadViewButtonTitle,
                         config: CustomButtonConfig.create()
-                        ,isEnable: !store.choiceAtext.isEmpty &&  !store.choiceBtext.isEmpty &&  store.enableButton)
+                        ,isEnable: !store.choiceAtext.isEmpty && !store.choiceBtext.isEmpty &&  store.enableButton)
                     .padding(.horizontal, 20)
                     
                     Spacer()
@@ -92,7 +92,7 @@ extension WriteAnswerView {
             Spacer()
                 .frame(height: 32)
             
-            if let wirteAnswerEmoji = Image.emojiToImage(emoji: store.createQuestionEmoji) {
+            if let wirteAnswerEmoji = Image.emojiToImage(emoji: store.createQuestionUserModel.createQuestionEmoji) {
                 wirteAnswerEmoji
                     .resizable()
                     .scaledToFit()

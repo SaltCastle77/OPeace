@@ -18,8 +18,7 @@ public struct WriteQuestion {
     
     @ObservableState
     public struct State: Equatable {
-        @Shared(.inMemory("createQuestionEmoji")) var selectEmojiText: String = ""
-        @Shared(.inMemory("createQuestionTitle")) var isWriteTextEditor: String = ""
+        @Shared(.inMemory("createQuestionUserModel")) var createQuestionUserModel: CreateQuestionUserModel = .init()
         
         var isSelectEmoji: Bool = false
         var isInuputEmoji: Bool = false
@@ -84,11 +83,9 @@ public struct WriteQuestion {
             case .binding(_):
                 return .none
                 
-            case .binding(\.selectEmojiText):
+            case .binding(\.createQuestionUserModel):
                 return .none
                 
-            case .binding(\.isWriteTextEditor):
-                return .none
                 
             case .binding(\.isActiveEmoji):
                 return .none

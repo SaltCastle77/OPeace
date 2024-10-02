@@ -73,29 +73,28 @@ public struct HomeView: View {
                            closeModalAction: { data in
                 guard let homeFilter = homeFilterStore.homeFilterTypeState else { return }
                 store.isFilterQuestion = true
+                               
                 switch homeFilter {
-                case .job:
-                    store.send(.async(.jobFilterSelected(job: data)))
-                    store.send(.view(.closeFilterModal))
-                case .generation:
-                    store.send(.async(.generationFilterSelected(generation:data)))
-                    store.send(.view(.closeFilterModal))
-                case .sorted(let sortedEnum):
-                    let sortedEnumFromData = QuestionSort.fromKoreanString(data)
-                    store.send(.async(.sortedFilterSelected(sortedEnum: sortedEnumFromData)))
-                    store.send(.view(.closeFilterModal))
+                    case .job:
+                        store.send(.async(.jobFilterSelected(job: data)))
+                        store.send(.view(.closeFilterModal))
+                    case .generation:
+                        store.send(.async(.generationFilterSelected(generation:data)))
+                        store.send(.view(.closeFilterModal))
+                    case .sorted(let sortedEnum):
+                        let sortedEnumFromData = QuestionSort.fromKoreanString(data)
+                        store.send(.async(.sortedFilterSelected(sortedEnum: sortedEnumFromData)))
+                        store.send(.view(.closeFilterModal))
                 }
                 
             })
-            .onAppear {
-            }
             .presentationDetents([.fraction(homeFilterStore.homeFilterTypeState == .job ? 0.7 : homeFilterStore.homeFilterTypeState == .generation ? 0.42: 0.2 )])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(20)
         }
         
         .popup(item: $store.scope(state: \.destination?.customPopUp, action: \.destination.customPopUp)) { customPopUp in
-            if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+            if store.userInfoModel?.isLogOut == true || store.userInfoModel?.isLookAround == true || store.userInfoModel?.isDeleteUser == true {
                 CustomBasicPopUpView(
                     store: customPopUp,
                     title: "로그인 하시겠어요?") {
@@ -191,7 +190,9 @@ extension HomeView {
                 }, title: store.selectedSortedButtonTitle.sortedKoreanString)
                 .frame(maxHeight: .infinity)
                                 
-                if store.isLogOut == true || store.isLookAround == true || store.isDeleteUser == true {
+                if store.userInfoModel?.isLogOut == true ||
+                    store.userInfoModel?.isLookAround == true ||
+                    store.userInfoModel?.isDeleteUser == true {
                     Circle()
                         .fill(Color.gray500)
                         .frame(width: 40, height: 40)
@@ -232,37 +233,37 @@ extension HomeView {
     }
     
     private func appearFloatingPopUp() {
-        if store.isLogOut == true  {
+        if store.userInfoModel?.isLogOut == true  {
             store.send(.view(.presntFloatintPopUp))
             store.floatingText = "로그아웃 되었어요"
             store.send(.view(.timeToCloseFloatingPopUp))
-        } else if store.isLookAround == true {
+        } else if store.userInfoModel?.isLookAround == true {
             store.floatingText = "로그인 하시겠어요?"
-        } else if store.isDeleteUser == true  {
+        } else if store.userInfoModel?.isDeleteUser == true  {
             store.send(.view(.presntFloatintPopUp))
             store.floatingText = "탈퇴 완료! 언젠가 다시 만나요"
             store.send(.view(.timeToCloseFloatingPopUp))
-        } else if store.isChangeProfile == true {
+        } else if store.userInfoModel?.isChangeProfile == true {
             store.send(.view(.presntFloatintPopUp))
             store.floatingText = "수정이 완료되었어요!"
             store.send(.view(.timeToCloseFloatingPopUp))
-            store.isChangeProfile = false
-        } else if store.isCreateQuestion == true {
+            store.userInfoModel?.isChangeProfile = false
+        } else if store.userInfoModel?.isCreateQuestion == true {
             store.send(.view(.presntFloatintPopUp))
             store.floatingText = "고민 등록이 완료 되었어요!"
             store.send(.view(.timeToCloseFloatingPopUp))
-            store.isCreateQuestion = false
-        } else if store.isDeleteQuestion == true {
+            store.userInfoModel?.isCreateQuestion = false
+        } else if store.userInfoModel?.isDeleteQuestion == true {
             store.send(.view(.presntFloatintPopUp))
             store.floatingText = "고민이 삭제되었어요!"
             store.send(.view(.timeToCloseFloatingPopUp))
-            store.isDeleteQuestion = false
-        } else if store.isReportQuestion == true {
+            store.userInfoModel?.isDeleteQuestion = false
+        } else if store.userInfoModel?.isReportQuestion == true {
             store.send(.view(.presntFloatintPopUp))
             store.floatingText = "신고가 완료 되었어요"
             store.floatingImage = .warning
             store.send(.view(.timeToCloseFloatingPopUp))
-            store.isReportQuestion = false
+            store.userInfoModel?.isReportQuestion = false
         } else {
             store.floatingText = "로그인 하시겠어요?"
         }
@@ -280,12 +281,13 @@ extension HomeView {
                     .foregroundStyle(Color.textColor100)
             }
             .onTapGesture {
-                if !store.isLogOut && !store.isLookAround && !store.isDeleteUser {
+                if store.userInfoModel?.isLogOut == false &&
+                store.userInfoModel?.isLookAround == false &&
+                store.userInfoModel?.isDeleteUser == false {
                     store.send(.navigation(.presntWriteQuestion))
                 } else {
                     store.send(.view(.prsentCustomPopUp))
                 }
-                
             }
             .padding(.bottom, 16)
         
@@ -336,9 +338,9 @@ extension HomeView {
                     generationColor: store.cardGenerationColor,
                     isTapAVote: $store.isTapAVote,
                     isTapBVote: $store.isTapBVote,
-                    isLogOut: store.isLogOut,
-                    isLookAround: store.isLookAround,
-                    isDeleteUser: store.isDeleteUser,
+                    isLogOut: store.userInfoModel?.isLogOut ?? false,
+                    isLookAround: store.userInfoModel?.isLookAround ?? false,
+                    isDeleteUser: store.userInfoModel?.isDeleteUser ?? false,
                     answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
                     editTapAction: {
                         handleEditTap(item: item)
@@ -400,7 +402,9 @@ extension HomeView {
     }
     
     private func handleEditTap(item: ResultData) {
-        if store.isLogOut || store.isLookAround || store.isDeleteUser {
+        if store.userInfoModel?.isLogOut == true ||
+            store.userInfoModel?.isLookAround == true ||
+            store.userInfoModel?.isDeleteUser == true {
             store.send(.view(.prsentCustomPopUp))
         } else {
             store.userID = item.userInfo?.userID ?? ""
@@ -411,7 +415,9 @@ extension HomeView {
     }
     
     private func handleLikeTap(userID: String) {
-        if store.isLogOut || store.isLookAround || store.isDeleteUser {
+        if store.userInfoModel?.isLogOut == true ||
+            store.userInfoModel?.isLookAround == true ||
+            store.userInfoModel?.isDeleteUser == true {
             store.send(.view(.prsentCustomPopUp))
         } else {
             store.send(.async(.isVoteQuestionLike(questioniD: Int(userID) ?? .zero)))
@@ -422,7 +428,6 @@ extension HomeView {
     private func appearStatusActionIfNeeded(item: ResultData) {
         if store.questionID != item.id {
             store.questionID = item.id ?? .zero
-//            store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
         }
     }
     
@@ -463,7 +468,9 @@ extension HomeView {
                         .foregroundStyle(Color.textColor100)
                 }
                 .onTapGesture {
-                    if !store.isLogOut && !store.isLookAround && !store.isDeleteUser {
+                    if store.userInfoModel?.isLogOut == false &&
+                    store.userInfoModel?.isLookAround == false &&
+                    store.userInfoModel?.isDeleteUser == false {
                         store.send(.navigation(.presntWriteQuestion))
                     } else {
                         store.send(.view(.prsentCustomPopUp))

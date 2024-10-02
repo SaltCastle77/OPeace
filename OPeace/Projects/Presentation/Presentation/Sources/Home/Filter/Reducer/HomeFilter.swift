@@ -81,7 +81,7 @@ public struct HomeFilter  {
                     state.homeFilterTypeState = homefilter
                     return .none
                 }
-                return .none
+                
             case .async(let asyncAction):
                 switch asyncAction {
                 case .fetchListByFilterEnum(let homeFilterType):

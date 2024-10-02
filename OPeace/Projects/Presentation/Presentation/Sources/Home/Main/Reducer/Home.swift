@@ -47,7 +47,7 @@ public struct Home {
         var isTapAVote: Bool = false
         var isTapBVote: Bool = false
         
-        var profile = Profile.State()
+//        var profile = Profile.State()
         var pageSize: Int  = 20
         
         var isTapBlockUser: Bool = false
@@ -71,14 +71,7 @@ public struct Home {
         var isFilterQuestion: Bool = false
         var selectedItem: String? = ""
         
-        @Shared var isLogOut: Bool
-        @Shared var isDeleteUser: Bool
-        @Shared var isLookAround: Bool
-        @Shared var isChangeProfile: Bool
-        @Shared var isCreateQuestion: Bool
-        @Shared var isDeleteQuestion: Bool
-        @Shared var isReportQuestion: Bool
-        @Shared var loginSocialType: SocialType?
+        @Shared var userInfoModel: UserInfoModel?
         
         @Shared(.inMemory("questionID")) var reportQuestionID: Int = 0
         
@@ -86,23 +79,10 @@ public struct Home {
         
        
         public init(
-            isLogOut: Bool = false,
-            isDeleteUser: Bool = false,
-            isLookAround: Bool = false,
-            isChangeProfile: Bool = false,
-            isCreateQuestion: Bool = false,
-            isDeleteQuestion: Bool = false,
-            isReportQuestion: Bool = false,
-            loginSocialType: SocialType? = nil
+
+            userInfoModel: UserInfoModel? = .init()
         ) {
-            self._isLogOut = Shared(wrappedValue: isLogOut, .inMemory("isLogOut"))
-            self._isDeleteUser = Shared(wrappedValue: isDeleteUser, .inMemory("isDeleteUser"))
-            self._isLookAround = Shared(wrappedValue: isLookAround, .inMemory("isLookAround"))
-            self._isChangeProfile = Shared(wrappedValue: isChangeProfile, .inMemory("isChangeProfile"))
-            self._isCreateQuestion = Shared(wrappedValue: isCreateQuestion, .inMemory("isCreateQuestion"))
-            self._isDeleteQuestion = Shared(wrappedValue: isDeleteQuestion, .inMemory("isDeleteQuestion"))
-            self._isReportQuestion = Shared(wrappedValue: isReportQuestion, .inMemory("isReportQuestion"))
-            self._loginSocialType = Shared(wrappedValue: loginSocialType, .inMemory("loginSocialType"))
+            self._userInfoModel = Shared(wrappedValue: userInfoModel, .inMemory("userInfoModel"))
         }
         
     }
@@ -114,7 +94,7 @@ public struct Home {
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
-        case profile(Profile.Action)
+//        case profile(Profile.Action)
         
         
     }
@@ -185,7 +165,9 @@ public struct Home {
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
-        Reduce<State, Action> { state, action in
+        Reduce<State, Action> {
+            state,
+            action in
             switch action {
             case .binding(_):
                 return .none
@@ -200,7 +182,7 @@ public struct Home {
                 switch View {
                 case .appaerProfiluserData:
                     return .run { send in
-                        await send(.profile(.scopeFetchUser))
+//                        await send(.profile(.scopeFetchUser))
                     }
                            
                 case .prsentCustomPopUp:
@@ -246,7 +228,7 @@ public struct Home {
                     return .none
                     
                 case .switchModalAction(let editQuestion):
-                    nonisolated(unsafe) var editQuestion = editQuestion
+                    nonisolated(unsafe) let editQuestion = editQuestion
                     switch editQuestion {
                     case .reportUser:
                         Log.debug("신고하기")
@@ -274,8 +256,7 @@ public struct Home {
             case .async(let AsyncAction):
                 switch AsyncAction {
                 case .fetchQuestionList:
-                    nonisolated(unsafe) var isLikeTap = state.isLikeTap
-                    nonisolated(unsafe) var pageSize = state.pageSize
+                    let pageSize = state.pageSize
                     return .run {  send in
                         let questionResult = await Result {
                             try await questionUseCase.fetchQuestionList(
@@ -298,7 +279,7 @@ public struct Home {
                     }
                     
                 case .jobFilterSelected(let job):
-                    nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
+                    let currentSelectedGeneration = state.selectedGeneration
                     nonisolated(unsafe) let currentSortBy = state.selectedSorted
                     if state.selectedJob == job {
                         state.selectedJobButtonTitle = "계열"
@@ -314,7 +295,7 @@ public struct Home {
                         return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
                     }
                 case .generationFilterSelected(let generation):
-                    nonisolated(unsafe) let currentSelectedJob = state.selectedJob
+                    let currentSelectedJob = state.selectedJob
                     nonisolated(unsafe) let currentSortBy = state.selectedSorted
                     if state.selectedGeneration == generation {
                         state.selectedGenerationButtonTitle = "세대"
@@ -330,8 +311,8 @@ public struct Home {
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))
                     }
                 case .sortedFilterSelected(let sorted):
-                    nonisolated(unsafe) let currentSelectedGeneration = state.selectedGeneration
-                    nonisolated(unsafe) let currentSelectedJob = state.selectedJob
+                    let currentSelectedGeneration = state.selectedGeneration
+                    let currentSelectedJob = state.selectedJob
 
                     
                     if state.selectedSorted == sorted {
@@ -343,7 +324,7 @@ public struct Home {
                         return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: sorted)))
                     }
                 case .filterQuestionList(let job, let generation, let sortBy):
-                    nonisolated(unsafe) var pageSize = state.pageSize
+                    let pageSize = state.pageSize
                      
                     return .run {  send in
                         let questionResult = await Result {
@@ -529,7 +510,7 @@ public struct Home {
                 switch NavigationAction {
                 case .presntProfile:
                     return .run {  send in
-                        await send(.profile(.scopeFetchUser))
+//                        await send(.profile(.scopeFetchUser))
                     }
                     
                 case .presntLogin:
@@ -547,9 +528,7 @@ public struct Home {
             }
         }
         .ifLet(\.$destination, action: \.destination)
-        Scope(state: \.profile, action: \.profile) {
-            Profile()
-        }
+
         .onChange(of: \.questionModel) { oldValue, newValue in
             Reduce { state, action in
                 state.questionModel = newValue
@@ -559,6 +538,12 @@ public struct Home {
         .onChange(of: \.statusQuestionModel) { oldValue, newValue in
             Reduce { state, action in
                 state.statusQuestionModel = newValue
+                return .none
+            }
+        }
+        .onChange(of: \.userInfoModel) { oldValue, newValue in
+            Reduce { state, action in
+                state.userInfoModel = newValue
                 return .none
             }
         }

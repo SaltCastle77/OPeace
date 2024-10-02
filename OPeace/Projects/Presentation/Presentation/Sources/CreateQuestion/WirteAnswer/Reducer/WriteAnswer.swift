@@ -22,9 +22,12 @@ public struct WriteAnswer {
     
     @ObservableState
     public struct State: Equatable {
-        @Shared var createQuestionEmoji: String
-        @Shared var createQuestionTitle: String
-        @Shared(.inMemory("isCreateQuestion")) var isCreateQuestion: Bool = false
+//        @Shared var createQuestionEmoji: String
+//        @Shared var createQuestionTitle: String
+        
+        @Shared var createQuestionUserModel: CreateQuestionUserModel
+        
+        @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = .init()
         
         @Presents var destination: Destination.State?
         
@@ -40,11 +43,14 @@ public struct WriteAnswer {
         
 
         public init(
-            createQuestionEmoji: String,
-            createQuestionTitle: String
+//            createQuestionEmoji: String,
+//            createQuestionTitle: String,
+            createQuestionUserModel: CreateQuestionUserModel = .init()
         ) {
-            self._createQuestionEmoji = Shared(wrappedValue: createQuestionEmoji, .inMemory("createQuestionEmoji"))
-            self._createQuestionTitle = Shared(wrappedValue: createQuestionTitle, .inMemory("createQuestionTitle"))
+//            self._createQuestionEmoji = Shared(wrappedValue: createQuestionEmoji, .inMemory("createQuestionEmoji"))
+//            self._createQuestionTitle = Shared(wrappedValue: createQuestionTitle, .inMemory("createQuestionTitle"))
+            self._createQuestionUserModel = Shared(wrappedValue: createQuestionUserModel, .inMemory("createQuestionUserModel"))
+            
         }
     }
     
@@ -168,8 +174,8 @@ public struct WriteAnswer {
                     switch result {
                     case .success(let createResultData):
                         state.createQuesionModel = createResultData
-                        state.createQuestionEmoji = ""
-                        state.createQuestionTitle = ""
+                        state.createQuestionUserModel.createQuestionEmoji = ""
+                        state.createQuestionUserModel.createQuestionTitle = ""
                     case .failure(let error):
                         Log.error("질문 생성 실패", error.localizedDescription)
                     }

@@ -53,7 +53,10 @@ public struct WriteQuestionView: View {
                             store.send(.navigation(.presntWriteAnswer))
                         }, title: store.presntNextViewButtonTitle,
                         config: CustomButtonConfig.create()
-                        ,isEnable: !store.isWriteTextEditor.isEmpty && store.emojiImage != nil && store.enableButton)
+                        ,isEnable: !store.createQuestionUserModel.createQuestionTitle.isEmpty &&
+                        store.emojiImage != nil
+                        && store.enableButton
+                    )
                     .padding(.horizontal, 20)
                     
                     Spacer()
@@ -92,20 +95,20 @@ extension WriteQuestionView {
                 HStack {
                     Spacer()
                         .frame(width: UIScreen.main.bounds.width * 0.4)
-
+                    
                     EmojiTextField(
-                        text: $store.selectEmojiText,
+                        text: $store.createQuestionUserModel.createQuestionEmoji,
                         emojiImage: $store.emojiImage,
                         isInputEmoji: $store.isInuputEmoji,
                         isEmojiActive: $store.isActiveEmoji )
                         .pretendardFont(family: .SemiBold, size: 48)
-                        .onChange(of: store.selectEmojiText) { oldValue, newValue in
+                        .onChange(of: store.createQuestionUserModel.createQuestionEmoji) { oldValue, newValue in
                             if newValue.count == 1, newValue.unicodeScalars.allSatisfy({ $0.properties.isEmoji }) {
                                 self.store.emojiImage = Image.emojiToImage(emoji: newValue)
                                 store.isInuputEmoji = false
                                 store.isActiveEmoji = false
                             } else {
-                                store.selectEmojiText = ""
+                                store.createQuestionUserModel.createQuestionEmoji = ""
                             }
                         }
                         .focused($isFocused)
@@ -125,7 +128,6 @@ extension WriteQuestionView {
                                     .offset(x: -75)
                             }
                         }
-                        
                         
                     Spacer()
                 }
@@ -151,7 +153,7 @@ extension WriteQuestionView {
                     .onTapGesture {
                         UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
                         store.isInuputEmoji.toggle()
-                        store.selectEmojiText = ""
+                        store.createQuestionUserModel.createQuestionTitle = ""
                         store.isActiveEmoji.toggle()
                         isFocused.toggle()
                     }
@@ -184,20 +186,25 @@ extension WriteQuestionView {
             Spacer()
                 .frame(height: 16)
             
-            TextEditor(text: $store.isWriteTextEditor)
-                .modifier(TextEditorModifier(placeholder: "여기를 눌러서 작성해주세요.", text: $store.isWriteTextEditor))
+            TextEditor(text: $store.createQuestionUserModel.createQuestionTitle)
+                .modifier(
+                    TextEditorModifier(
+                        placeholder: "여기를 눌러서 작성해주세요.",
+                        text: $store.createQuestionUserModel.createQuestionTitle
+                    )
+                )
                 .frame(height: 160)
             
             Spacer()
                 .frame(height: 12)
             
-            Text("\(store.isWriteTextEditor.count) / 60")
+            Text("\(store.createQuestionUserModel.createQuestionTitle.count) / 60")
                 .pretendardFont(family: .Regular, size: 16)
                 .foregroundStyle(Color.gray300)
-                .onChange(of: store.isWriteTextEditor) { newValue, oldValue in
+                .onChange(of: store.createQuestionUserModel.createQuestionTitle) { newValue, oldValue in
                     if newValue.count >= 60 {
                         store.enableButton = false
-                        store.isWriteTextEditor = String(newValue.prefix(60))
+                        store.createQuestionUserModel.createQuestionTitle = String(newValue.prefix(60))
                         store.send(.view(.presntFloatintPopUp))
                         store.send(.view(.timeToCloseFloatingPopUp))
                     } else {
