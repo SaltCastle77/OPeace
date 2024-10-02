@@ -85,6 +85,9 @@
          location = "group:Tuist/.build/tuist-derived/Firebase/Firebase.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:Tuist/.build/tuist-derived/FlowStacks/FlowStacks.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:Tuist/.build/tuist-derived/GoogleAppMeasurement/GoogleAppMeasurement.xcodeproj">
       </FileRef>
       <FileRef
@@ -116,6 +119,9 @@
       </FileRef>
       <FileRef
          location = "group:Tuist/.build/tuist-derived/SwiftJWT/SwiftJWT.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Tuist/.build/tuist-derived/TCACoordinators/TCACoordinators.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:Tuist/.build/tuist-derived/combine-schedulers/combine-schedulers.xcodeproj">

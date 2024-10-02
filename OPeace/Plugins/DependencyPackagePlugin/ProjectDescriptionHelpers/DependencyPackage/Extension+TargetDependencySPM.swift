@@ -27,6 +27,7 @@ public extension TargetDependency.SPM {
     static let swiftUIIntrospect = TargetDependency.external(name: "SwiftUIIntrospect", condition: .none)
     static let isEmojiView = TargetDependency.external(name: "ISEmojiView", condition: .none)
     static let swiftJWT = TargetDependency.external(name: "SwiftJWT", condition: .none)
+    static let tcaCoordinator = TargetDependency.external(name: "TCACoordinators", condition: .none)
 }
   
 
