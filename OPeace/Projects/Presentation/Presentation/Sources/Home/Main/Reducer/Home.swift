@@ -215,8 +215,8 @@ public struct Home {
                     case .sorted(let sortedOrderEnum):
                         state.selectedItem = state.selectedSorted.sortedKoreanString
                     }
-                    return .run { @MainActor send in
-                        send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
+                    return .run {  send in
+                        await send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
                     }
                 
                 case .presntEditQuestion:

@@ -13,7 +13,7 @@ public struct FlippableCardView<Content: View, T>: View {
     let content: (T) -> Content
     let onAppearLastItem: (() -> Void)?
     let onItemAppear: ((T) -> Void)?
-    let shouldSaveState: Bool // Parameter to control if the state should be saved
+    let shouldSaveState: Bool
 
     @AppStorage("lastViewedPage") private var lastViewedPage: Int = 0
     @GestureState private var dragOffset: CGFloat = 0

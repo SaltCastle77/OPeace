@@ -92,7 +92,7 @@ extension CardItemView {
                 .overlay {
                     VStack {
                         cardHeaderView(
-                            nickName: resultData.userInfo?.userNickname ?? "탈퇴 한 유저",
+                            nickName: resultData.userInfo?.userNickname ?? "",
                             job: resultData.userInfo?.userJob ?? "",
                             generation: resultData.userInfo?.userGeneration ?? ""
                         )
@@ -226,8 +226,6 @@ extension CardItemView {
         return ceil(boundingBox.height) + 20
     }
 
-
-    
     @ViewBuilder
     private func cardHeaderView(
         nickName: String,
@@ -239,7 +237,7 @@ extension CardItemView {
                 .frame(height: 32)
             
             HStack {
-                Text(nickName)
+                Text(nickName.isEmpty ? "탈퇴 한 유저" : nickName)
                     .pretendardFont(family: .Bold, size: 20)
                     .foregroundStyle(Color.basicWhite)
                 
@@ -271,7 +269,7 @@ extension CardItemView {
                 .frame(height: 3)
             
             HStack {
-                Text(job)
+                Text(job.isEmpty ?  "기타" : job)
                     .pretendardFont(family: .Regular, size: 14)
                     .foregroundStyle(Color.gray200)
                 
@@ -330,7 +328,6 @@ extension CardItemView {
             Spacer()
                 .frame(height: 16)
             
-            // Check for excessive line breaks and clean up if needed
             let processedTitle = handleExcessiveLineBreaks(in: title)
             
             Text(processedTitle)
@@ -338,6 +335,7 @@ extension CardItemView {
                 .foregroundStyle(Color.basicWhite)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
+                .minimumScaleFactor(0.7)
             
             Spacer()
                 .frame(height: 16)
