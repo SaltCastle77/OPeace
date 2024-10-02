@@ -12,6 +12,7 @@ import Presentation
 
 public struct AppView: View {
     @Bindable var store: StoreOf<AppReducer>
+    @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
     
     public var body: some View {
         SwitchStore(store) { state in
@@ -30,6 +31,9 @@ public struct AppView: View {
             case .main:
                 if let store = store.scope(state: \.main, action: \.view.main) {
                     HomeCoordinatorView(store: store)
+                        .onAppear {
+                            lastViewedPage = .zero
+                        }
                 }
             }
         }

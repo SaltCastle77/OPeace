@@ -102,6 +102,9 @@ public struct HomeCoordinator {
                     return .none
                 }
                 
+            case .home(.navigation(.presntProfile)):
+                return .send(.profile(.async(.fetchUser)))
+                
             case .navigation(let NavigationAction):
                 switch NavigationAction {
                 case .presntAuth:
