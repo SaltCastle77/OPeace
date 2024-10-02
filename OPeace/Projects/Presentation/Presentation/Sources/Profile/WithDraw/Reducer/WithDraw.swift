@@ -32,9 +32,8 @@ public struct WithDraw {
         
         @Presents var destination: Destination.State?
         
-        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
-        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
-        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
+        @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = .init()
+        
         public init() {}
     }
     
@@ -126,15 +125,14 @@ public struct WithDraw {
                         state.userDeleteModel = userDeleteData
                         UserDefaults.standard.removeObject(forKey: "REFRESH_TOKEN")
                         UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
-                        state.isDeleteUser = true
-                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser))
+                        state.userInfoModel?.isDeleteUser = true
+                        state.destination = .home(.init(userInfoModel: state.userInfoModel))
                     case .failure(let error):
                         Log.debug("회원 탈퇴 에러", error.localizedDescription)
                     }
                     return .none
                     
                 case .deletUserSocialType(let reason):
-                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
                     nonisolated(unsafe) var socialType = UserDefaults.standard.string(forKey: "LoginSocialType")
                     return .run { send in
                         switch socialType {

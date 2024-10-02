@@ -34,7 +34,7 @@ public struct EditProfile {
         var profileYear: Int  = 0
         let paddings: [CGFloat] = [47, 25, 32, 47, 24, 32]
         @Presents var destination: Destination.State?
-        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
+        @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = .init()
         
         public init() {}
     }

@@ -57,7 +57,7 @@ public struct EditProfileView: View {
                                 year: store.profileYear ,
                                 job:  store.profileSelectedJob ?? "",
                                 generation: store.editProfileGenerationText)))
-                            store.isChangeProfile = true
+                            store.userInfoModel?.isChangeProfile = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                                 backToHomeAction()
                             }

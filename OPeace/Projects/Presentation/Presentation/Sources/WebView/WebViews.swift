@@ -14,12 +14,14 @@ public struct WebViews: View {
     @Bindable var store: StoreOf<Web>
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+    var backAction: () -> Void
     
     public init(
-        store: StoreOf<Web>
+        store: StoreOf<Web>,
+        backAction: @escaping() -> Void
     ) {
         self.store = store
+        self.backAction = backAction
     }
     
     public var body: some View {
@@ -32,7 +34,7 @@ public struct WebViews: View {
                     .frame(height: 14)
                 
                 NavigationBackButton(buttonAction:  {
-                    self.store.send(.didTapBackButton)
+                    backAction()
                 })
                 
                 Spacer()

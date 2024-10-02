@@ -12,9 +12,7 @@ import KeychainAccess
 
 import Utill
 import DesignSystem
-import Model
-import Utills
-import UseCase
+import Networkings
 
 import KakaoSDKAuth
 import KakaoSDKUser
@@ -49,11 +47,7 @@ public struct Profile {
         var questionId: Int = .zero
         
         @Presents var destination: Destination.State?
-        @Shared(.inMemory("isLogOut")) var isLogOut: Bool = false
-        @Shared(.inMemory("isDeleteUser")) var isDeleteUser: Bool = false
-        @Shared(.inMemory("isChangeProfile")) var isChangeProfile: Bool = false
-        @Shared(.inMemory("isDeleteQuestion")) var isDeleteQuestion: Bool = false
-        @Shared(.inMemory("loginSocialType")) var loginSocialType: SocialType? = nil
+        @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = .init()
         @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
         
         public init() {}
@@ -134,15 +128,13 @@ public struct Profile {
                 return .none
                 
             case .scopeFetchUser:
-                state.isChangeProfile = false
-                return .run { @MainActor send in
-                    send(.async(.fetchUser))
+                state.userInfoModel?.isChangeProfile = false
+                return .run {  send in
+                    await send(.async(.fetchUser))
                 }
                 
-            case .destination(.presented(.setting(.test))):
+            case .destination(_):
                 return .none
-                
-                
                 
             case .view(let View):
                 switch View {
@@ -231,15 +223,15 @@ public struct Profile {
                     case .success(let resultData):
                         state.profileUserModel = resultData
                         state.profileGenerationYear =  state.profileUserModel?.data?.year
-                        state.isChangeProfile = false
+                        state.userInfoModel?.isChangeProfile = false
+                        
                     case let .failure(error):
                         Log.network("프로필 오류", error.localizedDescription)
                     }
                     return .none
                     
                 case .socilalLogOutUser:
-                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
-                    nonisolated(unsafe) var socialType = UserDefaults.standard.string(forKey: "LoginSocialType") ?? ""
+                    let socialType = UserDefaults.standard.string(forKey: "LoginSocialType") ?? ""
                     return .run {  send in
                         switch socialType {
                         case "kakao":
@@ -257,15 +249,15 @@ public struct Profile {
                     case .success(let userData):
                         state.userLogoutModel = userData
                         Log.debug("유저 로그아웃 성공", userData)
-                        state.isLogOut = true
-                        state.destination = .home(.init(isLogOut: state.isLogOut, isDeleteUser: state.isDeleteUser, isChangeProfile: state.isChangeProfile, isDeleteQuestion: state.isDeleteQuestion))
+                        state.userInfoModel?.isLogOut = true
+                        state.destination = .home(.init(userInfoModel: state.userInfoModel))
                     case .failure(let error):
                         Log.debug("유저 로그아웃 에러", error.localizedDescription)
                     }
                     return .none
                     
                 case .logoutUser:
-                    nonisolated(unsafe) var loginSocialType = state.loginSocialType
+                    nonisolated(unsafe) var userinfoModel = state.userInfoModel
                     return .run {  send in
                         let userLogOutData = await Result {
                             try await authUseCase.logoutUser(refreshToken: "")
@@ -276,10 +268,11 @@ public struct Profile {
                             if let userLogOutData = userLogOutData {
                                 await send(.async(.logoutUseResponse(.success(userLogOutData))))
                                 UserDefaults.standard.removeObject(forKey: "ACCESS_TOKEN")
-                                loginSocialType = nil
-                                await  send(.view(.closePopUp))
+                                let loginSocialType = UserDefaults.standard.removeObject(forKey: "LoginSocialType")
+                                await send(.view(.closePopUp))
+                                userinfoModel?.isLogOut = true
                                 try await self.clock.sleep(for: .seconds(0.4))
-                                await  send(.navigation(.presntLogout))
+                                await send(.navigation(.presntLogout))
                             }
                             
                         case .failure(let error):
@@ -338,7 +331,7 @@ public struct Profile {
                     switch result {
                     case .success(let deleteQuestionData):
                         state.deleteQuestionModel = deleteQuestionData
-                        state.isDeleteQuestion = true
+                        state.userInfoModel?.isDeleteQuestion = true
                         
                     case .failure(let error):
                         Log.debug("질문 삭제 에러", error.localizedDescription)
@@ -413,6 +406,12 @@ public struct Profile {
         .onChange(of: \.statusQuestionModel) { oldValue, newValue in
             Reduce { state, action in
                 state.statusQuestionModel = newValue
+                return .none
+            }
+        }
+        .onChange(of: \.userInfoModel) { oldValue, newValue in
+            Reduce { state, action in
+                state.userInfoModel = newValue
                 return .none
             }
         }
