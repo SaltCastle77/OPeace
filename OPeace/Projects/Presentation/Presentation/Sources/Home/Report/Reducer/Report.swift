@@ -24,7 +24,7 @@ public struct Report {
         var reportButtonComplete: String = "완료"
         var reportQuestionModel: ReportQuestionModel? = nil
         
-        @Shared(.inMemory("isReportQuestion")) var isReportQuestion: Bool = false
+        @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = .init()
         @Shared var questionID: Int
         
         public init(
@@ -112,7 +112,7 @@ public struct Report {
                     switch result {
                     case .success(let reportQuestionResult):
                         state.reportQuestionModel = reportQuestionResult
-                        state.isReportQuestion = true
+                        state.userInfoModel?.isReportQuestion = true
                     case .failure(let error):
                         Log.error("질문 신고 실패", error.localizedDescription)
                     }

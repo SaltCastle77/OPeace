@@ -147,8 +147,13 @@ public struct HomeCoordinator {
             state.routes.push(.createQuestion(.init()))
             return .none
             
+            //MARK: - 신고하기
         case .routeAction(id: _, action: .home(.navigation(.presntReport))):
             state.routes.push(.report(.init(questionID: state.questionID)))
+            return .none
+            
+        case .routeAction(id: _, action: .report(.navigation(.presntMainHome))):
+            state.routes.goBackToRoot()
             return .none
             
             //MARK: - 프로필 화면
