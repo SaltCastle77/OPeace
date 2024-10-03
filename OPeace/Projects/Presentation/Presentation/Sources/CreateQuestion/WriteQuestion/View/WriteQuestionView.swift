@@ -153,7 +153,7 @@ extension WriteQuestionView {
                     .onTapGesture {
                         UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
                         store.isInuputEmoji.toggle()
-                        store.createQuestionUserModel.createQuestionTitle = ""
+                        store.createQuestionUserModel.createQuestionEmoji = ""
                         store.isActiveEmoji.toggle()
                         isFocused.toggle()
                     }

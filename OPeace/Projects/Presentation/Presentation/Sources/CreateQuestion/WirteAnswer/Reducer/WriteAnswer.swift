@@ -43,12 +43,8 @@ public struct WriteAnswer {
         
 
         public init(
-//            createQuestionEmoji: String,
-//            createQuestionTitle: String,
             createQuestionUserModel: CreateQuestionUserModel = .init()
         ) {
-//            self._createQuestionEmoji = Shared(wrappedValue: createQuestionEmoji, .inMemory("createQuestionEmoji"))
-//            self._createQuestionTitle = Shared(wrappedValue: createQuestionTitle, .inMemory("createQuestionTitle"))
             self._createQuestionUserModel = Shared(wrappedValue: createQuestionUserModel, .inMemory("createQuestionUserModel"))
             
         }
