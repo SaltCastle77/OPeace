@@ -14,7 +14,10 @@ import CombineMoya
 
 extension MoyaProvider {
     //MARK: - MoyaProvider에 요청을 비동기적으로 처리하는 확장 함수 추가
-    public func requestAsync<T: Decodable>(_ target: Target, decodeTo type: T.Type) async throws -> T {
+    public func requestAsync<T: Decodable>(
+        _ target: Target,
+        decodeTo type: T.Type
+    ) async throws ->   T {
         return try await withCheckedThrowingContinuation { continuation in
             // async/await API의 일부로, 비동기 작업을 동기식으로 변환할 때 사용됩니다. 여기서 continuation은 비동기 작업이 완료되면 값을 반환하거나 오류를 던지기 위해 사용
             var cancellable: AnyCancellable?
@@ -101,13 +104,9 @@ extension MoyaProvider {
                     throw DataError.unhandledStatusCode(httpResponse.statusCode)
                 }
             }
-            .tryCompactMap { data in
+            .tryCompactMap { data -> T?  in
                 if data.isEmpty {
-                    if T.self == Void.self {
-                        return () as? T
-                    } else if let optionalType = T.self as? ExpressibleByNilLiteral.Type {
-                        return optionalType.init(nilLiteral: ()) as? T
-                    }
+                    return nil
                 }
                 return try data.decoded(as: T.self)
             }
@@ -172,13 +171,9 @@ extension MoyaProvider {
                         throw DataError.unhandledStatusCode(httpResponse.statusCode)
                     }
                 }
-                .tryCompactMap { data in
+                .tryCompactMap { data -> T?  in
                     if data.isEmpty {
-                        if T.self == Void.self {
-                            return () as? T
-                        } else if let optionalType = T.self as? ExpressibleByNilLiteral.Type {
-                            return optionalType.init(nilLiteral: ()) as? T
-                        }
+                        return nil
                     }
                     return try data.decoded(as: T.self)
                 }
@@ -193,8 +188,6 @@ extension MoyaProvider {
                         return DataError.unknownError
                     }
                 }
-                .eraseToAnyPublisher()
-            
             // AsyncStream을 생성하고 반환합니다.
             return AsyncStream { continuation in
                 nonisolated(unsafe) var cancellable: AnyCancellable?

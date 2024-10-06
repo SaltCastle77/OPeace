@@ -21,5 +21,4 @@ public enum DataError: Error {
     case errorData(String)
     case moyaError(MoyaError)
     case unknownError
-    
 }
