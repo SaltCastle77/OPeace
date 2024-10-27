@@ -28,6 +28,6 @@ let project = Project.makeAppModule(
     entitlements: .file(path: "../../Entitlements/OPeace.entitlements"),
     schemes: [
         Scheme.makeScheme(target: .release, name: Project.Environment.appName),
-        Scheme.makeTestPlanScheme(target: .debug, name: Project.Environment.appName)
+//        Scheme.makeTestPlanScheme(target: .debug, name: Project.Environment.appName)
     ]
 )

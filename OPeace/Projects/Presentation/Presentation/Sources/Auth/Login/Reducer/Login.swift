@@ -130,6 +130,7 @@ public struct Login {
                                   let identityToken = String(data: tokenData, encoding: .utf8) else {
                                 Log.error("Identity token is missing")
                                 return .none
+                                
                             }
                             state.appleAccessToken = identityToken
                             state.socialType = .apple

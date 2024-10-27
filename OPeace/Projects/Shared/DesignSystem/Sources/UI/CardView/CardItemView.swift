@@ -342,7 +342,7 @@ extension CardItemView {
                 .frame(height: 16)
             
             if isRoated {
-                if let stats = statsData?.stats {
+                if let stats = statsData?.stats  {
                     choiceAnswerRoundViewProfile(
                         choiceTitleA: choiceA,
                         choiceTitleB: choiceB,
@@ -360,6 +360,13 @@ extension CardItemView {
                         percentageB: Int(statsData?.overallRatio?.b ?? .zero),
                         stats: stats
                     )
+                } else  {
+                    choiceAnswerRoundViewProfile(
+                        choiceTitleA: choiceA,
+                        choiceTitleB: choiceB,
+                        percentageA: Int(statsData?.overallRatio?.a ?? .zero),
+                        percentageB: Int(statsData?.overallRatio?.b ?? .zero),
+                        stats: statsData?.stats ?? .init(a: ["a" : 0], b:  ["b" : 0]))
                 }
             } else {
                 choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)

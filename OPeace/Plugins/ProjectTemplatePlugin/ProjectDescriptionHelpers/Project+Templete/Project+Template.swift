@@ -58,16 +58,17 @@ public extension Project {
             name: "\(name)Tests",
             destinations: destinations,
             product: .unitTests,
-            bundleId: "\(bundleId).\(name)Tests",
+            bundleId: "\(bundleId).\(name)Test",
             deploymentTargets: deploymentTarget,
             infoPlist: .default,
             sources: ["\(name)Tests/Sources/**"],
             resources: ["\(name)Tests/Sources/OpeaceTestPlan.xctestplan"],
             dependencies: [
                 .target(name:name),
-                .sdk(name: "Testing", type: .framework, status: isXcodeVersion16OrAbove() ? .required : .optional),
+//                .sdk(name: "Testing", type: .framework, status: isXcodeVersion16OrAbove() ? .required : .optional),
             ]
         )
+        
         
         let targets = [appTarget, appDevTarget, appTestTarget]
         
