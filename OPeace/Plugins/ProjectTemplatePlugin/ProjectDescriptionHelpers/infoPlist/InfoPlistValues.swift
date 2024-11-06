@@ -96,19 +96,31 @@ public struct InfoPlistValues {
         ]
     }
     
-    public static func setCFBundleURLTypes() -> [String: Plist.Value] {
-        return [
-            "CFBundleURLTypes": .array([
-                .dictionary([
-                    "CFBundleTypeRole": .string("Editor"),
-                    "CFBundleURLName": .string("kakao"),
-                    "CFBundleURLSchemes": .array([
-                        .string("kakao${e55ab48902aa38be8a6fb0f1a3431e8d}")
-                    ])
-                ])
-            ])
-        ]
-    }
+  public static func setCFBundleURLTypes() -> [String: Plist.Value] {
+    let kakaoAppKey = setKakaoAPPKEY("$(KAKAO_APP_KEY)").values.first
+        let kakaoAppKeyValue: String
+        
+        if case let .string(value) = kakaoAppKey {
+            kakaoAppKeyValue = value
+        } else {
+            kakaoAppKeyValue = "" // 기본값 설정
+        }
+    return [
+      "CFBundleURLTypes": .array([
+        .dictionary([
+          "CFBundleTypeRole": .string("Editor"),
+          "CFBundleURLName": .string("kakao"),
+          "CFBundleURLSchemes": .array([
+            .string("kakao${\(kakaoAppKeyValue)}")
+          ])
+        ])
+      ])
+    ]
+  }
+  
+  public static func setFirebaseAnalyticsCollectionEnabled() -> [String: Plist.Value] {
+      return ["FIREBASE_ANALYTICS_COLLECTION_ENABLED": .boolean(false)]
+  }
     
     public static func setUIApplicationSceneManifest(_ value: [String: Any]) -> [String: Plist.Value] {
         func convertToPlistValue(_ value: Any) -> Plist.Value {
@@ -145,9 +157,22 @@ public struct InfoPlistValues {
         return ["NSCameraUsageDescription": .string(value)]
     }
     
-    public static func setKakaoAPPKEY(_ value: String) -> [String: Plist.Value] {
-        return ["KAKAO_APP_KEY": .string(value)]
-    }
+  
+  // BaseURL 설정 함수 추가
+  public static func setCustomValue(_ value: String) -> [String: Plist.Value] {
+      return ["KAKAO_KEY": .string(value)]
+  }
+
+  public static func setKakaoAPPKEY(_ value: String) -> [String: Plist.Value] {
+      let customValue = setCustomValue(value) // setCustomValue 호출
+      guard let customPlistValue = customValue.values.first,
+            case let .string(extractedValue) = customPlistValue else {
+          return [:] // 값이 없거나 .string 타입이 아닌 경우 빈 딕셔너리 반환
+      }
+      
+      // setCustomValue의 value 값만 반환
+      return ["KAKAO_APP_KEY": .string(extractedValue)]
+  }
     
     public static func setUILaunchScreens() -> [String: Plist.Value] {
         return [
@@ -179,18 +204,10 @@ public struct InfoPlistValues {
         infoPlist.merge(setCFBundleShortVersionString(.appVersion(version: "1.0.0"))) { (_, new) in new }
         infoPlist.merge(setAppTransportSecurity()) { (_, new) in new }
         infoPlist.merge(setApplicationQueriesSchemes()) { (_, new) in new }
-        infoPlist.merge(setKakaoAPPKEY("e55ab48902aa38be8a6fb0f1a3431e8d")) { (_, new) in new }
         infoPlist.merge(setCFBundleURLTypes()) { (_, new) in new }
         infoPlist.merge(setAppUseExemptEncryption(value: false)) { (_, new) in new }
-//        infoPlist.merge(setCFBundleURLTypes([
-//            [
-//                "CFBundleURLSchemes": [
-//                    "com.googleusercontent.apps.882277748169-ouegejt3kc6jo5enbfjmmre2nnbthj82"
-//                ]
-//            ]
-//        ])) { (_, new) in new }
+
         infoPlist.merge(setCFBundleVersion(.appBuildVersion())) { (_, new) in new }
-//        infoPlist.merge(setGIDClientID("882277748169-ouegejt3kc6jo5enbfjmmre2nnbthj82.apps.googleusercontent.com")) { (_, new) in new }
         infoPlist.merge(setLSRequiresIPhoneOS(true)) { (_, new) in new }
         infoPlist.merge(setUIAppFonts(["PretendardVariable.ttf"])) { (_, new) in new }
         infoPlist.merge(setUIApplicationSceneManifest([
@@ -206,9 +223,9 @@ public struct InfoPlistValues {
         ])) { (_, new) in new }
         infoPlist.merge(setUIRequiredDeviceCapabilities(["armv7"])) { (_, new) in new }
         infoPlist.merge(setUISupportedInterfaceOrientations(["UIInterfaceOrientationPortrait"])) { (_, new) in new }
-//        infoPlist.merge(setNSCameraUsageDescription("QR 코드 인식을 위해 카메라 접근 권한이 필요합니다")) { (_, new) in new }
         infoPlist.merge(setUILaunchScreens()) { (_, new) in new }
-
+      infoPlist.merge(setCustomValue("$(KAKAO_KEY)")) { (_, new) in new }
+      infoPlist.merge(setKakaoAPPKEY("$(KAKAO_KEY)")) { (_, new) in new }
         return infoPlist
     }
 }

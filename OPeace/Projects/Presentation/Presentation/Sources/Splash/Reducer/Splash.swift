@@ -9,11 +9,8 @@ import Foundation
 import ComposableArchitecture
 import DesignSystem
 
-import Utills
-import UseCase
-import Model
-
 import Utill
+import Networkings
 
 @Reducer
 public struct Splash {

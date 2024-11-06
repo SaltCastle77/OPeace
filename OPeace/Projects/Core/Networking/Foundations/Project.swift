@@ -13,7 +13,7 @@ let project = Project.makeModule(
         .Networking(implements: .ThirdPartys),
         .Networking(implements: .API),
         .Networking(implements: .Utills),
-        .SPM.keychainAccess
+//        .SPM.keychainAccess
     ],
     sources: ["Sources/**"]
 )

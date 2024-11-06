@@ -34,7 +34,8 @@ extension Settings {
                 .setCFBundleDisplayName(Project.Environment.appName)
                 .setOtherLdFlags("-ObjC -all_load")
                 .setDebugInformationFormat("non-global")
-                .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
+                .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)"),
+                   xcconfig: .relativeToRoot("./Config/dev.xcconfig")
 
             ),
             .debug(name: "QA", settings: SettingsDictionary()
@@ -43,7 +44,8 @@ extension Settings {
                 .setOtherLdFlags("-ObjC -all_load")
                 .setDebugInformationFormat("non-global")
                 .setProvisioningProfileSpecifier("match AppStore \(Project.Environment.bundlePrefix)")
-                .setSkipInstall(false)
+                .setSkipInstall(false),
+                   xcconfig: .relativeToRoot("./Config/qa.xcconfig")
             ),
             .release(name: .release, settings: SettingsDictionary()
                 .setProductName(Project.Environment.appName)
@@ -51,7 +53,9 @@ extension Settings {
                 .setOtherLdFlags("-ObjC -all_load")
                 .setDebugInformationFormat("non-global")
                 .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
-                .setSkipInstall(false)
+                .setSkipInstall(false),
+                     xcconfig: .relativeToRoot("./Config/realse.xcconfig")
+                     
             ),
         ], defaultSettings: .recommended
     )

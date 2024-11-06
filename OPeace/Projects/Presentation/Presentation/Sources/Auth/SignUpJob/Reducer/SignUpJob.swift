@@ -6,15 +6,14 @@
 //
 
 import Foundation
+import SwiftUI
+
 import ComposableArchitecture
 
 import Utill
-import Service
-import Utills
-import Model
-import UseCase
+
 import DesignSystem
-import SwiftUI
+import Networkings
 
 @Reducer
 public struct SignUpJob {

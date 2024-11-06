@@ -9,10 +9,8 @@ import Foundation
 import ComposableArchitecture
 
 import Utill
-import Model
 import DesignSystem
-import Utills
-import UseCase
+import Networkings
 
 @Reducer
 public struct SignUpPaging {

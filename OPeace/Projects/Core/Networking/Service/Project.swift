@@ -10,7 +10,6 @@ let project = Project.makeModule(
     settings:  .settings(),
     dependencies: [
         .Networking(implements: .API),
-        .Networking(implements: .Utills),
         .Networking(implements: .Foundations),
         .Networking(implements: .ThirdPartys)
     ],

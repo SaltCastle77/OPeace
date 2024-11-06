@@ -10,10 +10,7 @@ import Combine
 
 import Model
 import Service
-import Utills
-
-import Moya
-
+import AsyncMoya
 
 @Observable public class SingUpRepository: SignUpRepositoryProtocol {
     private let provider = MoyaProvider<SignUpService>(plugins: [MoyaLoggingPlugin()])

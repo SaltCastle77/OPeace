@@ -11,11 +11,8 @@ import ComposableArchitecture
 import Utill
 import SwiftUI
 
-import Model
 import DesignSystem
-import KeychainAccess
-import Utills
-import UseCase
+import Networkings
 
 @Reducer
 public struct SignUpAge {

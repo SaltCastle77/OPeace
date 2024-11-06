@@ -11,10 +11,8 @@ import SwiftUI
 import ComposableArchitecture
 
 import Utill
-import Model
-import Utills
-import UseCase
 import DesignSystem
+import Networkings
 
 @Reducer
 public struct WriteAnswer {

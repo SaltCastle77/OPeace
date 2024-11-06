@@ -8,9 +8,9 @@
 import ProjectDescription
 
 public extension TargetDependency.SPM {
-    static let moya = TargetDependency.external(name: "Moya", condition: .none)
-    static let combineMoya = TargetDependency.external(name: "CombineMoya", condition: .none)
     static let composableArchitecture = TargetDependency.external(name: "ComposableArchitecture", condition: .none)
+  static let asyncMoya = TargetDependency.external(name: "AsyncMoya", condition: .none)
+  
     static let concurrencyExtras = TargetDependency.external(name: "ConcurrencyExtras", condition: .none)
     static let sdwebImage = TargetDependency.external(name: "SDWebImageSwiftUI", condition: .none)
     static let keychainAccess = TargetDependency.external(name: "KeychainAccess", condition: .none)
@@ -28,6 +28,7 @@ public extension TargetDependency.SPM {
     static let isEmojiView = TargetDependency.external(name: "ISEmojiView", condition: .none)
     static let swiftJWT = TargetDependency.external(name: "SwiftJWT", condition: .none)
     static let tcaCoordinator = TargetDependency.external(name: "TCACoordinators", condition: .none)
+  
 }
   
 

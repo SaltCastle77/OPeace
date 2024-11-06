@@ -23,7 +23,7 @@ let project = Project.makeAppModule(
         .Presentation(implements: .Presentation)
     ],
     sources: ["Sources/**"],
-    resources: ["Resources/**"],
+    resources: ["Resources/**", "PrivacyInfo.xcprivacy"],
     infoPlist: .extendingDefault(with: infoPlist),
     entitlements: .file(path: "../../Entitlements/OPeace.entitlements"),
     schemes: [

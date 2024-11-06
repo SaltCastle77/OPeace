@@ -10,8 +10,7 @@ import SwiftUI
 import Combine
 
 import ComposableArchitecture
-import Model
-import UseCase
+import Networkings
 
 @Reducer
 public struct Home {

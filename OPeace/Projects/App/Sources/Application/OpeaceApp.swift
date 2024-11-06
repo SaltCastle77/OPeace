@@ -2,7 +2,6 @@ import SwiftUI
 import ComposableArchitecture
 import KakaoSDKAuth
 import KakaoSDKCommon
-import KeychainAccess
 
 @main
 struct OpeaceApp: App {
@@ -57,7 +56,7 @@ extension OpeaceApp {
     private func isFirstApplication() {
         print("isFirstUseApp : \(isFirstUseApp)")
         if isFirstUseApp == false {
-            try? Keychain().removeAll()
+          UserDefaults.standard.removeObject(forKey: "isFirstUseApp")
         }
     }
 }

@@ -32,16 +32,16 @@ let package = Package(
     name: "OPeace",
     dependencies: [
         .package(url: "http://github.com/pointfreeco/swift-composable-architecture", from: "1.15.0"),
-        .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
         .package(url: "https://github.com/pointfreeco/swift-concurrency-extras.git", from: "1.1.0"),
         .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
-        .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", from: "4.2.2"),
+//        .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", from: "4.2.2"),
         .package(url: "https://github.com/exyte/PopupView.git", from: "2.10.4"),
         .package(url: "https://github.com/kakao/kakao-ios-sdk", from: "2.21.0"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
         .package(url: "https://github.com/siteline/swiftui-introspect.git", from: "1.3.0"),
         .package(url: "https://github.com/Kitura/Swift-JWT.git", from: "4.0.0"),
-        .package(url: "https://github.com/johnpatrickmorgan/TCACoordinators.git", from: "0.10.0")
+        .package(url: "https://github.com/johnpatrickmorgan/TCACoordinators.git", from: "0.10.0"),
+        .package(url: "https://github.com/Roy-wonji/AsyncMoya",  from: "1.0.9"),
         
     ]
 )

@@ -7,12 +7,9 @@
 
 import Foundation
 import ComposableArchitecture
-import KeychainAccess
 
 import Utill
-import Model
-import Utills
-import UseCase
+import Networkings
 
 import KakaoSDKAuth
 import KakaoSDKUser
@@ -142,7 +139,7 @@ public struct WithDraw {
                                     Log.error("카카오 회원 탈퇴 에러", error.localizedDescription)
                                 }
                                 else {
-                                    Task {
+                                  _Concurrency.Task {
                                         await send(.async(.deleteUser(reason: reason)))
                                     }
                                 }
