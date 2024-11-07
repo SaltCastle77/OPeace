@@ -80,6 +80,11 @@ public extension SettingsDictionary {
     func setSkipInstall(_ value: Bool = false) -> SettingsDictionary {
         return self.merging(["SKIP_INSTALL": SettingValue(stringLiteral: value ? "YES" : "NO")])
     }
+  
+  /// 기본 로케일을 한국어(ko)로 설정하는 메서드
+  func setCFBundleDevelopmentRegion(_ value: String = "ko") -> SettingsDictionary {
+    return self.merging(["CFBundleDevelopmentRegion": SettingValue(stringLiteral: value)]) { (_, new) in new }
+  }
 }
 
 

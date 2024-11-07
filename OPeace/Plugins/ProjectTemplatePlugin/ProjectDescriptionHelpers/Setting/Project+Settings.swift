@@ -25,6 +25,7 @@ extension Settings {
             .setVersioningSystem()
             .setProvisioningProfileSpecifier("match Development \(Project.Environment.bundlePrefix)")
             .setDevelopmentTeam(Project.Environment.organizationTeamId)
+            .setCFBundleDevelopmentRegion()
             .setDebugInformationFormat(),
       
         

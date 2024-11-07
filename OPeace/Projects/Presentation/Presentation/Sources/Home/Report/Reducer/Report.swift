@@ -86,7 +86,7 @@ public struct Report {
                 switch AsyncAction {
                     
                 case .reportQuestion(questionID: let questionID, reason: let reason):
-                    return .run { @MainActor send in
+                    return .run { send in
                         let reportQuestionResult = await Result {
                             try await questionUseCase.reportQuestion(questionID: questionID, reason: reason)
                         }
@@ -94,14 +94,14 @@ public struct Report {
                         switch reportQuestionResult {
                         case .success(let reportQuestionResultData):
                             if let reportQuestionResultData = reportQuestionResultData {
-                                send(.async(.reportQuestionResponse(.success(reportQuestionResultData))))
+                              await send(.async(.reportQuestionResponse(.success(reportQuestionResultData))))
                                 
                                 try await clock.sleep(for: .seconds(1))
                                 
-                                send(.navigation(.presntMainHome))
+                              await send(.navigation(.presntMainHome))
                             }
                         case .failure(let error):
-                            send(.async(.reportQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+                          await send(.async(.reportQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
                         }
                         
                     }

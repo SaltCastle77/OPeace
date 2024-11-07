@@ -240,14 +240,14 @@ public struct Home {
                         state.isTapBlockUser = true
                     }
                     
-                    return .run { @MainActor send in
+                    return .run {  send in
                         switch editQuestion {
                         case .reportUser:
                             Log.debug("신고하기")
-                            send(.view(.prsentCustomPopUp))
+                          await send(.view(.prsentCustomPopUp))
                         case .blockUser:
                             Log.debug("차단하기")
-                            send(.view(.prsentCustomPopUp))
+                          await send(.view(.prsentCustomPopUp))
                         }
                     }
                     

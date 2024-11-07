@@ -68,7 +68,7 @@ public struct ProfileView: View {
                 } closeModalAction: {
                     store.send(.view(.closeModal))
                 }
-                .presentationDetents([.height(UIScreen.screenHeight * 0.3)])
+                .presentationDetents([.height(UIScreen.screenHeight * 0.4)])
                 .presentationCornerRadius(20)
                 .presentationDragIndicator(.hidden)
             }

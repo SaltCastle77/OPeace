@@ -113,7 +113,9 @@ public struct HomeView: View {
                     store: customPopUp,
                     title: store.customPopUpText) {
                         store.send(.view(.closePopUp))
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         store.send(.async(.blockUser(qusetionID: store.questionID ?? .zero, userID: store.userID ?? "")))
+                      }
                     } cancelAction: {
                         store.send(.view(.closePopUp))
                     }
@@ -124,7 +126,8 @@ public struct HomeView: View {
                     title: store.customPopUpText) {
                         store.send(.view(.closePopUp))
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            store.send(.navigation(.presntReport))
+                            
+                          store.send(.navigation(.presntReport))
                         }
                     } cancelAction: {
                         store.send(.view(.closePopUp))

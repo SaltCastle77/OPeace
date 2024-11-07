@@ -8,6 +8,7 @@
 public enum SettingProfile: String, CaseIterable , Equatable{
     case editProfile
     case blackManagement
+    case contactUs
     case logout
     case withDraw
     
@@ -18,6 +19,8 @@ public enum SettingProfile: String, CaseIterable , Equatable{
             return "내 정보 수정"
         case .blackManagement:
             return "차단 관리 "
+        case .contactUs:
+          return "문의하기"
         case .logout:
             return "로그아웃"
         case .withDraw:

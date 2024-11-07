@@ -15,6 +15,9 @@ update_fastlane
 
 APP_NAME = "OPeace"
 SCHEME = "OPeace-QA"
+APP_REALSE_NAME = "OPeace"
+APP_REALSE_SCHEME= "OPeace_Release"
+TEAM_ID = ENV["TEAM_ID"]
 
 ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "600"
 default_platform(:ios)
@@ -49,6 +52,29 @@ desc "Install Profiles and Build My App"
  
    end
 
+desc "Install Profiles and Build My App"
+  lane :build_ipa_Realse do
+    clear_derived_data
+
+   build_app(
+      workspace: "#{APP_NAME}.xcworkspace",
+      scheme: "#{APP_REALSE_SCHEME}",
+    silent: true,
+    clean: true,
+    output_directory: "./fastlane/output/",
+    output_name: "OPeace.ipa",
+      export_method: "app-store",
+      export_options: {
+      signingStyle: "manual",
+          uploadBitcode: false,
+            provisioningProfiles: {
+           "io.Opeace.Opeace" => "match AppStore io.Opeace.Opeace"
+           
+             }
+        }
+    )
+ 
+   end
 
 #  ✅ 테스트 플라이트 업로드
   desc "Push to TestFlight"
@@ -91,19 +117,60 @@ lane :send_slack do
    end
 end
 
-desc "Push to TestFlight"
-lane :QA_GIT do |options|
-  app_store_connect_api_key(is_key_content_base64: true, in_house: false)
-   build_ipa_Git
-    upload_to_testflight(
-       demo_account_required: true,
-       beta_app_description:" OPeace",
-       ipa:"./fastlane/output/OPeace.ipa",
-       changelog:"변경사항",
-       groups: ["Opeace", "OpenOpeaceTest"],
-       skip_waiting_for_build_processing: true)
 
-      send_slack
+lane :send_slack_Realse do
+    version_number = get_version_number(xcodeproj: "Projects/App/#{APP_NAME}.xcodeproj", target: "#{SCHEME}")
+    build_number = latest_testflight_build_number(app_identifier: "io.Opeace.Opeace") + 1
+    
+    slack(
+      message: "앱 배포가 완료되었습니다.",
+      icon_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/앱스토어.png/600px-앱스토어.png?20240730002648",
+      channel: "#개발-ios",
+      username: "Opeace",
+      success: true,
+      slack_url: ENV["SLACK_URL_UPLOAD"],
+      default_payloads: [:lane, :test_result, :git_branch, :git_author, :last_git_commit],
+      payload: { "Version": version_number + "(" + build_number.to_s + ")" }
+    )   
+    error do |lane, exception, options|
+    slack(
+      message: "에러 발생 : #{exception}",
+      success: false,
+      slack_url: ENV["SLACK_URL_UPLOAD"]
+    )
+   end
+end
+
+
+desc "Push a new release build to the App Store"
+lane :release do |options|
+  # ✅ 매개변수를 넣어서
+  # fastlane release version:"2.1.0"
+  # 과 같이 사용할 수 있다.
+  if options[:version]
+    app_store_connect_api_key(is_key_content_base64: true, in_house: false)
+    match(type: "appstore")
+    build_ipa_Realse
+    upload_to_app_store(
+      app_version: options[:version],
+      username: "shuwj81@daum.net",
+      team_id: "N94CS4N6VR",
+      ipa: "./fastlane/output/OPeace.ipa",
+      skip_metadata: false,
+      metadata_path: "./fastlane/metadata",
+      skip_screenshots: true,
+      force: true,
+      submit_for_review: true,
+      automatic_release: false,
+      precheck_include_in_app_purchases: false,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_encryption_updated: false,
+        export_compliance_uses_encryption: false,
+        content_rights_contains_third_party_content: false
+      }
+    )
+      send_slack_Realse
     end
-    # ✅ if 문을1
+  end
 end

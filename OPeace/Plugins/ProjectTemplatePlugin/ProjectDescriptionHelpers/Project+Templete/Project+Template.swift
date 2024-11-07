@@ -74,6 +74,10 @@ public extension Project {
     
     return Project(
       name: name,
+      options: .options(
+        defaultKnownRegions: ["en", "ko"],
+        developmentRegion: "ko"
+      ),
       packages: packages,
       settings: settings,
       targets: targets,
@@ -157,6 +161,10 @@ public extension Project {
     
     return Project(
       name: name,
+      options: .options(
+        defaultKnownRegions: ["en", "ko"],
+        developmentRegion: "ko"
+      ),
       packages: packages,
       settings: settings,
       targets: targets,
@@ -170,7 +178,7 @@ public extension Project {
 extension Scheme {
   public static func makeScheme(target: ConfigurationName, name: String) -> Scheme {
     // Scheme 이름을 "앱 이름 + 타겟 이름" 형식으로 생성
-    let schemeName = "\(name)-\(target.rawValue)"
+    let schemeName = "\(name)_\(target.rawValue)"
     
     // Run Action 설정 (Debug일 때만 디버거 첨부)
     let runAction = target == .debug

@@ -40,7 +40,7 @@ public struct ReportView: View {
                     reportReasonTextFieldView()
                     
                     Spacer()
-                        .frame(height: UIScreen.screenHeight * 0.5)
+                        .frame(height: UIScreen.screenHeight * 0.45)
                     
                     CustomButton(
                         action: {
@@ -81,6 +81,21 @@ extension ReportView {
                 Spacer()
             }
             
+          Spacer()
+            .frame(height: 20)
+          
+          
+          HStack {
+              Text("신고 내용은 24시간 이내 조치됩니다.")
+                  .pretendardFont(family: .Bold, size: 16)
+                  .foregroundStyle(Color.basicWhite)
+              
+              Spacer()
+          }
+          
+          Spacer()
+            .frame(height: 10)
+          
         }
         .padding(.horizontal, 20)
     }
