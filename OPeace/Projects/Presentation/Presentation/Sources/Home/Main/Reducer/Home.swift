@@ -352,6 +352,7 @@ public struct Home {
             state.selectedJob = ""
             state.selectedItem = ""
             state.isActivateJobButton = false
+          
             return .send(.async(.filterQuestionList(job: "", generation: currentSelectedGeneration, sortBy: currentSortBy)))
         } else {
             state.selectedJobButtonTitle = job
@@ -427,12 +428,36 @@ public struct Home {
     case .qusetsionListResponse(let result):
         switch result {
         case .success(let qusetsionListData):
-            state.questionModel = qusetsionListData
+            // userInfoModel.isLogOut 확인
+            if state.userInfoModel?.isLogOut == true {
+                // 로그아웃 상태에서는 필터링하지 않고 원래 데이터를 그대로 사용
+                state.questionModel = qusetsionListData
+            } else {
+                // 차단된 닉네임 리스트 가져오기
+                let blockedNicknames = state.userBlockListModel?.data?.compactMap { $0.nickname } ?? []
+                
+                // 차단된 닉네임 제외한 결과 필터링
+                let filteredResults = qusetsionListData.data?.results?.filter { item in
+                    guard let nickname = item.userInfo?.userNickname else { return true }
+                    return !blockedNicknames.contains(nickname)
+                }
+                
+                // 새로운 데이터를 생성하여 필터링된 결과를 저장
+                var updatedQuestionListData = qusetsionListData
+                updatedQuestionListData.data = updatedQuestionListData.data.map { data in
+                    var modifiedData = data
+                    modifiedData.results = filteredResults
+                    return modifiedData
+                }
+                
+                state.questionModel = updatedQuestionListData
+            }
+            
+            // 페이지 크기 증가
             state.pageSize += 20
         case .failure(let error):
-            Log.error("QuestionList 에어", error.localizedDescription)
+            Log.error("QuestionList 에러", error.localizedDescription)
         }
-        
         return .none
         
     case .isVoteQuestionLike(questioniD: let questioniD):

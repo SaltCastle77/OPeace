@@ -22,7 +22,7 @@ public struct QuestionResponseModel: Codable, Equatable {
   public let error: String?
   public let count: Int?
   public let next, previous: String?
-  public let results: [ResultData]?
+  public var results: [ResultData]?
   
   public init(
     error: String?,

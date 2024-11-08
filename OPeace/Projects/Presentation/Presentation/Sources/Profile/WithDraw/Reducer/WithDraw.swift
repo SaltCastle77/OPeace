@@ -134,16 +134,7 @@ public struct WithDraw {
                     return .run { send in
                         switch socialType {
                         case  "kakao":
-                            UserApi.shared.unlink {(error) in
-                                if let error = error {
-                                    Log.error("카카오 회원 탈퇴 에러", error.localizedDescription)
-                                }
-                                else {
-                                  _Concurrency.Task {
-                                        await send(.async(.deleteUser(reason: reason)))
-                                    }
-                                }
-                            }
+                          await send(.async(.deleteUser(reason: reason)))
                         case "apple":
                             await send(.async(.appleRevoke))
                             try await clock.sleep(for: .seconds(0.3))
