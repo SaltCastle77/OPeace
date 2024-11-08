@@ -33,8 +33,7 @@ public struct HomeView: View {
                 questionLIstView()
             }
             .onAppear {
-                store.send(.async(.fetchQuestionList))
-                store.send(.async(.fetchUserProfile))
+              store.send(.async(.appearData))
                 startRefreshData()
                 appearFloatingPopUp()
             }
@@ -115,6 +114,10 @@ public struct HomeView: View {
                         store.send(.view(.closePopUp))
                       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         store.send(.async(.blockUser(qusetionID: store.questionID ?? .zero, userID: store.userID ?? "")))
+                      
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                          store.send(.async(.appearData))
+                        }
                       }
                     } cancelAction: {
                         store.send(.view(.closePopUp))
@@ -320,56 +323,116 @@ extension HomeView {
     }
     
     
-    @ViewBuilder
-    private func qustionCardView() -> some View {
-        if let resultData = store.questionModel?.data?.results {
-            FlippableCardView(
-                data: resultData,
-                shouldSaveState: true) {
-                if !store.isFilterQuestion {
-                    store.send(.async(.fetchQuestionList))
+  @ViewBuilder
+  private func qustionCardView() -> some View {
+    if store.userInfoModel?.isLogOut == true {
+      noFilterQuestionList()
+    } else {
+      filterQuestionList()
+    }
+  }
+  
+  @ViewBuilder
+  private func filterQuestionList() -> some View {
+    if let resultData = store.questionModel?.data?.results?.filter({ item in
+        let blockedNicknames = store.userBlockListModel?.data?.compactMap { $0.nickname } ?? []
+        guard let nickname = item.userInfo?.userNickname else { return true }
+        return !blockedNicknames.contains(nickname)
+    }) {
+        FlippableCardView(
+            data: resultData,
+            shouldSaveState: true
+        ) {
+            if !store.isFilterQuestion {
+                store.send(.async(.fetchQuestionList))
+            }
+        } onItemAppear: { item in
+            if let resultItem = item as? ResultData, resultItem.id != store.questionID {
+                store.questionID = resultItem.id ?? 0
+            }
+        } content: { item in
+            CardItemView(
+                resultData: item,
+                statsData: store.statusQuestionModel?.data,
+                isProfile: false,
+                userLoginID: store.profileUserModel?.data?.socialID ?? "",
+                generationColor: store.cardGenerationColor,
+                isTapAVote: $store.isTapAVote,
+                isTapBVote: $store.isTapBVote,
+                isLogOut: store.userInfoModel?.isLogOut ?? false,
+                isLookAround: store.userInfoModel?.isLookAround ?? false,
+                isDeleteUser: store.userInfoModel?.isDeleteUser ?? false,
+                answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+                editTapAction: {
+                    handleEditTap(item: item)
+                },
+                likeTapAction: { userID in
+                    handleLikeTap(userID: userID)
+                },
+                appearStatusAction: {
+                },
+                choiceTapAction: {
+                    handleChoiceTap(item: item)
                 }
-            } onItemAppear: { item in
-                if let resultItem = item as? ResultData, resultItem.id != store.questionID {
-                    store.questionID = resultItem.id ?? 0
-                }
-            } content: { item in
-                CardItemView(
-                    resultData: item,
-                    statsData: store.statusQuestionModel?.data,
-                    isProfile: false,
-                    userLoginID: store.profileUserModel?.data?.socialID ?? "",
-                    generationColor: store.cardGenerationColor,
-                    isTapAVote: $store.isTapAVote,
-                    isTapBVote: $store.isTapBVote,
-                    isLogOut: store.userInfoModel?.isLogOut ?? false,
-                    isLookAround: store.userInfoModel?.isLookAround ?? false,
-                    isDeleteUser: store.userInfoModel?.isDeleteUser ?? false,
-                    answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
-                    editTapAction: {
-                        handleEditTap(item: item)
-                    },
-                    likeTapAction: { userID in
-                        handleLikeTap(userID: userID)
-                    },
-                    appearStatusAction: {
-
-                    },
-                    choiceTapAction: {
-                        handleChoiceTap(item: item)
-                    }
-                )
-//                .onAppear {
-//                    store.send(.async(.statusQuestion(id: item.id ?? .zero)))
-//                }
-                
-                .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
-                    guard let id = item.id, id == newValue else { return }
-                    store.send(.async(.statusQuestion(id: newValue)))
-                }
+            )
+            .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
+                guard let id = item.id, id == newValue else { return }
+                store.send(.async(.statusQuestion(id: newValue)))
             }
         }
     }
+  }
+  
+  @ViewBuilder
+  private func noFilterQuestionList() -> some View {
+    if let resultData = store.questionModel?.data?.results {
+          FlippableCardView(
+              data: resultData,
+              shouldSaveState: true) {
+              if !store.isFilterQuestion {
+                  store.send(.async(.fetchQuestionList))
+              }
+          } onItemAppear: { item in
+              if let resultItem = item as? ResultData, resultItem.id != store.questionID {
+                  store.questionID = resultItem.id ?? 0
+              }
+          } content: { item in
+              CardItemView(
+                  resultData: item,
+                  statsData: store.statusQuestionModel?.data,
+                  isProfile: false,
+                  userLoginID: store.profileUserModel?.data?.socialID ?? "",
+                  generationColor: store.cardGenerationColor,
+                  isTapAVote: $store.isTapAVote,
+                  isTapBVote: $store.isTapBVote,
+                  isLogOut: store.userInfoModel?.isLogOut ?? false,
+                  isLookAround: store.userInfoModel?.isLookAround ?? false,
+                  isDeleteUser: store.userInfoModel?.isDeleteUser ?? false,
+                  answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+                  editTapAction: {
+                      handleEditTap(item: item)
+                  },
+                  likeTapAction: { userID in
+                      handleLikeTap(userID: userID)
+                  },
+                  appearStatusAction: {
+
+                  },
+                  choiceTapAction: {
+                      handleChoiceTap(item: item)
+                  }
+              )
+//                .onAppear {
+//                    store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+//                }
+              
+              .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
+                  guard let id = item.id, id == newValue else { return }
+                  store.send(.async(.statusQuestion(id: newValue)))
+              }
+          }
+      }
+  }
 
 
 

@@ -32,6 +32,7 @@ public struct Home {
         var isVoteAnswerQuestionModel: QuestionVoteModel? = nil
         var profileUserModel: UpdateUserInfoModel? = nil
         var statusQuestionModel: StatusQuestionModel? = nil
+        var userBlockListModel: UserBlockListModel?  = nil
         
         var cardGenerationColor: Color = .basicBlack
         var isLikeTap: Bool = false
@@ -123,27 +124,30 @@ public struct Home {
     
   
     
-    //MARK: - AsyncAction 비동기 처리 액션
-    public enum AsyncAction: Equatable {
-        case fetchQuestionList
-        case qusetsionListResponse(Result<QuestionModel, CustomError>)
-        case isVoteQuestionLike(questioniD: Int)
-        case isVoteQuestionLikeResponse(Result<VoteQuestionLikeModel, CustomError>)
-        case blockUser(qusetionID: Int, userID: String)
-        case blockUserResponse(Result<UserBlockModel, CustomError>)
-        case isVoteQuestionAnswer(questionID: Int, choiceAnswer: String)
-        case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
-        case fetchUserProfile
-        case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
-        case jobFilterSelected(job: String)
-        case generationFilterSelected(generation: String)
-        case sortedFilterSelected(sortedEnum:QuestionSort)
-        case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
-        case statusQuestion(id: Int)
-        case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
-        case clearFilter
-        
-    }
+  //MARK: - AsyncAction 비동기 처리 액션
+  public enum AsyncAction: Equatable {
+    case fetchQuestionList
+    case qusetsionListResponse(Result<QuestionModel, CustomError>)
+    case isVoteQuestionLike(questioniD: Int)
+    case isVoteQuestionLikeResponse(Result<VoteQuestionLikeModel, CustomError>)
+    case blockUser(qusetionID: Int, userID: String)
+    case blockUserResponse(Result<UserBlockModel, CustomError>)
+    case isVoteQuestionAnswer(questionID: Int, choiceAnswer: String)
+    case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
+    case fetchUserProfile
+    case userProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+    case jobFilterSelected(job: String)
+    case generationFilterSelected(generation: String)
+    case sortedFilterSelected(sortedEnum:QuestionSort)
+    case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
+    case statusQuestion(id: Int)
+    case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
+    case clearFilter
+    case fetchUserBlockList
+    case fetchUserBlockResponse(Result<UserBlockListModel, CustomError>)
+    case appearData
+    
+  }
     
     //MARK: - 앱내에서 사용하는 액션
     public enum InnerAction: Equatable {
@@ -165,9 +169,7 @@ public struct Home {
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
-        Reduce<State, Action> {
-            state,
-            action in
+        Reduce { state, action in
             switch action {
             case .binding(_):
                 return .none
@@ -179,367 +181,22 @@ public struct Home {
                 return .none
                 
             case .view(let View):
-                switch View {
-                case .appaerProfiluserData:
-                    return .run { send in
-//                        await send(.profile(.scopeFetchUser))
-                    }
-                           
-                case .prsentCustomPopUp:
-                    state.destination = .customPopUp(.init())
-                    return .none
-                    
-                case .closePopUp:
-                    state.destination = nil
-                    return .none
-                case .closeFilterModal:
-                    state.destination = nil
-                    return .none
-
-                case .presntFloatintPopUp:
-                    state.destination = .floatingPopUP(.init())
-                    return .none
-                    
-                case .timeToCloseFloatingPopUp:
-                    return .run { send in
-                        try await clock.sleep(for: .seconds(1.5))
-                        await send(.view(.closePopUp))
-                    }
-                case .filterViewTappd(let filterEnum):
-                    state.destination = .homeFilter(.init(homeFilterEnum: filterEnum))
-                    switch filterEnum {
-                    case .job:
-                        state.selectedItem = state.selectedJob
-                    case .generation:
-                        state.selectedItem = state.selectedGeneration
-                    case .sorted(let sortedOrderEnum):
-                        state.selectedItem = state.selectedSorted.sortedKoreanString
-                    }
-                    return .run {  send in
-                        await send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
-                    }
-                
-                case .presntEditQuestion:
-                    state.destination = .editQuestion(.init())
-                    return .none
-                    
-                case .closeEditQuestionModal:
-                    state.destination = nil
-                    return .none
-                    
-                case .switchModalAction(let editQuestion):
-                    nonisolated(unsafe) let editQuestion = editQuestion
-                    switch editQuestion {
-                    case .reportUser:
-                        Log.debug("신고하기")
-                        state.customPopUpText = "정말 신고하시겠어요?"
-                        state.isReportQuestionPopUp = true
-                    case .blockUser:
-                        Log.debug("차단하기")
-                        state.customPopUpText = "정말 차단하시겠어요?"
-                        state.isTapBlockUser = true
-                    }
-                    
-                    return .run {  send in
-                        switch editQuestion {
-                        case .reportUser:
-                            Log.debug("신고하기")
-                          await send(.view(.prsentCustomPopUp))
-                        case .blockUser:
-                            Log.debug("차단하기")
-                          await send(.view(.prsentCustomPopUp))
-                        }
-                    }
-                    
-                }
+              return handleViewAction(state: &state, action: View)
                 
             case .async(let AsyncAction):
-                switch AsyncAction {
-                case .fetchQuestionList:
-                    let pageSize = state.pageSize
-                    return .run {  send in
-                        let questionResult = await Result {
-                            try await questionUseCase.fetchQuestionList(
-                                page: 1,
-                                pageSize: pageSize,
-                                job: "",
-                                generation: "",
-                                sortBy: .empty)
-                        }
-                        
-                        switch questionResult {
-                        case .success(let questionModel):
-                            if let questionModel = questionModel {
-                                await send(.async(.qusetsionListResponse(.success(questionModel))))
-                            }
-                        case .failure(let error):
-                            await send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
-                        }
-                        
-                    }
-                    
-                case .jobFilterSelected(let job):
-                    let currentSelectedGeneration = state.selectedGeneration
-                    nonisolated(unsafe) let currentSortBy = state.selectedSorted
-                    if state.selectedJob == job {
-                        state.selectedJobButtonTitle = "계열"
-                        state.selectedJob = ""
-                        state.selectedItem = ""
-                        state.isActivateJobButton = false
-                        return .send(.async(.filterQuestionList(job: "", generation: currentSelectedGeneration, sortBy: currentSortBy)))
-                    } else {
-                        state.selectedJobButtonTitle = job
-                        state.selectedJob = job
-                        state.selectedItem = ""
-                        state.isActivateJobButton = true
-                        return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
-                    }
-                case .generationFilterSelected(let generation):
-                    let currentSelectedJob = state.selectedJob
-                    nonisolated(unsafe) let currentSortBy = state.selectedSorted
-                    if state.selectedGeneration == generation {
-                        state.selectedGenerationButtonTitle = "세대"
-                        state.selectedGeneration = ""
-                        state.selectedItem = ""
-                        state.isActivateGenerationButton = false
-                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: "", sortBy: currentSortBy)))
-                    } else {
-                        state.isActivateGenerationButton = true
-                        state.selectedGenerationButtonTitle = generation
-                        state.selectedItem = generation
-                        state.selectedGeneration = generation
-                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))
-                    }
-                case .sortedFilterSelected(let sorted):
-                    let currentSelectedGeneration = state.selectedGeneration
-                    let currentSelectedJob = state.selectedJob
-
-                    
-                    if state.selectedSorted == sorted {
-                        state.selectedSorted = .empty
-                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: .empty)))
-                    } else {
-                        state.selectedSorted = sorted
-                        state.selectedSortedButtonTitle = sorted
-                        return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: sorted)))
-                    }
-                    
-                case .filterQuestionList(let job, let generation, let sortBy):
-                    let pageSize = state.pageSize
-                     
-                    return .run {  send in
-                        let questionResult = await Result {
-                            try await questionUseCase.fetchQuestionList(
-                                page: 1,
-                                pageSize: pageSize,
-                                job: job,
-                                generation: generation,
-                                sortBy: sortBy)
-                        }
-                        
-                        switch questionResult {
-                        case .success(let questionModel):
-                            if let questionModel = questionModel {
-                                await send(.async(.qusetsionListResponse(.success(questionModel))))
-                            }
-                        case .failure(let error):
-                            await  send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
-                        }
-                    }
-                    
-                case .clearFilter:
-                    state.selectedJobButtonTitle = "계열"
-                    state.selectedJob = ""
-                    state.selectedItem = ""
-                    state.isActivateJobButton = false
-                    state.selectedGenerationButtonTitle = "세대"
-                    state.selectedGeneration = ""
-                    state.isActivateGenerationButton = false
-                    state.selectedSorted = .recent
-                    return .none
-                    
-                case .qusetsionListResponse(let result):
-                    switch result {
-                    case .success(let qusetsionListData):
-                        state.questionModel = qusetsionListData
-                        state.pageSize += 20
-                    case .failure(let error):
-                        Log.error("QuestionList 에어", error.localizedDescription)
-                    }
-                    
-                    return .none
-                    
-                case .isVoteQuestionLike(questioniD: let questioniD):
-                    return .run { send in
-                        let voteQuestionLikeResult = await Result {
-                            try await questionUseCase.isVoteQuestionLike(questionID: questioniD)
-                        }
-                        
-                        switch voteQuestionLikeResult {
-                        case .success(let voteQuestionLikeResult):
-                            if let voteQuestionLikeResult  = voteQuestionLikeResult {
-                                await  send(.async(.isVoteQuestionLikeResponse(
-                                    .success(voteQuestionLikeResult))))
-                                
-                                await send(.async(.fetchQuestionList))
-                            }
-                        case .failure(let error):
-                            await send(.async(.isVoteQuestionLikeResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
-                        }
-                    }
-                    
-                case .isVoteQuestionLikeResponse(let voteQuestionResult):
-                    switch voteQuestionResult {
-                    case .success(let voteQuestionResult):
-                        state.isVoteLikeQuestionModel = voteQuestionResult
-                        state.isLikeTap.toggle()
-                    case .failure(let error):
-                        Log.error("좋아요 누르기 에러", error.localizedDescription)
-                    }
-                    return .none
-                    
-                case .blockUser(let qusetionID, let userID):
-                    return .run { send in
-                        let blockUserResult = await Result {
-                            try await authUseCase.userBlock(questioniD: qusetionID, userID: userID)
-                        }
-                        switch blockUserResult {
-                        case .success(let blockUserResult):
-                            if let blockUserResult = blockUserResult {
-                                await  send(.async(.blockUserResponse(.success(blockUserResult))))
-                                
-                                try await clock.sleep(for: .seconds(0.4))
-                                await  send(.view(.presntFloatintPopUp))
-                                
-                                await send(.view(.timeToCloseFloatingPopUp))
-                            }
-                        case .failure(let error):
-                            await  send(.async(.blockUserResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
-                        }
-                    }
-                    
-                case .blockUserResponse(let result):
-                    switch result {
-                    case .success(let blockUserResult):
-                        state.userBlockModel = blockUserResult
-                        state.floatingText = "차단이 완료 되었어요!"
-                        state.floatingImage = .succesLogout
-                    case .failure(let error):
-                        Log.error("유저 차단 에러", error.localizedDescription)
-                    }
-                    return .none
-                    
-                case .isVoteQuestionAnswer(let questionID, let choiceAnswer):
-                    return .run { send in
-                        let voteQuestionAnswerResult = await Result {
-                            try await questionUseCase.isVoteQuestionAnswer(questionID: questionID, choicAnswer: choiceAnswer)
-                        }
-                        
-                        switch voteQuestionAnswerResult {
-                        case .success(let voteQuestionResult):
-                            if let voteQuestionResult  = voteQuestionResult {
-                                await send(.async(.isVoteQuestionAnsweResponse(
-                                    .success(voteQuestionResult))))
-                                
-                            }
-                        case .failure(let error):
-                            await send(.async(.isVoteQuestionAnsweResponse(.failure(
-                                CustomError.createQuestionError(error.localizedDescription)))))
-                        }
-                    }
-                    
-                case .isVoteQuestionAnsweResponse(let reuslt):
-                    switch reuslt {
-                    case .success(let isVoteQuestionAnswer):
-                        state.isVoteAnswerQuestionModel = isVoteQuestionAnswer
-                        state.isRoatinCard = true
-                    case .failure(let error):
-                        Log.error("유저 투표 에러", error.localizedDescription)
-                    }
-                    return .none
-                    
-                    
-                case .fetchUserProfile:
-                    return .run {  send in
-                        let fetchUserData = await Result {
-                            try await authUseCase.fetchUserInfo()
-                        }
-                        
-                        switch fetchUserData {
-                        case .success(let fetchUserResult):
-                            if let fetchUserResult = fetchUserResult {
-                                await send(.async(.userProfileResponse(.success(fetchUserResult))))
-                            }
-                        case .failure(let error):
-                            await send(.async(.userProfileResponse(.failure(
-                                CustomError.userError(error.localizedDescription)))))
-                            
-                        }
-                    }
-                    
-                case .userProfileResponse(let result):
-                    switch result {
-                    case .success(let resultData):
-                        state.profileUserModel = resultData
-                    case let .failure(error):
-                        Log.network("프로필 오류", error.localizedDescription)
-                    }
-                    return .none
-                    
-                case .statusQuestion(id: let id):
-                    return .run { send in
-                        let questionResult = await Result {
-                            try await questionUseCase.statusQuestion(questionID: id)
-                        }
-                        
-                        switch questionResult {
-                        case .success(let questionStatusData):
-                        if let questionStatusData = questionStatusData {
-                                await send(.async(.statusQuestionResponse(.success(questionStatusData))))
-                            }
-                        case .failure(let error):
-                            await send(.async(.statusQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
-                        }
-                    }
-                    
-                case .statusQuestionResponse(let result):
-                    switch result {
-                    case .success(let statusQuestionData):
-                        state.statusQuestionModel = statusQuestionData
-                    case .failure(let error):
-                        Log.error("질문 에대한 결과 보여주기 실패", error.localizedDescription)
-                    }
-                    return .none
-                }
+              return handleAsyncAction(state: &state, action: AsyncAction)
                 
             case .inner(let InnerAction):
-                switch InnerAction {
-                    
-                }
+              return handleInnerAction(state: &state, action: InnerAction)
                 
             case .navigation(let NavigationAction):
-                switch NavigationAction {
-                case .presntProfile:
-                    return .run {  send in
-//                        await send(.profile(.scopeFetchUser))
-                    }
-                    
-                case .presntLogin:
-                    return .none
-                    
-                case .presntWriteQuestion:
-                    return .none
-                    
-                case .presntReport:
-                    return .none
-                }
+              return handleNavigationAction(state: &state, action: NavigationAction)
                 
             default:
                 return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
-
         .onChange(of: \.questionModel) { oldValue, newValue in
             Reduce { state, action in
                 state.questionModel = newValue
@@ -559,5 +216,417 @@ public struct Home {
             }
         }
     }
+  
+  private func handleViewAction(
+    state: inout State,
+    action: View
+  ) -> Effect<Action> {
+    switch action {
+    case .appaerProfiluserData:
+        return .run { send in
+//                        await send(.profile(.scopeFetchUser))
+        }
+               
+    case .prsentCustomPopUp:
+        state.destination = .customPopUp(.init())
+        return .none
+        
+    case .closePopUp:
+        state.destination = nil
+        return .none
+    case .closeFilterModal:
+        state.destination = nil
+        return .none
+
+    case .presntFloatintPopUp:
+        state.destination = .floatingPopUP(.init())
+        return .none
+        
+    case .timeToCloseFloatingPopUp:
+        return .run { send in
+            try await clock.sleep(for: .seconds(1.5))
+            await send(.view(.closePopUp))
+        }
+    case .filterViewTappd(let filterEnum):
+        state.destination = .homeFilter(.init(homeFilterEnum: filterEnum))
+        switch filterEnum {
+        case .job:
+            state.selectedItem = state.selectedJob
+        case .generation:
+            state.selectedItem = state.selectedGeneration
+        case .sorted(let sortedOrderEnum):
+            state.selectedItem = state.selectedSorted.sortedKoreanString
+        }
+        return .run {  send in
+            await send(.destination(.presented(.homeFilter(.async(.fetchListByFilterEnum(filterEnum))))))
+        }
+    
+    case .presntEditQuestion:
+        state.destination = .editQuestion(.init())
+        return .none
+        
+    case .closeEditQuestionModal:
+        state.destination = nil
+        return .none
+        
+    case .switchModalAction(let editQuestion):
+        nonisolated(unsafe) let editQuestion = editQuestion
+        switch editQuestion {
+        case .reportUser:
+            Log.debug("신고하기")
+            state.customPopUpText = "정말 신고하시겠어요?"
+            state.isReportQuestionPopUp = true
+        case .blockUser:
+            Log.debug("차단하기")
+            state.customPopUpText = "정말 차단하시겠어요?"
+            state.isTapBlockUser = true
+        }
+        
+        return .run {  send in
+            switch editQuestion {
+            case .reportUser:
+                Log.debug("신고하기")
+              await send(.view(.prsentCustomPopUp))
+            case .blockUser:
+                Log.debug("차단하기")
+              await send(.view(.prsentCustomPopUp))
+            }
+        }
+    }
+  }
+  
+  private func handleNavigationAction(
+    state: inout State,
+    action: NavigationAction
+  ) -> Effect<Action> {
+    switch action {
+    case .presntProfile:
+        return .run {  send in
+//                        await send(.profile(.scopeFetchUser))
+        }
+        
+    case .presntLogin:
+        return .none
+        
+    case .presntWriteQuestion:
+        return .none
+        
+    case .presntReport:
+        return .none
+    }
+  }
+  
+  private func handleAsyncAction(
+    state: inout State,
+    action: AsyncAction
+  ) -> Effect<Action> {
+    switch action {
+    case .fetchQuestionList:
+        let pageSize = state.pageSize
+        return .run {  send in
+            let questionResult = await Result {
+                try await questionUseCase.fetchQuestionList(
+                    page: 1,
+                    pageSize: pageSize,
+                    job: "",
+                    generation: "",
+                    sortBy: .empty)
+            }
+            
+            switch questionResult {
+            case .success(let questionModel):
+                if let questionModel = questionModel {
+                    await send(.async(.qusetsionListResponse(.success(questionModel))))
+                }
+            case .failure(let error):
+                await send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+            }
+            
+        }
+        
+    case .jobFilterSelected(let job):
+        let currentSelectedGeneration = state.selectedGeneration
+        nonisolated(unsafe) let currentSortBy = state.selectedSorted
+        if state.selectedJob == job {
+            state.selectedJobButtonTitle = "계열"
+            state.selectedJob = ""
+            state.selectedItem = ""
+            state.isActivateJobButton = false
+            return .send(.async(.filterQuestionList(job: "", generation: currentSelectedGeneration, sortBy: currentSortBy)))
+        } else {
+            state.selectedJobButtonTitle = job
+            state.selectedJob = job
+            state.selectedItem = ""
+            state.isActivateJobButton = true
+            return .send(.async(.filterQuestionList(job: job, generation: currentSelectedGeneration, sortBy: currentSortBy)))
+        }
+    case .generationFilterSelected(let generation):
+        let currentSelectedJob = state.selectedJob
+        nonisolated(unsafe) let currentSortBy = state.selectedSorted
+        if state.selectedGeneration == generation {
+            state.selectedGenerationButtonTitle = "세대"
+            state.selectedGeneration = ""
+            state.selectedItem = ""
+            state.isActivateGenerationButton = false
+            return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: "", sortBy: currentSortBy)))
+        } else {
+            state.isActivateGenerationButton = true
+            state.selectedGenerationButtonTitle = generation
+            state.selectedItem = generation
+            state.selectedGeneration = generation
+            return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: generation, sortBy: currentSortBy)))
+        }
+    case .sortedFilterSelected(let sorted):
+        let currentSelectedGeneration = state.selectedGeneration
+        let currentSelectedJob = state.selectedJob
+
+        
+        if state.selectedSorted == sorted {
+            state.selectedSorted = .empty
+            return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: .empty)))
+        } else {
+            state.selectedSorted = sorted
+            state.selectedSortedButtonTitle = sorted
+            return .send(.async(.filterQuestionList(job: currentSelectedJob, generation: currentSelectedGeneration, sortBy: sorted)))
+        }
+        
+    case .filterQuestionList(let job, let generation, let sortBy):
+        let pageSize = state.pageSize
+         
+        return .run {  send in
+            let questionResult = await Result {
+                try await questionUseCase.fetchQuestionList(
+                    page: 1,
+                    pageSize: pageSize,
+                    job: job,
+                    generation: generation,
+                    sortBy: sortBy)
+            }
+            
+            switch questionResult {
+            case .success(let questionModel):
+                if let questionModel = questionModel {
+                    await send(.async(.qusetsionListResponse(.success(questionModel))))
+                }
+            case .failure(let error):
+                await  send(.async(.qusetsionListResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+            }
+        }
+        
+    case .clearFilter:
+        state.selectedJobButtonTitle = "계열"
+        state.selectedJob = ""
+        state.selectedItem = ""
+        state.isActivateJobButton = false
+        state.selectedGenerationButtonTitle = "세대"
+        state.selectedGeneration = ""
+        state.isActivateGenerationButton = false
+        state.selectedSorted = .recent
+        return .none
+        
+    case .qusetsionListResponse(let result):
+        switch result {
+        case .success(let qusetsionListData):
+            state.questionModel = qusetsionListData
+            state.pageSize += 20
+        case .failure(let error):
+            Log.error("QuestionList 에어", error.localizedDescription)
+        }
+        
+        return .none
+        
+    case .isVoteQuestionLike(questioniD: let questioniD):
+        return .run { send in
+            let voteQuestionLikeResult = await Result {
+                try await questionUseCase.isVoteQuestionLike(questionID: questioniD)
+            }
+            
+            switch voteQuestionLikeResult {
+            case .success(let voteQuestionLikeResult):
+                if let voteQuestionLikeResult  = voteQuestionLikeResult {
+                    await  send(.async(.isVoteQuestionLikeResponse(
+                        .success(voteQuestionLikeResult))))
+                    
+                    await send(.async(.fetchQuestionList))
+                }
+            case .failure(let error):
+                await send(.async(.isVoteQuestionLikeResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+            }
+        }
+        
+    case .isVoteQuestionLikeResponse(let voteQuestionResult):
+        switch voteQuestionResult {
+        case .success(let voteQuestionResult):
+            state.isVoteLikeQuestionModel = voteQuestionResult
+            state.isLikeTap.toggle()
+        case .failure(let error):
+            Log.error("좋아요 누르기 에러", error.localizedDescription)
+        }
+        return .none
+        
+    case .blockUser(let qusetionID, let userID):
+        return .run { send in
+            let blockUserResult = await Result {
+                try await authUseCase.userBlock(questioniD: qusetionID, userID: userID)
+            }
+            switch blockUserResult {
+            case .success(let blockUserResult):
+                if let blockUserResult = blockUserResult {
+                    await  send(.async(.blockUserResponse(.success(blockUserResult))))
+                    
+                    try await clock.sleep(for: .seconds(0.4))
+                    await  send(.view(.presntFloatintPopUp))
+                    
+                    await send(.view(.timeToCloseFloatingPopUp))
+                }
+            case .failure(let error):
+                await  send(.async(.blockUserResponse(.failure(CustomError.createQuestionError(error.localizedDescription)))))
+            }
+        }
+        
+    case .blockUserResponse(let result):
+        switch result {
+        case .success(let blockUserResult):
+            state.userBlockModel = blockUserResult
+            state.floatingText = "차단이 완료 되었어요!"
+            state.floatingImage = .succesLogout
+        case .failure(let error):
+            Log.error("유저 차단 에러", error.localizedDescription)
+        }
+        return .none
+        
+    case .isVoteQuestionAnswer(let questionID, let choiceAnswer):
+        return .run { send in
+            let voteQuestionAnswerResult = await Result {
+                try await questionUseCase.isVoteQuestionAnswer(questionID: questionID, choicAnswer: choiceAnswer)
+            }
+            
+            switch voteQuestionAnswerResult {
+            case .success(let voteQuestionResult):
+                if let voteQuestionResult  = voteQuestionResult {
+                    await send(.async(.isVoteQuestionAnsweResponse(
+                        .success(voteQuestionResult))))
+                    
+                }
+            case .failure(let error):
+                await send(.async(.isVoteQuestionAnsweResponse(.failure(
+                    CustomError.createQuestionError(error.localizedDescription)))))
+            }
+        }
+        
+    case .isVoteQuestionAnsweResponse(let reuslt):
+        switch reuslt {
+        case .success(let isVoteQuestionAnswer):
+            state.isVoteAnswerQuestionModel = isVoteQuestionAnswer
+            state.isRoatinCard = true
+        case .failure(let error):
+            Log.error("유저 투표 에러", error.localizedDescription)
+        }
+        return .none
+        
+        
+    case .fetchUserProfile:
+        return .run {  send in
+            let fetchUserData = await Result {
+                try await authUseCase.fetchUserInfo()
+            }
+            
+            switch fetchUserData {
+            case .success(let fetchUserResult):
+                if let fetchUserResult = fetchUserResult {
+                    await send(.async(.userProfileResponse(.success(fetchUserResult))))
+                }
+            case .failure(let error):
+                await send(.async(.userProfileResponse(.failure(
+                    CustomError.userError(error.localizedDescription)))))
+                
+            }
+        }
+        
+    case .userProfileResponse(let result):
+        switch result {
+        case .success(let resultData):
+            state.profileUserModel = resultData
+        case let .failure(error):
+            Log.network("프로필 오류", error.localizedDescription)
+        }
+        return .none
+        
+    case .statusQuestion(id: let id):
+        return .run { send in
+            let questionResult = await Result {
+                try await questionUseCase.statusQuestion(questionID: id)
+            }
+            
+            switch questionResult {
+            case .success(let questionStatusData):
+            if let questionStatusData = questionStatusData {
+                    await send(.async(.statusQuestionResponse(.success(questionStatusData))))
+                }
+            case .failure(let error):
+                await send(.async(.statusQuestionResponse(.failure(CustomError.encodingError(error.localizedDescription)))))
+            }
+        }
+        
+    case .statusQuestionResponse(let result):
+        switch result {
+        case .success(let statusQuestionData):
+            state.statusQuestionModel = statusQuestionData
+        case .failure(let error):
+            Log.error("질문 에대한 결과 보여주기 실패", error.localizedDescription)
+        }
+        return .none
+      
+    case .fetchUserBlockList:
+        return .run {  send in
+            let userBlockResult = await Result {
+                try await authUseCase.fetchUserBlockList()
+            }
+            
+            switch userBlockResult {
+            case .success(let userBlockLIstData):
+                if let userBlockListData = userBlockLIstData {
+                  await send(.async(.fetchUserBlockResponse(.success(userBlockListData))))
+                }
+                
+            case .failure(let error):
+              await send(.async(.fetchUserBlockResponse(.failure(CustomError.userError(error.localizedDescription)))))
+            }
+        }
+        
+    case .fetchUserBlockResponse(let result):
+        switch result {
+        case .success(let userBlockListData):
+            state.userBlockListModel = userBlockListData
+        case .failure(let error):
+            Log.error("차단 유저 가져오기 실패", error.localizedDescription)
+        }
+        return .none
+      
+    case .appearData:
+      return .concatenate(
+        Effect.run(operation: { send in
+          await send (.async(.fetchQuestionList))
+        }),
+        Effect.run(operation: { send in
+          await send (.async(.fetchUserProfile))
+        }),
+        Effect.run(operation: { [userInfoModel = state.userInfoModel] send in
+          await send(.async(.fetchUserBlockList))
+        })
+        
+      )
+    }
+  }
+  
+  private func handleInnerAction(
+    state: inout State,
+    action: InnerAction
+  ) -> Effect<Action> {
+    switch action {
+   
+    }
+  }
+  
 }
 
