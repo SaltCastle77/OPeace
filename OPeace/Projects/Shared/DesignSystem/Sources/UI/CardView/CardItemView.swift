@@ -184,26 +184,24 @@ extension CardItemView {
         
         
         let titleHeight = calculateTextHeight(text: cleanedTitle, width: UIScreen.main.bounds.width - 88)
-        
+      let titleHeightTextCount = calculateTextHeight(text: cleanedTitle, width: UIScreen.main.bounds.width -  UIScreen.screenWidth * 0.2)
+      let smallSizeDevice = UIScreen.main.nativeBounds.width
         if let title = resultData.title {
             let titleCount = cleanedTitle.count
             let lineBreakCount = title.components(separatedBy: "\n").count - 1
-            if lineBreakCount >= 8 {
-                let baseHeight: CGFloat = 500
-                return baseHeight + titleHeight
+            if lineBreakCount >= 7 {
+              return smallSizeDevice <= 750 ?  UIScreen.screenHeight * 0.66 + titleHeightTextCount :  UIScreen.screenHeight * 0.5 + titleHeightTextCount + 10
             } else if titleCount < 12 {
-                return 520
+              return smallSizeDevice <= 750 ?  UIScreen.screenHeight * 0.74 :   UIScreen.screenHeight * 0.56
             } else if titleCount > 40 {
-                let baseHeight: CGFloat = 440
-                return baseHeight + titleHeight
+              return smallSizeDevice == 750 ?  UIScreen.screenHeight * 0.44 + titleHeightTextCount + 10 :  UIScreen.screenHeight * 0.4 + titleHeightTextCount + 10
             } else if titleCount > 12 {
-                let baseHeight: CGFloat = 450
-                return baseHeight + titleHeight
+              return smallSizeDevice <= 750 ?  UIScreen.screenHeight * 0.66 + titleHeightTextCount + 15 : UIScreen.screenHeight * 0.5 + titleHeightTextCount + 15
             } else {
-                return 520
+              return smallSizeDevice <= 750 ? UIScreen.screenHeight * 0.66 :  UIScreen.screenHeight * 0.56
             }
         } else {
-            return 520
+          return smallSizeDevice <= 750 ? UIScreen.screenHeight * 0.66 :  UIScreen.screenHeight * 0.56
         }
     }
 
@@ -224,7 +222,7 @@ extension CardItemView {
         let constraintBox = CGSize(width: width, height: .greatestFiniteMagnitude)
         let boundingBox = attributedText.boundingRect(with: constraintBox, options: .usesLineFragmentOrigin, context: nil)
         
-        return ceil(boundingBox.height) + 20
+        return ceil(boundingBox.height) + 10
     }
 
     @ViewBuilder
@@ -330,13 +328,13 @@ extension CardItemView {
                 .frame(height: 16)
             
             let processedTitle = handleExcessiveLineBreaks(in: title)
-            
+          let smallSizeDevice = UIScreen.main.nativeBounds.width
             Text(processedTitle)
                 .pretendardFont(family: .Bold, size: 28)
                 .foregroundStyle(Color.basicWhite)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
-                .minimumScaleFactor(0.7)
+                .minimumScaleFactor(0.5)
             
             Spacer()
                 .frame(height: 16)
@@ -624,6 +622,7 @@ extension CardItemView {
         choiceTitleA: String,
         choiceTitleB: String
     ) -> some View {
+      let smallSizeDevice = UIScreen.main.nativeBounds.width
         VStack {
             Spacer()
                 .frame(height: 16)
@@ -681,6 +680,8 @@ extension CardItemView {
                 .clipShape(Capsule())
         }
         .padding(.horizontal, 24)
+        .offset(y: resultData.title?.count ?? .zero > 40 ? smallSizeDevice == 750 ? -10 : 0 : 0)
+      
     }
     
     @ViewBuilder
@@ -822,6 +823,7 @@ extension CardItemView {
     
     @ViewBuilder
     private func questionChoiceVoteButton() -> some View {
+      let smallSizeDevice = UIScreen.main.nativeBounds.width
         VStack {
             Spacer()
                 .frame(height: 24)
@@ -857,6 +859,7 @@ extension CardItemView {
                     }
             }
         }
+        .offset(y: resultData.title?.count ?? .zero > 40 ? smallSizeDevice == 750 ? -10 : 0 : 0)
     }
     
     private func handleVote(for choice: String) {

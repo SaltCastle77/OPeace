@@ -39,23 +39,24 @@ public struct ReportView: View {
                     
                     reportReasonTextFieldView()
                     
-                    Spacer()
-                        .frame(height: UIScreen.screenHeight * 0.45)
                     
-                    CustomButton(
-                        action: {
-                            store.send(.async(.reportQuestion(questionID: store.questionID, reason: store.reportReasonText)))
-                        }, title: store.reportButtonComplete,
-                        config: CustomButtonConfig.create()
-                        ,isEnable: !store.reportReasonText.isEmpty
-                    )
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
-                        .frame(height: 16)
                 }
                 .bounce(false)
+              
+              Spacer()
+              
+              CustomButton(
+                  action: {
+                      store.send(.async(.reportQuestion(questionID: store.questionID, reason: store.reportReasonText)))
+                  }, title: store.reportButtonComplete,
+                  config: CustomButtonConfig.create()
+                  ,isEnable: !store.reportReasonText.isEmpty
+              )
+              .padding(.horizontal, 20)
                 
+              Spacer()
+                  .frame(height: 16)
+              
             }
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -89,8 +90,19 @@ extension ReportView {
               Text("신고 내용은 24시간 이내 조치됩니다.")
                   .pretendardFont(family: .Bold, size: 16)
                   .foregroundStyle(Color.basicWhite)
-              
+                  
               Spacer()
+          }
+          
+          Spacer()
+            .frame(height: 3)
+          
+          HStack {
+            Text("누적 신고횟수가 3회 이상인 유저는 글 작성을 할 수 없게 됩니다.")
+              .pretendardFont(family: .Bold, size: 16)
+              .foregroundStyle(Color.basicWhite)
+              
+          Spacer()
           }
           
           Spacer()
@@ -107,7 +119,7 @@ extension ReportView {
                 .frame(height: 16)
             
             TextEditor(text: $store.reportReasonText)
-                .modifier(TextEditorModifier(placeholder: "여기를 눌러서 작성해주세요.", text: $store.reportReasonText))
+                .modifier(TextEditorModifier(placeholder: "여기를 눌러서 작성해주세요. 부적절하거나 불쾌감을 줄수있는 컨텐츠는 재재 받을수 있습니다", text: $store.reportReasonText))
                 .frame(height: 160)
             
         }
