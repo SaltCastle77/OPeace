@@ -8,18 +8,18 @@
 import Foundation
 
 // MARK: - Welcome
-public struct UserLoginModel: Codable, Equatable {
-    public let data: UserLoginResponse?
+public struct UserLoginModel: Decodable {
+     let data: UserLoginResponse?
     
-    public init(data: UserLoginResponse?) {
+     init(data: UserLoginResponse?) {
         self.data = data
     }
 }
 
-public struct UserLoginResponse: Codable, Equatable {
-    public let socialID, accessToken, refreshToken: String?
-    public let expiresIn, refreshTokenExpiresIn: Int?
-    public let isExpires, isRefreshTokenExpires: Bool?
+struct UserLoginResponse: Decodable {
+     let socialID, accessToken, refreshToken: String?
+     let expiresIn, refreshTokenExpiresIn: Int?
+     let isExpires, isRefreshTokenExpires: Bool?
    
 
     enum CodingKeys: String, CodingKey {

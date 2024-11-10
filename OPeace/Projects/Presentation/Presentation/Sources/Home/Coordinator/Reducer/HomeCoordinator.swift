@@ -175,12 +175,14 @@ public struct HomeCoordinator {
             
             //MARK: - withDraw 회원 탈퇴
         case .routeAction(id: _, action: .profile(.navigation(.presntWithDraw))):
-            state.routes.push(.withDraw(.init()))
-            return .none
+          return .routeWithDelaysIfUnsupported(state.routes, action: \.router) {
+            $0.push(.withDraw(.init()))
+          }
             
         case .routeAction(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
-            state.routes.goBackToRoot()
-            return .none
+          return .routeWithDelaysIfUnsupported(state.routes, action: \.router) {
+            $0.goBackTo(\.home)
+          }
             
         case .routeAction(id: _, action: .profile(.navigation(.presntUserBlock))):
             state.routes.push(.blockUser(.init()))
