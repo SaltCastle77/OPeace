@@ -290,20 +290,23 @@ import SwiftJWT
   public func userBlock(
     questioniD: Int,
     userID: String
-  ) async throws -> UserBlockModel? {
-    return try await authProvider.requestAsync(.userBlock(
+  ) async throws -> UserBlockDTOModel? {
+    let userBlockModel = try await authProvider.requestAsync(.userBlock(
       questioniD: questioniD,
       userID: userID), decodeTo: UserBlockModel.self)
+    return userBlockModel.toUserBlockDTOToModel()
   }
   
   //MARK: - 유저 차단 리스트 조회 API
-  public func fetchUserBlockList() async throws -> UserBlockListModel? {
-    return try await authProvider.requestAsync(.fectchUserBlock, decodeTo: UserBlockListModel.self)
+  public func fetchUserBlockList() async throws -> UserBlockListDTOModel? {
+    let userBlockListModel = try await authProvider.requestAsync(.fectchUserBlock, decodeTo: UserBlockListModel.self)
+    return userBlockListModel.toUserBlockLIstDTOToModel()
   }
   
   //MARK: - 유저 차단 해제 API
-  public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
-    return try await authProvider.requestAsync(.realseUserBlock(userID: userID), decodeTo: UserBlockModel.self)
+  public func realseUserBlock(userID: String) async throws -> UserBlockDTOModel? {
+    let userBlockModel = try await authProvider.requestAsync(.realseUserBlock(userID: userID), decodeTo: UserBlockModel.self)
+    return userBlockModel.toUserBlockDTOToModel()
   }
 }
 

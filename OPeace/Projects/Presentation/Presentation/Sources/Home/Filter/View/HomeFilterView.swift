@@ -41,7 +41,7 @@ public struct HomeFilterView: View {
                   .frame(height: 22)
                 switch store.homeFilterTypeState {
                 case .job:
-                  if let jobCategories = store.jsobListModel?.data?.data {
+                  if let jobCategories = store.jsobListModel?.data.content {
                     ForEach(jobCategories, id: \.self) { jobCategory in
                       filterListItem(title: jobCategory, isSelected: selectItem == jobCategory) {
                         selectItem = jobCategory

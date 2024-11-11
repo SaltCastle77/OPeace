@@ -67,15 +67,15 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     return nil
   }
   
-  public func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel? {
+  public func userBlock(questioniD: Int, userID: String) async throws -> UserBlockDTOModel? {
     return nil
   }
   
-  public func fetchUserBlockList() async throws -> UserBlockListModel? {
+  public func fetchUserBlockList() async throws -> UserBlockListDTOModel? {
     return nil
   }
   
-  public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
+  public func realseUserBlock(userID: String) async throws -> UserBlockDTOModel? {
     return nil
   }
   

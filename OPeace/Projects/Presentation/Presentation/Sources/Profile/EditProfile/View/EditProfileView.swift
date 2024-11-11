@@ -138,7 +138,7 @@ extension EditProfileView {
             
             ScrollView {
                 VStack(spacing: 12) {
-                    if let categories = store.editProfileJobModel?.data?.data {
+                  if let categories = store.editProfileJobModel?.data.content {
                         ForEach(0..<(categories.count / 4 + (categories.count % 4 > 0 ? 1 : 0)), id: \.self) { rowIndex in
                             let startIndex = rowIndex * 4
                             let endIndex = min(startIndex + 4, categories.count)

@@ -21,9 +21,9 @@ public protocol AuthUseCaseProtocol {
   func autoLogin() async throws -> UserDTOModel?
   func deleteUser(reason: String) async throws -> DeletUserDTOModel?
   func checkUserVerify() async throws -> CheckUserDTOModel?
-  func userBlock(questioniD: Int, userID: String) async throws -> UserBlockModel?
-  func fetchUserBlockList() async throws -> UserBlockListModel?
-  func realseUserBlock(userID: String) async throws -> UserBlockModel?
+  func userBlock(questioniD: Int, userID: String) async throws -> UserBlockDTOModel?
+  func fetchUserBlockList() async throws -> UserBlockListDTOModel?
+  func realseUserBlock(userID: String) async throws -> UserBlockDTOModel?
   func makeJWT() async throws -> String
   func getAppleRefreshToken(code: String) async throws -> OAuthDTOModel?
   func revokeAppleToken() async throws -> OAuthDTOModel?

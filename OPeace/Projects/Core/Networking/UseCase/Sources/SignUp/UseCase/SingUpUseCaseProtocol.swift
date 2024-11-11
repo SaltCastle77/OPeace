@@ -10,14 +10,14 @@ import Foundation
 import Model
 
 public protocol SignUpUseCaseProtocol {
-    func checkNickName(_ nickName: String) async throws -> CheckNickNameModel?
-    func fetchJobList ()  async throws -> SignUpJobModel?
-    func updateUserInfo(
-        nickname: String,
-        year: Int,
-        job: String,
-        generation: String
-    ) async throws -> UpdateUserInfoModel?
-    func checkGeneration(year: Int) async throws -> CheckGeneraionModel?
-    
+  func checkNickName(_ nickName: String) async throws -> SignUpCheckInfoDTOModel?
+  func fetchJobList ()  async throws -> SignUpListDTOModel?
+  func updateUserInfo(
+    nickname: String,
+    year: Int,
+    job: String,
+    generation: String
+  ) async throws -> UpdateUserInfoModel?
+  func checkGeneration(year: Int) async throws -> SignUpCheckInfoDTOModel?
+  func fetchGenerationList() async throws -> GenerationListResponse?
 }

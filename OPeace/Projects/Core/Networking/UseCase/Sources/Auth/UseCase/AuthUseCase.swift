@@ -99,17 +99,17 @@ public struct AuthUseCase: AuthUseCaseProtocol {
   public func userBlock(
     questioniD: Int,
     userID: String
-  ) async throws -> UserBlockModel? {
+  ) async throws -> UserBlockDTOModel? {
     try await repository.userBlock(questioniD: questioniD, userID: userID)
   }
   
   //MARK: - 유저차단 목록
-  public func fetchUserBlockList() async throws -> UserBlockListModel? {
+  public func fetchUserBlockList() async throws -> UserBlockListDTOModel? {
     try await repository.fetchUserBlockList()
   }
   
   //MARK: - 유저 차단 해제
-  public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
+  public func realseUserBlock(userID: String) async throws -> UserBlockDTOModel? {
     try await repository.realseUserBlock(userID: userID)
   }
 }

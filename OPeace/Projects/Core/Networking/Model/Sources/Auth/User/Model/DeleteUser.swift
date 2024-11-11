@@ -10,7 +10,6 @@ import Foundation
 public struct DeleteUserModel: Decodable {
      let data: DeleteUserModelResponse?
     
-    
 }
 
 struct DeleteUserModelResponse: Decodable {

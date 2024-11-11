@@ -28,11 +28,11 @@ public struct Home {
         
         var questionModel: QuestionModel? = nil
         var isVoteLikeQuestionModel: VoteQuestionLikeModel? = nil
-        var userBlockModel: UserBlockModel? = nil
+      var userBlockModel: UserBlockDTOModel? = nil
         var isVoteAnswerQuestionModel: QuestionVoteModel? = nil
         var profileUserModel: UpdateUserInfoModel? = nil
         var statusQuestionModel: StatusQuestionModel? = nil
-        var userBlockListModel: UserBlockListModel?  = nil
+      var userBlockListModel: UserBlockListDTOModel?  = nil
         
         var cardGenerationColor: Color = .basicBlack
         var isLikeTap: Bool = false
@@ -131,7 +131,7 @@ public struct Home {
     case isVoteQuestionLike(questioniD: Int)
     case isVoteQuestionLikeResponse(Result<VoteQuestionLikeModel, CustomError>)
     case blockUser(qusetionID: Int, userID: String)
-    case blockUserResponse(Result<UserBlockModel, CustomError>)
+    case blockUserResponse(Result<UserBlockDTOModel, CustomError>)
     case isVoteQuestionAnswer(questionID: Int, choiceAnswer: String)
     case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
     case fetchUserProfile
@@ -144,7 +144,7 @@ public struct Home {
     case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
     case clearFilter
     case fetchUserBlockList
-    case fetchUserBlockResponse(Result<UserBlockListModel, CustomError>)
+    case fetchUserBlockResponse(Result<UserBlockListDTOModel, CustomError>)
     case appearData
     
   }
@@ -173,10 +173,7 @@ public struct Home {
             switch action {
             case .binding(_):
                 return .none
-                
-            case .destination(.presented(.homeFilter(.test))):
-                return .none
-                
+                         
             case .binding(\.questionID):
                 return .none
                 
@@ -434,7 +431,7 @@ public struct Home {
                 state.questionModel = qusetsionListData
             } else {
                 // 차단된 닉네임 리스트 가져오기
-                let blockedNicknames = state.userBlockListModel?.data?.compactMap { $0.nickname } ?? []
+                let blockedNicknames = state.userBlockListModel?.data.compactMap { $0.nickname } ?? []
                 
                 // 차단된 닉네임 제외한 결과 필터링
                 let filteredResults = qusetsionListData.data?.results?.filter { item in

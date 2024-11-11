@@ -335,7 +335,7 @@ extension HomeView {
   @ViewBuilder
   private func filterQuestionList() -> some View {
     if let resultData = store.questionModel?.data?.results?.filter({ item in
-        let blockedNicknames = store.userBlockListModel?.data?.compactMap { $0.nickname } ?? []
+      let blockedNicknames = store.userBlockListModel?.data.compactMap { $0.nickname } ?? []
         guard let nickname = item.userInfo?.userNickname else { return true }
         return !blockedNicknames.contains(nickname)
     }) {
