@@ -5,6 +5,8 @@
 //  Created by 서원지 on 8/25/24.
 //
 
+import Foundation
+
 public struct VoteQuestionLikeModel: Codable, Equatable {
     public let data: VoteQuestionLikeResponse?
     

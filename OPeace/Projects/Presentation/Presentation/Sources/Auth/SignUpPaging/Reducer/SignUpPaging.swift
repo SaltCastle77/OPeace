@@ -26,7 +26,7 @@ public struct SignUpPaging {
     var signUpJob = SignUpJob.State()
     var activeMenu: SignUpTab = .signUpName
     
-    var updateUserinfoModel: UpdateUserInfoModel?
+    var updateUserinfoModel: UpdateUserInfoDTOModel? = nil
     @Presents var destination: Destination.State?
     
     
@@ -64,7 +64,7 @@ public struct SignUpPaging {
   
   //MARK: - AsyncAction 비동기 처리 액션
   public enum AsyncAction: Equatable {
-    case updateUserInfoResponse(Result<UpdateUserInfoModel, CustomError>)
+    case updateUserInfoResponse(Result<UpdateUserInfoDTOModel, CustomError>)
     case updateUserInfo(
       nickName: String,
       year: Int,
@@ -186,7 +186,7 @@ public struct SignUpPaging {
               await  send(.view(.closePopUp))
               
               try await clock.sleep(for: .seconds(1))
-              if updateUserInfoData.data?.isFirstLogin == false {
+              if updateUserInfoData.data.isFirstLogin == false {
                 await send(.navigation(.presntOnboarding))
               } else {
                 await send(.navigation(.presntMainHome))

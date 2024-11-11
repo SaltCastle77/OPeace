@@ -32,10 +32,10 @@ public struct EditProfile {
     @Presents var destination: Destination.State?
     @Shared(.inMemory("userInfoModel")) var userInfoModel: UserInfoModel? = .init()
     
-    var profileUserModel: UpdateUserInfoModel?
+    var profileUserModel: UpdateUserInfoDTOModel?
     var nickNameModel: SignUpCheckInfoDTOModel?
     var editProfileJobModel: SignUpListDTOModel?
-    var updateUserinfoModel: UpdateUserInfoModel?
+    var updateUserinfoModel: UpdateUserInfoDTOModel?
     
     public init() {}
   }
@@ -68,13 +68,13 @@ public struct EditProfile {
   
   //MARK: - AsyncAction 비동기 처리 액션
   public enum AsyncAction: Equatable {
-    case fetchUserProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+    case fetchUserProfileResponse(Result<UpdateUserInfoDTOModel, CustomError>)
     case fetchUser
     case checkNickName(nickName: String)
     case checkNIckNameResponse(Result<SignUpCheckInfoDTOModel, CustomError>)
     case editProfileResponse(Result<SignUpListDTOModel, CustomError>)
     case fetchEditProfileJobList
-    case updateUserInfoResponse(Result<UpdateUserInfoModel, CustomError>)
+    case updateUserInfoResponse(Result<UpdateUserInfoDTOModel, CustomError>)
     case updateUserInfo(
       nickName: String,
       year: Int,
@@ -188,9 +188,9 @@ public struct EditProfile {
       switch result {
       case .success(let resultData):
         state.profileUserModel = resultData
-        state.profileName =  state.profileUserModel?.data?.nickname ?? ""
-        state.profileSelectedJob = state.profileUserModel?.data?.job ?? ""
-        state.profileYear = state.profileUserModel?.data?.year ?? .zero
+        state.profileName =  state.profileUserModel?.data.nickname ?? ""
+        state.profileSelectedJob = state.profileUserModel?.data.job ?? ""
+        state.profileYear = state.profileUserModel?.data.year ?? .zero
       case let .failure(error):
         #logNetwork("프로필 오류", error.localizedDescription)
       }

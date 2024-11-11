@@ -28,7 +28,7 @@ public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
     year: Int,
     job: String,
     generation: String
-  ) async throws -> UpdateUserInfoModel? {
+  ) async throws -> UpdateUserInfoDTOModel? {
     return nil
   }
   
@@ -36,7 +36,7 @@ public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
     return nil
   }
   
-  public func fetchGenerationList() async throws -> GenerationListResponse? {
+  public func fetchGenerationList() async throws -> SignUpListDTOModel? {
     nil
   }
 }

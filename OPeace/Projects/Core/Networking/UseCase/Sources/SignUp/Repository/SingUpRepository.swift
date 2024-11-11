@@ -31,8 +31,9 @@ import AsyncMoya
     return jobListModel.toSignUPListDTOToModel()
   }
   
-  public func fetchGenerationList() async throws -> GenerationListResponse? {
-    return try await provider.requestAsync(.getGenerationList, decodeTo: GenerationListResponse.self)
+  public func fetchGenerationList() async throws -> SignUpListDTOModel? {
+    let generationListModel = try await provider.requestAsync(.getGenerationList, decodeTo: GenerationListResponse.self)
+    return generationListModel.toGenerationListDTOToModel()
   }
   
   //MARK: - 유저 정보 업데이트
@@ -41,13 +42,14 @@ import AsyncMoya
     year: Int,
     job: String,
     generation: String
-  ) async throws -> UpdateUserInfoModel? {
-    return try await provider.requestAsync(.updateUserInfo(
+  ) async throws -> UpdateUserInfoDTOModel? {
+    let updateUserInfoModel = try await provider.requestAsync(.updateUserInfo(
       nickname: nickname,
       year: year,
       job: job,
       generation: generation
     ), decodeTo: UpdateUserInfoModel.self)
+    return updateUserInfoModel.toUpdateUserInfoDTOToModel()
   }
   
   //MARK: -  년도 입력시 세대 확인 API

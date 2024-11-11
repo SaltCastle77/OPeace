@@ -121,9 +121,8 @@ public struct HomeCoordinator {
     switch action {
       //MARK: - Home
     case .routeAction(id: _, action: .home(.navigation(.presntProfile))):
-      return .routeWithDelaysIfUnsupported(state.routes, action: \.router) {
-        $0.push(.profile(.init()))
-      }
+      state.routes.push(.profile(.init()))
+      return .none
       
       //MARK: - 로그인
     case .routeAction(id: _, action: .home(.navigation(.presntLogin))):
@@ -140,8 +139,7 @@ public struct HomeCoordinator {
       return .none
       
     case .routeAction(id: _, action: .report(.navigation(.presntMainHome))):
-      state.routes.goBackToRoot()
-      return .none
+      return .send(.inner(.removeToHome))
       
       //MARK: - 프로필 화면
       //MARK: - logout
@@ -160,9 +158,7 @@ public struct HomeCoordinator {
       return .none
       
     case .routeAction(id: _, action: .withDraw(.navigation(.presntDeleteUser))):
-      return .routeWithDelaysIfUnsupported(state.routes, action: \.router) {
-        $0.goBackTo(\.home)
-      }
+      return .send(.inner(.removeToHome))
       
     case .routeAction(id: _, action: .profile(.navigation(.presntUserBlock))):
       state.routes.push(.blockUser(.init()))
@@ -170,8 +166,7 @@ public struct HomeCoordinator {
       
       //MARK: - 내가 작성한 글 삭제
     case .routeAction(id: _, action: .profile(.navigation(.presntDeleteQuestion))):
-      state.routes.goBackTo(\.home)
-      return .none
+      return .send(.inner(.removeToHome))
       
       //MARK: - 작성한 글이 없을때
     case .routeAction(id: _, action: .profile(.navigation(.presnetCreateQuestionList))):
@@ -179,8 +174,7 @@ public struct HomeCoordinator {
       return .none
       
     case .routeAction(id: _, action: .createQuestion(.navigation(.presntHome))):
-      state.routes.goBackTo(\.home)
-      return .none
+      return .send(.inner(.removeToHome))
       
     default:
       return .none

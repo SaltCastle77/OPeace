@@ -7,23 +7,13 @@
 import Foundation
 
 // MARK: - Welcome
-public struct CheckGeneraionModel: Codable, Equatable {
-    public let data: CheckGeneraionResponseModel?
+public struct CheckGeneraionModel: Decodable {
+     let data: CheckGeneraionResponseModel?
     
-    public init(
-        data: CheckGeneraionResponseModel?
-    ) {
-        self.data = data
-    }
 }
 
 // MARK: - DataClass
-public struct CheckGeneraionResponseModel: Codable, Equatable {
-    public let data: String?
+struct CheckGeneraionResponseModel: Decodable {
+     let data: String?
     
-    public init(
-        data: String?
-    ) {
-        self.data = data
-    }
 }

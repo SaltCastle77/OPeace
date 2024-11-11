@@ -46,7 +46,7 @@ public final class DefaultAuthRepository: AuthRepositoryProtocol {
     return nil
   }
   
-  public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
+  public func fetchUserInfo() async throws -> UpdateUserInfoDTOModel? {
     return nil
   }
   

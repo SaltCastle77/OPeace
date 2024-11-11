@@ -7,30 +7,17 @@
 
 import Foundation
 
-public struct CheckNickNameModel: Codable, Equatable {
-    public var data: CheckNickNameResponse?
+public struct CheckNickNameModel: Decodable {
+     var data: CheckNickNameResponse?
     
-    public init(
-        data: CheckNickNameResponse?
-    ) {
-        self.data = data
-    }
 }
 
 
-public struct CheckNickNameResponse: Codable, Equatable {
-    public var exists: Bool?
-    public var message: String?
+struct CheckNickNameResponse: Decodable {
+     var exists: Bool?
+     var message: String?
     
-    public enum CodingKeys: String, CodingKey {
+     enum CodingKeys: String, CodingKey {
         case exists, message
-    }
-    
-    public init(
-        exists: Bool?,
-        message: String?
-    ) {
-        self.exists = exists
-        self.message = message
     }
 }

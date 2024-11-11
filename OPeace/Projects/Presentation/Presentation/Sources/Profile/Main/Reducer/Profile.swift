@@ -26,10 +26,10 @@ public struct Profile {
     var profileGenerationTextColor: Color = Color.gray600
     var profileGenerationText: String = ""
     
-    public var profileUserModel: UpdateUserInfoModel? = nil
+    public var profileUserModel: UpdateUserInfoDTOModel? = nil
     var userLogoutModel: UserDTOModel? = nil
     var myQuestionListModel: QuestionModel?  = nil
-    var deleteQuestionModel: DeleteQuestionModel? = nil
+    var deleteQuestionModel: FlagQuestionDTOModel? = nil
     var statusQuestionModel: StatusQuestionModel? = nil
     
     var profileGenerationYear: Int? = .zero
@@ -85,7 +85,7 @@ public struct Profile {
   
   //MARK: - AsyncAction 비동기 처리 액션
   public enum AsyncAction: Equatable {
-    case fetchUserProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+    case fetchUserProfileResponse(Result<UpdateUserInfoDTOModel, CustomError>)
     case fetchUser
     case logoutUseResponse(Result<UserDTOModel, CustomError>)
     case logoutUser
@@ -93,7 +93,7 @@ public struct Profile {
     case fetchQuestionResponse(Result<QuestionModel, CustomError>)
     case fetchQuestion
     case deleteQuestion(questionID: Int)
-    case deleteQuestionResponse(Result<DeleteQuestionModel, CustomError>)
+    case deleteQuestionResponse(Result<FlagQuestionDTOModel, CustomError>)
     case statusQuestion(id: Int)
     case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
     
@@ -283,7 +283,7 @@ public struct Profile {
       switch result {
       case .success(let resultData):
         state.profileUserModel = resultData
-        state.profileGenerationYear =  state.profileUserModel?.data?.year
+        state.profileGenerationYear =  state.profileUserModel?.data.year
         state.userInfoModel?.isChangeProfile = false
         
       case let .failure(error):

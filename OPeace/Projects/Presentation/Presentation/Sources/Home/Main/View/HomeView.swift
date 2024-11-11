@@ -355,7 +355,7 @@ extension HomeView {
                 resultData: item,
                 statsData: store.statusQuestionModel?.data,
                 isProfile: false,
-                userLoginID: store.profileUserModel?.data?.socialID ?? "",
+                userLoginID: store.profileUserModel?.data.socialID ?? "",
                 generationColor: store.cardGenerationColor,
                 isTapAVote: $store.isTapAVote,
                 isTapBVote: $store.isTapBVote,
@@ -401,7 +401,7 @@ extension HomeView {
                   resultData: item,
                   statsData: store.statusQuestionModel?.data,
                   isProfile: false,
-                  userLoginID: store.profileUserModel?.data?.socialID ?? "",
+                  userLoginID: store.profileUserModel?.data.socialID ?? "",
                   generationColor: store.cardGenerationColor,
                   isTapAVote: $store.isTapAVote,
                   isTapBVote: $store.isTapBVote,
@@ -441,10 +441,10 @@ extension HomeView {
             if item.metadata?.voted == true {
                 store.questionID = item.id ?? .zero
                 store.send(.async(.statusQuestion(id: item.id ?? .zero)))
-            } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
+            } else if store.profileUserModel?.data.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
                 store.isTapAVote = false
-            } else if store.profileUserModel?.data?.socialID != item.userInfo?.userID {
+            } else if store.profileUserModel?.data.socialID != item.userInfo?.userID {
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
                 store.send(.async(.fetchQuestionList))
                 store.questionID = item.id ?? .zero
@@ -454,10 +454,10 @@ extension HomeView {
             if item.metadata?.voted == true {
                 store.questionID = item.id ?? .zero
                 store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
-            } else if store.profileUserModel?.data?.socialID == item.userInfo?.userID {
+            } else if store.profileUserModel?.data.socialID == item.userInfo?.userID {
                 store.questionID = item.id ?? .zero
                 store.isTapBVote = false
-            } else if store.profileUserModel?.data?.socialID != item.userInfo?.userID{
+            } else if store.profileUserModel?.data.socialID != item.userInfo?.userID{
                 store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
                 store.send(.async(.fetchQuestionList))
                 store.questionID = item.id ?? .zero

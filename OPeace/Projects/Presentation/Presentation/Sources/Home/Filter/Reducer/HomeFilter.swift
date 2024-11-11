@@ -21,7 +21,7 @@ public struct HomeFilter  {
     public var selectedItem: String? = nil
     
     var jsobListModel: SignUpListDTOModel? = nil
-    var generationListModel: GenerationListResponse? = nil
+    var generationListModel: SignUpListDTOModel? = nil
     public var homeFilterTypeState: HomeFilterEnum? = nil
     
 
@@ -50,7 +50,7 @@ public struct HomeFilter  {
     case fetchListByFilterEnum(HomeFilterEnum)
     case fetchJobList
     case fetchJobResponse(Result<SignUpListDTOModel, CustomError>)
-    case fetchGenerationResponse(Result<GenerationListResponse, CustomError>)
+    case fetchGenerationResponse(Result<SignUpListDTOModel, CustomError>)
   }
   
   //MARK: - 앱내에서 사용하는 액션

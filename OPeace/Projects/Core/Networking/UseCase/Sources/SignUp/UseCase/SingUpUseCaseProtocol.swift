@@ -17,7 +17,7 @@ public protocol SignUpUseCaseProtocol {
     year: Int,
     job: String,
     generation: String
-  ) async throws -> UpdateUserInfoModel?
+  ) async throws -> UpdateUserInfoDTOModel?
   func checkGeneration(year: Int) async throws -> SignUpCheckInfoDTOModel?
-  func fetchGenerationList() async throws -> GenerationListResponse?
+  func fetchGenerationList() async throws -> SignUpListDTOModel?
 }

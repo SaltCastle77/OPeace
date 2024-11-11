@@ -34,7 +34,7 @@ public struct Login {
     
     var userLoginModel : OAuthDTOModel? = nil
     var socialType: SocialType? = nil
-    var profileUserModel: UpdateUserInfoModel? = nil
+    var profileUserModel: UpdateUserInfoDTOModel? = nil
     var refreshTokenModel: RefreshDTOModel?
     var appleRefreshTokenMode: OAuthDTOModel? = nil
     
@@ -73,7 +73,7 @@ public struct Login {
     case kakaoLoginResponse(Result<(String?, String?), CustomError>)
     case loginWIthKakao
     case kakaoLoginApiResponse(Result<OAuthDTOModel, CustomError>)
-    case fetchUserProfileResponse(Result<UpdateUserInfoModel, CustomError>)
+    case fetchUserProfileResponse(Result<UpdateUserInfoDTOModel, CustomError>)
     case fetchUser
     case refreshTokenResponse(Result<RefreshDTOModel, CustomError>)
     case refreshTokenRequest(refreshToken: String)
@@ -344,7 +344,7 @@ public struct Login {
             await send(.async(.fetchUserProfileResponse(.success(fetchUserResult))))
             UserDefaults.standard.set(true, forKey: "isFirstTimeUser")
             
-            if fetchUserResult.data?.nickname != nil && fetchUserResult.data?.year != nil && fetchUserResult.data?.job != nil {
+            if fetchUserResult.data.nickname != nil && fetchUserResult.data.year != nil && fetchUserResult.data.job != nil {
               await send(.navigation(.presentMain))
             } else {
               await send(.navigation(.presnetAgreement))

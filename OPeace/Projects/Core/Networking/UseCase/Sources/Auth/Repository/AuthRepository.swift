@@ -255,8 +255,9 @@ import SwiftJWT
   }
   
   //MARK: - 유저정보 조회 API
-  public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
-    return try await authProvider.requestAsync(.fetchUserInfo, decodeTo: UpdateUserInfoModel.self)
+  public func fetchUserInfo() async throws -> UpdateUserInfoDTOModel? {
+    let updateUserInfoModel = try await authProvider.requestAsync(.fetchUserInfo, decodeTo: UpdateUserInfoModel.self)
+    return updateUserInfoModel.toUpdateUserInfoDTOToModel()
   }
   
   //MARK: - 유저 로그아웃 API

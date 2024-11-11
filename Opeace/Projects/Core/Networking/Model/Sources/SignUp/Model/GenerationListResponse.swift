@@ -7,20 +7,14 @@
 
 import Foundation
 
-public struct GenerationListResponse: Codable, Equatable {
-    public let data: GenerationDataModel?
+public struct GenerationListResponse: Decodable {
+     let data: GenerationDataModel?
     
-    public init(data: GenerationDataModel?) {
-        self.data = data
-    }
 }
 
 
-public struct GenerationDataModel: Codable, Equatable {
-    public let data: [String]?
+struct GenerationDataModel: Decodable {
+     let data: [String]?
     
-    public init(data: [String]?) {
-        self.data = data
-    }
     
 }

@@ -71,7 +71,7 @@ public struct AuthUseCase: AuthUseCaseProtocol {
   }
   
   //MARK: - 유저 정보 조회
-  public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
+  public func fetchUserInfo() async throws -> UpdateUserInfoDTOModel? {
     try await repository.fetchUserInfo()
   }
   

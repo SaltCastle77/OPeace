@@ -39,7 +39,7 @@ public struct SignUpUseCase : SignUpUseCaseProtocol{
     year: Int,
     job: String,
     generation: String
-  ) async throws -> UpdateUserInfoModel? {
+  ) async throws -> UpdateUserInfoDTOModel? {
     try await repository.updateUserInfo(nickname: nickname, year: year, job: job, generation: generation)
   }
   
@@ -49,7 +49,7 @@ public struct SignUpUseCase : SignUpUseCaseProtocol{
   }
   
   //MARK: - 세대 리스트
-  public func fetchGenerationList() async throws -> GenerationListResponse? {
+  public func fetchGenerationList() async throws -> SignUpListDTOModel? {
     try await repository.fetchGenerationList()
   }
 }

@@ -132,7 +132,7 @@ public struct WithDraw {
           if let deleteUserData = deleteUserData {
             await send(.async(.deleteUserResponse(.success(deleteUserData))))
             
-            try await self.clock.sleep(for: .seconds(1))
+            try await self.clock.sleep(for: .seconds(0.3))
             if deleteUserData.data.status == true {
               await  send(.navigation(.presntDeleteUser))
             }

@@ -51,7 +51,7 @@ public struct HomeFilterView: View {
                     }
                   }
                 case .generation:
-                  if let generations = store.generationListModel?.data?.data {
+                  if let generations = store.generationListModel?.data.content {
                     ForEach(generations, id: \.self) { generation in
                       filterListItem(title: generation, isSelected: selectItem == generation) {
                         selectItem = generation

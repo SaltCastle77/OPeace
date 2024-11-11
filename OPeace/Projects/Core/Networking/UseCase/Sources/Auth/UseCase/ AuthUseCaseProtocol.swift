@@ -16,7 +16,7 @@ public protocol AuthUseCaseProtocol {
   func appleLogin() async throws -> OAuthDTOModel?
   func reauestKakaoLogin() async throws -> OAuthDTOModel?
   func requestRefreshToken(refreshToken : String) async throws -> RefreshDTOModel?
-  func fetchUserInfo() async throws -> UpdateUserInfoModel?
+  func fetchUserInfo() async throws -> UpdateUserInfoDTOModel?
   func logoutUser(refreshToken : String) async throws -> UserDTOModel?
   func autoLogin() async throws -> UserDTOModel?
   func deleteUser(reason: String) async throws -> DeletUserDTOModel?
