@@ -29,9 +29,9 @@ public struct Home {
     var questionModel: QuestionModel? = nil
     var isVoteLikeQuestionModel: FlagQuestionDTOModel? = nil
     var userBlockModel: UserBlockDTOModel? = nil
-    var isVoteAnswerQuestionModel: QuestionVoteModel? = nil
+    var isVoteAnswerQuestionModel: FlagQuestionDTOModel? = nil
     var profileUserModel: UpdateUserInfoDTOModel? = nil
-    var statusQuestionModel: StatusQuestionModel? = nil
+    var statusQuestionModel: StatusQuestionDTOModel? = nil
     var userBlockListModel: UserBlockListDTOModel?  = nil
     
     var cardGenerationColor: Color = .basicBlack
@@ -133,7 +133,7 @@ public struct Home {
     case blockUser(qusetionID: Int, userID: String)
     case blockUserResponse(Result<UserBlockDTOModel, CustomError>)
     case isVoteQuestionAnswer(questionID: Int, choiceAnswer: String)
-    case isVoteQuestionAnsweResponse(Result<QuestionVoteModel, CustomError>)
+    case isVoteQuestionAnsweResponse(Result<FlagQuestionDTOModel, CustomError>)
     case fetchUserProfile
     case userProfileResponse(Result<UpdateUserInfoDTOModel, CustomError>)
     case jobFilterSelected(job: String)
@@ -141,7 +141,7 @@ public struct Home {
     case sortedFilterSelected(sortedEnum:QuestionSort)
     case filterQuestionList(job: String , generation: String, sortBy: QuestionSort)
     case statusQuestion(id: Int)
-    case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
+    case statusQuestionResponse(Result<StatusQuestionDTOModel, CustomError>)
     case clearFilter
     case fetchUserBlockList
     case fetchUserBlockResponse(Result<UserBlockListDTOModel, CustomError>)

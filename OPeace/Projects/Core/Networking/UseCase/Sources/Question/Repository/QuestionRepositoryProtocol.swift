@@ -21,12 +21,12 @@ public protocol QuestionRepositoryProtocol {
     title: String,
     choiceA: String,
     choiceB: String
-  ) async throws -> CreateQuestionModel?
+  ) async throws -> CreateQuestionDTOModel?
   func isVoteQuestionLike(questionID: Int) async throws -> FlagQuestionDTOModel?
-  func isVoteQuestionAnswer(questionID: Int, choicAnswer: String) async throws -> QuestionVoteModel?
+  func isVoteQuestionAnswer(questionID: Int, choicAnswer: String) async throws -> FlagQuestionDTOModel?
   func deleteQuestion(questionID: Int) async throws -> FlagQuestionDTOModel?
   func reportQuestion(questionID: Int, reason: String) async throws -> FlagQuestionDTOModel?
-  func statusQuestion(questionID: Int) async throws -> StatusQuestionModel?
+  func statusQuestion(questionID: Int) async throws -> StatusQuestionDTOModel?
   
 }
 

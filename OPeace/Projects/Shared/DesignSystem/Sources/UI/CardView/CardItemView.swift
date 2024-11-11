@@ -18,7 +18,7 @@ public struct CardItemView: View {
     @State  var currentOffset: CGFloat = 0
     @State private var statsUpdated: Bool = false
     
-    private var statsData: QuestionStatusResponseModel?
+    private var statsData: StatusQuestionResponseDTOModel?
     private var resultData: ResultData
     private var userLoginID: String
     private var isProfile: Bool
@@ -34,7 +34,7 @@ public struct CardItemView: View {
     
     public init(
         resultData: ResultData,
-        statsData:QuestionStatusResponseModel?,
+        statsData: StatusQuestionResponseDTOModel?,
         isProfile: Bool,
         userLoginID: String,
         generationColor: Color,
@@ -340,31 +340,31 @@ extension CardItemView {
                 .frame(height: 16)
             
             if isRoated {
-                if let stats = statsData?.stats  {
+              if let stats = statsData?.status  {
                     choiceAnswerRoundViewProfile(
                         choiceTitleA: choiceA,
                         choiceTitleB: choiceB,
-                        percentageA: Int(statsData?.overallRatio?.a ?? .zero),
-                        percentageB: Int(statsData?.overallRatio?.b ?? .zero),
+                        percentageA: Int(statsData?.overallRatioA ?? .zero),
+                        percentageB: Int(statsData?.overallRatioB ?? .zero),
                         stats: stats
                     )
                 }
             } else if isProfile {
-                if let stats = statsData?.stats {
+              if let stats = statsData?.status {
                     choiceAnswerRoundViewProfile(
                         choiceTitleA: choiceA,
                         choiceTitleB: choiceB,
-                        percentageA: Int(statsData?.overallRatio?.a ?? .zero),
-                        percentageB: Int(statsData?.overallRatio?.b ?? .zero),
+                        percentageA: Int(statsData?.overallRatioA ?? .zero),
+                        percentageB: Int(statsData?.overallRatioB ?? .zero),
                         stats: stats
                     )
                 } else  {
                     choiceAnswerRoundViewProfile(
                         choiceTitleA: choiceA,
                         choiceTitleB: choiceB,
-                        percentageA: Int(statsData?.overallRatio?.a ?? .zero),
-                        percentageB: Int(statsData?.overallRatio?.b ?? .zero),
-                        stats: statsData?.stats ?? .init(a: ["a" : 0], b:  ["b" : 0]))
+                        percentageA: Int(statsData?.overallRatioA ?? .zero),
+                        percentageB: Int(statsData?.overallRatioB ?? .zero),
+                        stats: statsData?.status ?? .init(statusA: ["a" : 0], statusB:  ["b" : 0]))
                 }
             } else {
                 choiceAnswerRoundView(choiceTitleA: choiceA, choiceTitleB: choiceB)
@@ -394,7 +394,7 @@ extension CardItemView {
         choiceTitleB: String,
         percentageA: Int,
         percentageB: Int,
-        stats: Stats
+        stats: StatusDTO
     ) -> some View {
         let colorMapping: [String: Color] = [
             "Z세대": .basicPrimary,
@@ -408,7 +408,7 @@ extension CardItemView {
             Spacer()
                 .frame(height: 16)
             
-            if (stats.a?.isEmpty ?? true) && (stats.b?.isEmpty ?? true) {
+          if (stats.statusA?.isEmpty ?? true) && (stats.statusB?.isEmpty ?? true) {
                 makeDefaultRoundedView(
                     label: "A",
                     title: choiceTitleA,
@@ -422,7 +422,7 @@ extension CardItemView {
                     percentageLabel: String(percentageB)
                 )
             } else {
-                if let percentagesA = stats.a {
+              if let percentagesA = stats.statusA {
                     renderSegmentedView(
                         choiceLabel: "A",
                         choiceTitle: choiceTitleA,
@@ -434,7 +434,7 @@ extension CardItemView {
                 Spacer()
                     .frame(height: 8)
                 
-                if let percentagesB = stats.b {
+              if let percentagesB = stats.statusB {
                     renderSegmentedView(
                         choiceLabel: "B",
                         choiceTitle: choiceTitleB,

@@ -56,12 +56,13 @@ public class QuestionRepository: QuestionRepositoryProtocol {
     title: String,
     choiceA: String,
     choiceB: String
-  ) async throws -> CreateQuestionModel? {
-    return try await provider.requestAsync(.createQuestion(
+  ) async throws -> CreateQuestionDTOModel? {
+    let createQuestionModel = try await provider.requestAsync(.createQuestion(
       emoji: emoji,
       title: title,
       choiceA: choiceA,
       choiceB: choiceB), decodeTo: CreateQuestionModel.self)
+    return createQuestionModel.toCreateQuestionDTOToModel()
   }
   
   //MARK: - 좋아요 API
@@ -75,10 +76,11 @@ public class QuestionRepository: QuestionRepositoryProtocol {
   public func isVoteQuestionAnswer(
     questionID: Int,
     choicAnswer: String
-  ) async throws -> QuestionVoteModel? {
-    return try await provider.requestAsync(.isVoteQuestionAnswer(
+  ) async throws -> FlagQuestionDTOModel? {
+    let voteQuestionAnswerModel = try await provider.requestAsync(.isVoteQuestionAnswer(
       id: questionID,
       userChoice: choicAnswer), decodeTo: QuestionVoteModel.self)
+    return voteQuestionAnswerModel.toFlagQuestionDTOToModel()
   }
   
   //MARK: - 질문 삭제 API
@@ -102,8 +104,9 @@ public class QuestionRepository: QuestionRepositoryProtocol {
   //MARK: - 유저 투표 결과 API
   public func statusQuestion(
     questionID: Int
-  ) async throws -> StatusQuestionModel? {
-    return try await provider.requestAsync(.statusQuestion(
+  ) async throws -> StatusQuestionDTOModel? {
+    let statusQuestionModel = try await provider.requestAsync(.statusQuestion(
       id: questionID), decodeTo: StatusQuestionModel.self)
+    return statusQuestionModel.toStatusDTOToModel()
   }
 }

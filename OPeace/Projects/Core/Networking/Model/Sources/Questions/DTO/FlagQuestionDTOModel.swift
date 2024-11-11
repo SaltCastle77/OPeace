@@ -17,7 +17,7 @@ public struct FlagQuestionDTOModel: Codable, Equatable {
 
 public struct FlagQuestionResponseDTOModel: Codable, Equatable {
   public let id, question: Int
-  public let userID, reason, createAt: String
+  public let userID, reason, createAt, userChoice: String
   public let status: Bool
   public let message: String
   
@@ -27,6 +27,7 @@ public struct FlagQuestionResponseDTOModel: Codable, Equatable {
     userID: String = "",
     reason: String = "",
     createAt: String = "",
+    userChoice: String = "",
     status: Bool = false,
     message: String = ""
   ) {
@@ -35,6 +36,7 @@ public struct FlagQuestionResponseDTOModel: Codable, Equatable {
     self.userID = userID
     self.reason = reason
     self.createAt = createAt
+    self.userChoice = userChoice
     self.status = status
     self.message = message
   }

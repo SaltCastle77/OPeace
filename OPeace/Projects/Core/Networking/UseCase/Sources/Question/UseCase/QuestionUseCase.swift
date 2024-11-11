@@ -52,7 +52,7 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
     title: String,
     choiceA: String,
     choiceB: String
-  ) async throws -> CreateQuestionModel? {
+  ) async throws -> CreateQuestionDTOModel? {
     try await repository.createQuestion(
       emoji: emoji,
       title: title,
@@ -70,7 +70,7 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
   public func isVoteQuestionAnswer(
     questionID: Int,
     choicAnswer: String
-  ) async throws -> QuestionVoteModel? {
+  ) async throws -> FlagQuestionDTOModel? {
     try await repository.isVoteQuestionAnswer(questionID: questionID, choicAnswer: choicAnswer)
   }
   
@@ -91,7 +91,7 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
   }
   
   //MARK: - 투표 결과
-  public func statusQuestion(questionID: Int) async throws -> StatusQuestionModel? {
+  public func statusQuestion(questionID: Int) async throws -> StatusQuestionDTOModel? {
     try await repository.statusQuestion(questionID: questionID)
   }
 }

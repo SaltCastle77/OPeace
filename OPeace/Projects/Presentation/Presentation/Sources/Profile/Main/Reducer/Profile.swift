@@ -30,7 +30,7 @@ public struct Profile {
     var userLogoutModel: UserDTOModel? = nil
     var myQuestionListModel: QuestionModel?  = nil
     var deleteQuestionModel: FlagQuestionDTOModel? = nil
-    var statusQuestionModel: StatusQuestionModel? = nil
+    var statusQuestionModel: StatusQuestionDTOModel? = nil
     
     var profileGenerationYear: Int? = .zero
     var logoutPopUpTitle: String = "로그아웃 하시겠어요?"
@@ -95,7 +95,7 @@ public struct Profile {
     case deleteQuestion(questionID: Int)
     case deleteQuestionResponse(Result<FlagQuestionDTOModel, CustomError>)
     case statusQuestion(id: Int)
-    case statusQuestionResponse(Result<StatusQuestionModel, CustomError>)
+    case statusQuestionResponse(Result<StatusQuestionDTOModel, CustomError>)
     
   }
   

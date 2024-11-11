@@ -35,7 +35,7 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
     title: String,
     choiceA: String,
     choiceB: String
-  ) async throws -> CreateQuestionModel? {
+  ) async throws -> CreateQuestionDTOModel? {
     return nil
   }
   
@@ -46,7 +46,7 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
   public func isVoteQuestionAnswer(
     questionID: Int,
     choicAnswer: String
-  ) async throws -> QuestionVoteModel? {
+  ) async throws -> FlagQuestionDTOModel? {
     return nil
   }
   
@@ -63,7 +63,7 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
   
   public func statusQuestion(
     questionID: Int
-  ) async throws -> StatusQuestionModel? {
+  ) async throws -> StatusQuestionDTOModel? {
     return nil
   }
 }
