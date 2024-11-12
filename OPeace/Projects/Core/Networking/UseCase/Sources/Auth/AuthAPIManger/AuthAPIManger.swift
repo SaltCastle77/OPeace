@@ -14,19 +14,19 @@ import AsyncMoya
 
 public final class AuthAPIManger {
   public static let shared = AuthAPIManger()
-  var loginModel: RefreshModel? = nil
+  var loginModel: RefreshDTOModel? = nil
   let repository = AuthRepository()
   
   public init() {}
   
-  public func refeshTokenRsponse(_ result: Result<RefreshModel, CustomError>) -> Result<RefreshModel, CustomError>  {
+  public func refeshTokenRsponse(_ result: Result<RefreshDTOModel, CustomError>) -> Result<RefreshDTOModel, CustomError>  {
     switch result {
     case .success(let refeshModel):
       self.loginModel = refeshModel
-      APIHeader.accessTokenKey = refeshModel.data?.accessToken ?? ""
-      APIHeader.refreshTokenKey = refeshModel.data?.refreshToken ?? ""
-      UserDefaults.standard.set(refeshModel.data?.accessToken ?? "", forKey: "ACCESS_TOKEN")
-      UserDefaults.standard.set(refeshModel.data?.refreshToken, forKey: "REFRESH_TOKEN")
+      APIHeader.accessTokenKey = refeshModel.data.accessToken
+      APIHeader.refreshTokenKey = refeshModel.data.refreshToken
+      UserDefaults.standard.set(refeshModel.data.accessToken, forKey: "ACCESS_TOKEN")
+      UserDefaults.standard.set(refeshModel.data.refreshToken, forKey: "REFRESH_TOKEN")
       return .success(refeshModel)
     case .failure(let error):
       #logError("리프레쉬 에러", error.localizedDescription)

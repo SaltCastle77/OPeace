@@ -9,24 +9,24 @@ import Foundation
 import Model
 
 public protocol QuestionRepositoryProtocol {
-    func fetchQuestionList(
-        page: Int,
-        pageSize: Int,
-        job: String,
-        generation: String,
-        sortBy: QuestionSort) async throws -> QuestionModel?
-    func myQuestionList(page: Int, pageSize: Int)  async throws -> QuestionModel?
-    func createQuestion(
-        emoji: String,
-        title: String,
-        choiceA: String,
-        choiceB: String
-    ) async throws -> CreateQuestionModel?
-    func isVoteQuestionLike(questionID: Int) async throws -> VoteQuestionLikeModel?
-    func isVoteQuestionAnswer(questionID: Int, choicAnswer: String) async throws -> QuestionVoteModel?
-    func deleteQuestion(questionID: Int) async throws -> DeleteQuestionModel?
-    func reportQuestion(questionID: Int, reason: String) async throws -> ReportQuestionModel?
-    func statusQuestion(questionID: Int) async throws -> StatusQuestionModel?
-
+  func fetchQuestionList(
+    page: Int,
+    pageSize: Int,
+    job: String,
+    generation: String,
+    sortBy: QuestionSort) async throws -> QuestionDTOModel?
+  func myQuestionList(page: Int, pageSize: Int)  async throws -> QuestionDTOModel?
+  func createQuestion(
+    emoji: String,
+    title: String,
+    choiceA: String,
+    choiceB: String
+  ) async throws -> CreateQuestionDTOModel?
+  func isVoteQuestionLike(questionID: Int) async throws -> FlagQuestionDTOModel?
+  func isVoteQuestionAnswer(questionID: Int, choicAnswer: String) async throws -> FlagQuestionDTOModel?
+  func deleteQuestion(questionID: Int) async throws -> FlagQuestionDTOModel?
+  func reportQuestion(questionID: Int, reason: String) async throws -> FlagQuestionDTOModel?
+  func statusQuestion(questionID: Int) async throws -> StatusQuestionDTOModel?
+  
 }
 

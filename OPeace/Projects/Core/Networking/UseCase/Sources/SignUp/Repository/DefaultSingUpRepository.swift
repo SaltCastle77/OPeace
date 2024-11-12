@@ -10,33 +10,33 @@ import Foundation
 import Model
 
 public final class DefaultSignUpRepository: SignUpRepositoryProtocol {
-    public func fetchGenerationList() async throws -> Model.GenerationListResponse? {
-        nil
-    }
+  
+  public init() {
     
-    
-    public init() {
-        
-    }
-    
-    public func checkNickName(_ nickName: String) async throws -> CheckNickNameModel? {
-        return nil
-    }
-    
-    public func fetchJobList() async throws -> SignUpJobModel? {
-        return nil
-    }
-    
-    public func updateUserInfo(
-        nickname: String,
-        year: Int,
-        job: String,
-        generation: String
-    ) async throws -> UpdateUserInfoModel? {
-        return nil
-    }
-    
-    public func checkGeneration(year: Int) async throws -> CheckGeneraionModel? {
-        return nil
-    }
+  }
+  
+  public func checkNickName(_ nickName: String) async throws -> SignUpCheckInfoDTOModel? {
+    return nil
+  }
+  
+  public func fetchJobList() async throws -> SignUpListDTOModel? {
+    return nil
+  }
+  
+  public func updateUserInfo(
+    nickname: String,
+    year: Int,
+    job: String,
+    generation: String
+  ) async throws -> UpdateUserInfoDTOModel? {
+    return nil
+  }
+  
+  public func checkGeneration(year: Int) async throws -> SignUpCheckInfoDTOModel? {
+    return nil
+  }
+  
+  public func fetchGenerationList() async throws -> SignUpListDTOModel? {
+    nil
+  }
 }

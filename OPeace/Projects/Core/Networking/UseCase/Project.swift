@@ -14,7 +14,8 @@ let project = Project.makeModule(
         .Networking(implements: .Service),
         .Networking(implements: .Model),
         .SPM.composableArchitecture,
-        .SPM.swiftJWT
+        .SPM.swiftJWT,
+        .SPM.firebaseRemoteConfig
     ],
     sources: ["Sources/**"]
 )

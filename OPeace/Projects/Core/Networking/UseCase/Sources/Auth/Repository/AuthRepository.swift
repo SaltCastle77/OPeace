@@ -63,9 +63,10 @@ import SwiftJWT
   }
   
   //MARK: - 애플로그인 API
-  public func appleLogin() async throws -> UserLoginModel? {
+  public func appleLogin() async throws -> OAuthDTOModel? {
     let appleAcessToken = UserDefaults.standard.string(forKey: "APPLE_ACCESS_TOKEN") ?? ""
-    return try await provider.requestAsync(.appleLogin(accessToken: appleAcessToken), decodeTo: UserLoginModel.self)
+    let userLoginModel =  try await provider.requestAsync(.appleLogin(accessToken: appleAcessToken), decodeTo: UserLoginModel.self)
+    return userLoginModel.toOAuthDTOModel()
   }
   
   //MARK: - 애플로그인 JWT
@@ -104,16 +105,18 @@ import SwiftJWT
   }
   
   //MARK: - 애플로그인 토큰 발급
-  public func getAppleRefreshToken(code: String) async throws -> AppleTokenResponse? {
+  public func getAppleRefreshToken(code: String) async throws -> OAuthDTOModel? {
     let clientSecret = try await makeJWT()
-    return try await appleProvider.requestAsync(.getRefreshToken(code: code, clientSecret: clientSecret), decodeTo: AppleTokenResponse.self)
+    let appleResponseModel = try await appleProvider.requestAsync(.getRefreshToken(code: code, clientSecret: clientSecret), decodeTo: AppleTokenResponse.self)
+    return appleResponseModel.toOAuthDTOToModel()
   }
   
   //MARK: - 애플 탈퇴
-  public func revokeAppleToken() async throws -> AppleTokenResponse? {
+  public func revokeAppleToken() async throws -> OAuthDTOModel? {
     let clientSecret = UserDefaults.standard.string(forKey: "AppleClientSecret") ?? ""
     let token = UserDefaults.standard.string(forKey: "APPLE_REFRESH_TOKEN") ?? ""
-    return try await appleProvider.requestAsync(.revokeToken(clientSecret: clientSecret, token: token), decodeTo: AppleTokenResponse.self)
+    let appleResponseModel = try await appleProvider.requestAsync(.revokeToken(clientSecret: clientSecret, token: token), decodeTo: AppleTokenResponse.self)
+    return appleResponseModel.toOAuthDTOToModel()
   }
   
   //MARK: - kakaoLoigin
@@ -238,62 +241,73 @@ import SwiftJWT
   
   
   //MARK: - 카카오 로그인 API
-  public func reauestKakaoLogin() async throws -> UserLoginModel? {
+  public func reauestKakaoLogin() async throws -> OAuthDTOModel? {
     let kakaoAcessToken = UserDefaults.standard.string(forKey: "KAKAO_ACCESS_TOKEN")
-    return try await provider.requestAsync(.kakaoLogin(accessToken: kakaoAcessToken ?? ""), decodeTo: UserLoginModel.self)
+    let userLoginModel = try await provider.requestAsync(.kakaoLogin(accessToken: kakaoAcessToken ?? ""), decodeTo: UserLoginModel.self)
+    return userLoginModel.toOAuthDTOModel()
+    
   }
   
   //MARK: - 토큰 재발급 API
-  public func requestRefreshToken(refreshToken: String) async throws -> RefreshModel? {
-    return try await provider.requestAsync(.refreshToken(refreshToken: refreshToken), decodeTo: RefreshModel.self)
+  public func requestRefreshToken(refreshToken: String) async throws -> RefreshDTOModel? {
+    let refershModel = try await provider.requestAsync(.refreshToken(refreshToken: refreshToken), decodeTo: RefreshModel.self)
+    return refershModel.toRefreshDTOToModel()
   }
   
   //MARK: - 유저정보 조회 API
-  public func fetchUserInfo() async throws -> UpdateUserInfoModel? {
-    return try await authProvider.requestAsync(.fetchUserInfo, decodeTo: UpdateUserInfoModel.self)
+  public func fetchUserInfo() async throws -> UpdateUserInfoDTOModel? {
+    let updateUserInfoModel = try await authProvider.requestAsync(.fetchUserInfo, decodeTo: UpdateUserInfoModel.self)
+    return updateUserInfoModel.toUpdateUserInfoDTOToModel()
   }
   
   //MARK: - 유저 로그아웃 API
-  public func logoutUser(refreshToken: String) async throws -> UserLogOutModel? {
+  public func logoutUser(refreshToken: String) async throws -> UserDTOModel? {
     let refreshToken = UserDefaults.standard.string(forKey: "REFRESH_TOKEN") ?? ""
-    return try await authProvider.requestAsync(
+    let userLogOutModel = try await authProvider.requestAsync(
       .logoutUser(refreshToken: refreshToken),
       decodeTo: UserLogOutModel.self)
+    return userLogOutModel.toUserDTOToModel()
   }
   
   //MARK: - 자동 로그인 API
-  public func autoLogin() async throws -> UseLoginModel? {
-    return try await authProvider.requestAsync(.autoLogin, decodeTo: UseLoginModel.self)
+  public func autoLogin() async throws -> UserDTOModel? {
+    let userLoginModel = try await authProvider.requestAsync(.autoLogin, decodeTo: UseLoginModel.self)
+    return userLoginModel.userDTOToModel()
   }
   
   //MARK: - 회원 탈퇴 API
-  public func deleteUser(reason: String) async throws -> DeleteUserModel?  {
-    return try await authProvider.requestAsync(.deleteUser(reason: reason), decodeTo: DeleteUserModel.self)
+  public func deleteUser(reason: String) async throws -> DeletUserDTOModel?  {
+    let deleteUserModel = try await authProvider.requestAsync(.deleteUser(reason: reason), decodeTo: DeleteUserModel.self)
+    return deleteUserModel.toDeleteUserDTOToModel()
   }
   
   //MARK: - 유저 토큰 확인 API
-  public func checkUserVerify() async throws -> CheckUserVerifyModel? {
-    return try await provider.requestAsync(.userVerify, decodeTo: CheckUserVerifyModel.self)
+  public func checkUserVerify() async throws -> CheckUserDTOModel? {
+    let chekcUserVerfiyModel = try await provider.requestAsync(.userVerify, decodeTo: CheckUserVerifyModel.self)
+    return chekcUserVerfiyModel.toCheckUserDTOModel()
   }
   
   //MARK: - 유저 차단 API
   public func userBlock(
     questioniD: Int,
     userID: String
-  ) async throws -> UserBlockModel? {
-    return try await authProvider.requestAsync(.userBlock(
+  ) async throws -> UserBlockDTOModel? {
+    let userBlockModel = try await authProvider.requestAsync(.userBlock(
       questioniD: questioniD,
       userID: userID), decodeTo: UserBlockModel.self)
+    return userBlockModel.toUserBlockDTOToModel()
   }
   
   //MARK: - 유저 차단 리스트 조회 API
-  public func fetchUserBlockList() async throws -> UserBlockListModel? {
-    return try await authProvider.requestAsync(.fectchUserBlock, decodeTo: UserBlockListModel.self)
+  public func fetchUserBlockList() async throws -> UserBlockListDTOModel? {
+    let userBlockListModel = try await authProvider.requestAsync(.fectchUserBlock, decodeTo: UserBlockListModel.self)
+    return userBlockListModel.toUserBlockLIstDTOToModel()
   }
   
   //MARK: - 유저 차단 해제 API
-  public func realseUserBlock(userID: String) async throws -> UserBlockModel? {
-    return try await authProvider.requestAsync(.realseUserBlock(userID: userID), decodeTo: UserBlockModel.self)
+  public func realseUserBlock(userID: String) async throws -> UserBlockDTOModel? {
+    let userBlockModel = try await authProvider.requestAsync(.realseUserBlock(userID: userID), decodeTo: UserBlockModel.self)
+    return userBlockModel.toUserBlockDTOToModel()
   }
 }
 

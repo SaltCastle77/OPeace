@@ -9,9 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 import Utill
-import Model
-import UseCase
-import Utills
+import Networkings
 
 @Reducer
 public struct Setting {
@@ -29,7 +27,6 @@ public struct Setting {
         case async(AsyncAction)
         case inner(InnerAction)
         case navigation(NavigationAction)
-        case test
     }
     
     //MARK: - ViewAction
@@ -60,37 +57,61 @@ public struct Setting {
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
-        
         Reduce { state, action in
             switch action {
             case .binding(_):
                 return .none
                 
-            case .test:
-                return .none
-            case .view(let View):
-                switch View {
-                case .tapSettingitem(let item):
-                    state.settingtitem = item
-                    return .none
-                }
+            case .view(let viewAction):
+              return handleViewAction(state: &state, action: viewAction)
                 
-            case .async(let AsyncAction):
-                switch AsyncAction {
-                    
-               
-                }
+            case .async(let asyncAction):
+              return handleAsyncAction(state: &state, action: asyncAction)
                 
-            case .inner(let InnerAction):
-                switch InnerAction {
-             
-                }
+            case .inner(let innerAction):
+              return handleInnerAction(state: &state, action: innerAction)
                 
-            case .navigation(let NavigationAction):
-                switch NavigationAction {
-                    
-                }
+            case .navigation(let navigationAction):
+              return handleNavigationAction(state: &state, action: navigationAction)
             }
         }
     }
+  
+  private func handleViewAction(
+    state: inout State,
+    action: View
+  ) -> Effect<Action> {
+    switch action {
+    case .tapSettingitem(let item):
+        state.settingtitem = item
+        return .none
+    }
+  }
+  
+  private func handleAsyncAction(
+    state: inout State,
+    action: AsyncAction
+  ) -> Effect<Action> {
+    switch action {
+      
+    }
+  }
+  
+  private func handleInnerAction(
+    state: inout State,
+    action: InnerAction
+  ) -> Effect<Action> {
+    switch action {
+      
+    }
+  }
+  
+  private func handleNavigationAction(
+    state: inout State,
+    action: NavigationAction
+  ) -> Effect<Action> {
+    switch action {
+   
+    }
+  }
 }
