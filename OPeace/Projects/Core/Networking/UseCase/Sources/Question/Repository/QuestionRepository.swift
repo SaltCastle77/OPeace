@@ -29,13 +29,14 @@ public class QuestionRepository: QuestionRepositoryProtocol {
     job: String,
     generation: String,
     sortBy: QuestionSort
-  ) async throws -> QuestionModel? {
-    return try await provider.requestAsync(.fetchQuestionList(
+  ) async throws -> QuestionDTOModel? {
+    let questionModel = try await provider.requestAsync(.fetchQuestionList(
       page: page,
       pageSize: pageSize,
       job: job,
       generation: generation,
       sortBy: sortBy.questionSortDesc), decodeTo: QuestionModel.self)
+    return questionModel.toQuestionDTOToModel()
   }
   
   
@@ -43,11 +44,12 @@ public class QuestionRepository: QuestionRepositoryProtocol {
   public func myQuestionList(
     page: Int,
     pageSize: Int
-  ) async throws -> QuestionModel? {
-    return try await provider.requestAsync(.myQuestionList(
+  ) async throws -> QuestionDTOModel? {
+    let questionModel = try await provider.requestAsync(.myQuestionList(
       page: page,
       pageSize: pageSize
     ), decodeTo: QuestionModel.self)
+    return questionModel.toQuestionDTOToModel()
   }
   
   //MARK: - 질문 생성API

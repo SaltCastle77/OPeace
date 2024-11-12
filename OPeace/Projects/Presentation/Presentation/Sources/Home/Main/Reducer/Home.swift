@@ -11,6 +11,7 @@ import Combine
 
 import ComposableArchitecture
 import Networkings
+import FirebaseRemoteConfig
 
 @Reducer
 public struct Home {
@@ -26,13 +27,14 @@ public struct Home {
     var floatingImage: ImageAsset = .succesLogout
     var cancellable: AnyCancellable?
     
-    var questionModel: QuestionModel? = nil
+    var questionModel: QuestionDTOModel? = nil
     var isVoteLikeQuestionModel: FlagQuestionDTOModel? = nil
     var userBlockModel: UserBlockDTOModel? = nil
     var isVoteAnswerQuestionModel: FlagQuestionDTOModel? = nil
     var profileUserModel: UpdateUserInfoDTOModel? = nil
     var statusQuestionModel: StatusQuestionDTOModel? = nil
     var userBlockListModel: UserBlockListDTOModel?  = nil
+    var remoteConfig: RemoteConfig?
     
     var cardGenerationColor: Color = .basicBlack
     var isLikeTap: Bool = false
@@ -74,7 +76,8 @@ public struct Home {
     @Shared var userInfoModel: UserInfoModel?
     
     @Shared(.inMemory("questionID")) var reportQuestionID: Int = 0
-    
+    @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
+
     @Presents var destination: Destination.State?
     
     
@@ -103,6 +106,7 @@ public struct Home {
   public enum Destination {
     case homeFilter(HomeFilter)
     case customPopUp(CustomPopUp)
+    case updatePopUp(CustomPopUp)
     case floatingPopUP(FloatingPopUp)
     case editQuestion(EditQuestion)
     
@@ -120,6 +124,10 @@ public struct Home {
     case switchModalAction(EditQuestionType)
     case filterViewTappd(HomeFilterEnum)
     case closeFilterModal
+    case checkVersion(completion: () async -> Void)
+    case forceUpate
+    case forceUpdateResponse(Bool)
+    case appearCheckUpdatePopUp
   }
   
   
@@ -127,7 +135,7 @@ public struct Home {
   //MARK: - AsyncAction 비동기 처리 액션
   public enum AsyncAction: Equatable {
     case fetchQuestionList
-    case qusetsionListResponse(Result<QuestionModel, CustomError>)
+    case qusetsionListResponse(Result<QuestionDTOModel, CustomError>)
     case isVoteQuestionLike(questioniD: Int)
     case isVoteQuestionLikeResponse(Result<FlagQuestionDTOModel, CustomError>)
     case blockUser(qusetionID: Int, userID: String)
@@ -270,11 +278,9 @@ public struct Home {
       nonisolated(unsafe) let editQuestion = editQuestion
       switch editQuestion {
       case .reportUser:
-        Log.debug("신고하기")
         state.customPopUpText = "정말 신고하시겠어요?"
         state.isReportQuestionPopUp = true
       case .blockUser:
-        Log.debug("차단하기")
         state.customPopUpText = "정말 차단하시겠어요?"
         state.isTapBlockUser = true
       }
@@ -289,6 +295,56 @@ public struct Home {
           await send(.view(.prsentCustomPopUp))
         }
       }
+      
+    case .checkVersion(let completion):
+        return .run { send in
+            do {
+                let remoteConfig = RemoteConfig.remoteConfig()
+                try await remoteConfig.fetchAsync(withExpirationDuration: 0)
+                guard let minVersionString = remoteConfig["minimum_version"].stringValue else {
+                    return
+                }
+              #logDebug("Firebase minimum_version: \(minVersionString)")
+                guard let bundleID = Bundle.main.bundleIdentifier else {
+                    return
+                }
+              
+              let minVesrsion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+              #logDebug("Firebase minimum_version: \(minVesrsion)")
+                let appStoreVersion = try await AppStoreVersionFetcher.fetchAppStoreVersion(bundleID: bundleID)
+
+              if VersionComparer.shouldShowUpdatePopup(minimumVersion: appStoreVersion, appStoreVersion: minVesrsion) {
+                  #logDebug("Firebase minimum_version is higher than App Store version.")
+                    await completion()
+                } else {
+                  #logDebug("App Store version is up-to-date.")
+                }
+            } catch {
+              #logDebug("Error during version check: \(error.localizedDescription)")
+            }
+        }
+      
+    case .forceUpate:
+      return .run {  send in
+        let remoteConfig = RemoteConfig.remoteConfig()
+        try await remoteConfig.fetchAsync(withExpirationDuration: 0)
+        let forceUpdate = remoteConfig["force_update"].boolValue
+        print(forceUpdate)
+        await send(.view(.forceUpdateResponse(forceUpdate)))
+      }
+      
+    case let .forceUpdateResponse(forceUpdate):
+      return .run { @MainActor send in
+        if forceUpdate {
+          if let url = URL(string: "itms-apps://itunes.apple.com/app/6587550388") {
+            UIApplication.shared.open(url)
+          }
+        }
+      }
+      
+    case .appearCheckUpdatePopUp:
+      state.destination = .updatePopUp(.init())
+      return .none
     }
   }
   
@@ -423,39 +479,34 @@ public struct Home {
       return .none
       
     case .qusetsionListResponse(let result):
-      switch result {
-      case .success(let qusetsionListData):
-        // userInfoModel.isLogOut 확인
-        if state.userInfoModel?.isLogOut == true {
-          // 로그아웃 상태에서는 필터링하지 않고 원래 데이터를 그대로 사용
-          state.questionModel = qusetsionListData
-        } else {
-          // 차단된 닉네임 리스트 가져오기
-          let blockedNicknames = state.userBlockListModel?.data.compactMap { $0.nickname } ?? []
-          
-          // 차단된 닉네임 제외한 결과 필터링
-          let filteredResults = qusetsionListData.data?.results?.filter { item in
-            guard let nickname = item.userInfo?.userNickname else { return true }
-            return !blockedNicknames.contains(nickname)
-          }
-          
-          // 새로운 데이터를 생성하여 필터링된 결과를 저장
-          var updatedQuestionListData = qusetsionListData
-          updatedQuestionListData.data = updatedQuestionListData.data.map { data in
-            var modifiedData = data
-            modifiedData.results = filteredResults
-            return modifiedData
-          }
-          
-          state.questionModel = updatedQuestionListData
+        switch result {
+        case .success(let qusetsionListData):
+            if state.userInfoModel?.isLogOut == true {
+                // 로그아웃 상태에서는 필터링하지 않고 원래 데이터를 그대로 사용
+                state.questionModel = qusetsionListData
+            } else {
+                // 차단된 닉네임 리스트 가져오기
+              let blockedNicknames = state.userBlockListModel?.data.compactMap { $0.nickname } ?? []
+
+                // 차단된 닉네임 제외한 결과 필터링
+              let filteredResults = qusetsionListData.data?.content?.filter { item in
+                    guard let nickname = item.userInfo?.userNickname else { return true }
+                    return !blockedNicknames.contains(nickname)
+                }
+
+                // 새로운 데이터를 생성하여 필터링된 결과를 저장
+                var updatedQuestionListData = qusetsionListData
+              updatedQuestionListData.data?.content = filteredResults
+                
+                state.questionModel = updatedQuestionListData
+            }
+
+            // 페이지 크기 증가
+            state.pageSize += 20
+        case .failure(let error):
+            Log.error("QuestionList 에러", error.localizedDescription)
         }
-        
-        // 페이지 크기 증가
-        state.pageSize += 20
-      case .failure(let error):
-        Log.error("QuestionList 에러", error.localizedDescription)
-      }
-      return .none
+        return .none
       
     case .isVoteQuestionLike(questioniD: let questioniD):
       return .run { send in
@@ -633,10 +684,9 @@ public struct Home {
         Effect.run(operation: { send in
           await send (.async(.fetchUserProfile))
         }),
-        Effect.run(operation: { [userInfoModel = state.userInfoModel] send in
+        Effect.run(operation: { send in
           await send(.async(.fetchUserBlockList))
         })
-        
       )
     }
   }

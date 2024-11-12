@@ -19,6 +19,7 @@ let project = Project.makeModule(
         .SPM.popupView,
         .SPM.firebaseAnalytics,
         .SPM.firebaseCrashlytics,
+        .SPM.firebaseRemoteConfig,
         .SPM.swiftUIIntrospect,
         .SPM.tcaCoordinator
         

@@ -34,15 +34,18 @@ public struct HomeView: View {
       }
       .onAppear {
         store.send(.async(.appearData))
-        startRefreshData()
+//        startRefreshData()
         appearFloatingPopUp()
+        store.send(.view(.checkVersion {
+          store.send(.view(.appearCheckUpdatePopUp))
+        }))
       }
       .onDisappear {
         store.send(.async(.clearFilter))
         refreshTimer?.invalidate()
       }
-      if store.questionModel?.data?.results == []  ||
-          ((store.questionModel?.data?.results?.isEmpty) == nil)  {
+      if store.questionModel?.data?.content == []  ||
+          ((store.questionModel?.data?.content?.isEmpty) == nil)  {
         
       } else {
         VStack {
@@ -157,6 +160,27 @@ public struct HomeView: View {
         .closeOnTapOutside(true)
     }
     
+    .popup(item: $store.scope(state: \.destination?.updatePopUp, action: \.destination.updatePopUp)) { updatePopUpStore in
+      CustomBasicPopUpView(
+        store: updatePopUpStore,
+        title: "업데이트 해주세요",
+        confirmAction: {
+          store.send(.view(.forceUpate))
+        },
+        cancelAction: {
+          store.send(.view(.closePopUp))
+        }
+      )
+    }  customize: { popup in
+      popup
+        .type(.floater(verticalPadding: UIScreen.screenHeight * 0.35))
+        .position(.bottom)
+        .animation(.spring)
+        .closeOnTap(true)
+        .closeOnTapOutside(true)
+        .backgroundColor(Color.basicBlack.opacity(0.8))
+    }
+    
   }
   
   private func startRefreshData() {
@@ -165,6 +189,7 @@ public struct HomeView: View {
     if !store.isFilterQuestion {
       refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
         store.send(.async(.fetchQuestionList))
+        store.lastViewedPage = store.lastViewedPage
       }
     }
   }
@@ -306,7 +331,7 @@ extension HomeView {
       Spacer()
         .frame(height: 15)
       
-      if store.questionModel?.data?.results == []  || ((store.questionModel?.data?.results?.isEmpty) == nil) {
+      if store.questionModel?.data?.content == []  || ((store.questionModel?.data?.content?.isEmpty) == nil) {
         Spacer()
           .frame(height: 16)
         
@@ -334,7 +359,7 @@ extension HomeView {
   
   @ViewBuilder
   private func filterQuestionList() -> some View {
-    if let resultData = store.questionModel?.data?.results?.filter({ item in
+    if let resultData = store.questionModel?.data?.content?.filter({ item in
       let blockedNicknames = store.userBlockListModel?.data.compactMap { $0.nickname } ?? []
       guard let nickname = item.userInfo?.userNickname else { return true }
       return !blockedNicknames.contains(nickname)
@@ -347,8 +372,8 @@ extension HomeView {
           store.send(.async(.fetchQuestionList))
         }
       } onItemAppear: { item in
-        if let resultItem = item as? ResultData, resultItem.id != store.questionID {
-          store.questionID = resultItem.id ?? 0
+        if let resultItem = item as? QuestionContentData, resultItem.id != store.questionID {
+          store.questionID = resultItem.id
         }
       } content: { item in
         CardItemView(
@@ -362,7 +387,7 @@ extension HomeView {
           isLogOut: store.userInfoModel?.isLogOut ?? false,
           isLookAround: store.userInfoModel?.isLookAround ?? false,
           isDeleteUser: store.userInfoModel?.isDeleteUser ?? false,
-          answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+          answerRatio: (A: Int(item.answerRatio?.answerRatioA ?? 0), B: Int(item.answerRatio?.answerRatioB ?? 0)),
           editTapAction: {
             handleEditTap(item: item)
           },
@@ -376,7 +401,6 @@ extension HomeView {
           }
         )
         .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
-          guard let id = item.id, id == newValue else { return }
           store.send(.async(.statusQuestion(id: newValue)))
         }
       }
@@ -385,98 +409,95 @@ extension HomeView {
   
   @ViewBuilder
   private func noFilterQuestionList() -> some View {
-    if let resultData = store.questionModel?.data?.results {
+    if let resultData = store.questionModel?.data?.content {
       FlippableCardView(
         data: resultData,
-        shouldSaveState: true) {
-          if !store.isFilterQuestion {
-            store.send(.async(.fetchQuestionList))
-          }
-        } onItemAppear: { item in
-          if let resultItem = item as? ResultData, resultItem.id != store.questionID {
-            store.questionID = resultItem.id ?? 0
-          }
-        } content: { item in
-          CardItemView(
-            resultData: item,
-            statsData: store.statusQuestionModel?.data,
-            isProfile: false,
-            userLoginID: store.profileUserModel?.data.socialID ?? "",
-            generationColor: store.cardGenerationColor,
-            isTapAVote: $store.isTapAVote,
-            isTapBVote: $store.isTapBVote,
-            isLogOut: store.userInfoModel?.isLogOut ?? false,
-            isLookAround: store.userInfoModel?.isLookAround ?? false,
-            isDeleteUser: store.userInfoModel?.isDeleteUser ?? false,
-            answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
-            editTapAction: {
-              handleEditTap(item: item)
-            },
-            likeTapAction: { userID in
-              handleLikeTap(userID: userID)
-            },
-            appearStatusAction: {
-              
-            },
-            choiceTapAction: {
-              handleChoiceTap(item: item)
-            }
-          )
-          //                .onAppear {
-          //                    store.send(.async(.statusQuestion(id: item.id ?? .zero)))
-          //                }
-          
-          .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
-            guard let id = item.id, id == newValue else { return }
-            store.send(.async(.statusQuestion(id: newValue)))
-          }
+        shouldSaveState: true
+      ) {
+        if !store.isFilterQuestion {
+          store.send(.async(.fetchQuestionList))
         }
+      } onItemAppear: { item in
+        if let resultItem = item as? QuestionContentData, resultItem.id != store.questionID {
+          store.questionID = resultItem.id
+        }
+      } content: { item in
+        CardItemView(
+          resultData: item,
+          statsData: store.statusQuestionModel?.data,
+          isProfile: false,
+          userLoginID: store.profileUserModel?.data.socialID ?? "",
+          generationColor: store.cardGenerationColor,
+          isTapAVote: $store.isTapAVote,
+          isTapBVote: $store.isTapBVote,
+          isLogOut: store.userInfoModel?.isLogOut ?? false,
+          isLookAround: store.userInfoModel?.isLookAround ?? false,
+                   isDeleteUser: store.userInfoModel?.isDeleteUser ?? false,
+          answerRatio: (
+            A: Int(item.answerRatio?.answerRatioA ?? .zero),
+            B: Int(item.answerRatio?.answerRatioB ?? .zero)
+                    ),
+          editTapAction: {
+            handleEditTap(item: item)
+          },
+          likeTapAction: { userID in
+            handleLikeTap(userID: userID)
+          },
+          appearStatusAction: {},
+          choiceTapAction: {
+            handleChoiceTap(item: item)
+          }
+        )
+        .onChange(of: store.questionID ?? .zero) { oldValue, newValue in
+          store.send(.async(.statusQuestion(id: newValue)))
+        }
+      }
     }
   }
   
   
   
-  private func handleChoiceTap(item: ResultData) {
+  private func handleChoiceTap(item: QuestionContentData) {
     if store.isTapAVote {
       if item.metadata?.voted == true {
-        store.questionID = item.id ?? .zero
-        store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+        store.questionID = item.id
+        store.send(.async(.statusQuestion(id: item.id)))
       } else if store.profileUserModel?.data.socialID == item.userInfo?.userID {
-        store.questionID = item.id ?? .zero
+        store.questionID = item.id
         store.isTapAVote = false
       } else if store.profileUserModel?.data.socialID != item.userInfo?.userID {
-        store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerA)))
+        store.send(.async(.isVoteQuestionAnswer(questionID: item.id, choiceAnswer: store.isSelectAnswerA)))
         store.send(.async(.fetchQuestionList))
-        store.questionID = item.id ?? .zero
-        store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+        store.questionID = item.id
+        store.send(.async(.statusQuestion(id: item.id)))
       }
     } else if store.isTapBVote {
       if item.metadata?.voted == true {
-        store.questionID = item.id ?? .zero
+        store.questionID = item.id
         store.send(.async(.statusQuestion(id: store.questionID ?? .zero)))
       } else if store.profileUserModel?.data.socialID == item.userInfo?.userID {
-        store.questionID = item.id ?? .zero
+        store.questionID = item.id 
         store.isTapBVote = false
       } else if store.profileUserModel?.data.socialID != item.userInfo?.userID{
-        store.send(.async(.isVoteQuestionAnswer(questionID: item.id ?? .zero, choiceAnswer: store.isSelectAnswerB)))
+        store.send(.async(.isVoteQuestionAnswer(questionID: item.id, choiceAnswer: store.isSelectAnswerB)))
         store.send(.async(.fetchQuestionList))
-        store.questionID = item.id ?? .zero
-        store.send(.async(.statusQuestion(id: item.id ?? .zero)))
+        store.questionID = item.id
+        store.send(.async(.statusQuestion(id: item.id)))
       }
     } else {
       store.send(.view(.prsentCustomPopUp))
     }
   }
   
-  private func handleEditTap(item: ResultData) {
+  private func handleEditTap(item: QuestionContentData) {
     if store.userInfoModel?.isLogOut == true ||
         store.userInfoModel?.isLookAround == true ||
         store.userInfoModel?.isDeleteUser == true {
       store.send(.view(.prsentCustomPopUp))
     } else {
       store.userID = item.userInfo?.userID ?? ""
-      store.reportQuestionID = item.id ?? .zero
-      store.questionID = item.id ?? .zero
+      store.reportQuestionID = item.id
+      store.questionID = item.id
       store.send(.view(.presntEditQuestion))
     }
   }
@@ -492,9 +513,9 @@ extension HomeView {
     }
   }
   
-  private func appearStatusActionIfNeeded(item: ResultData) {
+  private func appearStatusActionIfNeeded(item: QuestionContentData) {
     if store.questionID != item.id {
-      store.questionID = item.id ?? .zero
+      store.questionID = item.id
     }
   }
   

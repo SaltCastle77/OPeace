@@ -40,14 +40,7 @@ public struct ProfileView: View {
         
         CustomTitleNaviagionBackButton(buttonAction: backAction, title: "마이페이지")
         
-        userInfoTitle(
-          nickName: store.profileUserModel?.data.nickname ?? "" ,
-          job: store.profileUserModel?.data.job ?? "",
-          generation: store.profileUserModel?.data.generation ?? "" )
-        
-        myPostWritingTitle()
-        
-        postingListView()
+        loadingData()
         
         Spacer()
       }
@@ -188,6 +181,34 @@ extension ProfileView {
   }
   
   @ViewBuilder
+  private func loadingData() -> some View {
+    if store.profileUserModel?.data == nil {
+      VStack {
+        Spacer()
+        
+        ProgressView()
+          .progressViewStyle(.circular)
+          .progressViewStyle(LinearProgressViewStyle(tint: .green))
+          .frame(width: 100, height: 100)
+        
+        Spacer()
+      }
+    }
+    else {
+      VStack {
+        userInfoTitle(
+          nickName: store.profileUserModel?.data.nickname ?? "" ,
+          job: store.profileUserModel?.data.job ?? "",
+          generation: store.profileUserModel?.data.generation ?? "" )
+        
+        myPostWritingTitle()
+        
+        postingListView()
+      }
+    }
+  }
+  
+  @ViewBuilder
   private func myPostWritingTitle() -> some View {
     VStack {
       Spacer()
@@ -206,7 +227,7 @@ extension ProfileView {
   
   @ViewBuilder
   private func postingListView() -> some View {
-    if store.myQuestionListModel?.data?.results == [] {
+    if store.myQuestionListModel?.data?.content == [] {
       noPostingListView()
     } else {
       myPostitngList()
@@ -219,15 +240,16 @@ extension ProfileView {
       Spacer()
         .frame(height: 16)
       
-      if let resultData = store.myQuestionListModel?.data?.results {
+      if let resultData = store.myQuestionListModel?.data?.content {
         FlippableCardView(
           data: resultData,
           shouldSaveState: false,
           onItemAppear: { item in
-            if let resultItem = item as? ResultData {
-              store.questionId = resultItem.id ?? .zero
+            if let resultItem = item as? QuestionContentData {
+              store.questionId = resultItem.id
             }
-          } , content: { item in
+          } ,
+          content: { item in
             CardItemView(
               resultData: item,
               statsData: store.statusQuestionModel?.data,
@@ -239,18 +261,18 @@ extension ProfileView {
               isLogOut: false,
               isLookAround: false,
               isDeleteUser: false,
-              answerRatio: (A: Int(item.answerRatio?.a ?? 0), B: Int(item.answerRatio?.b ?? 0)),
+              answerRatio: (
+                A: Int(item.answerRatio?.answerRatioA ?? .zero ), B: Int(item.answerRatio?.answerRatioB ?? .zero)),
               editTapAction: {
                 store.send(.view(.presntPopUp))
                 store.isDeleteQuestionPopUp = true
-                store.deleteQuestionId = item.id ?? .zero
+                store.deleteQuestionId = item.id
                 store.popUpText = "고민을 삭제하시겠어요?"
               },
-              likeTapAction: { _ in },
-              appearStatusAction: {
-                
-              },
-              choiceTapAction: {})
+              likeTapAction: {_ in},
+              appearStatusAction: {},
+              choiceTapAction: {}
+            )
             .onChange(of:  store.questionId) { oldValue, newValue in
               store.send(.async(.statusQuestion(id:  newValue)))
             }

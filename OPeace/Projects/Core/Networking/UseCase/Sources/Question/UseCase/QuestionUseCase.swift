@@ -28,7 +28,7 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
     job: String,
     generation: String,
     sortBy: QuestionSort
-  ) async throws -> QuestionModel? {
+  ) async throws -> QuestionDTOModel? {
     try await repository.fetchQuestionList(
       page: page,
       pageSize: pageSize,
@@ -42,7 +42,7 @@ public struct QuestionUseCase: QuestionUseCaseProtocol {
   public func myQuestionList(
     page: Int,
     pageSize: Int
-  ) async throws -> QuestionModel? {
+  ) async throws -> QuestionDTOModel? {
     try await repository.myQuestionList(page: page, pageSize: pageSize)
   }
   

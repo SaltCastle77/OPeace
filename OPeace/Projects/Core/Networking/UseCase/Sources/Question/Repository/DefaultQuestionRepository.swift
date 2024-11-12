@@ -19,14 +19,14 @@ public final class DefaultQuestionRepository: QuestionRepositoryProtocol {
     pageSize: Int,
     job: String,
     generation: String,
-    sortBy: QuestionSort) async throws -> QuestionModel? {
+    sortBy: QuestionSort) async throws -> QuestionDTOModel? {
       return nil
     }
   
   public func myQuestionList(
     page: Int,
     pageSize: Int
-  ) async throws -> QuestionModel? {
+  ) async throws -> QuestionDTOModel? {
     return nil
   }
   

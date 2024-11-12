@@ -28,7 +28,7 @@ public struct Profile {
     
     public var profileUserModel: UpdateUserInfoDTOModel? = nil
     var userLogoutModel: UserDTOModel? = nil
-    var myQuestionListModel: QuestionModel?  = nil
+    var myQuestionListModel: QuestionDTOModel?  = nil
     var deleteQuestionModel: FlagQuestionDTOModel? = nil
     var statusQuestionModel: StatusQuestionDTOModel? = nil
     
@@ -90,7 +90,7 @@ public struct Profile {
     case logoutUseResponse(Result<UserDTOModel, CustomError>)
     case logoutUser
     case socilalLogOutUser
-    case fetchQuestionResponse(Result<QuestionModel, CustomError>)
+    case fetchQuestionResponse(Result<QuestionDTOModel, CustomError>)
     case fetchQuestion
     case deleteQuestion(questionID: Int)
     case deleteQuestionResponse(Result<FlagQuestionDTOModel, CustomError>)

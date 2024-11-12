@@ -14,8 +14,8 @@ public protocol QuestionRepositoryProtocol {
     pageSize: Int,
     job: String,
     generation: String,
-    sortBy: QuestionSort) async throws -> QuestionModel?
-  func myQuestionList(page: Int, pageSize: Int)  async throws -> QuestionModel?
+    sortBy: QuestionSort) async throws -> QuestionDTOModel?
+  func myQuestionList(page: Int, pageSize: Int)  async throws -> QuestionDTOModel?
   func createQuestion(
     emoji: String,
     title: String,
