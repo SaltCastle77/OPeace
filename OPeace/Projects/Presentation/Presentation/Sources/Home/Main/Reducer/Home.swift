@@ -77,6 +77,7 @@ public struct Home {
     
     @Shared(.inMemory("questionID")) var reportQuestionID: Int = 0
     @Shared(.appStorage("lastViewedPage")) var lastViewedPage: Int = .zero
+    @Shared(.appStorage("checkVersionShowPopUp")) var checkVersionShowPopUp: Bool = false
 
     @Presents var destination: Destination.State?
     
@@ -313,7 +314,7 @@ public struct Home {
               #logDebug("Firebase minimum_version: \(minVesrsion)")
                 let appStoreVersion = try await AppStoreVersionFetcher.fetchAppStoreVersion(bundleID: bundleID)
 
-              if VersionComparer.shouldShowUpdatePopup(minimumVersion: appStoreVersion, appStoreVersion: minVesrsion) {
+              if VersionComparer.shouldShowUpdatePopup(minimumVersion: minVesrsion, appStoreVersion: appStoreVersion) {
                   #logDebug("Firebase minimum_version is higher than App Store version.")
                     await completion()
                 } else {

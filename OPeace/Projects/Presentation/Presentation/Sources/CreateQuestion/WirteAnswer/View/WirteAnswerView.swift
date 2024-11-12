@@ -42,29 +42,11 @@ public struct WriteAnswerView: View {
                 ScrollView {
                     writeAnswerChoice()
                     
-                    Spacer()
-                        .frame(height: UIScreen.screenHeight * 0.45)
-                    
-                    CustomButton(
-                        action: {
-                            store.send(.async(.createQuestion(
-                                emoji: store.createQuestionUserModel.createQuestionEmoji.convertEmojiToUnicode(store.createQuestionUserModel.createQuestionEmoji),
-                                title: store.createQuestionUserModel.createQuestionTitle ,
-                                choiceA: store.choiceAtext,
-                                choiceB: store.choiceBtext)))
-                            store.userInfoModel?.isCreateQuestion = true
-                            
-                            
-                        }, title: store.presntWriteUploadViewButtonTitle,
-                        config: CustomButtonConfig.create()
-                        ,isEnable: !store.choiceAtext.isEmpty && !store.choiceBtext.isEmpty &&  store.enableButton)
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
-                        .frame(height: 16)
-                    
                 }
                 .bounce(false)
+              
+              wirteAnswerButton()
+              
             }
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -154,4 +136,31 @@ extension WriteAnswerView {
                 .focused($choiceBFocus)
         }
     }
+  
+  @ViewBuilder
+  private func wirteAnswerButton() -> some View {
+    VStack{
+      Spacer()
+          .frame(height: UIScreen.screenHeight * 0.45)
+      
+      CustomButton(
+          action: {
+              store.send(.async(.createQuestion(
+                  emoji: store.createQuestionUserModel.createQuestionEmoji.convertEmojiToUnicode(store.createQuestionUserModel.createQuestionEmoji),
+                  title: store.createQuestionUserModel.createQuestionTitle ,
+                  choiceA: store.choiceAtext,
+                  choiceB: store.choiceBtext)))
+              store.userInfoModel?.isCreateQuestion = true
+              
+              
+          }, title: store.presntWriteUploadViewButtonTitle,
+          config: CustomButtonConfig.create()
+          ,isEnable: !store.choiceAtext.isEmpty && !store.choiceBtext.isEmpty &&  store.enableButton)
+      .padding(.horizontal, 20)
+      
+      Spacer()
+          .frame(height: 16)
+      
+    }
+  }
 }

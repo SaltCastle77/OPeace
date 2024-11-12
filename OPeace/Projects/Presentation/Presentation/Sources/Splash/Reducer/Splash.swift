@@ -24,6 +24,7 @@ public struct Splash {
     
     var checkUserVerifyModel:   CheckUserDTOModel? = nil
     var refreshTokenModel: RefreshDTOModel? = nil
+    @Shared(.appStorage("checkVersionShowPopUp")) var checkVersionShowPopUp: Bool = false
     
   }
   

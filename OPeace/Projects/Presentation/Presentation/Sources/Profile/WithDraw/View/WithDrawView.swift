@@ -39,23 +39,22 @@ public struct WithDrawView: View {
                     withDrawTitleView()
                     
                     withDrawReasonTextFieldView()
-                    
-                    Spacer()
-                        .frame(height: UIScreen.screenHeight * 0.5)
-                    
-                    CustomButton(
-                        action: {
-                            store.send(.async(.deletUserSocialType(reason: store.withDrawTitle)))
-                        }, title: store.withDrawButtonComplete,
-                        config: CustomButtonConfig.create()
-                        ,isEnable: !store.withDrawTitle.isEmpty
-                    )
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
-                        .frame(height: 16)
                 }
                 .bounce(false)
+              
+              Spacer()
+              
+              CustomButton(
+                  action: {
+                      store.send(.async(.deletUserSocialType(reason: store.withDrawTitle)))
+                  }, title: store.withDrawButtonComplete,
+                  config: CustomButtonConfig.create()
+                  ,isEnable: !store.withDrawTitle.isEmpty
+              )
+              .padding(.horizontal, 20)
+              
+              Spacer()
+                  .frame(height: 16)
                 
             }
             .onTapGesture {

@@ -36,9 +36,12 @@ public struct HomeView: View {
         store.send(.async(.appearData))
 //        startRefreshData()
         appearFloatingPopUp()
-        store.send(.view(.checkVersion {
-          store.send(.view(.appearCheckUpdatePopUp))
-        }))
+        
+        if !store.checkVersionShowPopUp {
+          store.send(.view(.checkVersion {
+            store.send(.view(.appearCheckUpdatePopUp))
+          }))
+        }
       }
       .onDisappear {
         store.send(.async(.clearFilter))
@@ -166,8 +169,10 @@ public struct HomeView: View {
         title: "업데이트 해주세요",
         confirmAction: {
           store.send(.view(.forceUpate))
+          store.checkVersionShowPopUp = true
         },
         cancelAction: {
+          store.checkVersionShowPopUp = true
           store.send(.view(.closePopUp))
         }
       )

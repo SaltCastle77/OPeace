@@ -36,27 +36,10 @@ public struct SignUpAgeView: View {
           
           chekcAgeErrorText()
           
-          Spacer()
-            .frame(height: UIScreen.screenHeight * 0.352)
-          
-          CustomButton(
-            action: {
-              store.send(.async(.fetchJobList))
-              Task {
-                try await Task.sleep(nanoseconds: UInt64(5))
-                store.send(.switchTabs)
-              }
-              
-            }, title: store.presntNextViewButtonTitle,
-            config: CustomButtonConfig.create()
-            ,isEnable: store.enableButton
-          )
-          .padding(.horizontal, 20)
-          
-          Spacer()
-            .frame(height: 16)
         }
         .bounce(false)
+        
+        chekcAgeSignUpButton()
         
       }
       .onAppear {
@@ -106,8 +89,6 @@ extension SignUpAgeView {
       Text(store.signUpAgeSubTitle)
         .pretendardFont(family: .Regular, size: 16)
         .foregroundStyle(Color.gray300)
-      
-      
     }
   }
   
@@ -191,6 +172,30 @@ extension SignUpAgeView {
           .pretendardFont(family: .Regular, size: 16)
           .foregroundStyle(store.enableButton ? Color.basicPrimary : Color.alertError)
       }
+    }
+  }
+  
+  @ViewBuilder
+  private func chekcAgeSignUpButton() -> some View {
+    VStack {
+      Spacer()
+      
+      CustomButton(
+        action: {
+          store.send(.async(.fetchJobList))
+          Task {
+            try await Task.sleep(nanoseconds: UInt64(5))
+            store.send(.switchTabs)
+          }
+          
+        }, title: store.presntNextViewButtonTitle,
+        config: CustomButtonConfig.create()
+        ,isEnable: store.enableButton
+      )
+      .padding(.horizontal, 20)
+      
+      Spacer()
+        .frame(height: 16)
     }
   }
 }

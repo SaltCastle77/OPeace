@@ -614,9 +614,6 @@ extension CardItemView {
       return combinedSegments
     }
   
-  
-  
-  
   @ViewBuilder
   private func choiceAnswerRoundView(
     choiceTitleA: String,

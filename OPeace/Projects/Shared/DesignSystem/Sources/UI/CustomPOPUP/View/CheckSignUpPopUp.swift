@@ -42,7 +42,7 @@ public struct CheckSignUpPopUp: View {
     public var body: some View{
         RoundedRectangle(cornerRadius: 20)
             .fill(Color.gray500)
-            .frame(height: UIScreen.screenHeight * 0.58)
+            .frame(height:  UIScreen.main.nativeBounds.width == 750 ? UIScreen.screenHeight * 0.74 : UIScreen.screenHeight * 0.58)
             .padding(.horizontal, 31)
             .overlay(alignment: .center) {
                 VStack {

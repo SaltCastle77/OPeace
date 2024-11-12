@@ -201,7 +201,7 @@ public struct InfoPlistValues {
         infoPlist.merge(setCFBundleInfoDictionaryVersion("6.0")) { (_, new) in new }
         infoPlist.merge(setCFBundleName("OPeace")) { (_, new) in new }
         infoPlist.merge(setCFBundlePackageType("APPL")) { (_, new) in new }
-        infoPlist.merge(setCFBundleShortVersionString(.appVersion(version: "1.0.0"))) { (_, new) in new }
+      infoPlist.merge(setCFBundleShortVersionString(.appVersion(version: .appVersion()))) { (_, new) in new }
         infoPlist.merge(setAppTransportSecurity()) { (_, new) in new }
         infoPlist.merge(setApplicationQueriesSchemes()) { (_, new) in new }
         infoPlist.merge(setCFBundleURLTypes()) { (_, new) in new }

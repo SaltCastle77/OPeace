@@ -48,7 +48,7 @@ public struct EditProfileView: View {
                     signUpJobSelect()
                     
                     Spacer()
-                        .frame(height: UIScreen.screenHeight * 0.1)
+                    .frame(height: UIScreen.main.nativeBounds.width == 750 ?   UIScreen.screenHeight * 0.15 :  UIScreen.screenHeight * 0.1)
                     
                     CustomButton(
                         action: {

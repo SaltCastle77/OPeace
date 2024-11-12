@@ -44,25 +44,10 @@ public struct WriteQuestionView: View {
                     selectQuestionEmojeView()
                     
                     wittingQustionView()
-                    
-                    Spacer()
-                        .frame(height: UIScreen.screenHeight * 0.35)
-                    
-                    CustomButton(
-                        action: {
-                            store.send(.navigation(.presntWriteAnswer))
-                        }, title: store.presntNextViewButtonTitle,
-                        config: CustomButtonConfig.create()
-                        ,isEnable: !store.createQuestionUserModel.createQuestionTitle.isEmpty &&
-                        store.emojiImage != nil
-                        && store.enableButton
-                    )
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
-                        .frame(height: 16)
                 }
                 .bounce(false)
+              
+              writeQuestionButton()
                 
             }
             .popup(item: $store.scope(state: \.destination?.floatingPopUP, action: \.destination.floatingPopUP)) { floatingPopUpStore in
@@ -179,7 +164,6 @@ extension WriteQuestionView {
         .padding()
     }
 
-    
     @ViewBuilder
     private func wittingQustionView() -> some View {
         VStack {
@@ -215,6 +199,27 @@ extension WriteQuestionView {
         .padding(.horizontal ,20)
         
     }
+  
+  @ViewBuilder
+  private func writeQuestionButton() -> some View {
+    VStack {
+      Spacer()
+      
+      CustomButton(
+          action: {
+              store.send(.navigation(.presntWriteAnswer))
+          }, title: store.presntNextViewButtonTitle,
+          config: CustomButtonConfig.create()
+          ,isEnable: !store.createQuestionUserModel.createQuestionTitle.isEmpty &&
+          store.emojiImage != nil
+          && store.enableButton
+      )
+      .padding(.horizontal, 20)
+      
+      Spacer()
+          .frame(height: 16)
+    }
+  }
 }
 
 

@@ -40,7 +40,7 @@ public struct SignUpJobView: View {
           signUpJobSelect()
           
           Spacer()
-            .frame(height: UIScreen.screenHeight * 0.145)
+            .frame(height: UIScreen.main.nativeBounds.width == 750 ?   UIScreen.screenHeight * 0.2 :  UIScreen.screenHeight * 0.145)
           
           CustomButton(
             action: {
