@@ -33,10 +33,12 @@ make generate
   
   - VCS  
   <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> 
-  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-
+  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> </br>
+  
 ## App Store
-<a href="https://apps.apple.com/kr/app/opeace/id6587550388" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-US?size=250x83&amp" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
+<a href="https://apps.apple.com/kr/app/opeace/id6587550388" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;">
+  <img src="https://github.com/user-attachments/assets/3c823098-3c44-4892-b454-43b33366e412" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;">
+</a>
   
 ## 🐈‍⬛ Git
 
