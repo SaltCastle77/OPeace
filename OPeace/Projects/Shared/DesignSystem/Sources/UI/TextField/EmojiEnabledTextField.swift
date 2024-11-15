@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public class EmojiEnabledTextField: UITextField {
     public override var textInputMode: UITextInputMode? {
         for mode in UITextInputMode.activeInputModes {

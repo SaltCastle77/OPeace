@@ -41,11 +41,11 @@ public struct WriteAnswerView: View {
                 
                 ScrollView {
                     writeAnswerChoice()
+                  
+                  wirteAnswerButton()
                     
                 }
                 .bounce(false)
-              
-              wirteAnswerButton()
               
             }
             .onTapGesture {
@@ -151,11 +151,10 @@ extension WriteAnswerView {
                   choiceA: store.choiceAtext,
                   choiceB: store.choiceBtext)))
               store.userInfoModel?.isCreateQuestion = true
-              
-              
           }, title: store.presntWriteUploadViewButtonTitle,
           config: CustomButtonConfig.create()
           ,isEnable: !store.choiceAtext.isEmpty && !store.choiceBtext.isEmpty &&  store.enableButton)
+      
       .padding(.horizontal, 20)
       
       Spacer()

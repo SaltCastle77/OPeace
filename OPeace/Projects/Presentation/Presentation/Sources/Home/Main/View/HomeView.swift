@@ -37,11 +37,11 @@ public struct HomeView: View {
 //        startRefreshData()
         appearFloatingPopUp()
         
-        if !store.checkVersionShowPopUp {
-          store.send(.view(.checkVersion {
-            store.send(.view(.appearCheckUpdatePopUp))
-          }))
-        }
+//        if !store.checkVersionShowPopUp {
+//          store.send(.view(.checkVersion {
+//            store.send(.view(.appearCheckUpdatePopUp))
+//          }))
+//        }
       }
       .onDisappear {
         store.send(.async(.clearFilter))

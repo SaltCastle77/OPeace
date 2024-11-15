@@ -60,6 +60,7 @@ public struct EmojiTextField: UIViewRepresentable {
                 guard let self = self else { return }
                 let newValue = textField.text ?? ""
                 
+              DispatchQueue.main.async {
                 if newValue.count == 1, newValue.unicodeScalars.allSatisfy({ $0.properties.isEmoji }) {
                     self.parent.text = newValue
                     self.parent.emojiImage = Image.emojiToImage(emoji: newValue)
@@ -74,6 +75,7 @@ public struct EmojiTextField: UIViewRepresentable {
                     self.parent.text = newValue
                     self.parent.isEmojiActive = false // Stay in input mode for non-emoji
                 }
+              }
             }
         }
 
